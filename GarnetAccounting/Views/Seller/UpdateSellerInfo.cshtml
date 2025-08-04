@@ -1,0 +1,154 @@
+﻿@model UpdateSellerDto
+@{
+    ViewData["Title"] = "نرم افزار واسط سامانه مودیان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header"><h5 class="mb-0 text-primary">ثبت فروشنـده جـدید</h5></div>
+    <div class="card-body">
+        <form asp-action="UpdateSellerInfo" asp-asp-controller="Seller" asp-area="" enctype="multipart/form-data" method="post" class="row g-3 fv-plugins-bootstrap5 fv-plugins-framework">
+
+            <input type="hidden" asp-for="CustomerId" value="@Model.CustomerId" />
+            <input type="hidden" asp-for="Id" value="@Model.Id" />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="LegalStatus"></label>
+                            <select asp-for="LegalStatus" class="form-control">
+                                <option selected>انتخاب کنید</option>
+                                <option value="1">حقیقی</option>
+                                <option value="2">حقوقی</option>
+                                <option value="3">مشارکت مدنی</option>
+                            </select>
+                            <span asp-validation-for="LegalStatus" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="NationalId"></label>
+                            <input type="text" asp-for="NationalId" class="form-control">
+                            <span asp-validation-for="NationalId" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label" asp-for="Name"></label>
+                            <input type="text" asp-for="Name" class="form-control" placeholder="نرم افزاری گارنِت">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                         <div class="col-md-12">
+                            <label class="form-label" asp-for="fullNameEn"></label>
+                            <input type="text" asp-for="fullNameEn" class="form-control" placeholder="NarmAfzariGarnet">
+                            <span asp-validation-for="fullNameEn" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="EconomicCode"></label>
+                            <input type="text" asp-for="EconomicCode" class="form-control">
+                            <span asp-validation-for="EconomicCode" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="RegistrationNumber"></label>
+                            <input type="text" asp-for="RegistrationNumber" class="form-control">
+                            <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="TaxMemoryId"></label>
+                            <input type="text" asp-for="TaxMemoryId" class="form-control">
+                            <span asp-validation-for="TaxMemoryId" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="SellerPrivateKeyFile"></label>
+                            <input type="file" asp-for="SellerPrivateKeyFile" accept="text/plain" class="form-control">
+                            <span asp-validation-for="SellerPrivateKeyFile" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="SellerCSRFile"></label>
+                            <input type="file" asp-for="SellerCSRFile" accept="text/plain" class="form-control">
+                            <span asp-validation-for="SellerCSRFile" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="SellerPublicFile"></label>
+                            <input type="file" asp-for="SellerPublicFile" accept="text/plain" class="form-control">
+                            <span asp-validation-for="SellerPublicFile" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class=" col-md-6">
+                            <label class="form-label" asp-for="PostalCode"></label>
+                            <input type="text" asp-for="PostalCode" class="form-control">
+                            <span asp-validation-for="PostalCode" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="MobilePhone"></label>
+                            <input type="text" asp-for="MobilePhone" class="form-control">
+                            <span asp-validation-for="MobilePhone" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="Address"></label>
+                            <textarea class="form-control" rows="2" asp-for="Address"></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="InvoiceDescription"></label>
+                            <textarea class="form-control" rows="2" asp-for="InvoiceDescription"></textarea>
+                            <span asp-validation-for="InvoiceDescription" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="LogoFile"></label>
+                            <input type="file" asp-for="LogoFile" accept="image" class="form-control">
+                            <span asp-validation-for="LogoFile" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="AccountingSystemId"></label>
+                            <input type="text" asp-for="AccountingSystemId" class="form-control">
+                            <span asp-validation-for="AccountingSystemId" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="switch mt15">
+                                <input type="checkbox" asp-for="IsLogoDisplayedOnInvoice" class="switch-input" id="tst" checked="checked">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on"></span>
+                                    <span class="switch-off"></span>
+                                </span>
+                                <span class="switch-label">تصویر لوگو در فاکتور نمایش داده شود</span>
+                            </label>
+                        </div>
+                      
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-primary me-sm-3 me-1">ثبت</button>
+                <a asp-action="Sellers" asp-controller="Seller" asp-asp-area=""  class="btn btn-label-secondary">
+                    بازگشت به لیست
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@*
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+
+        $('#tst').change(function () {
+            if (this.checked) {
+                alert("@ViewBag.customerId");
+            }
+            else {
+                alert("@ViewBag.customerId");
+            }
+        })
+
+    })
+</script>*@
+

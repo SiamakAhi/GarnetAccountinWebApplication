@@ -1,0 +1,65 @@
+﻿   @model ImpodtReceptionDto
+
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning"> بارگذاری اطلاعات پذیرش</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form asp-action="ImportModiranReceptions" asp-controller="Reciption" asp-area="AutoServiceAgency" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="SellerId" value="@Model.SellerId" />
+                <input type="hidden" asp-for="PeriodId" value="@Model.PeriodId" />
+                <input type="hidden" asp-for="UserCreator" value="@Model.UserCreator" />
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label">برند</label>
+                        <select class="form-select" asp-for="Brand">
+                            <option class="MVM">انتخاب ...</option>
+                            @if (User.IsInRole("courier"))
+                            {
+                                <option value="ام وی ام">ام وی ام</option>
+                                <option value="فونیکس">فونیکس</option>
+                            }
+                            @if (User.IsInRole("RepresentativeUser"))
+                            {
+                                <option value="Lamari">Lamari</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label" asp-for="ExcelFile">فایل اکسل اطلاعت پذیرش</label>
+                        <input type="file" asp-for="ExcelFile" class="form-control" accept="xlsx" placeholder="انتخاب فایل اکسل " />
+                    </div>
+                    <hr />
+                    <div class="col-md-12 d-grid p-3 mb-2">
+                        <input type="button" class="btn btn-primary accAjaxSubmit" value="بارگذاری اطلاعات" />
+                    </div>
+                </div>
+            </form>
+
+            <div class="alert alert-info mb-3" role="alert">
+                <strong> کاربر گرامی </strong> <br />
+                <strong class="text-black">
+                    فرمت فایل اکسل باید xlsx باشد. اگر فایل شما office97-2003 است یا فرمت آن xls است، لازم است فایل را ابتدا به فرمت xlsx یا همان workbook ذخیره کنید.
+                </strong>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,286 @@
+﻿    @model VmRepresentativeManager
+@{
+    ViewData["Title"] = "ریز کارکرد نماینده";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string reportTitle = $"ریز کارکرد {Model.RepresentativeReportDetail.Items.FirstOrDefault().DestinationRepresentative}";
+    string reportTitle_selectDate = " ";
+    string reportTitle_selectEndDate = " ";
+    if (Model.filter.StartDate != null)
+        reportTitle_selectDate = $" از تاریخ {Model.filter.StartDate.Value.LatinToPersian()}";
+    if (Model.filter.EndDate != null)
+        reportTitle_selectEndDate = $" تا تاریخ {Model.filter.EndDate.Value.LatinToPersian()}";
+    if (Model.filter.StartDate.HasValue || Model.filter.EndDate.HasValue)
+        reportTitle = $"ریز کارکرد {Model.RepresentativeReportDetail.Items.FirstOrDefault().DestinationRepresentative}  {reportTitle_selectDate} {reportTitle_selectEndDate}";
+
+}
+
+<div class="">
+    <div class="card card-panel">
+        <div class="card-panel-header">
+            <div><span class="card-panel-title">مدیریت نمایندگان</span></div>
+            <div>
+                <ul class="card-panel-navbar">
+                    <li>
+                        <a href="javascript:void(0)" data-url="@Url.Action("AddRepresentative", "Representative", new { Area = "Courier" })" class="quickaccess-link callform">
+                            <i class="bx bx-plus"></i>
+                            <span>جـدید</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-panel-section">
+            <div class="card-panel-section-header"><h5 class="text-warning ">@reportTitle </h5></div>
+            <div class="card-panel-section-body">
+                <div class="widget-info-container">
+                    <form asp-action="RepresentativesReportDetail" asp-controller="Representative" asp-area="Courier" method="get" id="repReportDetailFilter">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <input type="hidden" asp-for="filter.DestinationRepresentative" value="@Model.filter.DestinationRepresentative" />
+                                    <input type="hidden" asp-for="filter.CurrentPage" value="1" />
+                                    <div class="col-md-4 mb-1">
+                                        <div class="garnet-input-group1 garnet-input-group-light">
+                                            <label asp-for="filter.strStartDate">از تاریخ‌</label>
+                                            <input type="text" asp-for="filter.strStartDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-1">
+                                        <div class="garnet-input-group1 garnet-input-group-light">
+                                            <label asp-for="filter.strEndDate">تا تاریخ‌</label>
+                                            <input type="text" asp-for="filter.strEndDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-1">
+                                        <div class="garnet-input-group1 garnet-input-group-light">
+                                            <label>گروه بارنامه</label>
+                                            <select asp-for="filter.BillOfLadingType"  asp-items="@ViewBag.group">
+                                                <option value="null" selected>همه</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-1">
+                                        <div class="garnet-input-group1 garnet-input-group-light">
+                                            <label>نوع تسویه</label>
+                                            <select asp-for="filter.PaymentMethod">
+                                                <option value="" selected>همه</option>
+                                                <option value="نقدی">نقدی</option>
+                                                <option value="اعتباری">اعتباری</option>
+                                                <option value="پسکرایه">پسکرایه</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-1">
+                                        <div class="garnet-input-group1 garnet-input-group-light">
+                                            <label>صادر کننده</label>
+                                            <select asp-for="filter.Agency" class="select2" asp-items="@ViewBag.agency">
+                                                <option value="" selected>همه</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <div class="widget-info fullwidth">
+                                            <div class="form-check form-check-inline ">
+                                                <input class="form-check-input" type="checkbox"  asp-for="filter.ShowUnFinal" checked="">
+                                                <label class="form-check-label" asp-for="filter.ShowUnFinal"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <div class="garnet-input-group1 garnet-input-group-light">
+                                            <label>تعداد ردیف در هر صفحه</label>
+                                            <input type="number" min="1" asp-for="filter.PageSize" value="@Model.filter.PageSize">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 form-actionbox">
+                              
+                                    <input type="submit" class="btn btn-primary text-center" value="نمایش اطلاعات " />
+                                    <a asp-action="RepresentativesReportDetail" asp-controller="Representative" asp-area="Courier" class="btn btn-info text-center">مدیریت نمایندگان</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card-panel-section">
+            <div class="card-panel-section-body">
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-striped table-bordered ">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="row-num"><input type="checkbox" id="selectTblRows" /></th>
+                                <th class="row-num">ردیف</th>
+                                <th>شماره بارنامه</th>
+                                <th>تاریخ</th>
+                                <th>گروه برنامه</th>
+                                <th>شعبه</th>
+                                <th>مقصد</th>
+                                <th>حمل بار</th>
+                                <th>مبلغ تمبر</th>
+                                <th>هزینه جمع آوری</th>
+                                <th>بسته بندی</th>
+                                <th>بیمه</th>
+                                <th>تخفیف</th>
+                                <th>ارزش افزوده</th>
+                                <th>سایر هزینه های مبدأ</th>
+                                <th>هزینه توزیع</th>
+                                <th>هزینه های مقصد</th>
+                                <th>مبلغ بارنامه</th>
+                                <th>نحوه تسویه</th>
+                                <th>نماینده توزیع</th>
+                                <th>وزن واقعی</th>
+                                <th>شماره سند حسابداری</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.RepresentativeReportDetail.Items.Count() > 0)
+                            {
+                                int RowNumber = 1;
+
+                                foreach (var x in Model.RepresentativeReportDetail.Items)
+                                {
+                                    string style = (x.RecordLock != true && x.BillOfLadingGroupCode != 100) ? " bg-warning text-white " : "";
+                                    <tr class="@style">
+                                        <td class="row-num"><input type="checkbox" class="tblRow" name="tableRow" value="@x.Id" /></td>
+                                        <td class="row-num">@RowNumber</td>
+                                        <td>@x.BillOfLadingNumber</td>
+                                        <td>@x.MiladiDate.Value.LatinToPersian()</td>
+                                        <td>@x.BillOfLadingGroup</td>
+                                        <td>@x.AgencyName</td>
+                                        <td>@x.ToDestination</td>
+                                        <td>@(x.CargoFare > 0 ? x.CargoFare.ToPrice() : "0")</td>
+                                        <td>@(x.StampFee > 0 ? x.StampFee.ToPrice() : "0")</td>
+                                        <td>@(x.CollectionOrSeparationFee > 0 ? x.CollectionOrSeparationFee.ToPrice() : "0")</td>
+                                        <td>@(x.PackagingFee > 0 ? x.PackagingFee.ToPrice() : "0")</td>
+                                        <td>@(x.InsuranceFee > 0 ? x.InsuranceFee.ToPrice() : "0")</td>
+                                        <td>@(x.Discount > 0 ? x.Discount.ToPrice() : "0")</td>
+                                        <td>@(x.VAT > 0 ? x.VAT.ToPrice() : "0")</td>
+                                        <td>@(x.OtherOriginFees > 0 ? x.OtherOriginFees.ToPrice() : "0")</td>
+                                        <td>@(x.DistributionOrSeparationFee > 0 ? x.DistributionOrSeparationFee.ToPrice() : "0")</td>
+                                        <td>@(x.DestinationMiscellaneousFee > 0 ? x.DestinationMiscellaneousFee.ToPrice() : "0")</td>
+                                        <td>@(x.TotalBillOfLadingAmount > 0 ? x.TotalBillOfLadingAmount.ToPrice() : "0")</td>
+                                        <td>@x.PaymentMethod</td>
+                                        <td>@x.DestinationRepresentative</td>
+                                        <td>@x.ActualCargoWeight</td>
+                                        <td>@x.DocNumber</td>
+                                    </tr>
+                                    RowNumber++;
+                                }
+                            }
+                        </tbody>
+                        @if (Model.RepresentativeReportDetail.Items.Count() > 0)
+                        {
+                            <tfoot class="table-dark">
+
+                                <tr>
+                                    <td colspan="7" class="text-center"> جمع : </td>
+                                    <td>@Model.RepresentativeReportDetail.Items.Sum(n => n.CargoFare).ToPrice()</td>
+                                    <td>@Model.RepresentativeReportDetail.Items.Sum(n => n.StampFee).ToPrice()</td>
+                                    <td>@Model.RepresentativeReportDetail.Items.Sum(n => n.CollectionOrSeparationFee).ToPrice()</td>
+                                    <td>@Model.RepresentativeReportDetail.Items.Sum(n => n.PackagingFee).ToPrice()</td>
+                                    <td>@Model.RepresentativeReportDetail.Items.Sum(n => n.InsuranceFee).ToPrice()</td>
+                                    <td>@Model.RepresentativeReportDetail.Items.Sum(n => n.Discount).ToPrice()</td>
+                                    <td>@Model.RepresentativeReportDetail.Items.Sum(n => n.VAT).ToPrice()</td>
+                                    <td>@Model.RepresentativeReportDetail.Items.Sum(n => n.OtherOriginFees).ToPrice()</td>
+                                    <td>@Model.RepresentativeReportDetail.Items.Sum(n => n.DistributionOrSeparationFee).ToPrice()</td>
+                                    <td>@Model.RepresentativeReportDetail.Items.Sum(n => n.DestinationMiscellaneousFee).ToPrice()</td>
+                                    <td>@Model.RepresentativeReportDetail.Items.Sum(n => n.TotalBillOfLadingAmount).ToPrice()</td>
+                                    <td colspan="2"></td>
+                                    <td>@Model.RepresentativeReportDetail.Items.Sum(n => n.ActualCargoWeight).ToPrice()</td>
+                                    <td></td>
+                                </tr>
+
+                            </tfoot>
+                        }
+                        else
+                        {
+                            <tfoot>
+                                <tr>
+                                    <td colspan="22">اطلاعاتی جهت نمایش وجود ندارد</td>
+                                </tr>
+                            </tfoot>
+                        }
+
+                    </table>
+                </div>
+
+                <div class="card-footer">
+                    @if (Model.RepresentativeReportDetail.TotalPages > 1)
+                    {
+                        <nav aria-label="Page navigation" class="pagin mt-3">
+                            <ul class="pagination pagination-sm text-center">
+                                @if (Model.RepresentativeReportDetail.HasPreviousPage)
+                                {
+                                    <li class="page-item prev">
+                                        <a class="page-link" data-formid="repReportDetailFilter" data-currentpage="@(Model.RepresentativeReportDetail.CurrentPage - 1)">
+                                            <i class="tf-icon bx bx-chevrons-left"></i>
+                                        </a>
+                                    </li>
+                                }
+
+                                @{
+                                    int totalPages = Model.RepresentativeReportDetail.TotalPages;
+                                    int currentPage = Model.RepresentativeReportDetail.CurrentPage;
+                                    int pageRange = 3; // تعداد صفحات قبل و بعد از صفحه فعلی
+
+                                    int startPage = Math.Max(1, currentPage - pageRange);
+                                    int endPage = Math.Min(totalPages, currentPage + pageRange);
+
+                                    if (startPage > 1)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" data-formid="repReportDetailFilter" data-currentpage="1">1</a>
+                                        </li>
+                                        if (startPage > 2)
+                                        {
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                        }
+                                    }
+
+                                    for (int i = startPage; i <= endPage; i++)
+                                    {
+                                        string strActive = currentPage == i ? "active" : "";
+                                        <li class="page-item @strActive">
+                                            <a class="page-link" data-formid="repReportDetailFilter" data-currentpage="@i">@i</a>
+                                        </li>
+                                    }
+
+                                    if (endPage < totalPages)
+                                    {
+                                        if (endPage < totalPages - 1)
+                                        {
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                        }
+                                        <li class="page-item">
+                                            <a class="page-link" data-formid="repReportDetailFilter" data-currentpage="@totalPages">@totalPages</a>
+                                        </li>
+                                    }
+                                }
+
+                                @if (Model.RepresentativeReportDetail.HasNextPage)
+                                {
+                                    <li class="page-item next">
+                                        <a class="page-link" data-formid="repReportDetailFilter" data-currentpage="@(Model.RepresentativeReportDetail.CurrentPage + 1)">
+                                            <i class="tf-icon bx bx-chevrons-right"></i>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

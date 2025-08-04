@@ -1,0 +1,102 @@
+﻿  @model VmBillofladingPanel
+
+@{
+    ViewData["Title"] = "صدور بارنامه";
+    Layout = "~/Views/Shared/_AppRepLayout.cshtml";
+}
+
+@* <div class="container">
+    <div class="page-header">
+        <div class="page-header-title">
+            <h2 class="text-white"> @Model.Branch.BranchName</h2>
+            <div class="page-header-subtitle">
+                <span class="text-secondary">@Model.CurrentUser.Name</span>
+                <span class="text-secondary">@Model.Branch.CityName</span>
+            </div>
+        </div>
+        <div class="page-header-brand">
+            <img src="/img/Logos/2.png" alt="کیهان پست" />
+            <h4 class="text-primary">کیهـان پُست</h4>
+        </div>
+    </div>
+</div> *@
+<div class="container">
+    <h2 class="text-white">صدور بارنامه</h2>
+    <form asp-action="CreateBillofladingHeader" asp-controller="Billoflading" asp-area="Courier" method="post">
+
+        <input type="hidden" asp-for="BillOfLading.bill.Id" value="@Guid.NewGuid()" />
+        <input type="hidden" asp-for="BillOfLading.bill.OriginHubId" value="@Model.Branch.HubId" />
+        <input type="hidden" asp-for="BillOfLading.bill.CreatedBy" value="@User.Identity.Name" />
+        <input type="hidden" asp-for="BillOfLading.bill.OriginBranchId" value="@Model.CurrentUser.BranchId" />
+
+        <div class="row mt-2">
+            <div class="col-md-3 col-6 mb-2">
+                <label class="form-label">تاریخ صدور بارنامه</label>
+                <input type="text" class="form-control text-center bg-dark text-white" readonly asp-for="BillOfLading.bill.IssuanceDate" value="@DateTime.Now.LatinToPersian()" />
+            </div>
+            <div class="col-md-3 col-6 mb-2">
+                <label class="form-label">شماره بارنامه</label>
+                <input type="text" class="form-control text-center bg-dark text-white" readonly asp-for="BillOfLading.bill.WaybillNumber" value="@ViewBag.BillNumber" />
+            </div>
+            <div class="col-md-3 col-xs-6 mb-2">
+                <label class="form-label">مقصد</label>
+                <select class="form-select form-select-sm" asp-for="BillOfLading.bill.RouteId" asp-items="ViewBag.routes">
+                </select>
+            </div>
+            <div class="col-md-3 col-xs-6 mb-2">
+                <label class="form-label">سرویس</label>
+                <select class="form-select form-select-sm" asp-for="BillOfLading.bill.ServiceId" asp-items="ViewBag.services">
+                </select>
+            </div>
+          
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-4 mb-2 mt-2">
+                <h5 class="card-header"> فرستنــده</h5>
+               
+                <div>
+                    <div class="control-top-toolbar">
+                        <a href="#" class="me-2 ms-3"><i class="bx bx-search"></i></a>
+                        <a href="#"><i class="bx bx-plus"></i></a>
+                    </div>
+                    <select class="form-select select2" asp-for="BillOfLading.bill.SenderId" asp-items="ViewBag.persen">
+                        <option value="null">انتخاب فرستنده ...</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="form-label">آدرس</label>
+                    <textarea rows="3" asp-for="BillOfLading.bill.SenderAddress" class="form-control"> </textarea>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2 mt-2">
+                <h5 class="card-header"> گیرنـده</h5>
+                <div>
+                    <div class="control-top-toolbar">
+                        <a href="#" class="me-2 ms-3"><i class="bx bx-search"></i></a>
+                        <a href="#"><i class="bx bx-plus"></i></a>
+                    </div>
+                    <select class="form-select select2" asp-for="BillOfLading.bill.ReceiverId" asp-items="ViewBag.persen">
+                        <option value="null">انتخاب گیرنده ...</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">آدرس</label>
+                    <textarea rows="3" asp-for="BillOfLading.bill.ReceiverAddress" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2 mt-2">
+                <h5 class="card-header mb-4"> توضیحات</h5>
+                <textarea rows="6" asp-for="BillOfLading.bill.Description" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="col-md-3 d-grid p-2">
+                <input type="submit" class="btn btn-secondary" value="افزودن مرسولات" />
+            </div>
+             
+        </div>
+    </form>
+</div>
+
+

@@ -1,0 +1,77 @@
+﻿  @model AddBranchUserDto
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title"> ایجاد کاربر شعبه/نمایندگی</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="mt-3" asp-action="CreateBranchManagerUser" asp-controller="BranchUser" asp-area="Courier" method="post">
+                <input type="hidden" asp-for="DepartmentUserId" value="@Guid.NewGuid()" />
+                <input type="hidden" asp-for="BranchId" value="@ViewBag.BranchId" />
+                <input type="hidden" asp-for="DepartmentCode" value="101" />
+                <input type="hidden" asp-for="IsSupervisor" value="true" />
+                <input type="hidden" asp-for="SellerId" value="@ViewBag.sellerId" />
+
+                <div class="garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>مشخصات فردی </h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="FName" class="form-label"></label>
+                            <input type="text" class="form-control form-control-sm" asp-for="FName" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="LName" class="form-label"></label>
+                            <input type="text" class="form-control form-control-sm" asp-for="LName" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="email" class="form-label"></label>
+                            <input type="email" class="form-control form-control-sm" asp-for="email" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="Mobile" class="form-label"></label>
+                            <input type="tel" class="form-control form-control-sm" asp-for="Mobile" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="Gender" class="form-label"></label>
+                            <select class="form-select form-control-sm" asp-for="Gender">
+                                <option value="1" selected>آقا</option>
+                                <option value="2">بانو</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>اطلاعات کاربری</h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <label asp-for="UserName" class="form-label"></label>
+                            <input type="text" class="form-control form-control-sm" asp-for="UserName" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input type="text" class="form-control form-control-sm" asp-for="Password" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="ConfirmPassword" class="form-label"></label>
+                            <input type="text" class="form-control form-control-sm" asp-for="ConfirmPassword" />
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="garnet-section-footer">
+                    <a href="#" class="btn btn-warning accAjaxSubmit"> ایجاد کاربر</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+

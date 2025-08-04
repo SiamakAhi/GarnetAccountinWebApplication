@@ -1,0 +1,138 @@
+﻿@model VmAccountingDocs
+@{
+    ViewData["Title"] = "مرتب سازی اسناد";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="divider text-start divider-primary">
+                    <div class="divider-text">
+                        <span class="text-warning px-2">فیلتر اسناد</span>
+                    </div>
+                </div>
+                <did class="p-2">
+                    <form asp-action="DocSorting" asp-controller="AccFunc" asp-area="Accounting" method="get">
+                        <div class="row">
+                            <div class=" col-md-6 mb-1">
+                                <label asp-for="filter.FromDocNumer" class="form-label">‌از شماره سند</label>
+                                <input type="number" asp-for="filter.FromDocNumer" class="form-control form-control-sm text-center">
+                            </div>
+                            <div class=" col-md-6 mb-1">
+                                <label asp-for="filter.ToDocNumer" class="form-label">تا شماره سند‌</label>
+                                <input type="number" asp-for="filter.ToDocNumer" class="form-control form-control-sm text-center">
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label asp-for="filter.StartDate" class="form-label">از تاریخ‌</label>
+                                <input type="text" asp-for="filter.strStartDate" class="form-control form-control-sm flatpickr-input" placeholder="YYYY/MM/DD" id="flatpickr-date">
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label asp-for="filter.EndDate" class="form-label">‌تا تاریخ </label>
+                                <input type="text" class="form-control form-control-sm flatpickr-input" asp-for="filter.EndDate" placeholder="YYYY/MM/DD" id="flatpickr-Enddate">
+                            </div>
+                            <div class="col-md-12 mb-1">
+                                <label class="form-label">وضعیت سند</label>
+                                <select class="form-select form-select-sm" asp-for="filter.docType" asp-items="@ViewBag.docType">
+                                    <option value="null" selected>همه</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-12 d-grid mb-1">
+                                <input type="submit" class="btn btn-secondary mt-2" value="نمایش" />
+                            </div>
+                        </div>
+                    </form>
+                </did>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="card p-2">
+            <div class="divider text-start divider-primary">
+                <div class="divider-text">
+                    <span class="text-warning px-2">لیست اسناد حسابداری</span>
+                </div>
+            </div>
+            <div class="card-body ">
+                <div class="table-responsive text-nowrap static-height-600">
+                    <form asp-action="DocSorting" asp-controller="AccFunc" asp-area="Accounting" method="post">
+
+                        <div class="row px-4">
+                            <div class="col-md-2">
+                                <label class="form-label ms-2"> مرتب سازی از شماره : </label>
+                                <input type="number" min="1" name="startNumber" class="form-control text-center" value="1">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="submit" class="btn btn-warning mt-4" value="شروع مرتب سازی بر اساس جدول زیر" />
+                            </div>
+                        </div>
+                        <table class="table table-striped dataTable" id="tblDocsSorting">
+                            <thead class="table-dark fixedHeader-locked">
+                                <tr>
+                                    <th class="row-chb px-2">
+                                        <input type="checkbox" class="mx-2" id="SelectRows" />
+                                    </th>
+                                    <th class="row-chb">ردیف</th>
+                                    <th>وضعیت</th>
+                                    <th>شماره سند</th>
+                                    <th>تاریخ</th>
+                                    <th>شماره عطف</th>
+                                    <th>شماره اتوماتیک</th>
+                                    <th>شرح سند</th>
+                                    <th>جمع بدهکار</th>
+                                    <th>جمع بستانکار</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                                @if (Model.Docs.Count() > 0)
+                                {
+                                    int row = 1;
+                                    foreach (var x in Model.Docs)
+                                    {
+                                        <tr>
+                                            <td class="row-chb px-2">
+                                                <input type="hidden" name="docIds" value="@x.Id">
+                                                <a href="javascript:void(0)" class="move-up"><i class="bx bx-up-arrow text-warning ms-3"></i></a>
+                                                <a href="javascript:void(0)" class="move-down"><i class="bx bx-down-arrow text-warning"></i></a>
+                                            </td>
+                                            <td class="row-chb">@row</td>
+                                            <td>@x.StatusId.AccToDocStatusName()</td>
+                                            <td>@x.DocNumber</td>
+                                            <td>@x.DocDate.Value.LatinToPersian()</td>
+                                            <td>@x.AtfNumber</td>
+                                            <td>@x.AutoDocNumber</td>
+                                            <td>@x.Description</td>
+                                            <td>@(x.Bed > 0 ? x.Bed.ToPrice() : "0")</td>
+                                            <td>@(x.Bes > 0 ? x.Bes.ToPrice() : "0")</td>
+                                        </tr>
+                                        row++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

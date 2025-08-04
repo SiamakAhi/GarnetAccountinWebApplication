@@ -1,0 +1,231 @@
+﻿    @model VmRepresentativeManager
+@{
+    ViewData["Title"] = "مدیریت شعب و نمایندگان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string reportTitle = "کارکرد نمایندگان در 30 روز گذشته";
+    string reportTitle_selectDate = " ";
+    string reportTitle_selectEndDate = " ";
+    if (Model.filter.StartDate != null)
+        reportTitle_selectDate = $" از تاریخ {Model.filter.StartDate.Value.LatinToPersian()}";
+    if (Model.filter.EndDate != null)
+        reportTitle_selectEndDate = $" تا تاریخ {Model.filter.EndDate.Value.LatinToPersian()}";
+    if (Model.filter.StartDate.HasValue || Model.filter.EndDate.HasValue)
+        reportTitle = $"گزارش نمایندگان توزیع {reportTitle_selectDate} {reportTitle_selectEndDate}";
+
+
+}
+
+<div class="">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-panel">
+                <div class="card-panel-header">
+                    <div><span class="card-panel-title">مدیریت نمایندگان</span></div>
+                    <div>
+                        <ul class="card-panel-navbar">
+                            <li>
+                                <a href="javascript:void(0)" data-url="@Url.Action("AddRepresentative", "Representative", new { Area = "Courier" })" class="quickaccess-link callform">
+                                    <i class="bx bx-plus"></i>
+                                    <span>جـدید</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card-panel-section">
+                            <div class="card-panel-section-header"><span>فیلتر </span></div>
+                            <div class="card-panel-section-body">
+                                <div class="widget-info-container">
+                                    <form asp-action="RepresentativesManager" asp-controller="Representative" asp-area="Courier" method="get" id="frmRepManagerFilter">
+                                        <div class="row">
+                                            <div class="col-md-12 mb-1">
+                                                <div class="garnet-input-group1 garnet-input-group-light">
+                                                    <label>نماینده مقصد</label>
+                                                    <select asp-for="filter.DestinationRepresentative" class="select2" asp-items="@ViewBag.reps">
+                                                        <option value="" selected>همه</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-1">
+                                                <div class="garnet-input-group1 garnet-input-group-light">
+                                                    <label asp-for="filter.strStartDate">از تاریخ‌</label>
+                                                    <input type="text" asp-for="filter.strStartDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-1">
+                                                <div class="garnet-input-group1 garnet-input-group-light">
+                                                    <label asp-for="filter.strEndDate">تا تاریخ‌</label>
+                                                    <input type="text" asp-for="filter.strEndDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-1">
+                                                <div class="garnet-input-group1 garnet-input-group-light">
+                                                    <label>نوع تسویه</label>
+                                                    <select asp-for="filter.PaymentMethod">
+                                                        <option value="" selected>همه</option>
+                                                        <option value="نقدی">نقدی</option>
+                                                        <option value="اعتباری">اعتباری</option>
+                                                        <option value="پسکرایه">پسکرایه</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-1">
+                                                <div class="garnet-input-group1 garnet-input-group-light">
+                                                    <label>صادر کننده</label>
+                                                    <select asp-for="filter.Agency" class="select2" asp-items="@ViewBag.agency">
+                                                        <option value="" selected>همه</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-2">
+                                                <div class="form-check form-check-inline garnet-input-group-light">
+                                                    <input class="form-check-input" type="checkbox" asp-for="filter.ShowUnFinal" checked="">
+                                                    <label class="form-check-label" asp-for="filter.ShowUnFinal"></label>
+                                                </div>
+                                            </div>
+                                            <div class=" d-grid p-2">
+                                                <input type="submit" class="garnet-btn garnet-btn-warning mb-2 text-center" value="نمایش اطلاعات " />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card-panel-section">
+                            <div class="card-panel-section-header"><span>@reportTitle </span></div>
+                            <div class="card-panel-section-body">
+                                <div class="table-responsive text-nowrap static-height-450">
+                                    <table class="table table-striped table-bordered">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th rowspan="2">ردیف</th>
+                                                <th rowspan="2">نماینده</th>
+                                                <th rowspan="2">شهر</th>
+                                                <th rowspan="2">آخرین تاریخ</th>
+                                                <th colspan="5">بارنامه های ارسالی</th>
+                                                <th colspan="5">بارنامه های وارده</th>
+                                                <th rowspan="2">مانده حساب</th>
+                                                <th rowspan="2">وضعیت حساب</th>
+                                                <th rowspan="2"><i class="bx bx-info"></i></th>
+                                            </tr>
+                                            <tr>
+                                                <th>تعداد </th>
+                                                <th>وزن</th>
+                                                <th>تعداد بسته</th>
+                                                <th>سهم تفکبک و توزیع</th>
+                                                <th>پسکرایه</th>
+
+                                                <th>تعداد </th>
+                                                <th>وزن</th>
+                                                <th>تعداد بسته</th>
+                                                <th>سهم تفکبک و توزیع</th>
+                                                <th>پسکرایه</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.SaleDailyReportByRepresentative.Count > 0)
+                                            {
+                                                int row = 1;
+                                                foreach (var x in Model.SaleDailyReportByRepresentative)
+                                                {
+                                                    <tr>
+                                                        <td class="col-chbx">@row</td>
+                                                        <td>@x.DestinationRepresentative</td>
+                                                        <td>@x.ToDestination</td>
+                                                        <td>@x.MiladiDate.Value.LatinToPersian()</td>
+                                                        <!-- بارنامه های ارسالی-->
+                                                        <td class="col-price">@x.OutQty</td>
+                                                        <td class="col-price">@x.OutActualCargoWeight</td>
+                                                        <td class="col-price">@x.OutGoodsCount</td>
+                                                        <td class="col-price">@x.OutRepresentativeShare.ToPrice()</td>
+                                                        <td class="col-price">@x.OutPasKarayeh.ToPrice()</td>
+                                                        <!-- بارنامه های وارده غیرسیستمی -->
+                                                        <td class="col-price">@x.InQty</td>
+                                                        <td class="col-price">@x.InActualCargoWeight</td>
+                                                        <td class="col-price">@x.InGoodsCount</td>
+                                                        <td class="col-price">@x.InRepresentativeShare.ToPrice()</td>
+                                                        <td class="col-price">@x.InPasKarayeh.ToPrice()</td>
+
+                                                        <td class="col-price">@x.BalanceAmount.ToPrice()</td>
+                                                        <td class="col-price">@x.BalanceStatus</td>
+                                                        <td>
+                                                            <a class=" btn btn-sm btn-dark getRepDetail" data-frmfilterid="frmRepManagerFilter" data-repname="@x.DestinationRepresentative" data-url="@Url.Action("RepresentativesReportDetail", "Representative", new { Area = "Courier" })">جزئیات</a>
+                                                        </td>
+                                                    </tr>
+                                                    row++;
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-panel-section">
+                            <div class="card-panel-section-header"><span>لیست نمایندگان </span></div>
+                            <div class="card-panel-section-body">
+                                <div class="list-container">
+                                    <ul class="garnet-list1">
+                                        @if (Model.Representatives.Count > 0)
+                                        {
+                                            foreach (var x in Model.Representatives)
+                                            {
+                                                string avatar = "/img/avatars/avatar1.svg";
+                                                if (!string.IsNullOrEmpty(x.Avatar))
+                                                {
+                                                    avatar = $"/img/avatars/{x.Avatar}";
+                                                }
+                                                <li>
+                                                    <div class="item-pic">
+                                                        <div class="pic">
+                                                            <img src="@avatar" alt="@x.Title" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="item-content">
+                                                        <div>
+                                                            <h5>@x.Title</h5>
+                                                            <span>@x.Description</span>
+                                                        </div>
+                                                        <div>
+                                                            <ul class="garnet-list1-navbar">
+                                                                <li class="garnet-list1-nav">
+                                                                    <a href="#">
+                                                                        <i class="fas fa-truck"></i>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="garnet-list1-nav">
+                                                                    <a href="#">
+                                                                        <i class="fas fa-list"></i>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="garnet-list1-nav">
+                                                                    <a href="javascript:void(0)" class="callformwhithItemid" data-itemid="@x.Id" data-url="@Url.Action("AddBranch", "Branch", new { Area = "Courier" })">
+                                                                        <i class="bx bx-bookmark-plus"></i>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,64 @@
+﻿@model List<ContractorDto>
+@{
+    ViewData["Title"] = "پیمانکاران و سرویس دهندگان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    <div class="card card-panel">
+        <div class="card-panel-header">
+            <div><span class="card-panel-title">پیمانکاران و سرویس دهنگان</span></div>
+            <div class="card-panel-navbar-container">
+                <ul class="card-panel-navbar">
+                    <li>
+                        <a href="javascript:void(0)" data-url="@Url.Action("AddContractor", "Contractor", new { Area = "AutoServiceAgency" })" class="quickaccess-link callform">
+                            <i class="bx bx-plus"></i>
+                            <span>افــزودن</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="row-chb">#</th>
+                            <th class="wper-50">نام پیمانکار / سرویس دهنده</th>
+                            <th>تخصص</th>
+                            <th>درصد پورسانت</th>
+                            <th>نام حساب تفصیل</th>
+                            <th>وضعیت</th>
+                            <th>اقدامات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            int row = 1;
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="row-chb">@row</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.SkillArea</td>
+                                    <td class="text-center"> @item.SharePercentage.ToString("0.##") <span class="text-secondary">%</span></td>
+                                    <td>@item.TafsilName</td>
+                                    <td>@(item.IsActive ? "فعال" : "غیرفعال")</td>
+                                    <td>
+                                        <a href="javascript:void(0)" class="callform" data-url="@Url.Action("UpdateContractor", "Contractor", new { Area = "AutoServiceAgency", id=item.Id })"><i class="bx bx-edit-alt text-gray" title="ویرایش اطلاعات پیمانکار"></i></a>
+                                    </td>
+                                </tr>
+                                row++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+

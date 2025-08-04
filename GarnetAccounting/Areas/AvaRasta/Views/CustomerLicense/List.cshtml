@@ -1,0 +1,38 @@
+﻿@model IEnumerable<VmCustomer>
+@{
+    ViewData["Title"] = "لیست مشتریان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0 text-danger">لیست مشتریان</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>نام مشتری</th>
+                    <th>ایمیل</th>
+                    <th>تلفن</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customer in Model)
+                {
+                    <tr>
+                        <td>@customer.FName @customer.LName</td>
+                        <td>@customer.Email</td>
+                        <td>@customer.Phone</td>
+                        <td>
+                            <a href="@(Url.Action("Index", new { customerId = customer.Id }))" class="btn btn-primary">مدیریت</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

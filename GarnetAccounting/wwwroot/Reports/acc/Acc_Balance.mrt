@@ -1,0 +1,643 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<StiSerializer version="1.02" type="Net" application="StiReport">
+  <Dictionary Ref="1" type="Dictionary" isKey="true">
+    <BusinessObjects isList="true" count="0" />
+    <Databases isList="true" count="0" />
+    <DataSources isList="true" count="2">
+      <data Ref="2" type="Stimulsoft.Report.Dictionary.StiBusinessObjectSource" isKey="true">
+        <Alias>data</Alias>
+        <Columns isList="true" count="10">
+          <value>GroupType,System.Int16</value>
+          <value>GroupTypeName,System.String</value>
+          <value>GroupId,System.Int32</value>
+          <value>GroupName,System.String</value>
+          <value>KolName,System.String</value>
+          <value>KolCode,System.String</value>
+          <value>KolId,System.Int32</value>
+          <value>Bed,System.Int64</value>
+          <value>Bes,System.Int64</value>
+          <value>Mandeh,System.Int64</value>
+        </Columns>
+        <Dictionary isRef="1" />
+        <Key>48673ff88d9e4a3688259c6212654ff6</Key>
+        <Name>data</Name>
+        <NameInSource>data</NameInSource>
+      </data>
+      <Debt Ref="3" type="Stimulsoft.Report.Dictionary.StiBusinessObjectSource" isKey="true">
+        <Alias>Debt</Alias>
+        <Columns isList="true" count="10">
+          <value>GroupType,System.Int16</value>
+          <value>GroupTypeName,System.String</value>
+          <value>GroupId,System.Int32</value>
+          <value>GroupName,System.String</value>
+          <value>KolName,System.String</value>
+          <value>KolCode,System.String</value>
+          <value>KolId,System.Int32</value>
+          <value>Bed,System.Int64</value>
+          <value>Bes,System.Int64</value>
+          <value>Mandeh,System.Int64</value>
+        </Columns>
+        <Dictionary isRef="1" />
+        <Key>871e8ab7871346e2941894cf5754df69</Key>
+        <Name>Debt</Name>
+        <NameInSource>Debt</NameInSource>
+      </Debt>
+    </DataSources>
+    <Relations isList="true" count="0" />
+    <Report isRef="0" />
+    <Resources isList="true" count="0" />
+    <Variables isList="true" count="3">
+      <value>,ReportDate,ReportDate,,System.String,,False,False,False,False</value>
+      <value>,FinancePeriod,FinancePeriod,,System.String,,False,False,False,False</value>
+      <value>,BalanceDate,BalanceDate,,System.String,,False,False,False,False</value>
+    </Variables>
+  </Dictionary>
+  <EngineVersion>EngineV2</EngineVersion>
+  <GlobalizationStrings isList="true" count="0" />
+  <Key>9046c560869b4bb686995754f720282d</Key>
+  <MetaTags isList="true" count="0" />
+  <Pages isList="true" count="1">
+    <Page1 Ref="4" type="Page" isKey="true">
+      <Border>None;Black;2;Solid;False;4;Black</Border>
+      <Brush>Transparent</Brush>
+      <Components isList="true" count="2">
+        <PageHeaderBand1 Ref="5" type="PageHeaderBand" isKey="true">
+          <Border>None;[191:191:191];1;Solid;False;4;Black</Border>
+          <Brush>Transparent</Brush>
+          <ClientRectangle>0,0.2,11.29,0.6</ClientRectangle>
+          <Components isList="true" count="7">
+            <Text1 Ref="6" type="Text" isKey="true">
+              <Border>None;[191:191:191];1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>4.54,0,2.2,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Yekan Bakh FaNum Black,12,Bold</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text1</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>{CompanyName}</Text>
+              <TextBrush>Black</TextBrush>
+              <VertAlignment>Center</VertAlignment>
+            </Text1>
+            <Text2 Ref="7" type="Text" isKey="true">
+              <Border>None;[191:191:191];1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>3.94,0.15,3.4,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Yekan Bakh FaNum Light,9,Bold</Font>
+              <HorAlignment>Center</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text2</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>ترازنامه در تاریخ  {BalanceDate}</Text>
+              <TextBrush>Black</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text2>
+            <Text17 Ref="8" type="Text" isKey="true">
+              <Border>None;[191:191:191];1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>9.9,0.3,1.3,0.2</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Yekan Bakh FaNum Light,8,Bold</Font>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text17</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>چاپ گزارش : {ReportDate}</Text>
+              <TextBrush>[127:127:127]</TextBrush>
+              <TextOptions>,,RightToLeft=True,,,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text17>
+            <Text18 Ref="9" type="Text" isKey="true">
+              <Border>None;[191:191:191];1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>9.9,0.1,1.3,0.2</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Yekan Bakh FaNum Light,9,Bold</Font>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text18</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>دوره : {FinancePeriod}</Text>
+              <TextBrush>[127:127:127]</TextBrush>
+              <TextOptions>,,RightToLeft=True,,,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text18>
+            <Panel1 Ref="10" type="Panel" isKey="true">
+              <Border>Top, Left;Black;1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>5.6,0.6,5.7,6.3</ClientRectangle>
+              <Components isList="true" count="5">
+                <HeaderBand1 Ref="11" type="HeaderBand" isKey="true">
+                  <Brush>Transparent</Brush>
+                  <ClientRectangle>0,0.2,5.7,0.5</ClientRectangle>
+                  <Components isList="true" count="1">
+                    <Text5 Ref="12" type="Text" isKey="true">
+                      <Brush>Transparent</Brush>
+                      <ClientRectangle>4.5,0.1,0.9,0.4</ClientRectangle>
+                      <Conditions isList="true" count="0" />
+                      <Font>Yekan Bakh FaNum Black,14,Bold</Font>
+                      <HorAlignment>Right</HorAlignment>
+                      <Margins>0,0,0,0</Margins>
+                      <Name>Text5</Name>
+                      <Page isRef="4" />
+                      <Parent isRef="11" />
+                      <Text>دارایی</Text>
+                      <TextBrush>Black</TextBrush>
+                      <Type>Expression</Type>
+                      <VertAlignment>Center</VertAlignment>
+                    </Text5>
+                  </Components>
+                  <Conditions isList="true" count="0" />
+                  <Name>HeaderBand1</Name>
+                  <Page isRef="4" />
+                  <Parent isRef="10" />
+                </HeaderBand1>
+                <GroupHeaderBand1 Ref="13" type="GroupHeaderBand" isKey="true">
+                  <Brush>Transparent</Brush>
+                  <ClientRectangle>0,1.1,5.7,0.2</ClientRectangle>
+                  <Components isList="true" count="1">
+                    <Text6 Ref="14" type="Text" isKey="true">
+                      <Brush>Transparent</Brush>
+                      <ClientRectangle>3.6,0,1.7,0.2</ClientRectangle>
+                      <Conditions isList="true" count="0" />
+                      <Font>Yekan Bakh FaNum,10,Bold</Font>
+                      <Margins>5,5,5,5</Margins>
+                      <Name>Text6</Name>
+                      <Page isRef="4" />
+                      <Parent isRef="13" />
+                      <Text>{data.GroupName}</Text>
+                      <TextBrush>Black</TextBrush>
+                      <TextOptions>,,RightToLeft=True,,,A=0</TextOptions>
+                      <Type>Expression</Type>
+                      <VertAlignment>Center</VertAlignment>
+                    </Text6>
+                  </Components>
+                  <Condition>{data.GroupName}</Condition>
+                  <Conditions isList="true" count="0" />
+                  <Name>GroupHeaderBand1</Name>
+                  <Page isRef="4" />
+                  <Parent isRef="10" />
+                  <SortDirection>None</SortDirection>
+                </GroupHeaderBand1>
+                <DataBand1 Ref="15" type="DataBand" isKey="true">
+                  <Brush>Transparent</Brush>
+                  <BusinessObjectGuid isNull="true" />
+                  <ClientRectangle>0,1.7,5.7,0.2</ClientRectangle>
+                  <Components isList="true" count="2">
+                    <Text7 Ref="16" type="Text" isKey="true">
+                      <Brush>Transparent</Brush>
+                      <ClientRectangle>2.5,0,2.7,0.2</ClientRectangle>
+                      <Conditions isList="true" count="0" />
+                      <Font>Yekan Bakh FaNum,10</Font>
+                      <Margins>0,0,0,0</Margins>
+                      <Name>Text7</Name>
+                      <Page isRef="4" />
+                      <Parent isRef="15" />
+                      <Text>{data.KolName}</Text>
+                      <TextBrush>Black</TextBrush>
+                      <TextOptions>,,RightToLeft=True,,,A=0</TextOptions>
+                      <Type>DataColumn</Type>
+                      <VertAlignment>Center</VertAlignment>
+                    </Text7>
+                    <Text8 Ref="17" type="Text" isKey="true">
+                      <AfterPrintEvent>
+</AfterPrintEvent>
+                      <Brush>Transparent</Brush>
+                      <ClientRectangle>0.3,0,2.2,0.2</ClientRectangle>
+                      <Conditions isList="true" count="0" />
+                      <Font>Yekan Bakh FaNum,9</Font>
+                      <HorAlignment>Right</HorAlignment>
+                      <Margins>0,0,0,0</Margins>
+                      <Name>Text8</Name>
+                      <Page isRef="4" />
+                      <Parent isRef="15" />
+                      <Text>{data.Mandeh}</Text>
+                      <TextBrush>Black</TextBrush>
+                      <TextFormat Ref="18" type="NumberFormat" isKey="true">
+                        <DecimalDigits>0</DecimalDigits>
+                        <GroupSeparator>,</GroupSeparator>
+                        <NegativePattern>1</NegativePattern>
+                        <UseLocalSetting>False</UseLocalSetting>
+                      </TextFormat>
+                      <TextOptions>,,RightToLeft=True,,,A=0</TextOptions>
+                      <Type>DataColumn</Type>
+                      <VertAlignment>Center</VertAlignment>
+                    </Text8>
+                  </Components>
+                  <Conditions isList="true" count="0" />
+                  <DataSourceName>data</DataSourceName>
+                  <Filters isList="true" count="0" />
+                  <Name>DataBand1</Name>
+                  <Page isRef="4" />
+                  <Parent isRef="10" />
+                  <Sort isList="true" count="0" />
+                </DataBand1>
+                <GroupFooterBand1 Ref="19" type="GroupFooterBand" isKey="true">
+                  <Brush>Transparent</Brush>
+                  <ClientRectangle>0,2.3,5.7,0.2</ClientRectangle>
+                  <Components isList="true" count="1">
+                    <Text9 Ref="20" type="Text" isKey="true">
+                      <Border>Bottom;Black;1;Solid;False;4;Black</Border>
+                      <Brush>Transparent</Brush>
+                      <ClientRectangle>0.3,0,1.6,0.2</ClientRectangle>
+                      <Conditions isList="true" count="0" />
+                      <Font>Yekan Bakh FaNum,10,Bold</Font>
+                      <HorAlignment>Right</HorAlignment>
+                      <Margins>0,0,0,0</Margins>
+                      <Name>Text9</Name>
+                      <Page isRef="4" />
+                      <Parent isRef="19" />
+                      <Text>{Sum(data.Mandeh)}</Text>
+                      <TextBrush>Black</TextBrush>
+                      <TextFormat Ref="21" type="NumberFormat" isKey="true">
+                        <DecimalDigits>0</DecimalDigits>
+                        <GroupSeparator>,</GroupSeparator>
+                        <NegativePattern>1</NegativePattern>
+                        <UseLocalSetting>False</UseLocalSetting>
+                      </TextFormat>
+                      <TextOptions>,,RightToLeft=True,,,A=0</TextOptions>
+                      <Type>Expression</Type>
+                      <VertAlignment>Center</VertAlignment>
+                    </Text9>
+                  </Components>
+                  <Conditions isList="true" count="0" />
+                  <Name>GroupFooterBand1</Name>
+                  <Page isRef="4" />
+                  <Parent isRef="10" />
+                </GroupFooterBand1>
+                <FooterBand1 Ref="22" type="FooterBand" isKey="true">
+                  <Brush>Transparent</Brush>
+                  <ClientRectangle>0,2.9,5.7,0.5</ClientRectangle>
+                  <Components isList="true" count="2">
+                    <Text10 Ref="23" type="Text" isKey="true">
+                      <Border>Bottom;Black;1;Double;False;4;Black</Border>
+                      <Brush>Transparent</Brush>
+                      <ClientRectangle>0.3,0.2,1.6,0.2</ClientRectangle>
+                      <Conditions isList="true" count="0" />
+                      <Font>Yekan Bakh FaNum,11,Bold</Font>
+                      <HorAlignment>Right</HorAlignment>
+                      <Margins>0,0,0,0</Margins>
+                      <Name>Text10</Name>
+                      <Page isRef="4" />
+                      <Parent isRef="22" />
+                      <Text>{Sum(data.Mandeh)}</Text>
+                      <TextBrush>Black</TextBrush>
+                      <TextFormat Ref="24" type="NumberFormat" isKey="true">
+                        <DecimalDigits>0</DecimalDigits>
+                        <GroupSeparator>,</GroupSeparator>
+                        <NegativePattern>1</NegativePattern>
+                        <UseLocalSetting>False</UseLocalSetting>
+                      </TextFormat>
+                      <TextOptions>,,RightToLeft=True,,,A=0</TextOptions>
+                      <Type>Expression</Type>
+                      <VertAlignment>Center</VertAlignment>
+                    </Text10>
+                    <Text20 Ref="25" type="Text" isKey="true">
+                      <Border>None;Black;1;Double;False;4;Black</Border>
+                      <Brush>Transparent</Brush>
+                      <ClientRectangle>4.3,0.2,1,0.2</ClientRectangle>
+                      <Conditions isList="true" count="0" />
+                      <Font>Yekan Bakh FaNum,11,Bold</Font>
+                      <Margins>0,0,0,0</Margins>
+                      <Name>Text20</Name>
+                      <Page isRef="4" />
+                      <Parent isRef="22" />
+                      <Text>جمع دارایی ها</Text>
+                      <TextBrush>Black</TextBrush>
+                      <TextFormat Ref="26" type="NumberFormat" isKey="true">
+                        <DecimalDigits>0</DecimalDigits>
+                        <GroupSeparator>,</GroupSeparator>
+                        <NegativePattern>1</NegativePattern>
+                        <UseLocalSetting>False</UseLocalSetting>
+                      </TextFormat>
+                      <TextOptions>,,RightToLeft=True,,,A=0</TextOptions>
+                      <Type>Expression</Type>
+                      <VertAlignment>Center</VertAlignment>
+                    </Text20>
+                  </Components>
+                  <Conditions isList="true" count="0" />
+                  <Name>FooterBand1</Name>
+                  <Page isRef="4" />
+                  <Parent isRef="10" />
+                </FooterBand1>
+              </Components>
+              <Conditions isList="true" count="0" />
+              <Name>Panel1</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+            </Panel1>
+            <Panel2 Ref="27" type="Panel" isKey="true">
+              <Border>Top, Right;Black;1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanShrink>True</CanShrink>
+              <ClientRectangle>0,0.6,5.6,6.3</ClientRectangle>
+              <Components isList="true" count="5">
+                <HeaderBand2 Ref="28" type="HeaderBand" isKey="true">
+                  <Brush>Transparent</Brush>
+                  <ClientRectangle>0,0.2,5.6,0.5</ClientRectangle>
+                  <Components isList="true" count="1">
+                    <Text11 Ref="29" type="Text" isKey="true">
+                      <Brush>Transparent</Brush>
+                      <ClientRectangle>3.8,0.1,1.6,0.4</ClientRectangle>
+                      <Conditions isList="true" count="0" />
+                      <Font>Yekan Bakh FaNum Black,14,Bold</Font>
+                      <HorAlignment>Right</HorAlignment>
+                      <Margins>0,0,0,0</Margins>
+                      <Name>Text11</Name>
+                      <Page isRef="4" />
+                      <Parent isRef="28" />
+                      <Text>بدهی و سرمایه</Text>
+                      <TextBrush>Black</TextBrush>
+                      <Type>Expression</Type>
+                      <VertAlignment>Center</VertAlignment>
+                    </Text11>
+                  </Components>
+                  <Conditions isList="true" count="0" />
+                  <Name>HeaderBand2</Name>
+                  <Page isRef="4" />
+                  <Parent isRef="27" />
+                </HeaderBand2>
+                <GroupHeaderBand2 Ref="30" type="GroupHeaderBand" isKey="true">
+                  <Brush>Transparent</Brush>
+                  <ClientRectangle>0,1.1,5.6,0.2</ClientRectangle>
+                  <Components isList="true" count="1">
+                    <Text12 Ref="31" type="Text" isKey="true">
+                      <Brush>Transparent</Brush>
+                      <ClientRectangle>3.7,0,1.7,0.2</ClientRectangle>
+                      <Conditions isList="true" count="0" />
+                      <Font>Yekan Bakh FaNum,10,Bold</Font>
+                      <Margins>5,5,5,5</Margins>
+                      <Name>Text12</Name>
+                      <Page isRef="4" />
+                      <Parent isRef="30" />
+                      <Text>{Debt.GroupName}</Text>
+                      <TextBrush>Black</TextBrush>
+                      <TextOptions>,,RightToLeft=True,,,A=0</TextOptions>
+                      <Type>DataColumn</Type>
+                      <VertAlignment>Center</VertAlignment>
+                    </Text12>
+                  </Components>
+                  <Condition>{Debt.GroupName}</Condition>
+                  <Conditions isList="true" count="0" />
+                  <Name>GroupHeaderBand2</Name>
+                  <Page isRef="4" />
+                  <Parent isRef="27" />
+                </GroupHeaderBand2>
+                <DataBand2 Ref="32" type="DataBand" isKey="true">
+                  <Brush>Transparent</Brush>
+                  <BusinessObjectGuid isNull="true" />
+                  <ClientRectangle>0,1.7,5.6,0.2</ClientRectangle>
+                  <Components isList="true" count="2">
+                    <Text13 Ref="33" type="Text" isKey="true">
+                      <Brush>Transparent</Brush>
+                      <ClientRectangle>2.4,0,2.8,0.2</ClientRectangle>
+                      <Conditions isList="true" count="0" />
+                      <Font>Yekan Bakh FaNum,10</Font>
+                      <Margins>0,0,0,0</Margins>
+                      <Name>Text13</Name>
+                      <Page isRef="4" />
+                      <Parent isRef="32" />
+                      <Text>{Debt.KolName}</Text>
+                      <TextBrush>Black</TextBrush>
+                      <TextOptions>,,RightToLeft=True,,,A=0</TextOptions>
+                      <Type>Expression</Type>
+                      <VertAlignment>Center</VertAlignment>
+                    </Text13>
+                    <Text14 Ref="34" type="Text" isKey="true">
+                      <AfterPrintEvent>
+</AfterPrintEvent>
+                      <BeforePrintEvent>if(Debt.Mandeh &lt; 0){
+	Text14.Margins=	new Stimulsoft.Report.Components.StiMargins(0, 130, 0, 0);
+}</BeforePrintEvent>
+                      <Brush>Transparent</Brush>
+                      <ClientRectangle>0.2,0,2.2,0.2</ClientRectangle>
+                      <Conditions isList="true" count="0" />
+                      <Font>Yekan Bakh FaNum,9</Font>
+                      <HorAlignment>Right</HorAlignment>
+                      <Margins>0,0,0,0</Margins>
+                      <Name>Text14</Name>
+                      <Page isRef="4" />
+                      <Parent isRef="32" />
+                      <Text>{Debt.Mandeh}</Text>
+                      <TextBrush>Black</TextBrush>
+                      <TextFormat Ref="35" type="NumberFormat" isKey="true">
+                        <DecimalDigits>0</DecimalDigits>
+                        <GroupSeparator>,</GroupSeparator>
+                        <NegativePattern>1</NegativePattern>
+                        <UseLocalSetting>False</UseLocalSetting>
+                      </TextFormat>
+                      <TextOptions>,,RightToLeft=True,,,A=0</TextOptions>
+                      <Type>DataColumn</Type>
+                      <VertAlignment>Center</VertAlignment>
+                    </Text14>
+                  </Components>
+                  <Conditions isList="true" count="0" />
+                  <DataSourceName>Debt</DataSourceName>
+                  <Filters isList="true" count="0" />
+                  <Name>DataBand2</Name>
+                  <Page isRef="4" />
+                  <Parent isRef="27" />
+                  <Sort isList="true" count="0" />
+                </DataBand2>
+                <GroupFooterBand2 Ref="36" type="GroupFooterBand" isKey="true">
+                  <Brush>Transparent</Brush>
+                  <ClientRectangle>0,2.3,5.6,0.2</ClientRectangle>
+                  <Components isList="true" count="1">
+                    <Text15 Ref="37" type="Text" isKey="true">
+                      <Border>Bottom;Black;1;Solid;False;4;Black</Border>
+                      <Brush>Transparent</Brush>
+                      <ClientRectangle>0.2,0,1.6,0.2</ClientRectangle>
+                      <Conditions isList="true" count="0" />
+                      <Font>Yekan Bakh FaNum,10,Bold</Font>
+                      <HorAlignment>Right</HorAlignment>
+                      <Margins>0,0,0,0</Margins>
+                      <Name>Text15</Name>
+                      <Page isRef="4" />
+                      <Parent isRef="36" />
+                      <Text>{Sum(Debt.Mandeh)}</Text>
+                      <TextBrush>Black</TextBrush>
+                      <TextFormat Ref="38" type="NumberFormat" isKey="true">
+                        <DecimalDigits>0</DecimalDigits>
+                        <GroupSeparator>,</GroupSeparator>
+                        <NegativePattern>1</NegativePattern>
+                        <UseLocalSetting>False</UseLocalSetting>
+                      </TextFormat>
+                      <TextOptions>,,RightToLeft=True,,,A=0</TextOptions>
+                      <Type>Expression</Type>
+                      <VertAlignment>Center</VertAlignment>
+                    </Text15>
+                  </Components>
+                  <Conditions isList="true" count="0" />
+                  <Name>GroupFooterBand2</Name>
+                  <Page isRef="4" />
+                  <Parent isRef="27" />
+                </GroupFooterBand2>
+                <FooterBand2 Ref="39" type="FooterBand" isKey="true">
+                  <Brush>Transparent</Brush>
+                  <ClientRectangle>0,2.9,5.6,0.5</ClientRectangle>
+                  <Components isList="true" count="2">
+                    <Text16 Ref="40" type="Text" isKey="true">
+                      <Border>Bottom;Black;1;Double;False;4;Black</Border>
+                      <Brush>Transparent</Brush>
+                      <ClientRectangle>0.2,0.2,1.6,0.2</ClientRectangle>
+                      <Conditions isList="true" count="0" />
+                      <Font>Yekan Bakh FaNum,11,Bold</Font>
+                      <HorAlignment>Right</HorAlignment>
+                      <Margins>0,0,0,0</Margins>
+                      <Name>Text16</Name>
+                      <Page isRef="4" />
+                      <Parent isRef="39" />
+                      <Text>{Sum(Debt.Mandeh)}</Text>
+                      <TextBrush>Black</TextBrush>
+                      <TextFormat Ref="41" type="NumberFormat" isKey="true">
+                        <DecimalDigits>0</DecimalDigits>
+                        <GroupSeparator>,</GroupSeparator>
+                        <NegativePattern>1</NegativePattern>
+                        <UseLocalSetting>False</UseLocalSetting>
+                      </TextFormat>
+                      <TextOptions>,,RightToLeft=True,,,A=0</TextOptions>
+                      <Type>Expression</Type>
+                      <VertAlignment>Center</VertAlignment>
+                    </Text16>
+                    <Text19 Ref="42" type="Text" isKey="true">
+                      <Border>None;Black;1;Double;False;4;Black</Border>
+                      <Brush>Transparent</Brush>
+                      <ClientRectangle>4,0.2,1.4,0.2</ClientRectangle>
+                      <Conditions isList="true" count="0" />
+                      <Font>Yekan Bakh FaNum,11,Bold</Font>
+                      <Margins>0,0,0,0</Margins>
+                      <Name>Text19</Name>
+                      <Page isRef="4" />
+                      <Parent isRef="39" />
+                      <Text>جمع بدهی و سرمایه</Text>
+                      <TextBrush>Black</TextBrush>
+                      <TextFormat Ref="43" type="NumberFormat" isKey="true">
+                        <DecimalDigits>0</DecimalDigits>
+                        <GroupSeparator>,</GroupSeparator>
+                        <NegativePattern>1</NegativePattern>
+                        <UseLocalSetting>False</UseLocalSetting>
+                      </TextFormat>
+                      <TextOptions>,,RightToLeft=True,,,A=0</TextOptions>
+                      <Type>Expression</Type>
+                      <VertAlignment>Center</VertAlignment>
+                    </Text19>
+                  </Components>
+                  <Conditions isList="true" count="0" />
+                  <Name>FooterBand2</Name>
+                  <Page isRef="4" />
+                  <Parent isRef="27" />
+                </FooterBand2>
+              </Components>
+              <Conditions isList="true" count="0" />
+              <Name>Panel2</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+            </Panel2>
+            <Text3 Ref="44" type="Text" isKey="true">
+              <Border>None;[191:191:191];1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <ClientRectangle>0.1,0.28,1.1,0.2</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Font>Yekan Bakh FaNum Light,9</Font>
+              <Margins>0,0,0,0</Margins>
+              <Name>Text3</Name>
+              <Page isRef="4" />
+              <Parent isRef="5" />
+              <Text>صفحه {PageNumber} از {TotalPageCount}</Text>
+              <TextBrush>[127:127:127]</TextBrush>
+              <Type>Expression</Type>
+              <VertAlignment>Center</VertAlignment>
+            </Text3>
+          </Components>
+          <Conditions isList="true" count="0" />
+          <Name>PageHeaderBand1</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+        </PageHeaderBand1>
+        <Text4 Ref="45" type="Text" isKey="true">
+          <Border>None;[191:191:191];1;Solid;False;4;Black</Border>
+          <Brush>Transparent</Brush>
+          <CanShrink>True</CanShrink>
+          <ClientRectangle>9.9,7.28,1.3,0.4</ClientRectangle>
+          <Conditions isList="true" count="0" />
+          <Font>Yekan Bakh FaNum Black,8</Font>
+          <HorAlignment>Right</HorAlignment>
+          <Margins>0,0,10,0</Margins>
+          <Name>Text4</Name>
+          <Page isRef="4" />
+          <Parent isRef="4" />
+          <Text>گروه نرم افزاری گارنِت
+https://garnetapp.ir</Text>
+          <TextBrush>[127:127:127]</TextBrush>
+          <Type>Expression</Type>
+          <VertAlignment>Center</VertAlignment>
+        </Text4>
+      </Components>
+      <Conditions isList="true" count="0" />
+      <Guid>f95e00ae5f0049caa9bd732c58da7fb0</Guid>
+      <Margins>0.2,0.2,0.2,0.2</Margins>
+      <Name>Page1</Name>
+      <Orientation>Landscape</Orientation>
+      <PageHeight>8.27</PageHeight>
+      <PageWidth>11.69</PageWidth>
+      <PaperSize>A4</PaperSize>
+      <Report isRef="0" />
+      <RightToLeft>True</RightToLeft>
+      <StretchToPrintArea>True</StretchToPrintArea>
+    </Page1>
+  </Pages>
+  <ReferencedAssemblies isList="true" count="8">
+    <value>System.Dll</value>
+    <value>System.Drawing.Dll</value>
+    <value>System.Windows.Forms.Dll</value>
+    <value>System.Data.Dll</value>
+    <value>System.Xml.Dll</value>
+    <value>Stimulsoft.Controls.Dll</value>
+    <value>Stimulsoft.Base.Dll</value>
+    <value>Stimulsoft.Report.Dll</value>
+  </ReferencedAssemblies>
+  <ReportAlias>Report</ReportAlias>
+  <ReportChanged>9/7/2024 1:15:54 AM</ReportChanged>
+  <ReportCreated>9/6/2024 3:35:27 PM</ReportCreated>
+  <ReportFile>F:\GitLab Projects\garnetaccounting\GarnetAccounting\wwwroot\Reports\acc\Acc_Balance.mrt</ReportFile>
+  <ReportGuid>8af07e3d4d234c70b6b7522689b117ee</ReportGuid>
+  <ReportName>Report</ReportName>
+  <ReportUnit>Inches</ReportUnit>
+  <ReportVersion>2020.2.1.0</ReportVersion>
+  <Script>using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Data;
+using Stimulsoft.Controls;
+using Stimulsoft.Base.Drawing;
+using Stimulsoft.Report;
+using Stimulsoft.Report.Dialogs;
+using Stimulsoft.Report.Components;
+
+namespace Reports
+{
+    public class Report : Stimulsoft.Report.StiReport
+    {
+        public Report()        {
+            this.InitializeComponent();
+        }
+
+        #region StiReport Designer generated code - do not modify
+		#endregion StiReport Designer generated code - do not modify
+    }
+}
+</Script>
+  <ScriptLanguage>CSharp</ScriptLanguage>
+  <Styles isList="true" count="0" />
+</StiSerializer>

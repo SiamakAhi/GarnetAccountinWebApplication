@@ -1,0 +1,50 @@
+﻿@model VmUpdateProfile
+
+
+<form class="row g-3" asp-action="UpdateUserProfile" asp-controller="usermanager" asp-area="" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" value="@Model.Id" />
+    <input type="hidden" asp-for="userName" value="@Model.userName" />
+    <div class="col-lg-6">
+        <label class="form-label" asp-for="FirstName"></label>
+        <input class="form-control" type="text" asp-for="FirstName">
+    </div>
+    <div class="col-lg-6">
+        <label class="form-label" asp-for="LastName"></label>
+        <input class="form-control" type="text" asp-for="LastName">
+    </div>
+     <div class="col-lg-6">
+        <label asp-for="Gender">جنسیت</label>
+        <select class="form-select" asp-for="Gender">
+            <option>...</option>
+            <option value="1">مرد</option>
+            <option value="2">زن</option>
+        </select>
+    </div>
+    <div class="col-lg-6">
+        <label class="form-label" asp-for="Email"></label>
+        <input class="form-control" type="email" asp-for="Email">
+    </div>
+    <div class="col-lg-6">
+        <label class="form-label" asp-for="PhoneNumber"></label>
+        <input class="form-control" type="text" asp-for="PhoneNumber">
+    </div>
+    <div class="col-lg-6">
+        <label class="form-label" asp-for="Mobile"></label>
+        <input class="form-control" type="text" asp-for="Mobile">
+    </div>
+   
+    <div class="col-lg-6">
+        <label asp-for="StrBirthDate" class="form-label">تاریخ تولد</label>
+        <input asp-for="StrBirthDate" type="hidden" class="form-control flatpickr-input" placeholder="YYYY/MM/DD" id="flatpickr-date">
+    </div>
+    <div class="col-lg-6">
+        <label asp-for="ImageFile"></label>
+        <input type="file" class="form-control" asp-for="ImageFile" placeholder="تصویر پروفایل" />
+    </div>
+
+
+    <div class="col-12 d-flex justify-content-end">
+        <button class="btn btn-primary" type="submit">به روز رسانی</button>
+        </div>
+</form>
+

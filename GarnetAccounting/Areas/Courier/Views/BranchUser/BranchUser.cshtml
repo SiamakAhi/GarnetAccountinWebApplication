@@ -1,0 +1,86 @@
+﻿@model ViewmodelBranchUser
+@{
+    ViewData["Title"] = "BranchUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="">
+    <div class="card card-panel">
+        <div class="card-panel-header">
+            <div><span class="card-panel-title">مدیریت کاربران</span></div>
+            <div>
+                <ul class="card-panel-navbar">
+                    <li>
+                        <a href="javascript:void(0)" data-url="@Url.Action("", "", new { Area = "Courier" })" class="quickaccess-link callform">
+                            <i class="bx bx-plus"></i>
+                            <span>جـدید</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-panel-section">
+            <div class="card-panel-section-header"><h5 class="text-warning">فیلتر </h5></div>
+            <div class="card-panel-section-body">
+                <div class="widget-info-container">
+                    <form asp-action="BranchUser" asp-controller="BranchUser" asp-area="Courier" method="get" id="bUserFilter">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="row">
+                                    <div class="col-md-4 mb-1">
+                                        <div class="garnet-input-group1 garnet-input-group-light">
+                                            <label>صادر کننده</label>
+                                            <select asp-for="filter.BranchId" class="select2" asp-items="@ViewBag.agency">
+                                                <option value="" selected>همه</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 form-actionbox">
+                                <input type="submit" class="btn btn-primary text-center" value="نمایش اطلاعات " />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card-panel-section">
+            <div class="card-panel-section-body">
+                @foreach (var x in Model.Users)
+                {
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-3">
+                            <div class="d-flex align-items-start">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar me-3">
+                                        <img src="~/img/avatars/1.png" alt="آواتار" class="rounded-circle">
+                                    </div>
+                                    <div class="me-2">
+                                        <h6 class="mb-0">@x.Name</h6>
+                                        <small class="text-muted">@x.BranchName</small>
+                                    </div>
+                                </div>
+                                <div class="ms-auto">
+                                    <span>@x.CityName</span>
+                                </div>
+                                <div class="ms-auto">
+                                    <span>@x.userName</span>
+                                </div>
+                                <div class="ms-auto">
+                                   <span>@x.RegisterDate.LatinToPersian()</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

@@ -1,0 +1,84 @@
+﻿@model ConvertAccountsDto
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning">تبدیل حساب ها</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form asp-action="ConvertAccounts" asp-controller="Assistants" asp-area="Accounting" method="post">
+
+                @if (Model.ArticleIds != null && Model.ArticleIds.Any())
+                {
+                    foreach (var id in Model.ArticleIds)
+                    {
+                        <input type="hidden" asp-for="ArticleIds" value="@id" />
+                    }
+                }
+
+                <h5 class="form-divider-v">معین</h5>
+                <div class="mb-3">
+                    <label class="ms-3 mb-1">انتخاب حساب معین</label>
+                    <select asp-for="NewMoeinId" class="form-select select2 gonext" asp-items="@ViewBag.Moeins">
+                        <option value="0">انتخاب کنید ...</option>
+                    </select>
+                </div>
+
+                <div class="groupcontrols mb-3">
+                    <h5 class="form-divider-v"> تفصیل 4</h5>
+                    <div class="form-check form-check-success">
+                        <input asp-for="Tafsil4Action" class="form-check-input" type="radio" value="1" id="Tafsil4Action1" checked="">
+                        <label class="form-check-label" for="Tafsil4Action1"> تغییری در حساب های تصیل 4 داده نشود </label>
+                    </div>
+                    <div class="form-check form-check-danger">
+                        <input asp-for="Tafsil4Action" class="form-check-input" type="radio" value="2" id="Tafsil4Action2">
+                        <label class="form-check-label" for="Tafsil4Action2"> حساب تفصیل 4 برای آرتیکل های انتخاب شده حذف شوند </label>
+                    </div>
+                    <div class="form-check form-check-warning mb-2">
+                        <input asp-for="Tafsil4Action" class="form-check-input" type="radio" value="3" id="Tafsil4Action3">
+                        <label class="form-check-label" for="Tafsil4Action3"> حساب تفصیل 4 به حساب انتخاب شده زیر تغییر کنند </label>
+                    </div>
+                    <div class="mb-2">
+                        <label class="ms-3 mb-1">انتخاب حساب تفصیل</label>
+                        <select asp-for="Tafsil4Id" class="form-select select2 gonext" asp-items="@ViewBag.Tafsils">
+                            <option value="null">انتخاب کنید ...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="groupcontrols mb-3">
+                    <h5 class="form-divider-v"> تفصیل 5</h5>
+                    <div class="form-check form-check-success">
+                        <input asp-for="Tafsil5Action" class="form-check-input" type="radio" value="1" id="Tafsil5Action1" checked="">
+                        <label class="form-check-label" for="Tafsil5Action1"> تغییری در حساب های تصیل 5 داده نشود </label>
+                    </div>
+                    <div class="form-check form-check-danger">
+                        <input asp-for="Tafsil5Action" class="form-check-input" type="radio" value="2" id="Tafsil5Action2">
+                        <label class="form-check-label" for="Tafsil5Action2"> حساب تفصیل 5 برای آرتیکل های انتخاب شده حذف شوند </label>
+                    </div>
+                    <div class="form-check form-check-warning mb-2">
+                        <input asp-for="Tafsil5Action" class="form-check-input" type="radio" value="3" id="Tafsil5Action3">
+                        <label class="form-check-label" for="Tafsil5Action3"> حساب تفصیل 5 به حساب انتخاب شده زیر تغییر کنند </label>
+                    </div>
+                    <div class="mb-2">
+                        <label class="ms-3 mb-1">انتخاب حساب تفصیل</label>
+                        <select asp-for="Tafsil5Id" class="form-select select2 gonext" asp-items="@ViewBag.Tafsils">
+                            <option value="null">انتخاب کنید ...</option>
+                        </select>
+                    </div>
+                </div>
+                
+               
+                <div class="row mt-3">
+                    <hr />
+                    <div class="col-md-12 d-grid p-3 mb-2">
+                        <input type="button" class="btn btn-primary accAjaxSubmit" value="ثبت" />
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/js/forms-selects.js"></script>

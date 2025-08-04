@@ -1,0 +1,47 @@
+﻿@model ExcelImportDto
+@{
+    ViewData["Title"] = "بارگذاری گرازشات سامانه مودیان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string alert = ViewBag.msg;
+}
+
+<div class="card">
+    <h5 class="card-header heading-color">
+        بارگذاری اطلاعات خرید و فروش سامانه مودیان از فایل اکسل
+    </h5>
+    <div class="card-body">
+        <form asp-action="InsertMoadianReport" asp-controller="Assistants" asp-area="Accounting" method="post" enctype="multipart/form-data">
+            <div class="row mt-1">
+                <div class="col-md-4 mb-2">
+                    <label class="form-label">انتخاب الگوی گزارش اکسل ورودی</label>
+                    <select asp-for="Reporttype" class="form-select">
+                        <option>...</option>
+                        <option value="1">گزارش فروش از کارپوشه مالیاتی</option>
+                        <option value="2">گزارش خرید از کارپوشه مالیاتی</option>
+                        <option value="3">اکسل فروش خروجی نرم افزار واسط گارنت</option>
+                    </select>
+                </div>
+                <div class="col-md-8 mb-2">
+                    <label class="form-label">انتخاب فایل اکسل</label>
+                    <input type="file" class="form-control" asp-for="File" accept=".xls, .xlsx" placeholder="انتخاب اکسل" />
+                </div>
+                <div  class="col-12 mb-4 mt-4">
+                    <div class="garnet-checkbox-group">
+                        <label asp-for="AppendDoc">
+                            اسناد به تاریخ های مشابه اضافه شوند. ( درصورت عدم وجود سند در تاریخ صورتحساب، سند جدید ایجاد خواهد شد)
+                        </label>
+                        <input type="checkbox" asp-for="AppendDoc" />
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <input type="button" class="btn btn-primary mb-2 accAjaxSubmit" value="بارگذاری و ثبت اسناد حسابداری" />
+                    @*<a class="btn btn-warning mb-2" asp-action="" asp-controller="Sale" asp-area="Sale">بازگشت به مدیریت صورتحساب ها</a>*@
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

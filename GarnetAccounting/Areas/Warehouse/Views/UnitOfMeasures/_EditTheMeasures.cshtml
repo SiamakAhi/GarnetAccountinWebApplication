@@ -1,0 +1,41 @@
+﻿@model UnitOfMeasureDto
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning"> ویرایش واحد اندازه گیری</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form asp-action="EditTheMeasures" asp-controller="UnitOfMeasures" asp-area="Warehouse" method="post">
+                <div class="mb-3">
+                    <label asp-for="UnitName" class="form-label">نام</label>
+                    <input type="text" class="form-control" asp-for="UnitName" placeholder="کیلوگرم">
+                </div>
+                <div>
+                    <label asp-for="UnitSymbol" class="form-label">نماد</label>
+                    <input type="text" class="form-control" asp-for="UnitSymbol" placeholder="Kg">
+                </div>
+                <div>
+                    <label asp-for="UnitCode" class="form-label">کد کشوری</label>
+                    <input type="text" class="form-control" asp-for="UnitCode" placeholder="164">
+                </div>
+                <div>
+                    <label asp-for="Description" class="form-label">توضیحات</label>
+                    <input type="text" class="form-control" asp-for="Description">
+                </div>
+                <div class="d-grid mt-2">
+                    <input type="button" class="btn btn-warning mb-2 accAjaxSubmit" value="ثبت">
+                    <button type="reset" class="btn btn-label-secondary mb-2" data-bs-dismiss="modal" aria-label="Close">
+                        انصراف
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+

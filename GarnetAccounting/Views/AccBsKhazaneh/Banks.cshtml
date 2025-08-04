@@ -1,0 +1,68 @@
+﻿@model BanksViewModel
+@{
+    ViewData["Title"] = "یانک ها";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class=" row">
+        <div class="col-md-4">
+            <div class="card">
+                <h5 class="card-header">
+                    افــزودن بانک جدید
+                </h5>
+                <div class="card-body">
+                    @await Html.PartialAsync("_AddBank",Model.Bank)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <h5 class="card-header">
+                    لیست یانک ها
+                </h5>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>نام بانک</th>
+                                    <th>کد حساب تفصیلی</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Banks?.Count > 0)
+                                {
+                                    int rowNo = 1;
+                                    foreach (var x in Model.Banks)
+                                    {
+
+                                        <tr>
+                                            <td class="text-center">@rowNo</td>
+                                            <td>@x.Name</td>
+                                            <td class="text-center">
+                                                @if (string.IsNullOrEmpty(x.TafsilCode))
+                                                {
+                                                   <a href="#" class="btn btn-sm btn-outline-info accAjaxPost" data-url="@Url.Action("CreateTafsil","AccBsKhazaneh",new {Area=""})" data-target="@x.Id" >ایجاد حساب تفصیلی</a>
+                                                }
+                                                else
+                                                {
+                                                    @x.TafsilCode
+                                                }
+                                            </td>
+                                            <td class="text-center"></td>
+                                        </tr>
+                                        rowNo++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

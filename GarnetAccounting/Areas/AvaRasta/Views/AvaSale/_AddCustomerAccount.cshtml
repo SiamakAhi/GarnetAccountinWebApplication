@@ -1,0 +1,71 @@
+﻿@model VmRegisterUser
+
+<div class="modal-dialog modal-lg modal-simple modal-edit-user">
+    <div class="modal-content p-3 p-md-5">
+        <div class="modal-body">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class=" mb-4 mt-0 mt-md-n2">
+                <h3 class="text-center m-0">ایجاد اکانت مشتری</h3>
+                <p class="text-center m-0">ساخت اکانت مشتری را به اطلاع وی برسانید</p>
+                <form asp-action="AddCustomerAccount" asp-controller="AvaSale" asp-area="AvaRasta" method="post" class="mt-2">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="FName"></label>
+                            <input type="text" asp-for="FName" value="@Model.FName" class="form-control">
+                            <span asp-validation-for="FName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="LName"></label>
+                            <input type="text" asp-for="LName" value="@Model.LName" class="form-control">
+                            <span asp-validation-for="LName" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="Mobile"></label>
+                            <input type="text" asp-for="Mobile" value="@Model.Mobile" class="form-control">
+                            <span asp-validation-for="Mobile" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="email"></label>
+                            <input type="email" asp-for="email" value="@Model.email" class="form-control">
+                            <span asp-validation-for="email" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="Gender"></label>
+                            <select asp-for="Gender" class="form-select" aria-label="Default select">
+                                <option value="1">آقا</option>
+                                <option value="2">خانم</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" asp-for="UserName"></label>
+                            <input type="text" asp-for="UserName" class="form-control" autocomplete="off">
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label" asp-for="Password"></label>
+                            <input type="password" asp-for="Password" class="form-control">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="ConfirmPassword"></label>
+                            <input type="password" asp-for="ConfirmPassword" class="form-control">
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                          <input type="hidden" asp-for="customerId" value="@Model.customerId" />
+                          <input type="hidden" asp-for="Birthday" value="@Model.Birthday" />
+
+                        <div class="col-12 text-center mt-4">
+                            <button type="button" class="btn btn-primary me-sm-3 me-1 accAjaxSubmit">ثبت</button>
+                            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">
+                                انصراف
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

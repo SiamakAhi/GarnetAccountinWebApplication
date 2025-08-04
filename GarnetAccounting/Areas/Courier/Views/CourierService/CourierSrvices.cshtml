@@ -1,0 +1,82 @@
+﻿@model List<Cu_ServiceDto>
+@{
+    ViewData["Title"] = "مدیریت خدمات";
+}
+
+<div class="container">
+    <div class="card">
+        <div class="card-header alert-secondary p-0">
+            <h5 class="custom-card-title">
+                <i class="bx bxs-category-alt text-warning"></i>
+                مدیریت خدمات
+            </h5>
+            <div class="section-nav">
+               
+                <div class="nav-btnbox mb-2 ms-2">
+                    <a href="#" data-url="@Url.Action("AddCourierService", "CourierService", new { Area = "Courier" })" data-target="0" class="btn btn-sm btn-secondary callform">
+                        ایجاد سرویس جدید
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        </div>
+
+        <div class="card-body card-table">
+            <div class="table-responsive text-nowrap">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>کد </th>
+                            <th>نام </th>
+                            <th>نام (انگلیسی)</th>
+                            <th>نوع حمل</th>
+                            <th>درصد تأثیر بر نرخ پایه</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @if (Model?.Count() > 0)
+                        {
+                            int row = 1;
+                            foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>@row</td>
+                                    <td>@x.ServiceCode</td>
+                                    <td>@x.ServiceName</td>
+                                    <td>@x.ServiceName_En</td>
+                                    <td>@x.ShipmentTypeCode.ToShipmentTypeName()</td>
+                                    <td>@x.ServicePercentage</td>
+                                    <td class="row-btns text-center">
+                                    <a href="#" class="callform" data-url="@Url.Action("UpdateCourierService", "CourierService", new { Area = "Courier", id = x.Id })"><i class="bx bx-edit-alt text-gray" title="ویرایش"></i></a>
+                                        <a href="#" class="removeById" data-url="@Url.Action("DelService", "CourierService", new { Area = "Courier" })" data-target="@x.Id"><i class="bx bx-trash text-warning" title="حذف"></i></a>
+                                    </td>
+                                </tr>
+
+                                row++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7">
+                                    سرویسی در سیستم ثبت نشده است
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <div class="card-footer p-4">
+           
+        </div>
+    </div>
+</div>
+
+

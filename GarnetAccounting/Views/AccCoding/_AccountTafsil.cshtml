@@ -1,0 +1,115 @@
+﻿@model AccountTafsilDto
+
+<div class="card">
+    <div class="card-header alert-secondary p-0">
+        <h5 class="custom-card-title">
+            <i class="bx bxs-category-alt text-warning"></i>
+            مدیریت سرفصل های حسابداری (سطوح تفصیلی)
+        </h5>
+        <div class="section-nav">
+            <ul>
+                <li>
+                    <a class="accountBrowserNav_tafsil" asp-action="Groups" asp-controller="AccCoding" asp-area="">
+                        <span class="text-secondary">گروه حساب ها</span>
+                    </a>
+                </li>
+                <li class="text-warning verticaldivider">
+                    <span>|</span>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" class="accountBrowserNav_tafsil codingNav" data-url="@Url.Action("Kols","AccCoding",new{Area="",id=ViewBag.GroupId,groupName=ViewBag.GroupName})">
+                        <span>@ViewBag.GroupName</span>
+                    </a>
+                </li>
+                <li class="text-warning verticaldivider">
+                    <span>|</span>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" class="accountBrowserNav_tafsil codingNav" data-url="@Url.Action("Moeins","AccCoding",new{Area="",kolId=ViewBag.KolId, groupName=ViewBag.GroupName, kolName=ViewBag.KolName,groupId=ViewBag.GroupId })">
+                        <span>@ViewBag.KolName</span>
+                    </a>
+                </li>
+                <li class="text-warning verticaldivider">
+                    <span>|</span>
+                </li>
+                <li>
+                    <span class="text-primary nav-pagenametext">@ViewBag.MoeinCode - @ViewBag.MoeinName</span>
+                </li>
+            </ul>
+
+            <div class="nav-btnbox pe-2">
+                <a href="#" data-url="@Url.Action("AddTafsilGroup", "AccCoding", new { Area = "" })" class="btn btn-sm btn-secondary callform">
+                    ایجاد گروه تفصیلی
+                </a>
+            </div>
+           
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="divider divider-success text-start-center mt-2 mb-4">
+            <div class="divider-text">
+                در صورت نیاز، برای سطوح تفصیلی، گروه های موردنظرتان را از لیست بازشونده انتخاب کنید
+            </div>
+        </div>
+        <form class="mb-3" asp-action="SetTafsilToAccount" asp-controller="AccCoding" asp-area="" method="post">
+
+            <input type="hidden" asp-for="Id" value="@ViewBag.MoeinId" />
+            <div class="row tafsilControls">
+                <div class="col-md-6 mb-4">
+                    <h5>گروه(های) تفصیلی سطح 4</h5>
+                    <div class="select2-dark">
+                        <select asp-for="Tafsil4_Array" class="select2 form-select" multiple asp-items="@ViewBag.Groups">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <h5>گروه(های) تفصیلی سطح 5</h5>
+                    <div class="select2-dark">
+                        <select asp-for="Tafsil5_Array" class="select2 form-select" multiple asp-items="@ViewBag.Groups">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <h5>گروه(های) تفصیلی سطح 6</h5>
+                    <div class="select2-dark">
+                        <select asp-for="Tafsil6_Array" class="select2 form-select" multiple asp-items="@ViewBag.Groups">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <h5>گروه(های) تفصیلی سطح 7</h5>
+                    <div class="select2-dark">
+                        <select asp-for="Tafsil7_Array" class="select2 form-select" multiple asp-items="@ViewBag.Groups">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <h5>گروه(های) تفصیلی سطح 8</h5>
+                    <div class="select2-dark">
+                        <select asp-for="Tafsil8_Array" class="select2 form-select" multiple asp-items="@ViewBag.Groups">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6 d-grid p-3">
+                    <input type="button" class="btn btn-sm btn-primary mt-3 addAccountByAjax" value="ثبت" />
+                </div>
+            </div>
+        </form>
+
+
+        <div class="divider my-4">
+            <div class="divider-text">
+            </div>
+        </div>
+    </div>
+    <div class="card-footer alert-secondary"></div>
+</div>
+
+
+
+@*<script src="~/vendor/libs/jquery/jquery.js"></script>
+<script src="~/js/app/acccoding.js"></script>*@
+
+
+
+

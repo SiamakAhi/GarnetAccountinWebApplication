@@ -1,0 +1,200 @@
+﻿@model DocReportDto
+@{
+    ViewData["Title"] = " گزارش گردش حساب ها";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card page-header-panel">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="card-panel-header">
+                <div><span class="card-panel-title">گردش حساب ها </span> </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <form asp-action="GetTurnoverAccounts" asp-controller="AccReports" asp-area="Accounting" method="get" id="frmFilterTurnover">
+                <input type="hidden" asp-for="filter.CurrentPage" value="1" />
+                <input type="hidden" asp-for="filter.PageSize" value="25" />
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card-header-panel-section">
+                            <div class="card-header-panel-section-header p-0"><span>فیلتر  </span></div>
+                            <div class="card-header-panel-section-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="row">
+                                            <div class=" col-md-6 mb-2">
+                                                <div class="garnet-input-group1 garnet-input-group-light">
+                                                    <label asp-for="filter.FromDocNumer">‌از شماره سند</label>
+                                                    <input type="number" asp-for="filter.FromDocNumer">
+                                                </div>
+                                            </div>
+                                            <div class=" col-md-6 mb-2">
+                                                <div class="garnet-input-group1 garnet-input-group-light">
+                                                    <label asp-for="filter.ToDocNumer">‌تا شماره سند</label>
+                                                    <input type="number" asp-for="filter.ToDocNumer">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-2">
+                                                <div class="garnet-input-group1 garnet-input-group-light">
+                                                    <label asp-for="filter.StartDate">از تاریخ‌</label>
+                                                    <input type="text" asp-for="filter.strStartDate" class="flatpickr-input" placeholder="YYYY/MM/DD">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-2">
+                                                <div class="garnet-input-group1 garnet-input-group-light">
+                                                    <label asp-for="filter.strEndDate">تا تاریخ‌</label>
+                                                    <input type="text" asp-for="filter.strEndDate" class="flatpickr-input" placeholder="YYYY/MM/DD">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-md-12 mb-2 select2-dark">
+                                                <div class="garnet-input-group1 garnet-input-group-light">
+                                                    <label>حساب(های) کل</label>
+                                                    <select asp-for="filter.KolsId" class="select2 gonext fillMoeinSelect" id="turnoverKols" multiple data-filltarget="#turnoverMoeins" data-url="@Url.Action("GetMoeinsByKols", "basedata", new { Area = "" })" asp-items="@ViewBag.Kols">
+                                                        <option value="null">انتخاب کنید ...</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-2 select2-dark">
+                                                <div class="garnet-input-group1 garnet-input-group-light">
+                                                    <label>حساب(های) معین</label>
+                                                    <select asp-for="filter.MoeinIds" class="select2 gonext" multiple id="turnoverMoeins" asp-items="@ViewBag.Moeins">
+                                                        <option value="null">انتخاب کنید ...</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 mb-2 select2-dark">
+                                                <div class="garnet-input-group1 garnet-input-group-light">
+                                                    <label>تفصیل 4</label>
+                                                    <select asp-for="filter.Tafsil4Ids" class="select2 gonext" multiple asp-items="@ViewBag.Tafsils">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="widget-info-container mb-3">
+                                            <div class="widget-info">
+                                                <div class="form-check form-check-inline">
+                                                    <input asp-for="filter.ReportLevel" class="form-check-input" type="radio" value="1" id="collapsible-address-type-home">
+                                                    <label class="form-check-label" for="collapsible-address-type-home">گردش در سطح کل</label>
+                                                </div>
+                                            </div>
+                                            <div class="widget-info">
+                                                <div class="form-check form-check-inline">
+                                                    <input asp-for="filter.ReportLevel" class="form-check-input" type="radio" value="2" id="collapsible-address-type-office">
+                                                    <label class="form-check-label" for="collapsible-address-type-office">
+                                                        گردش در سطح معین
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="widget-info">
+                                                <div class="form-check form-check-inline">
+                                                    <input asp-for="filter.ReportLevel" class="form-check-input" type="radio" value="3" id="collapsible-address-type-tafsil" checked="">
+                                                    <label class="form-check-label" for="collapsible-address-type-tafsil">
+                                                        گردش در سطح تفصیل
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-header-panel-section">
+                            <div class="card-header-panel-section-header"><span>عملیات</span></div>
+                            <div class="card-header-panel-section-body">
+                                <div class="row">
+                                    <div class="col-12 d-grid px-2">
+                                        <button type="submit" class="btn btn-warning mb-2">
+                                            <i class="tf-icons bx bx-list mx-1"></i>
+                                            مشاهده
+                                        </button>
+                                    </div>
+                                    <div class="col-12 d-grid px-2">
+                                        <a href="javascript:void(0)" data-formid="frmFilterTurnover" data-url="@Url.Action("GetTurnoverAccounts_Print", "AccReports", new { Area = "Accounting" })" class="btn btn-secondary mb-2 submitCustomForm">
+                                            <i class="bx bx-printer mx-1"></i>
+                                            چاپ گزارش
+                                        </a>
+                                    </div>    
+                                    <div class="col-12 d-grid px-2">
+                                        <a asp-action="PrintTurnover" asp-controller="AccPrint" asp-area="Accounting" class="btn btn-secondary mb-2">
+                                            <i class="bx bx-printer mx-1"></i>
+                                           پرینت گردش تمام دوره
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card-body pb-0">
+        <div class="table-responsive text-nowrap">
+            @if (Model.TurnoverAccounts.Count > 0)
+            {
+                foreach (var acc in Model.TurnoverAccounts)
+                {
+                    <div class="mh-400 mb-4">
+                        <table class="table table-bordered table-hover table-striped mb-3">
+                            <thead>
+                                <tr class="tr-headerReport">
+                                    <th colspan="7">
+                                        <h5><span class="text-warning me-2"> @acc.AccountCode</span> @acc.KolName/@acc.MoeinName/@acc.TafsilName </h5>
+                                    </th>
+                                </tr>
+                                <tr class="tr-columnsHeader">
+                                    <td>شماره</td>
+                                    <td>تاریخ</td>
+                                    <td>شرح</td>
+                                    <td>بد</td>
+                                    <td>بس</td>
+                                    <td>ت</td>
+                                    <td>مانده</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var x in acc.Items)
+                                {
+                                    <tr>
+                                        <td>@x.DocNumber</td>
+                                        <td>@x.DocDate.LatinToPersian()</td>
+                                        <td>@x.Description</td>
+                                        <td>@x.Bed.ToPrice()</td>
+                                        <td>@x.Bes.ToPrice()</td>
+                                        <td>@x.Status</td>
+                                        <td>@x.Balance.ToPrice()</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-center"> جمع :</td>
+                                    <td>@acc.Items.Sum(n=>n.Bed).ToPrice() </td>
+                                    <td>@acc.Items.Sum(n=>n.Bes).ToPrice() </td>
+                                    <td>@acc.Items.LastOrDefault().Status </td>
+                                    <td>@acc.Items.LastOrDefault().Balance </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="card-footer pt-0">
+    </div>
+</div>
+
+
+
+

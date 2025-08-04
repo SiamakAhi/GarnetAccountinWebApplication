@@ -1,0 +1,75 @@
+
+
+@font-face {
+	font-family: Yekan Bakh FaNum;
+	font-style: normal;
+	font-weight: 100;
+	src: url('../farsi-fonts-fa-num/woff/YekanBakhFaNum-thin.woff') format('woff'), url('../farsi-fonts-fa-num/woff2/YekanBakhFaNum-thin.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: Yekan Bakh FaNum;
+	font-style: normal;
+	font-weight: 300;
+	src: url('../farsi-fonts-fa-num/woff/YekanBakhFaNum-Light.woff') format('woff'), url('../farsi-fonts-fa-num/woff2/YekanBakhFaNum-Light.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: Yekan Bakh FaNum;
+	font-style: normal;
+	font-weight: normal;
+	src: url('../farsi-fonts-fa-num/woff/YekanBakhFaNum-Regular.woff') format('woff'), url('../farsi-fonts-fa-num/woff2/YekanBakhFaNum-Regular.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: Yekan Bakh FaNum;
+	font-style: normal;
+	font-weight: 600;
+	src: url('../farsi-fonts-fa-num/woff/YekanBakhFaNum-SemiBold.woff') format('woff'), url('../farsi-fonts-fa-num/woff2/YekanBakhFaNum-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: Yekan Bakh FaNum;
+	font-style: normal;
+	font-weight: bold;
+	src: url('../farsi-fonts-fa-num/woff/YekanBakhFaNum-Bold.woff') format('woff'), url('../farsi-fonts-fa-num/woff2/YekanBakhFaNum-Bold.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: Yekan Bakh FaNum;
+	font-style: normal;
+	font-weight: 800;
+	src: url('../farsi-fonts-fa-num/woff/YekanBakh FaNum-ExtraBold.woff') format('woff'), url('../farsi-fonts-fa-num/woff2/YekanBakh FaNum-ExtraBold.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: Yekan Bakh FaNum;
+	font-style: normal;
+	font-weight: 900;
+	src: url('../farsi-fonts-fa-num/woff/YekanBakh FaNum-Black.woff') format('woff'), url('../farsi-fonts-fa-num/woff2/YekanBakh FaNum-Black.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: Yekan Bakh FaNum;
+	font-style: normal;
+	font-weight: 950;
+	src: url('../farsi-fonts-fa-num/woff/YekanBakh FaNum-ExtraBlack.woff') format('woff'), url('../farsi-fonts-fa-num/woff2/YekanBakh FaNum-ExtraBlack.woff2') format('woff2');
+}
+html, body {
+	font-family: Yekan Bakh FaNum !important;
+}
+
+h4,
+h5,
+h6,
+p,
+a {
+	font-family: Yekan Bakh FaNum !important;
+}
+h1,
+h2,
+h3 {
+	font-family: Yekan Bakh FaNum !important;
+	font-weight: bolder !important;
+}
+

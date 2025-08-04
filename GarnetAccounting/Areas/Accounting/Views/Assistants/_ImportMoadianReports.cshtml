@@ -1,0 +1,58 @@
+﻿   @model MoadianImporterDto
+
+
+<div class="modal-dialog garnet-modal mwp-700">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning">ثبت صورتحساب ها سامانه مودیان</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form asp-action="ImportMoadianReports" asp-controller="Assistants" asp-area="Accounting" method="post" enctype="multipart/form-data">
+                <input type="hidden" asp-for="SellerId" value="@Model.SellerId" />
+                <input type="hidden" asp-for="PeriodId" value="@Model.PeriodId" />
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label"></label>
+                        <select class="form-select" asp-for="ReportType">
+                            <option>...</option>
+                            <option value="1">گزارش خرید از کارپوشه مالیاتی</option>
+                            <option value="2">گزارش فروش از کارپوشه مالیاتی</option>
+                            <option value="3">گزارش فروش از نرم افزار واسط گارنت</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label" asp-for="File"></label>
+                        <input type="file" asp-for="File" class="form-control" accept="xlsx, xls" placeholder="انتخاب فایل اکسل گزارش تراکنش بانک" />
+                    </div>
+                    <hr />
+                    <div class="col-md-12 d-grid p-3 mb-2">
+                        <input type="button" class="btn btn-primary accAjaxSubmit" value="ثبت در بانک اطلاعاتی" />
+                    </div>
+                </div>
+            </form>
+
+            <div class="alert alert-info mb-3" role="alert">
+                <strong> کاربر گرامی </strong> <br />
+                <strong>
+                    فرمت فایل اکسل باید xlsx باشد. اگر فایل شما office97-2003 است یا فرمت آن xls است، لازم است فایل را ابتدا به فرمت xlsx یا همان workbook ذخیره کنید.
+                </strong>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

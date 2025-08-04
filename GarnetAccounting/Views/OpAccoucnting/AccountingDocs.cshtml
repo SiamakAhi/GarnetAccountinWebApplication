@@ -1,0 +1,308 @@
+﻿@model VmAccountingDocs
+
+@{
+    ViewData["Title"] = "مدیریت مالی گارنت - اسناد حسابداری";
+    // Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-panel">
+    <div class="card-panel-header">
+        <div><span class="card-panel-title">اسناد حسابداری</span></div>
+        <div class="card-panel-navbar-container">
+            <ul class="card-panel-navbar">
+                <li>
+                    <a href="javascript:void(0)" data-url="@Url.Action("CreateDocHeader", "OpAccoucnting", new { Area = "" })" class="quickaccess-link newdoc">
+                        <i class="bx bx-plus"></i>
+                        <span>جـدید</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="quickaccess-link bulk-DocPrint" data-tableid="tblDocsList" data-url="@Url.Action("PrintDocsOption", "AccPrint", new { Area = "Accounting" })" title="چاپ اسناد" href="#">
+                        <i class="bx bx-printer"></i>
+                        <span>چاپ گروهی</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="quickaccess-link bulkAction-callmodal" href="#" data-tableid="tblDocsList" data-url="@Url.Action("MergeDocs", "AccFunc", new { Area = "Accounting" })" data-allerttext="ادغام اسناد انتخاب شده" title="ادغام اسناد">
+                        <i class="bx bx-merge"></i>
+                        <span>ادغام اسناد</span>
+                    </a>
+                </li>
+                <li>
+
+                    <a class="uickaccess-link  bulkAction" href="#" data-tableid="tblDocsList" data-url="@Url.Action("DelDocs", "AccFunc", new { Area = "Accounting" })" data-allerttext="اسناد انتخاب شده حذف شوند ؟" title="حذف سنـد">
+                        <i class="bx bx-trash"></i>
+                        <span>حذف گروهی</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="uickaccess-link bulkAction-callmodal" href="#" data-tableid="tblDocsList" data-url="@Url.Action("CopyDocs", "AccFunc", new { Area = "Accounting" })" data-allerttext="کپی اسناد انتخاب ادغام اسناد انتخاب شدهدر یک سند" title="کپی از اسناد">
+                        <i class="bx bx-copy"></i>
+                        <span>کپی از اسناد</span>
+                    </a>
+                </li>
+                @*  <li>
+                <a class="nav-link bulkAction" href="#" data-tableid="tblDocsList" data-url="@Url.Action("DocChangesToTemporary", "AccFunc", new { Area = "Accounting" })" data-allerttext="ردیف های انتخاب شده ثبت موقت شوند ؟" title="تغییر وضغیت سند به سند موقت ">
+                <i class="bx bx-check"></i>
+                <span class="mobilScreen">تغییر وضعیت سند به موقت</span>
+                </a>
+                </li> *@
+
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        <form asp-action="AccountingDocs" asp-controller="OpAccoucnting" asp-area="" method="get" id="frmDocListFilter">
+            <input type="hidden" asp-for="filter.CurrentPage" value="1" />
+
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>فیلتـر</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.FromDocNumer">‌از شماره سند</label>
+                                        <input type="number" class="text-center" asp-for="filter.FromDocNumer">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.ToDocNumer">‌تا شماره سند</label>
+                                        <input type="number" class="text-center" asp-for="filter.ToDocNumer">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.strStartDate">از تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strStartDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.strEndDate">تا تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strEndDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>وضعیت سند</label>
+                                        <select asp-for="filter.docType" asp-items="@ViewBag.docType">
+                                            <option value="null" selected>همه</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-7 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>جستجو در شرح سند </label>
+                                        <input type="text" class="text-center" asp-for="filter.Description">
+                                    </div>
+                                </div>
+                                 <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>تعداد ردیف در هر صفحه</label>
+                                        <input type="number" min="1" asp-for="filter.PageSize" value="@Model.filter.PageSize">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>عملیات</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class=" d-grid p-2">
+                                <input type="submit" class="garnet-btn garnet-btn-warning mb-2" value="نمایش" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          
+        </form>
+    </div>
+   
+  
+
+
+    <div class="card-body card-table">
+        <div class="table-responsive text-nowrap static-height-600">
+            <table class="table table-hover table-striped table-bordered dataTable" id="tblDocsList">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="row-chb">
+                            <input type="checkbox" id="SelectRows" />
+                            ردیف
+                        </th>
+                        <th>وضعیت</th>
+                        <th>شماره سند</th>
+                        <th>تاریخ</th>
+                        <th>شماره عطف</th>
+                        <th>شماره اتوماتیک</th>
+                        <th>شرح سند</th>
+                        <th>جمع بدهکار</th>
+                        <th>جمع بستانکار</th>
+                        <th>اختلاف</th>
+                        <th>تعداد ردیف ها</th>
+                        <th></th>
+                        <th>تاریخ ایجاد</th>
+                        <th>ایجاد کننده</th>
+                        <th>آخرین ویرایش</th>
+                        <th>ویرایش کننده</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.DocsPagin.Items.Count() > 0)
+                    {
+                        int row = 1;
+                        foreach (var x in Model.DocsPagin.Items)
+                        {
+                            <tr class="dblc-link" data-url="@Url.Action("Doc", "OpAccoucnting", new { Area = "", id = x.Id })">
+                                <td class="row-chb">
+                                    <input type="checkbox" class="tblRow px-3" name="docId" value="@x.Id" />
+                                    @row
+                                </td>
+                                <td>@x.StatusId.AccToDocStatusName()</td>
+                                <td>@x.DocNumber</td>
+                                <td>@x.DocDate.Value.LatinToPersian()</td>
+                                <td>@x.AtfNumber</td>
+                                <td>@x.AutoDocNumber</td>
+                                <td>@x.Description</td>
+                                <td>@(x.Bed > 0 ? x.Bed.ToPrice() : "0")</td>
+                                <td>@(x.Bes > 0 ? x.Bes.ToPrice() : "0")</td>
+                                <td class="text-danger">@(x.Ekhtelaf != 0 ? x.Ekhtelaf.ToPrice() : "0")</td>
+                                <td class="text-center">@x.Articles?.Count</td>
+                                <td>
+                                    <a target="_blank" asp-action="Doc" asp-controller="OpAccoucnting" asp-area="" asp-route-id="@x.Id"> <i class="bx bx-edit-alt text-primary mx-1"></i></a>
+                                    <a href="javascript:void(0)" class="callformwhithid" data-docnumber="@x.DocNumber" data-docid="@x.Id" data-url="@Url.Action("PrintDocOption", "AccPrint", new { Area = "Accounting" })">
+                                        <i class="bx bx-printer text-info mx-1"></i>
+                                    </a>
+                                    <a target="_blank" asp-action="PrintDocLvl4" asp-controller="AccPrint" asp-area="Accounting" asp-route-id="@x.Id">
+                                        <i class="bx bx-printer text-danger mx-1"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" class="removeById" data-target="@x.Id" data-url="@Url.Action("DeleteDoc", "OpAccoucnting", new { Area = "" })" title="سند موردنظر حذف شود ؟"> <i class="bx bx-trash-alt text-warning mx-1"></i></a>
+                                </td>
+                                <td><small class="text-secondary mx-1">@(new TimeSpan(x.CreateDate.Value.Hour, x.CreateDate.Value.Minute, x.CreateDate.Value.Second).ToString())</small> @x.CreateDate.Value.LatinToPersian() </td>
+                                <td>@x.CreatorUserName</td>
+                                <td>
+                                    @if (x.LastUpdateDate.HasValue)
+                                    {
+                                        <small class="mx-1"> @(new TimeSpan(x.LastUpdateDate.Value.Hour, x.LastUpdateDate.Value.Minute, x.LastUpdateDate.Value.Second))</small>
+                                        <span>@x.LastUpdateDate.Value.LatinToPersian()</span>
+                                    }
+                                </td>
+                                <td>@x.EditorUserName</td>
+                            </tr>
+
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="card-footer">
+        @if (Model.DocsPagin.TotalPages > 1)
+        {
+            <nav aria-label="Page navigation" class="pagin mt-3">
+                <ul class="pagination pagination-sm text-center">
+                    @if (Model.DocsPagin.HasPreviousPage)
+                    {
+                        <li class="page-item prev">
+                            <a class="page-link" data-formid="frmDocListFilter" data-currentpage="@(Model.DocsPagin.CurrentPage - 1)">
+                                <i class="tf-icon bx bx-chevrons-left"></i>
+                            </a>
+                        </li>
+                    }
+
+                    @{
+                        int totalPages = Model.DocsPagin.TotalPages;
+                        int currentPage = Model.DocsPagin.CurrentPage;
+                        int pageRange = 3; // تعداد صفحات قبل و بعد از صفحه فعلی
+
+                        int startPage = Math.Max(1, currentPage - pageRange);
+                        int endPage = Math.Min(totalPages, currentPage + pageRange);
+
+                        if (startPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" data-formid="frmDocListFilter" data-currentpage="1">1</a>
+                            </li>
+                            if (startPage > 2)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                        }
+
+                        for (int i = startPage; i <= endPage; i++)
+                        {
+                            string strActive = currentPage == i ? "active" : "";
+                            <li class="page-item @strActive">
+                                <a class="page-link" data-formid="frmDocListFilter" data-currentpage="@i">@i</a>
+                            </li>
+                        }
+
+                        if (endPage < totalPages)
+                        {
+                            if (endPage < totalPages - 1)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                            <li class="page-item">
+                                <a class="page-link" data-formid="frmDocListFilter" data-currentpage="@totalPages">@totalPages</a>
+                            </li>
+                        }
+                    }
+
+                    @if (Model.DocsPagin.HasNextPage)
+                    {
+                        <li class="page-item next">
+                            <a class="page-link" data-formid="frmDocListFilter" data-currentpage="@(Model.DocsPagin.CurrentPage + 1)">
+                                <i class="tf-icon bx bx-chevrons-right"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+
+        }
+    </div>
+
+</div>
+
+
+
+

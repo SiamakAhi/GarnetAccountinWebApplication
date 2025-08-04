@@ -1,0 +1,90 @@
+﻿@model List<ConProjectDto>
+@{
+    ViewData["Title"] = "مدیریت پروژه ها";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="card">
+        <div class="card-header alert-secondary p-0">
+            <h5 class="custom-card-title">
+                <i class="bx bx-building-house text-warning"></i>
+                مدیریت پروژه ها
+            </h5>
+            <div class="section-nav">
+                <div class="nav-btnbox ms-2 mb-2">
+                    <a href="#" data-url="@Url.Action("Create", "ConProject", new{Area = "Projects"})"
+                       class="btn btn-sm btn-secondary callform">
+                        ایجاد پروژه جدید
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body card-table">
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ردیف</th>
+                        <th>عنوان پروژه/قرارداد</th>
+                        <th>شماره قرارداد</th>
+                        <th>کارفرما</th>
+                        <th>تاریخ شروع</th>
+                        <th>مبلغ پروژه</th>
+                        <th>مدت پیمان (روز)</th>
+                        <th>ایجاد کننده</th>
+                        <th>وضعیت</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model?.Count() > 0)
+                    {
+                        int row = 1;
+                        foreach (var x in Model)
+                        {
+                            <tr>
+                                <td class="text-center">@row</td>
+                                <td class="text-center">@x.ProjectName</td>
+                                <td class="text-center">@x.ProjectNumber</td>
+                                <td class="text-center">@x.ClientName</td>
+                                <td class="text-center">@(x.ProjectStartDate.HasValue ? x.ProjectStartDate.Value.LatinToPersian() : "")</td>
+                                <td class="text-center">@x.ProjectAmount?.ToString("N0") ریال</td>
+                                <td class="text-center">@x.ContractDurationDays</td>
+                                <td class="text-center">@x.CreatedBy</td>
+                                <td class="text-center">@(x.IsActive ? "جاری":"پایان یافته")</td>
+                                <td class="row-btns text-center">
+                                    <a href="#" class="callform"
+                                       data-url="@Url.Action("Edit", "ConProject", new { Area = "Projects", id = x.Id })">
+                                        <i class="bx bx-edit-alt text-gray" title="ویرایش"></i>
+                                    </a>
+                                    <a href="#" class="removeById"
+                                       data-url="@Url.Action("changeStatus", "ConProject", new { Area = "Projects" })"
+                                       data-target="@x.Id" title="وضعیت قرارداد موردنظر را تغییر میدهید ؟">
+                                        <i class="bx bx-trash text-warning" title="تغییر وضعیت"></i>
+                                    </a>
+                                    <a href="#" class="removeById"
+                                       data-url="@Url.Action("Delete", "ConProject", new { Area = "Projects" })"
+                                       data-target="@x.Id" title="پروژه موردنظر را حذف می کنید ؟">
+                                        <i class="bx bx-trash text-danger" title="حذف"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8">
+                                پروژه ای در سیستم ثبت نشده است
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,107 @@
+﻿@model EndOfPeriodDto
+@{
+    ViewData["Title"] = "CloseTemporaryAccounts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-primary">
+    <h6 class="card-header">بستن حساب های موقت</h6>
+
+    <div class="card-body">
+        <dov class="row">
+            <div class="col-md-3 p-3 alert-secondary box-radius pb-5">
+                <div class="divider text-start divider-danger">
+                    <div class="divider-text">
+                        <span class="text-primary">تنظیم حساب ها</span>
+                    </div>
+                </div>
+                <div>
+                    <form asp-action="CloseTemporaryAccounts" asp-controller="EndOfPeriod" asp-area="Accounting" method="post">
+                        <div class="row">
+                            <div class="col-md-12 mb-2">
+                                <div class="alert alert-primary" role="alert">
+                                    <h6 class="alert-heading mb-1"><i class="bx bx-xs bx-command me-2 text-danger"></i>موجودی پایان دوره : </h6>
+                                    <input type="text" asp-for="AccountsSetting.strPayanDore" class="form-control text-center numberInput gonext" />
+                                </div>
+                            </div>
+                            <hr />
+                             <div class="col-md-12 d-grid mt-2 mb-3 px-4">
+                                 <input type="submit" class="btn btn-primary mb-2" value="پیش نمایش سند بستن حساب ها" />
+                                <input type="button" class="btn btn-success mb-2 submitCustomAction" data-url="@Url.Action("AddDocCloseTemporaryAccounts","EndOfPeriod",new{Area="Accounting"})" value="ثبت سند بستن حساب های موقت" />
+                             </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="col-md-9 p-3">
+                <div class="divider text-start divider-danger">
+                    <div class="divider-text">
+                        <span class="text-primary">پیش نویس سند بستن حساب ها</span>
+                    </div>
+                </div>
+
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="row-chb"><input type="checkbox" id="SelectRows" /></th>
+                                <th class="row-chb">ردیف</th>
+                                <th class="limit-text">
+                                    حساب
+                                </th>
+                                <th>
+                                    شرح آرتیکل
+                                </th>
+                                <th>بدهکار</th>
+                                <th>بستانکار</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Articles?.Count > 0)
+                            {
+                                int rownumber = 1;
+                                foreach (var x in Model.Articles)
+                                {
+                                    <tr id="@x.Id" data-deb="@x.Bed" data-bes="@x.Bes" class="dblc_callform" data-url="@Url.Action("EditArticle","OpAccoucnting",new{Area="",id=x.Id})">
+                                        <td class="row-chb"><input type="checkbox" name="articleRow" value="@x.Id" /></td>
+                                        <td class="row-chb">@rownumber</td>
+                                        <td>
+                                            <span class="text-secondary">@x.MoeinCode</span>
+                                            <span class="me-2">@x.MoeinName</span>
+                                        </td>
+                                        <td class="limit-text" title="@x.Comment">
+                                           
+                                            @x.Comment
+                                        </td>
+                                        <td>
+                                            <span>@(x.Bed > 0 ? x.Bed.ToPrice() : "0")</span>
+                                        </td>
+                                        <td>
+                                            <span>@(x.Bes > 0 ? x.Bes.ToPrice() : "0")</span>
+                                        </td>
+                                        
+                                    </tr>
+                                    rownumber++;
+                                }
+                            }
+                            
+                        </tbody>
+                           <tfoot>
+                            @if(Model.Articles?.Count > 0)
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center"> <h5>جمع :</h5></td>
+                                    <td class="text-center"><h5>@Model.Articles.Sum(n => n.Bed).ToPrice()</h5></td>
+                                    <td class="text-center"><h5>@Model.Articles.Sum(n => n.Bes).ToString()</h5></td>
+                                </tr>
+                            }
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+        </dov>
+    </div>
+</div>
+

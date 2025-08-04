@@ -1,0 +1,126 @@
+﻿@font-face {
+    font-family: 'YekanBakh-Black';
+    src: url('../fonts/YekanBakh-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakh-Bold';
+    src: url('../fonts/YekanBakh-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakh-ExtraBlack';
+    src: url('../fonts/YekanBakh-ExtraBlack.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakh-ExtraBold';
+    src: url('../fonts/YekanBakh-ExtraBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakhFaNum-Black';
+    src: url('../fonts/YekanBakhFaNum-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakhFaNum-Bold';
+    src: url('../fonts/YekanBakhFaNum-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakhFaNum-ExtraBlack';
+    src: url('../fonts/YekanBakhFaNum-ExtraBlack.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakhFaNum-ExtraBold';
+    src: url('../fonts/YekanBakhFaNum-ExtraBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakhFaNum-Light';
+    src: url('../fonts/YekanBakhFaNum-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakhFaNum-Regular';
+    src: url('../fonts/YekanBakhFaNum-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakhFaNum-SemiBold';
+    src: url('../fonts/YekanBakhFaNum-SemiBold.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakhFaNum-Thin';
+    src: url('../fonts/YekanBakhFaNum-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakh-Light';
+    src: url('../fonts/YekanBakh-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakh-Regular';
+    src: url('../fonts/YekanBakh-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakh-SemiBold';
+    src: url('../fonts/YekanBakh-SemiBold.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'YekanBakh-Thin';
+    src: url('../fonts/YekanBakh-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+body {
+    font-family: 'YekanBakhFaNum-Regular' !important;
+    font-size:14px !important;
+}
+h1, h2, h3, h4, h5, .font-bold {
+    font-family: 'YekanBakhFaNum-ExtraBold' !important;
+}
+.font-light {
+    font-family: 'YekanBakhFaNum-Light' !important;
+}
+.flatpickr-current-month .flatpickr-monthDropdown-months, .flatpickr-current-month .flatpickr-monthDropdown-months, .flatpickr-current-month input.cur-year {
+    font-family: 'YekanBakhFaNum-Regular' !important;
+}
+

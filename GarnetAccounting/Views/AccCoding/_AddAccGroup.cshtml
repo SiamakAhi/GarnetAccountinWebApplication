@@ -1,0 +1,70 @@
+﻿@model GroupDto
+
+<div class="modal-dialog modal-lg modal-simple">
+    <div class="modal-content p-3 p-md-5">
+        <div class="modal-header">
+            <div class="alert alert-primary alert-dismissible d-flex align-items-center" role="alert">
+                <h5>
+                    <i class="bx bx-xs bx-command me-2 text-info"></i>
+                   ایجاد گــروه
+                </h5>
+
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class=" mb-4 mt-0 mt-md-n2">
+                <form asp-action="AddAccGroup" asp-controller="AccCoding" asp-area="" method="post">
+                   
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="GroupCode"></label>
+                        <div class="col-sm-3">
+                            <input type="text" asp-for="GroupCode" class="form-control gonext firstSelect" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="GroupName"></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="GroupName" class="form-control gonext" />
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="TypeId"></label>
+                        <div class="col-sm-9">
+                            <select class="form-select gonext" asp-for="TypeId" asp-items="@ViewBag.GroupType">
+                                <option>انتخاب کنید .. </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="GroupType">ماهیت</label>
+                        <div class="col-sm-9">
+                            <select class="form-select gonext" asp-for="GroupType" asp-items="@ViewBag.GroupNatureType">
+                                <option>انتخاب کنید .. </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <label class="col-sm-3 col-form-label" asp-for="Description"></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="Description" class="form-control gonext" placeholder="..." />
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <label class="col-sm-3 col-form-label" asp-for="Order">ترتیب</label>
+                        <div class="col-sm-9">
+                            <input type="number" min="0" asp-for="Order" class="form-control gonext" placeholder="..." />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row d-grid mt-3">
+                        <input type="button" class="btn btn-primary mt-2 accAjaxSubmit" value="ایجاد گــروه" />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>

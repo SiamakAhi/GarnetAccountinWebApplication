@@ -1,0 +1,152 @@
+﻿@model VmAccountingDocs
+
+@{
+    ViewData["Title"] = "مدیریت مالی گارنت - اسناد حذف شده حسابداری";
+}
+
+<div class="card">
+    <div class="card-header  alert-secondary">
+
+        <div class="docList-container alert-secondary">
+            <form asp-action="DeletedDocs" asp-controller="AccFunc" asp-area="Accounting" method="get">
+
+                <div class="row">
+                    <div class=" col-md-1 mb-1">
+                        <label asp-for="filter.FromDocNumer" class="form-label">‌از شماره سند</label>
+                        <input type="number" asp-for="filter.FromDocNumer" class="form-control form-control-sm text-center">
+                    </div>
+                    <div class=" col-md-1 mb-1">
+                        <label asp-for="filter.ToDocNumer" class="form-label">تا شماره سند‌</label>
+                        <input type="number" asp-for="filter.ToDocNumer" class="form-control form-control-sm text-center">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label asp-for="filter.StartDate" class="form-label">از تاریخ‌</label>
+                        <input type="text" asp-for="filter.strStartDate" class="form-control form-control-sm flatpickr-input" placeholder="YYYY/MM/DD" id="flatpickr-date">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <label asp-for="filter.EndDate" class="form-label">‌تا تاریخ </label>
+                        <input type="text" class="form-control form-control-sm flatpickr-input" asp-for="filter.EndDate" placeholder="YYYY/MM/DD" id="flatpickr-Enddate">
+                    </div>
+                    <div class="col-md-4 mb-1">
+                        <label asp-for="filter.EndDate" class="form-label">جستجو در شرح سند </label>
+                        <input type="text" class="form-control form-control-sm" asp-for="filter.Description">
+                    </div>
+                    <div class="col-md-1 mb-1">
+                        <input type="submit" class="btn btn-secondary mt-4" value="نمایش" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card-body card-table">
+        <div class="table-responsive text-nowrap static-height-600">
+            <table class="table table-hover table-striped dataTable" id="tblDocsList">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="row-chb">
+                            ردیف
+                        </th>
+                        <th>شماره سند</th>
+                        <th>تاریخ</th>
+                        <th>شماره عطف</th>
+                        <th>شماره اتوماتیک</th>
+                        <th>شرح سند</th>
+                        <th>جمع بدهکار</th>
+                        <th>جمع بستانکار</th>
+                       
+                        <th>تاریخ ایجاد</th>
+                        <th>ایجاد کننده</th>
+                        <th>آخرین ویرایش</th>
+                        <th>ویرایش کننده</th>
+                        <th>زمان حذف</th>
+                        <th>کاربر حذف کننده</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.Docs.Count() > 0)
+                    {
+                        int row = 1;
+                        foreach (var x in Model.Docs)
+                        {
+                            <tr>
+                                <td class="row-chb">
+                                    @row
+                                </td>
+                                <td>@x.DocNumber</td>
+                                <td>@x.DocDate.Value.LatinToPersian()</td>
+                                <td>@x.AtfNumber</td>
+                                <td>@x.AutoDocNumber</td>
+                                <td>@x.Description</td>
+                                <td>@(x.Bed > 0 ? x.Bed.ToPrice() : "0")</td>
+                                <td>@(x.Bes > 0 ? x.Bes.ToPrice() : "0")</td>
+                               
+                                <td><small class="text-secondary mx-1">@(new TimeSpan(x.CreateDate.Value.Hour, x.CreateDate.Value.Minute, x.CreateDate.Value.Second).ToString())</small> @x.CreateDate.Value.LatinToPersian() </td>
+                                <td>@x.CreatorUserName</td>
+                                <td>
+                                    @if (x.LastUpdateDate.HasValue)
+                                    {
+                                        <small class="mx-1"> @(new TimeSpan(x.LastUpdateDate.Value.Hour, x.LastUpdateDate.Value.Minute, x.LastUpdateDate.Value.Second))</small>
+                                        <span>@x.LastUpdateDate.Value.LatinToPersian()</span>
+                                    }
+                                </td>
+                                <td>@x.EditorUserName</td>
+                                <td>
+                                    @if (x.DeletedDate.HasValue)
+                                    {
+                                        <small class="mx-1"> @(new TimeSpan(x.DeletedDate.Value.Hour, x.DeletedDate.Value.Minute, x.DeletedDate.Value.Second))</small>
+                                        <span>@x.DeletedDate.Value.LatinToPersian()</span>
+                                    }
+                                </td>
+                                <td>@x.DeleteUser</td>
+                                <td>
+                                    <a href="javascript:void(0)" class="removeById" data-target="@x.Id" data-url="@Url.Action("UndeleteDoc","AccFunc",new{Area="Accounting"})" title="بازیابی سند انجام شود ؟">
+                                        <i class="bx bx-transfer-alt text-primary mx-1"></i>
+                                        بازیابی سنـد
+                                    </a>
+                                </td>
+                            </tr>
+
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="card-footer">
+        <div class="divider text-start divider-primary">
+            <div class="divider-text">
+                <span class="text-secondary px-2">تعداد کل اسناد : @Model.Docs?.Count </span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+

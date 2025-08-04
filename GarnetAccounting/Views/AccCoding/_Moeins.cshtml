@@ -1,0 +1,103 @@
+﻿@model List<MoeinDto>
+
+
+<div class="card">
+    <div class="card-header alert-secondary p-0">
+        <h5 class="custom-card-title">
+            <i class="bx bxs-category-alt text-warning"></i>
+            حساب های معین
+        </h5>
+        <div class="section-nav">
+            <ul>
+                <li>
+                    <a class="accountBrowserNav_tafsil" asp-action="Groups" asp-controller="AccCoding" asp-area="">
+                        <span class="text-secondary">گروه حساب ها</span>
+                    </a>
+                </li>
+                <li class="text-warning verticaldivider">
+                    <span>|</span>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" class="accountBrowserNav_tafsil codingNav" data-url="@Url.Action("Kols","AccCoding",new{Area="",id=ViewBag.GroupId,groupName=ViewBag.GroupName})">
+                        <span>@ViewBag.GroupName</span>
+                    </a>
+                </li>
+                <li class="text-warning verticaldivider">
+                    <span>|</span>
+                </li>
+                <li>
+                    <span class="text-primary nav-pagenametext">@ViewBag.KolCode - @ViewBag.KolName</span>
+                </li>
+            </ul>
+            <div class="nav-btnbox pe-2">
+                <a href="#" class="btn btn-sm btn-secondary callform" data-url="@Url.Action("AddMoein","AccCoding",new{Area="",kolId=ViewBag.KolId, kolName=ViewBag.KolName, kolCode= ViewBag.kolCode, groupName=ViewBag.GroupName, groupId=ViewBag.GroupId})">
+                    ایجاد حساب معین
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body card-table">
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ردیف</th>
+                        <th>سرفصل</th>
+                        <th>کد حساب</th>
+                        <th>نام حساب</th>
+                        <th>ماهیت</th>
+                        <th>حساب ارزی</th>
+                        <th>نوع ارز</th>
+                        <th>معین خلاف ماهیت</th>
+                        <th>شرح</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model?.Count() > 0)
+                    {
+                        int row = 1;
+                        foreach (var x in Model)
+                        {
+                            <tr class="accCoding" data-url="@Url.Action("AccountTafsil","AccCoding",new{Area="",moeinId=x.Id,kolId=x.KolId, moeinName=x.MoeinName,moeinCode=x.MoeinCode, kolName=ViewBag.KolName,groupName=x.GroupName,groupId=x.GroupId})">
+                                <td>@row</td>
+                                <td>@x.KolName</td>
+                                <td>@x.MoeinCode</td>
+                                <td>@x.MoeinName</td>
+                                <td>@x.Nature.AccToNatureName()</td>
+                                <td>@(x.IsCurrencyAccount == true ? "بله" : "خیر")</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>@x.Description</td>
+                                <td class="row-btns text-center">
+                                    <a href="#"><i class="bx bx-info text-info"></i></a>
+                                    <a href="#" class="callform" data-url="@Url.Action("EditMoein","AccCoding", new{Area="" , Id=x.Id})"><i class="bx bx-edit-alt text-gray " title="ویرایش"></i></a>
+                                    <a href="#" class="removeById" data-url="@Url.Action("DelMoein","AccCoding", new{Area=""})" data-target="@x.Id"><i class="bx bx-trash text-warning" title="حذف"></i></a>
+                                </td>
+                            </tr>
+
+                            row++;
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="10" class="text-center p-3">
+                                <div class="alert alert-primary mb-3" role="alert">
+                                    حسابی در سرفصل <strong class="text-warning">@ViewBag.KolName</strong>  ایجاد نشده است.
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+    <div class="card-footer"></div>
+</div>
+
+

@@ -1,0 +1,25 @@
+﻿
+/* تنظیمات چاپ */
+@media print {
+    body * {
+        visibility: hidden; /* پنهان کردن تمام عناصر */
+    }
+
+    .print-area, .print-area * {
+        visibility: visible; /* نمایش دادن منطقه چاپ */
+    }
+
+    .print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    /* تنظیمات برگه A4 و Landscape */
+    @page {
+        size: A4 landscape;
+        margin: 10mm; /* حاشیه برگه */
+    }
+}

@@ -1,0 +1,130 @@
+﻿@model Pagination<VmBuyer>
+@{
+    ViewData["Title"] = "نرم افزار واسط سامانه مودیان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string message = ViewBag.Message;
+}
+
+
+<div class="card">
+    <div class="card-header-search">
+        <h5 class="card-header heading-color">
+            مدیریت مشتــریان
+        </h5>
+        <div class="btn-toolbar demo-inline-spacing" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group" role="group" aria-label="First group">
+                <a asp-action="AddBuyer" asp-controller="Buyer" class="btn btn-outline-secondary">
+                    <i class="tf-icons bx bx-user-plus"></i>
+                </a>
+                <a asp-action="ImportBuyerFromXls" asp-controller="Import" asp-area="" class="btn btn-outline-secondary iconpng">
+                    <img src="~/img/icons/misc/xls2.png" />
+                    ورود اطلاعات از اکسل
+                </a>
+                <a href="~/sticFiles/Garnet_SampleAddBuyerSheet.xlsx" class="btn btn-outline-secondary iconpng">
+                    <img src="~/img/icons/misc/xls3.png" />
+                    نمونه فایل اکسل
+                </a>
+            </div>
+        </div>
+
+        <div>
+            <form asp-action="Buyers" asp-controller="buyer" asp-area="" method="get" class="flex-1">
+                <div class="input-group input-group-merge">
+                    <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-search"></i></span>
+                    <input type="text" name="name" class="form-control" placeholder="جستجو در نام  ...">
+                    <input type="text" name="NationalCode" class="form-control" placeholder="کد ملی ...">
+                    <button class="btn btn-outline-primary" type="submit">جستجــو</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card-body card-table">
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ردیف</th>
+                        <th>حقیقی / حقوقی</th>
+                        <th>نام مشتری</th>
+                        <th>شناسه / کد ملی</th>
+                        <th>کد اقتصادی</th>
+                        <th>شهر</th>
+                        <th>شماره تماس</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.Items?.Count() > 0)
+                    {
+                        int row = (Model.CurrentPage - 1) * Model.PageSize + 1;
+                        foreach (var x in Model.Items)
+                        {
+                            <tr>
+                                <td>@row</td>
+                                <td>@(x.legalStatus == 1 ? "حقیقی" : "حقوقی")</td>
+                                <td>@x.Name</td>
+                                <td>@x.NotionalIdentity</td>
+                                <td>@x.EconimicCode</td>
+                                <td>@x.Province  @x.City</td>
+                                <td>@x.phone</td>
+
+                                <td class="row-btns text-center">
+                                    <a href="#"><i class="bx bx-info text-info"></i></a>
+                                    <a asp-action="UpdateBuyer" asp-controller="Buyer" asp-area="" asp-route-id="@x.Id"><i class="bx bx-edit-alt text-gray" title="ویرایش"></i></a>
+                                    <a href="#" class="delBuyer" data-url="@Url.Action("delBuyer","Buyer", new{Area=""})" data-target="@x.Id"><i class="bx bx-trash text-warning" title="حذف"></i></a>
+                                </td>
+                            </tr>
+
+                            row++;
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center"> مشتری در سیستم تعریف نشده است</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+            @if (Model.TotalPages > 1)
+            {
+                <nav aria-label="Page navigation" class="pagin mt-3">
+                    <ul class="pagination pagination-sm text-center">
+
+                        @if (Model.HasPreviousPage)
+                        {
+                            <li class="page-item prev">
+                                <a class="page-link" asp-action="Buyers" asp-controller="Buyer" asp-area="" asp-route-currentPage="@(Model.CurrentPage-1)"><i class="tf-icon bx bx-chevrons-left"></i></a>
+                            </li>
+                        }
+                        @{
+                            int count = Model.TotalPages > 10 ? 10 : Model.TotalPages;
+                        }
+                        @for (int i = 1; i <= count; i++)
+                        {
+                            string strActive = Model.CurrentPage == i ? "active" : "";
+                            <li class="page-item @strActive">
+                                <a class="page-link" asp-action="Buyers" asp-controller="Buyer" asp-area="" asp-route-currentPage="@i">@i</a>
+                            </li>
+                        }
+
+                        @if (Model.HasNextPage)
+                        {
+                            <li class="page-item next">
+                                <a class="page-link" asp-action="Buyers" asp-controller="Buyer" asp-area="" asp-route-currentPage="@(Model.CurrentPage+1)"><i class="tf-icon bx bx-chevrons-right"></i></a>
+                            </li>
+                        }
+
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+
+</div>
+

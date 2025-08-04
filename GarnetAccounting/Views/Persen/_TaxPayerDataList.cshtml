@@ -1,0 +1,39 @@
+﻿@model List<PersonDto>
+
+<div class="modal-dialog larg-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-dark">جهت نمایش اطلاعات کاربردی مودی روی نام آن کلک کنید </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            @if (Model.Any())
+            {
+                int rowNumber = 1;
+                <div class="row">
+                    @foreach (var x in Model)
+                    {
+                        <div class="col-12 col-sm-6 col-md-4 mb-2">
+                            <div class="d-grid">
+                                <a class="list-btn"
+                                   asp-route-id="@x.Id"
+                                   asp-route-name="@x.Name"
+                                   asp-action="GetTaxpayerInfo"
+                                   asp-controller="Seller"
+                                   asp-area="">
+                                    <span class="list-btn-badge">@rowNumber</span>
+                                    <h5>@x.Name</h5>
+                                </a>
+                            </div>
+                        </div>
+                        rowNumber++;
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">هیچ اطلاعاتی برای نمایش وجود ندارد.</div>
+            }
+        </div>
+    </div>
+</div>

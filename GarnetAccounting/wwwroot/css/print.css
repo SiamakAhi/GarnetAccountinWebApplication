@@ -1,0 +1,164 @@
+﻿/* تنظیمات عمومی */
+body {
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 12px;
+    direction: rtl;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.accounts-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+    .accounts-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+.tr-colheader {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+    .tr-colheader th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .tr-headerRepor {
+        border: none;
+    }
+.tr-headerRepor > th {
+    background-color: #ffffff !important;
+    border: none;
+}
+    .tr-headerRepor > th > h2{
+            margin-bottom:0 !important;
+    }
+    .tr-headerRepor > th > h4 {
+        margin-top:3px;
+    }
+
+    .accounts-table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .accounts-table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+.total-row th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #f0f0f0;
+    font-weight: bold;
+    border-top: 2px dashed #00000055;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-bottom: 2px solid #ddd;
+}
+
+.report-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+}
+
+.report-date {
+    font-size: 14px;
+    margin: 5px 0 0 0;
+    color: #666;
+}
+
+
+.toolbar {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+    .toolbar > button, .toolbar a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-inline: 4px;
+        width: 120px;
+        height: 30px;
+        padding: 2px;
+        font-family: 'YekanBakhFaNum-Regular' !important;
+        border: 1px solid #ff0000;
+        border-radius: 4px;
+        background: #fff;
+        text-decoration:none;
+    }
+
+    .toolbar i {
+        margin-left: 8px;
+    }
+
+/* تنظیمات پرینت */
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+        font-size: 10px;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
+
+    /* تکرار سربرگ در هر صفحه */
+    thead {
+        display: table-header-group;
+    }
+
+    /* جلوگیری از شکستن ردیف‌ها */
+    tr {
+        page-break-inside: avoid;
+    }
+    /* نمایش <tfoot> فقط در صفحه آخر */
+    .accounts-table tfoot {
+        display: table-footer-group;
+    }
+
+
+    /* تخصیص فضای کافی برای <tfoot> در صفحه آخر */
+    /*.accounts-table tbody {
+        page-break-after: always;
+    }*/
+
+
+    /* تنظیمات جدول */
+    .accounts-table {
+        font-size: 10px;
+    }
+    
+}

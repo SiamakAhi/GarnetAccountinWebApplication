@@ -1,0 +1,380 @@
+﻿
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    text-align: right;
+    direction: rtl;
+    font-size: 12px;
+    font-family: 'Vazirmatn', sans-serif;
+    box-sizing: border-box;
+}
+
+.side {
+    position: relative;
+    min-height: 88vh;
+    background-color: #4a4d81;
+    padding: 50px 15px;
+}
+
+td.col-price {
+    min-width: unset;
+    width: 170px !important;
+    text-align: left;
+}
+.col-chbx{
+    max-width:50px;
+}
+.container {
+    position: relative;
+    max-width: 1200px;
+    margin: auto;
+    flex-grow: 1;
+    margin-top:40px;
+}
+
+.invoice-container {
+    page-break-after: always;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+h3, h4, h5 {
+    text-align: center;
+    color: #000;
+    font-weight: 900;
+    margin: 0;
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.header-content {
+    height: 75px;
+}
+
+.reportInfo {
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 20px;
+    margin-top: -8px;
+    margin-bottom: 2px;
+}
+
+    .reportInfo p {
+        margin: 2px;
+    }
+/* تنظیمات دکمه‌ها */
+.toolbar {
+    position: sticky;
+    top: 100px;
+    max-width: 250px;
+    display: flex;
+    gap: 8px;
+    border-radius: 8px;
+    flex-wrap: wrap;
+}
+
+.button {
+    padding: 5px 15px 5px 15px;
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    color: #000;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-grow: 1;
+    flex-shrink: 0;
+    background: white;
+    width: 50%;
+}
+
+a {
+    text-decoration: none;
+}
+
+.side-brand {
+    position: fixed;
+    position: page;
+    margin: auto;
+    bottom: 30px;
+    right: 80px;
+    text-align: center;
+}
+    .side-brand   h1{
+        font-weight:900;
+        color:gray;
+        text-shadow:0 3px 5px #000;
+        text-align:center;
+    }
+
+    .button:hover {
+        background: #f2f4f7;
+    }
+
+
+.print-button {
+    border-right: 2px solid #4CAF50;
+}
+
+.pdf-button {
+    border-right: 2px solid #E53935;
+}
+
+.close-button {
+    border-right: 2px solid #616161;
+}
+
+.share-button {
+    border-right: 2px solid #04398d;
+}
+
+.button i {
+    margin-left: 15px;
+}
+
+.accounts-table {
+    margin-top: 15px;
+    width: 98%;
+    margin-inline: auto;
+    border-radius: 5px;
+    border-collapse: collapse;
+}
+
+    .accounts-table th, .accounts-table td {
+        text-align: center;
+        padding: 4px;
+        border: 1px solid gray;
+    }
+
+    .accounts-table th {
+        background: whitesmoke;
+    }
+
+.col-price {
+    text-align: left;
+    padding-left: 10px !important;
+}
+
+tr.total td {
+    font-weight: 600;
+    background: whitesmoke;
+}
+
+.sellerinfo {
+    display: flex;
+    align-items: center;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    max-width: unset;
+    justify-content: flex-start;
+}
+
+    .sellerinfo .title {
+        width: 40px;
+        background: whitesmoke;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        margin: 0;
+        border-left: 1px solid gray;
+    }
+
+.rowcount {
+    width: 40px;
+    padding: 0 !important;
+}
+
+.vertical-text {
+    transform: rotate(90deg);
+}
+
+.sellerinfo .personinfo {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+    margin: 0;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+
+    .sellerinfo .personinfo > li {
+        list-style: none;
+        display: flex;
+        padding: 0;
+        flex-grow: 1;
+        min-width: 25%;
+        margin-top: 5px;
+    }
+
+        .sellerinfo .personinfo > li label {
+            margin-left: 8px;
+            min-width: 50px;
+        }
+
+        .sellerinfo .personinfo > li :not(label) {
+            font-weight: 400;
+        }
+
+        .sellerinfo .personinfo > li:last-child {
+            width: 100%;
+        }
+
+.footer > td {
+    text-align: right !important;
+    padding: 10px 25px !important;
+}
+
+.footer > div > div {
+    padding: 10px 25px !important;
+}
+
+.footer > td > div.sign {
+    margin-top: 20px !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-bottom: 35px;
+}
+
+thead {
+    display: table-header-group;
+}
+
+.remarkbox h4 {
+    text-align: right;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+@media (max-width:900px) {
+    .side-brand{
+        display:none;
+    }
+    body {
+        flex-direction: column;
+    }
+
+    .side {
+        position: relative;
+        min-height: unset;
+        padding: 15px;
+    }
+
+    .toolbar {
+        position: relative;
+        top: unset;
+        right: unset;
+        height: unset;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        max-width: unset;
+        width: 100%;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .button {
+        width: 48%;
+    }
+}
+/* تنظیمات چاپ */
+@media print {
+
+    .toolbar, .side {
+        display: none;
+    }
+
+    @page {
+        size: A4 landscape;
+        margin: 5mm;
+    }
+
+   
+   
+
+    /* تکرار هدر در هر صفحه */
+    thead {
+        display: table-header-group;
+    }
+
+    body {
+        margin: 10px;
+        padding: 0;
+        font-size: 12px;
+        overflow: hidden;
+    }
+
+    .container {
+        width: 100%;
+        margin: auto;
+    }
+
+    .accounts-table {
+        width: 99.5%;
+        font-size: 12px;
+    }
+
+    .toolbar {
+        display: none;
+    }
+
+    h3, h5 {
+        font-size: 16px;
+        page-break-after: avoid;
+    }
+
+    .reportInfo {
+        padding-inline: 10px;
+        page-break-after: avoid;
+    }
+
+
+    table {
+        page-break-inside: auto; /* اجتناب از شکستن جدول درون صفحات */
+    }
+
+    thead {
+        display: table-header-group; /* نمایش هدر به صورت یک گروه در هر صفحه */
+    }
+
+    tfoot {
+        display: table-footer-group; /* نمایش فوتر به صورت یک گروه در هر صفحه (در صورت نیاز) */
+    }
+
+    tr {
+        page-break-inside: avoid; /* جلوگیری از شکستن ردیف‌ها در بین صفحات */
+    }
+}
+thead tr, tfoot tr {
+    background-color: whitesmoke;
+}
+.tr-headerReport{
+    border:none;
+    background-color:transparent;
+    
+}
+.tr-headerReport > th{
+    border: none;
+    background-color: transparent;
+}
+.tr-headerReport h5, .tr-headerReport h4 {
+    margin: 2px;
+}
+.tr-headerReport h6 {
+    text-align: right;
+    font-size: 14px;
+    margin: 0 10px;
+}

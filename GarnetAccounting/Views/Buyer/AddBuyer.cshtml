@@ -1,0 +1,102 @@
+﻿@model BuyerAddDto
+@{
+    ViewData["Title"] = "وزود اطاعات اشخاص و شرکت ها";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header"><h5 class="mb-0 text-primary">از طریق فرم زیر مشتری جدید ثبت کنید</h5></div>
+    <div class="card-body">
+        <form asp-action="AddBuyer" asp-asp-controller="Buyer" asp-area="" method="post" class=" g-3 fv-plugins-bootstrap5 fv-plugins-framework">
+
+            <input type="hidden" asp-for="CustomerId" value="@ViewBag.customerId" />
+            <input type="hidden" asp-for="SellerId" value="@ViewBag.SellerId" />
+            <div class="row">
+
+                <div class="col-md-3">
+                    <label class="form-label" asp-for="LegalStatus"></label>
+                    <select asp-for="LegalStatus" class="form-control" asp-items="@ViewBag.PartyTypes">
+                        <option selected>انتخاب کنید</option>
+
+                    </select>
+                    <span asp-validation-for="LegalStatus" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" asp-for="NationalId"></label>
+                    <input type="text" id="buyernat" asp-for="NationalId" class="form-control">
+                    <span asp-validation-for="NationalId" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" asp-for="EconomicCode">
+                        کد اقتصادی جدید *
+                        <a href="#" data-url="@Url.Action("EconomicInfoForAdd","moadian",new{Area="Moadian"})" class="btn btn-sm btn-outline-secondary mt-2 getEcco">استعلام</a>
+                    </label>
+                    <input type="text" asp-for="EconomicCode" id="ecconumber" class="form-control">
+                    <span asp-validation-for="EconomicCode" class="text-danger"></span>
+                </div>
+              
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="Name"></label>
+                    <input type="text" id="buyerTradeName" asp-for="Name" class="form-control" placeholder="گروه نرم افزار گارنِت">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label" asp-for="RegistrationNumber"></label>
+                    <input type="text" asp-for="RegistrationNumber" class="form-control">
+                    <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                </div>
+
+                <div class=" col-md-3">
+                    <label class="form-label" asp-for="Province"></label>
+                    <input type="text" asp-for="Province" class="form-control">
+                    <span asp-validation-for="Province" class="text-danger"></span>
+                </div>
+                <div class=" col-md-3">
+                    <label class="form-label" asp-for="City"></label>
+                    <input type="text" asp-for="City" class="form-control">
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class=" col-md-3">
+                    <label class="form-label" asp-for="PostalCode"></label>
+                    <input type="text" asp-for="PostalCode" class="form-control">
+                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" asp-for="MobilePhone"></label>
+                    <input type="text" asp-for="MobilePhone" class="form-control">
+                    <span asp-validation-for="MobilePhone" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="Address"></label>
+                    <textarea class="form-control" rows="2" asp-for="Address"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="InvoiceDescription"></label>
+                    <textarea class="form-control" rows="2" asp-for="InvoiceDescription"></textarea>
+                    <span asp-validation-for="InvoiceDescription" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label" asp-for="AccountingSystemId"></label>
+                    <input type="text" asp-for="AccountingSystemId" class="form-control">
+                    <span asp-validation-for="AccountingSystemId" class="text-danger"></span>
+                </div>
+            </div>
+
+
+
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-primary me-sm-3 me-1">ثبت</button>
+                <a asp-action="Buyers" asp-controller="Buyer" asp-asp-area="" class="btn btn-label-secondary">
+                    بازگشت به لیست
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+

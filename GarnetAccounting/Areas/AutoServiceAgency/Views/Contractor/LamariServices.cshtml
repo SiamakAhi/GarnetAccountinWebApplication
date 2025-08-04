@@ -1,0 +1,69 @@
+﻿@model List<LamariServiceDto>
+@{
+    ViewData["Title"] = "خدمات";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="card card-panel">
+        <div class="card-panel-header">
+            <div><span class="card-panel-title">انواع خدمات</span></div>
+            <div class="card-panel-navbar-container">
+                <ul class="card-panel-navbar">
+                    <li>
+                        <a href="javascript:void(0)" data-url="@Url.Action("AddLamariService", "Contractor", new { Area = "AutoServiceAgency" })" class="quickaccess-link callform">
+                            <i class="bx bx-plus"></i>
+                            <span>افــزودن سرویس جدید</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="row-chb">#</th>
+                            <th>نام سرویس</th>
+                            <th>نوع سرویس</th>
+                            <th>سهم مکانیک</th>
+                            <th>سهم برقکار</th>
+                            <th>سهم نمایندگی</th>
+                            <th>وضعیت حساب معین</th>
+                            <th>وضعیت حساب تفصیلی</th>
+                            <th>وضعیت</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            int row = 1;
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="row-chb">@row</td>
+                                    <td>@item.ServiceName</td>
+                                    <td>@(item.ServiceType == 1 ? "سرویس دوره ای" : "سایر خدمات")</td>
+                                    <td>@item.MechanicShareAmount.ToPrice()</td>
+                                    <td>@item.ElectricianShareAmount.ToPrice()</td>
+                                    <td>@item.AgencySharePercentage.ToPrice()</td>
+                                    <td>@(item.MoeinId > 0 ? "مشخص شده" : "نامشخص")</td>
+                                    <td>@(item.TafsilId > 0 ? "مشخص شده" : "نامشخص")</td>
+                                    <td>@(item.IsActive ?"قابل ارایه":"غیرفعال")</td>
+                                    <td>
+                                        <a href="javascript:void(0)" class="callform" data-url="@Url.Action("UpdateLamariService", "Contractor", new { Area = "AutoServiceAgency", id = item.Id })"><i class="bx bx-edit-alt text-gray" title="ویرایش اطلاعات سرویس"></i></a>
+                                    </td>
+                                </tr>
+                                row++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+

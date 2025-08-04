@@ -1,0 +1,68 @@
+﻿@model PersonDto
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">معرفی شخص</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="mt-3" asp-action="UpdatePerson" asp-controller="Persen" asp-area="" method="post">
+                <input type="hidden" asp-for="CustomerId" value="@Model.CustomerId" />
+                <input type="hidden" asp-for="SellerId" value="@Model.SellerId" />
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label" asp-for="LegalStatus"></label>
+                        <select asp-for="LegalStatus" class="form-control form-control-sm" asp-items="@ViewBag.PartyTypes">
+                            <option selected>انتخاب کنید</option>
+
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label" asp-for="Name"></label>
+                        <input type="text" asp-for="Name" class="form-control form-control-sm" placeholder="گروه نرم افزار گارنِت">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label" asp-for="NationalId"></label>
+                        <input type="text" asp-for="NationalId" class="form-control form-control-sm">
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label" asp-for="EconomicCode"></label>
+                        <input type="text" asp-for="EconomicCode" class="form-control">
+                    </div>
+                    <div class="col-md-12 mb-2 divider text-start-center divider-info">
+                        <div class="divider-text text-warning">نشانی و اطلاعات تماس </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="Province" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="Province" />
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="City" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="City" />
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                        <label asp-for="PostalCode" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="PostalCode" />
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label asp-for="Address" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="Address" />
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label asp-for="MobilePhone" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="MobilePhone" />
+                    </div>
+
+                </div>
+                <hr />
+
+                <div class="d-grid mb-2 p-2">
+                    <a href="javascript:void(0)" class="btn btn-primary accAjaxSubmit"> ثبت</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

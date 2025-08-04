@@ -1,0 +1,94 @@
+﻿@model List<GroupDto>
+@{
+    ViewData["Title"] = "نرم افزار حسابداری گارنِت - سرفصل حساب ها";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="card" id="codingPlace">
+        <div class="card-header alert-secondary p-0">
+            <h5 class="custom-card-title">
+                <i class="bx bxs-category-alt text-warning"></i>
+                مدیریت سرفصل های حسابداری
+            </h5>
+            <div class="section-nav">
+                <ul class="">
+                    <li>
+                        <span class="text-primary nav-pagenametext">گروه حساب ها</span>
+                    </li>
+                </ul>
+                <div class="nav-btnbox  pe-2">
+                    <a href="#" data-url="@Url.Action("AddAccGroup","AccCoding",new{Area=""})" data-target="0" class="btn btn-sm btn-secondary callform">
+                        ایجاد گروه جدید
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body card-table">
+            <div class="table-responsive text-nowrap">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>کد گروه</th>
+                            <th>نام حساب</th>
+                            <th>نوع حساب</th>
+                            <th>ماهیت گروه</th>
+                            <th>شرح</th>
+                            <th>ترتیب</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @if (Model?.Count() > 0)
+                        {
+                            int row = 1;
+                            foreach (var x in Model)
+                            {
+                                <tr class="accCoding" data-url="@Url.Action("Kols","AccCoding",new{Area="",id=x.Id,groupName=x.GroupName, groupCode=x.GroupCode, groupId=x.Id})">
+                                    <td>@row</td>
+                                    <td>@x.GroupCode</td>
+                                    <td>@x.GroupName</td>
+                                    <td>@x.TypeName</td>
+                                    <td>@x.GroupTypeName</td>
+                                    <td>@x.Description</td>
+                                    <td>@x.Order</td>
+                                    <td class="row-btns text-center">
+                                        <a href="#" class="callform" data-url="@Url.Action("EditGroup","AccCoding", new{Area="", id=x.Id})"><i class="bx bx-edit-alt text-gray" title="ویرایش"></i></a>
+                                        <a href="#" class="removeById" data-url="@Url.Action("DelGroup","AccCoding", new{Area=""})" data-target="@x.Id"><i class="bx bx-trash text-warning" title="حذف"></i></a>
+                                    </td>
+                                </tr>
+
+                                row++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <div class="card-footer p-4">
+            <div class="alert alert-primary alert-dismissible help-box" role="alert">
+                <h6 class="alert-heading mb-1"><i class="bx bx-xs bx-command me-2 text-warning"></i>توجـه!</h6>
+                <ul>
+                    <li> جهت مشاهده و مدیریت حساب های کل روی گروه موردنظرتان دابل کلیک کنید.</li>
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Model -->
+<!-- End Model -->

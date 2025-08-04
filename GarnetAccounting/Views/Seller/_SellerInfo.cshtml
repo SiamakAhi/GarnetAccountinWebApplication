@@ -1,0 +1,80 @@
+﻿@model UpdateSellerDto
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title"> @Model.Name</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="mt-3" asp-action="UpdateSellerOthersInfo" asp-controller="Seller" asp-area="" method="post">
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+                <input type="hidden" asp-for="CustomerId" value="@Model.CustomerId" />
+                <input type="hidden" asp-for="TaxPayerType" value="@Model.TaxPayerType" />
+                <input type="hidden" asp-for="LegalStatus" value="@Model.LegalStatus" />
+
+                <div class="garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                          <h6>اطلاعات اصلی</h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="Name" class="form-label"></label>
+                            <input type="text" class="form-control form-control-sm" asp-for="Name" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="NationalId" class="form-label"></label>
+                            <input type="text" class="form-control form-control-sm" asp-for="NationalId" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="EconomicCode" class="form-label"></label>
+                            <input type="text" class="form-control form-control-sm" asp-for="EconomicCode" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="CEOContactNumber" class="form-label"></label>
+                            <input type="text" class="form-control form-control-sm" asp-for="CEOContactNumber" />
+                        </div>
+                        </div>
+                    </div>
+              
+                <div class="garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>اطلاعات تکمیلی</h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <label asp-for="CEOName" class="form-label"></label>
+                            <input type="text" class="form-control form-control-sm" asp-for="CEOName" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="TaxFileNumber" class="form-label"></label>
+                            <input type="text" class="form-control form-control-sm" asp-for="TaxFileNumber" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="TaxTrackingNumber" class="form-label"></label>
+                            <input type="text" class="form-control form-control-sm" asp-for="TaxTrackingNumber" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="TaxUnitCode" class="form-label"></label>
+                            <input type="text" class="form-control form-control-sm" asp-for="TaxUnitCode" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label asp-for="TaxAuditor" class="form-label"></label>
+                            <input type="text" class="form-control form-control-sm" asp-for="TaxAuditor" />
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <label asp-for="TaxUnitAddress" class="form-label"></label>
+                            <textarea rows="1" class="form-control form-control-sm" asp-for="TaxUnitAddress">
+                        </textarea>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="garnet-section-footer">
+                    <a href="#" class="btn btn-warning accAjaxSubmit"> ثبت</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

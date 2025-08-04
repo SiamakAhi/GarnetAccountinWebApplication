@@ -1,0 +1,114 @@
+﻿@model UpdatePermissionDto
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card">
+    <h5 class="card-header">ایجاد کاربر</h5>
+    <div class="card-body">
+
+
+        <div class="row">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="divider text-start divider-primary">
+                        <div class="divider-text">دسترسی های کاربر</div>
+                    </div>
+                    <div class="row p-4">
+
+                        <form asp-action="SetUserPermission" asp-controller="CustomerManager" asp-area="CustomerArea" method="post" class="mt-2">
+                            <input type="hidden" asp-for="UserSetting.Id" value="@Model.UserSetting.Id" />
+                            <input type="hidden" asp-for="UserSetting.UserName" value="@Model.UserSetting.UserName" />
+                            <input type="hidden" asp-for="UserSetting.CustomerId" value="@Model.UserSetting.CustomerId" />
+                            <div class="col-md-12 p-4">
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="checkbox" asp-for="UserSetting.AllowSellerManagement">
+                                    <label class="form-check-label" asp-for="UserSetting.AllowSellerManagement"></label>
+                                </div>
+                                <div class="form-check mt-1">
+                                    <input class="form-check-input" type="checkbox" value="true" checked asp-for="UserSetting.AllowStuffManagement">
+                                    <label class="form-check-label" asp-for="UserSetting.AllowStuffManagement"></label>
+                                </div>
+                                <div class="form-check mt-1">
+                                    <input class="form-check-input" type="checkbox" value="true" checked asp-for="UserSetting.AllowBuyerManagement">
+                                    <label class="form-check-label" asp-for="UserSetting.AllowBuyerManagement"></label>
+                                </div>
+                                <div class="form-check mt-1">
+                                    <input class="form-check-input" type="checkbox" value="true" checked asp-for="UserSetting.AllowSaleManagement">
+                                    <label class="form-check-label" asp-for="UserSetting.AllowSaleManagement"></label>
+                                </div>
+                                <div class="form-check mt-1">
+                                    <input class="form-check-input" type="checkbox" asp-for="UserSetting.AllowUserManagement">
+                                    <label class="form-check-label" asp-for="UserSetting.AllowUserManagement"></label>
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <button type="button" class="btn btn-primary m-2 SubmitByAjax">ثبت</button>
+                                <a asp-action="CustomerUserList" asp-controller="CustomerManager" asp-area="CustomerArea" class="btn btn-warning m-2">
+                                    بازگشت به لیست
+                                </a>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="divider text-start divider-warning">
+                        <div class="divider-text">دسترسی به فروشندگان</div>
+
+                        <div class="p-3">
+                            <form asp-action="AddSellerToUser" asp-controller="CustomerManager" asp-area="CustomerArea" method="post" class="mt-2">
+                                <input type="hidden" asp-for="UserSeller.CustomerId" value="@Model.UserSetting.CustomerId" />
+                                <input type="hidden" asp-for="UserSeller.UserName" value="@Model.UserSetting.UserName" />
+                                
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        <label class="form-label" asp-for="UserSeller.SellerId">لیست فروشندگان</label>
+                                        <select asp-for="UserSeller.SellerId" class="form-select" asp-items="@ViewBag.Sellers" aria-label="Default select">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label></label>
+                                        <button type="button" class="btn btn-primary m-2 SubmitByAjax">ثبت دسترسی</button>
+                                    </div>
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col-md-12 table-responsive">
+                                        <table class="table table-hover table-striped">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th>فروشنــده</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.UserSellers.Count > 0)
+                                                {
+                                                    foreach (var x in Model.UserSellers)
+                                                    {
+                                                        <tr>
+                                                            <td>@x.SellerName</td>
+                                                            <td class="text-end">
+                                                                <a href="#" class="delRow" title="حذف" data-url="@Url.Action("RemoveSellerFromUser","CustomerManager",new{Area="CustomerArea"})" data-target="@x.Id" data-bind="@Model.UserSetting.UserName">
+                                                                    <i class="bx bx-x text-danger"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

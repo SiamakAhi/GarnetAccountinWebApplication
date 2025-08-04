@@ -1,0 +1,66 @@
+﻿@model VmUpdateProfile
+
+
+<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+    <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+            <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+            <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+                <h4 class="mb-1" id="modalTitle">بروزرسانی اطلاعات کاربر  </h4>
+            </div>
+            <div class="p-4 pb-0" id="modalContent">
+                <form class="row g-3" asp-action="UpdateUser" asp-controller="usermanager" asp-area="" method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="FirstName" id="@Model.FirstName" type="text" placeholder="نام" />
+                        <label asp-for="FirstName"></label>
+                    </div>
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="LastName" id="@Model.LastName" type="text" placeholder="نام خانوادگی" />
+                        <label asp-for="LastName"></label>
+                    </div>
+                    <div class="form-floating">
+                        <input class="form-control" asp-for="PhoneNumber" id="@Model.PhoneNumber" type="text" placeholder="موبایل" />
+                        <label asp-for="PhoneNumber"></label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="email" class="form-control" asp-for="Email" id="@Model.Email" placeholder="ایمیل" />
+                        <label asp-for="Email"></label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input type="text" class="form-control" asp-for="userName" id="@Model.userName" placeholder="نام کاربری" />
+                        <label asp-for="userName"></label>
+                    </div>
+                    <div class="form-floating">
+                       
+                        <select class="form-select" asp-for="Gender" id="@Model.Gender" aria-label="Floating select" >
+                            <option>...</option>
+                            <option value="1">مرد</option>
+                            <option value="2">زن</option>
+                        </select>
+                        <label asp-for="Gender" id="@Model.Gender">جنسیت</label>
+                    </div>
+                    <div class="form-floating">
+                        <input class="form-control datetimepicker" id="@Model.StrBirthDate" asp-for="StrBirthDate"  type="text" placeholder="y/m/d" data-options="{&quot;disableMobile&quot;:true,&quot;locale&quot;:&quot;fa&quot;}">
+                        <label asp-for="StrBirthDate">تاریخ تولد</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="file" class="form-control" asp-for="ImageFile" id="@Model.ImageFile" placeholder="تصویر پروفایل" />
+                        <label asp-for="ImageFile"></label>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">انصراف</button>
+                        <button class="btn btn-primary submitajax" data-confirmtext="تغییرات ثبت شود ؟" type="button">ثبت اطلاعات </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="\lib\falcon\assets\js/theme.js"></script>
+

@@ -1,0 +1,622 @@
+﻿@model AccountsBrowserDto
+@{
+    long totalBed = 0;
+    long totalBes = 0;
+    long ekhtelaf = 0;
+    long mandehBed = 0;
+    long mandeBes = 0;
+    string strTotalBed = "0";
+    string strTotalBes = "0";
+    string strEkhtelaf = "0";
+    string status = "0";
+
+    if (Model.Kols != null)
+    {
+        totalBed = Model.Kols.Count > 0 ? Model.Kols.Sum(n => n.Bed) : 0;
+        totalBes = Model.Kols.Count > 0 ? Model.Kols.Sum(n => n.Bes) : 0;
+        ekhtelaf = totalBed >= totalBes ? totalBed - totalBes : totalBes - totalBed;
+
+        strTotalBed = totalBed > 0 ? totalBed.ToPrice() : "0";
+        strTotalBes = totalBes > 0 ? totalBes.ToPrice() : "0";
+        strEkhtelaf = ekhtelaf > 0 ? ekhtelaf.ToPrice() : "0";
+        status = (ekhtelaf > 0 && totalBed > totalBes) ? "بدهکار" : ((ekhtelaf > 0 && totalBes > totalBed) ? "بستانکار" : "");
+    }
+    else if (Model.Articles != null)
+    {
+        totalBed = Model.Articles.Sum(n => n.Bed);
+        totalBes = Model.Articles.Sum(n => n.Bes);
+        ekhtelaf = totalBed >= totalBes ? totalBed - totalBes : totalBes - totalBed;
+
+        strTotalBed = totalBed > 0 ? totalBed.ToPrice() : "0";
+        strTotalBes = totalBes > 0 ? totalBes.ToPrice() : "0";
+        strEkhtelaf = ekhtelaf > 0 ? ekhtelaf.ToPrice() : "0";
+        status = (ekhtelaf > 0 && totalBed > totalBes) ? "بدهکار" : ((ekhtelaf > 0 && totalBes > totalBed) ? "بستانکار" : "");
+    }
+
+}
+
+<div class="card page-header-panel">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="card-panel-header">
+                <div><span class="card-panel-title">مرورگر حساب ها</span><span class="text-warning mx-1">تفصیل / آرتیکل</span></div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <form asp-action="AccountBrowserTafsil" asp-controller="AccReports" asp-area="Accounting" method="get" id="frm_AccountBrowser">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card-header-panel-section">
+                            <div class="card-header-panel-section-header p-0"><span>فیلتر مرورگر </span></div>
+                            <div class="card-header-panel-section-body">
+                                <input type="hidden" asp-for="filter.KolId" value="@Model.filter?.KolId" />
+                                <input type="hidden" asp-for="filter.MoeinId" value="@Model.filter?.MoeinId" />
+                                <input type="hidden" asp-for="filter.ReportLevel" value="@Model.filter?.ReportLevel" />
+                                <input type="hidden" asp-for="filter.CurrentTafsilId" value="@Model.filter?.CurrentTafsilId" />
+                                <input type="hidden" asp-for="filter.tafsil4Id" value="@Model.filter?.tafsil4Id" />
+                                <input type="hidden" asp-for="filter.tafsil5Id" value="@Model.filter?.tafsil5Id" />
+                                <input type="hidden" asp-for="filter.tafsil6Id" value="@Model.filter?.tafsil6Id" />
+                                <input type="hidden" asp-for="filter.tafsil7Id" value="@Model.filter?.tafsil7Id" />
+                                <input type="hidden" asp-for="filter.tafsil8Id" value="@Model.filter?.tafsil8Id" />
+                                <input type="hidden" asp-for="filter.LevelUp" value="@Model.filter?.LevelUp" />
+                                <div class="filter-controls-container">
+                                    <div class="garnet-input-group">
+                                        <label>وضعیت سند</label>
+                                        <select asp-for="filter.docType" asp-items="@ViewBag.docType">
+                                            <option value="null" selected>همه</option>
+                                        </select>
+                                    </div>
+                                    <div class="garnet-input-group">
+                                        <label asp-for="filter.FromDocNumer">‌از شماره سند</label>
+                                        <input type="number" asp-for="filter.FromDocNumer" class="text-center">
+                                    </div>
+                                    <div class="garnet-input-group">
+                                        <label asp-for="filter.ToDocNumer">تا شماره سند‌</label>
+                                        <input type="number" asp-for="filter.ToDocNumer" class="text-center">
+                                    </div>
+                                    <div class="garnet-input-group">
+                                        <label asp-for="filter.StartDate">از تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strStartDate" class=" flatpickr-input" placeholder="YYYY/MM/DD">
+                                    </div>
+                                    <div class="garnet-input-group">
+                                        <label asp-for="filter.EndDate">از تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strEndDate" class="flatpickr-input" placeholder="YYYY/MM/DD">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-header-panel-section">
+                            <div class="card-header-panel-section-header"><span>عملیات </span></div>
+                            <div class="card-header-panel-section-body">
+                                <div class="row">
+                                    <div class="col-12 d-grid mx-1 px-1">
+                                        <button type="submit" class="btn btn-primary mb-1">
+                                            <i class="tf-icons bx bx-list mx-1"></i>
+                                            نمایش
+                                        </button>
+                                    </div>
+                                    <div class="col-6 d-grid px-1">
+                                        <a href="javascript:void(0)" id="exportToExcel" data-tableid="#tbl-accountBrowserTafsil" class="btn btn-secondary iconpng mb-1">
+                                            خروجی اکسل
+                                        </a>
+                                    </div>
+                                    <div class="col-6 d-grid px-1">
+                                        <a href="javascript:void(0)" class="btn btn-primary mb-1 getBrowserprint" data-url="@Url.Action("Print_BrowserTafsil", "AccPrint", new { Area = "Accounting" })">
+                                            چاپ
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="section-nav">
+        <ul>
+            <li>
+                <a asp-area="Accounting" asp-controller="AccReports" asp-action="AccountBrowserKol">
+                    <span class="text-secondary">حساب های کل</span>
+                </a>
+            </li>
+            <li class="text-warning verticaldivider">
+                <span>|</span>
+            </li>
+            <li>
+                <a href="javascript:void()" class="accountBrowserNav_tafsil" data-reportlevel="2" data-formid="frm_AccountBrowser" data-url="@Url.Action("AccountBrowserMoein", "AccReports", new { Area = "Accounting" })">
+                    <span class="text-secondary">@Model.navInfo.KolName</span>
+                </a>
+            </li>
+            @if (Model.navInfo.ReportLevel > 3)
+            {
+                <li class="text-warning verticaldivider">
+                    <span>|</span>
+                </li>
+                @if (Model.navInfo.ReportLevel == 3)
+                {
+                    <li>
+                        <a href="@(Context.Request.Headers["Referer"].ToString())">
+                            <span class="text-secondary">@Model.navInfo.MoeinName</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="javascript:void()" class="accountBrowserNav_tafsil" data-reportlevel="3" data-formid="frm_AccountBrowser" data-url="@Url.Action("AccountBrowserTafsil", "AccReports", new { Area = "Accounting" })">
+                            <span class="text-secondary">@Model.navInfo.MoeinName</span>
+                        </a>
+                    </li>
+                }
+
+            }
+
+            @if (Model.navInfo.ReportLevel > 4 && Model.navInfo.Tafsil4Id.HasValue)
+            {
+                <li class="text-warning verticaldivider">
+                    <span>|</span>
+                </li>
+                @if (Model.navInfo.ReportLevel == 4)
+                {
+                    <li>
+                        <span class="nav-pagenametext">@Model.navInfo.Tafsil4Name</span>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="javascript:void()" class="accountBrowserNav_tafsil" data-reportlevel="4" data-formid="frm_AccountBrowser" data-url="@Url.Action("AccountBrowserTafsil", "AccReports", new { Area = "Accounting" })">
+                            <span class="text-secondary">@Model.navInfo.Tafsil4Name</span>
+                        </a>
+                    </li>
+                }
+            }
+            @if (Model.navInfo.ReportLevel > 5 && Model.navInfo.Tafsil5Id.HasValue)
+            {
+                <li class="text-warning verticaldivider">
+                    <span>|</span>
+                </li>
+
+                @if (Model.navInfo.ReportLevel == 5)
+                {
+                    <li>
+                        <span class="nav-pagenametext">@Model.navInfo?.Tafsil5Name</span>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="javascript:void()" class="accountBrowserNav_tafsil" data-reportlevel="5" data-formid="frm_AccountBrowser" data-url="@Url.Action("AccountBrowserTafsil", "AccReports", new { Area = "Accounting" })">
+                            <span class="text-secondary">@Model.navInfo?.Tafsil5Name</span>
+                        </a>
+                    </li>
+                }
+
+            }
+            @if (Model.navInfo.ReportLevel > 6 && Model.navInfo.Tafsil6Id.HasValue)
+            {
+                <li class="text-warning verticaldivider">
+                    <span>|</span>
+                </li>
+
+                @if (Model.navInfo.ReportLevel == 6)
+                {
+                    <li>
+                        <span class="nav-pagenametext">@Model.navInfo.Tafsil6Name</span>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="javascript:void()" class="accountBrowserNav_tafsil" data-reportlevel="6" data-formid="frm_AccountBrowser" data-url="@Url.Action("AccountBrowserTafsil", "AccReports", new { Area = "Accounting" })">
+                            <span class="text-secondary">@Model.navInfo.Tafsil6Name</span>
+                        </a>
+                    </li>
+                }
+
+            }
+            @if (Model.navInfo.ReportLevel > 7 && Model.navInfo.Tafsil7Id.HasValue)
+            {
+                <li class="text-warning verticaldivider">
+                    <span>|</span>
+                </li>
+
+                @if (Model.navInfo.ReportLevel == 7)
+                {
+                    <li>
+                        <span class="nav-pagenametext">@Model.navInfo.Tafsil7Name</span>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="javascript:void()" class="accountBrowserNav_tafsil" data-reportlevel="7" data-formid="frm_AccountBrowser" data-url="@Url.Action("AccountBrowserTafsil", "AccReports", new { Area = "Accounting" })">
+                            <span class="text-secondary">@Model.navInfo.Tafsil7Name</span>
+                        </a>
+                    </li>
+                }
+
+            }
+            @if (Model.navInfo.ReportLevel > 8 && Model.navInfo.Tafsil8Id.HasValue)
+            {
+                <li class="text-warning verticaldivider">
+                    <span>|</span>
+                </li>
+                @if (Model.navInfo.ReportLevel == 8)
+                {
+                    <li>
+                        <span class="nav-pagenametext">@Model.navInfo.Tafsil8Name</span>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="javascript:void()" class="accountBrowserNav_tafsil" data-reportlevel="8" data-formid="frm_AccountBrowser" data-url="@Url.Action("AccountBrowserTafsil", "AccReports", new { Area = "Accounting" })">
+                            <span class="text-secondary">@Model.navInfo.Tafsil8Name</span>
+                        </a>
+                    </li>
+                }
+
+            }
+            @if (Model.navInfo.ReportLevel == 9)
+            {
+                <li class="text-warning verticaldivider">
+                    <span>|</span>
+                </li>
+                <li>
+                    <span class="nav-pagenametext">آرتیکل اسنـاد</span>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="reportPlace" id="accountBrowswePlace">
+        <div class="card-body m-0">
+            <div class="table-responsive text-nowrap static-height-450">
+                @if (Model.Kols != null)
+                {
+                    int colcount = 3;
+                    if (Model.filter.ReportLevel.HasValue && Model.filter.ReportLevel > 3)
+                        colcount = Model.filter.ReportLevel.Value - 1;
+
+                    <table class="table table-striped table-bordered dataTable" id="tbl-accountBrowserTafsil">
+                        <thead class="table-dark">
+                            <tr>
+                                <th rowspan="2"> ردیف</th>
+                                <th colspan="@colcount">اطلاعات حساب</th>
+                                <th colspan="2" class="text-center">گردش طی دوره</th>
+                                <th colspan="2" class="text-center">مانده</th>
+                            </tr>
+                            <tr>
+                                <th>کل</th>
+                                <th>معین</th>
+                                @if ((Model.Kols.Where(n => n.Tafsil4Id != null).Any() && Model.filter.ReportLevel >= 4) || Model.filter.ReportLevel >= 4)
+                                {
+                                    <th> تفصیل 4</th>
+                                }
+                                @if ((Model.Kols.Where(n => n.Tafsil5Id != null).Any() && Model.filter.ReportLevel >= 5) || Model.filter.ReportLevel >= 5)
+                                {
+                                    <th> تفصیل 5</th>
+                                }
+                                @if ((Model.Kols.Where(n => n.Tafsil6Id != null).Any() && Model.filter.ReportLevel >= 6) || Model.filter.ReportLevel >= 6)
+                                {
+                                    <th> تفصیل 6</th>
+                                }
+                                @if ((Model.Kols.Where(n => n.Tafsil7Id != null).Any() && Model.filter.ReportLevel >= 7) || Model.filter.ReportLevel >= 7)
+                                {
+                                    <th> تفصیل 7</th>
+                                }
+                                @if ((Model.Kols.Where(n => n.Tafsil8Id != null).Any() && Model.filter.ReportLevel >= 8) || Model.filter.ReportLevel >= 8)
+                                {
+                                    <th> تفصیل 8</th>
+                                }
+                                <th>بدهکار</th>
+                                <th>بستانکار</th>
+                                <th>بدهکار</th>
+                                <th>بستانکار</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            @if (Model.Kols?.Count() > 0)
+                            {
+                                int row = 1;
+                                foreach (var x in Model.Kols)
+                                {
+                                    string cssClass = (x.Nature != x.MandehNature && x.MandehNature != 3 && x.Nature != 3) ? " bg-warning text-black" : "";
+                                    <tr class="accountBrowser_tafsil @cssClass" data-deb="@x.Bed" data-bes="@x.Bes" data-moeinid="@x.MoeinId" data-tafsilid="@x.CurrentTafsilId" data-url="@Url.Action("AccountBrowserTafsil", "AccReports", new { Area = "Accounting" })">
+                                        <td class="row-num text-center">
+                                            <input type="checkbox" name="articleRow" />
+                                            @row
+                                        </td>
+                                        <td>@x.KolName</td>
+                                        <td>@x.MoeinName</td>
+                                        @if ((Model.Kols.Where(n => n.Tafsil4Id != null).Any() && Model.filter.ReportLevel >= 4) || Model.filter.ReportLevel >= 4)
+                                        {
+                                            <td>@x.Tafsil4Name</td>
+                                        }
+                                        @if ((Model.Kols.Where(n => n.Tafsil5Id != null).Any() && Model.filter.ReportLevel >= 5) || Model.filter.ReportLevel >= 5)
+                                        {
+                                            <td>@x.Tafsil5Name</td>
+                                        }
+                                        @if ((Model.Kols.Where(n => n.Tafsil6Id != null).Any() && Model.filter.ReportLevel >= 6) || Model.filter.ReportLevel >= 6)
+                                        {
+                                            <td>@x.Tafsil6Name</td>
+                                        }
+                                        @if ((Model.Kols.Where(n => n.Tafsil7Id != null).Any() && Model.filter.ReportLevel >= 7) || Model.filter.ReportLevel >= 7)
+                                        {
+                                            <td>@x.Tafsil7Name</td>
+                                        }
+                                        @if ((Model.Kols.Where(n => n.Tafsil8Id != null).Any() && Model.filter.ReportLevel >= 8) || Model.filter.ReportLevel >= 8)
+                                        {
+                                            <td>@x.Tafsil8Name</td>
+                                        }
+
+                                        <td class="col-price">@(x.Bed > 0 ? x.Bed.ToPrice() : "0")</td>
+                                        <td class="col-price">@(x.Bes > 0 ? x.Bes.ToPrice() : "0")</td>
+                                        <td class="col-price">
+                                            @{
+                                                if (x.MandehNature == 1)
+                                                {
+                                                    <span>@(x.Mandeh > 0 ? x.Mandeh.ToPrice() : "0")</span>
+                                                    mandehBed += x.Mandeh;
+                                                }
+                                                else
+                                                {
+                                                    <span>0</span>
+                                                }
+                                            }
+                                        </td>
+                                        <td class="col-price">
+                                            @{
+                                                if (x.MandehNature == 2)
+                                                {
+                                                    <span>@(x.Mandeh > 0 ? x.Mandeh.ToPrice() : "0")</span>
+                                                    mandeBes += x.Mandeh;
+                                                }
+                                                else
+                                                {
+                                                    <span>0</span>
+                                                }
+                                            }
+                                        </td>
+
+                                    </tr>
+
+                                    row++;
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="8">
+                                        <div class="alert alert-primary my-3 text-center" role="alert">
+                                            @ViewBag.Allert
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+
+                    int colspan = 0;
+                    @if (Model.Articles.Where(n => n.Tafsil4Id != null).Any())
+                        colspan++;
+                    @if (Model.Articles.Where(n => n.Tafsil5Id != null).Any())
+                        colspan++;
+                    @if (Model.Articles.Where(n => n.Tafsil6Id != null).Any())
+                        colspan++;
+                    @if (Model.Articles.Where(n => n.Tafsil7Id != null).Any())
+                        colspan++;
+                    @if (Model.Articles.Where(n => n.Tafsil8Id != null).Any())
+                        colspan++;
+
+                    <table class="table table-striped table-hover table-striped table-bordered dataTable" id="tbl-accountBrowserArt">
+                        <thead class="table-dark">
+                            <tr>
+                                <th rowspan="2" class="row-chb">ردیف</th>
+                                <th rowspan="2" class="row-chb">شماره سند</th>
+                                <th rowspan="2" class="row-chb">عطف</th>
+                                <th rowspan="2">تاریخ سند</th>
+                                <th rowspan="2">کل</th>
+                                <th rowspan="2">معین</th>
+                                @if (Model.Articles.Where(n => n.Tafsil4Id != null).Any())
+                                {
+                                    <th colspan="@colspan">سطوح تفصیلی</th>
+                                }
+                                <th colspan="2">گردش طی دوره</th>
+                                <th colspan="2">مانده</th>
+                                <th rowspan="2">شرح</th>
+                            </tr>
+                            <tr>
+                                @if (Model.Articles.Where(n => n.Tafsil4Id != null).Any())
+                                {
+                                    <th>4 تفصیل</th>
+                                }
+                                @if (Model.Articles.Where(n => n.Tafsil5Id != null).Any())
+                                {
+                                    <th>5 تفصیل</th>
+                                }
+                                @if (Model.Articles.Where(n => n.Tafsil6Id != null).Any())
+                                {
+                                    <th>6 تفصیل</th>
+                                }
+                                @if (Model.Articles.Where(n => n.Tafsil7Id != null).Any())
+                                {
+                                    <th>7 تفصیل</th>
+                                }
+                                @if (Model.Articles.Where(n => n.Tafsil8Id != null).Any())
+                                {
+                                    <th>8 تفصیل</th>
+                                }
+                                <th>بدهکار</th>
+                                <th>بستانکار</th>
+                                <th>بدهکار</th>
+                                <th>بستانکار</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            @if (Model.Articles?.Count() > 0)
+                            {
+                                int row = 1;
+                                foreach (var x in Model.Articles)
+                                {
+                                    <tr class="dblc-link" data-target="@x.Id" data-deb="@x.Bed" data-bes="@x.Bes" data-url="@Url.Action("Doc", "OpAccoucnting", new { Area = "", id = x.DocId, selectedArticle = x.Id })">
+                                        <td class="row-num text-center">
+                                            <input type="checkbox" name="articleRow" />
+                                            @row
+                                        </td>
+                                        <td class="row-chb">
+                                           @x.DocNumber
+                                        </td>
+                                        <td class="row-chb">
+                                            @x.AutoNumber
+                                        </td>
+                                        <td>@x.DocDate.Value.LatinToPersian()</td>
+                                        <td>@x.KolName</td>
+                                        <td>@x.MoeinName</td>
+
+                                        @if (Model.Articles.Where(n => n.Tafsil4Id != null).Any())
+                                        {
+                                            <td>@x.Tafsil4Name</td>
+                                        }
+                                        @if (Model.Articles.Where(n => n.Tafsil5Id != null).Any())
+                                        {
+                                            <td>@x.Tafsil5Name</td>
+                                        }
+                                        @if (Model.Articles.Where(n => n.Tafsil6Id != null).Any())
+                                        {
+                                            <td>@x.Tafsil6Name</td>
+                                        }
+                                        @if (Model.Articles.Where(n => n.Tafsil7Id != null).Any())
+                                        {
+                                            <td>@x.Tafsil7Name</td>
+                                        }
+                                        @if (Model.Articles.Where(n => n.Tafsil8Id != null).Any())
+                                        {
+                                            <td>@x.Tafsil8Name</td>
+                                        }
+                                        <td class="col-price">@(x.Bed > 0 ? x.Bed.ToPrice() : "0")</td>
+                                        <td class="col-price">@(x.Bes > 0 ? x.Bes.ToPrice() : "0")</td>
+                                        <td class="col-price">@x.BedBalance.ToPrice()</td>
+                                        <td class="col-price">@x.BesBalance.ToPrice()</td>
+                                        <td>@x.Comment</td>
+                                    </tr>
+
+                                    row++;
+                                }
+                            }
+                            else
+                            {
+
+                            }
+
+                        </tbody>
+                    </table>
+                }
+
+            </div>
+        </div>
+
+        <div class="alert-secondary p-2 m-0 mt-2">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="open my-2" id="sumRowsPlace">
+                        <div class="divider text-start divider-primary">
+                            <div class="divider-text">
+                                <h6 class="mb-0">
+                                    جمع ردیف های انتخاب شده
+                                </h6>
+                            </div>
+                        </div>
+                        <div class="bulkActionBox ps-3">
+                            <ul class="accountinfoBox me-2">
+                                <li>
+                                    <label class="text-secondary">بدهکار  </label>
+                                    <span class="text16 mx-3" id="totalBed"></span>
+                                </li>
+                                <li>
+                                    <label class="text-secondary">بستانکار </label>
+                                    <span class="text16 mx-3" id="totalBes"></span>
+                                </li>
+                                <li>
+                                    <label class="text-secondary">اختلاف </label>
+                                    <span class="text16 text-danger mx-3" id="ekhtelaf"></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <ul class="docfooter-totalAmounts">
+                        <li>
+                            <label>جمع بدهکار : </label>
+                            <div>
+                                <input type="text" readonly value="@strTotalBed" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label>جمع بستانکار : </label>
+                            <div>
+                                <input type="text" readonly value="@strTotalBes" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        @if (Model.Kols != null)
+                        {
+                            <li>
+                                <label>جمع مانده بدهکار : </label>
+                                <div>
+                                    <input type="text" readonly value="@(mandehBed > 0?mandehBed.ToPrice():"0")" />
+                                    <span class="text-sm-end">ريال</span>
+                                </div>
+                            </li>
+                            <li>
+                                <label>جمع مانده بستانکار : </label>
+                                <div>
+                                    <input type="text" readonly value="@(mandeBes > 0?mandeBes.ToPrice():"0")" />
+                                    <span class="text-sm-end">ريال</span>
+                                </div>
+                            </li>
+                        }
+                        <li>
+                            <label class="docBalance">
+                                @if (status == "بدهکار")
+                                {
+                                    <span class="badge badge-dot bg-label-danger px-3">@status</span>
+                                }
+                                else if (status == "بستانکار")
+                                {
+                                    <span class="badge badge-dot bg-label-danger px-3">@status</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-dot bg-label-success px-3">تـراز</span>
+                                }
+
+                            </label>
+                            <div>
+                                <input type="text" class="text-danger" readonly value="@strEkhtelaf" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<script src="~/vendor/libs/jquery/jquery.js"></script>
+<script src="~/appfunctions/export.js"></script>

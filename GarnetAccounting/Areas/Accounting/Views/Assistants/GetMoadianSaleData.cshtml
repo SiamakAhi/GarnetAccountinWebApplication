@@ -1,0 +1,63 @@
+﻿@model DocFilterDto
+@{
+    ViewData["Title"] = "استحراج فایل فروش برای سامانه مودیان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-panel">
+
+    <div>
+        <form asp-action="ExportMoadianBill" asp-controller="Assistants" asp-area="Accounting" method="post" id="frmBankFilter">
+            <input type="hidden" asp-for="SellerId" value="@Model.SellerId" />
+            <input type="hidden" asp-for="PeriodId" value="@Model.PeriodId" />
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header mt-4">
+                            <span>بازه زمانی موردنظرتان را انتخاب کنید</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class="row">
+                                <div class="col-12 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="strStartDate">از تاریخ‌</label>
+                                        <input type="text" asp-for="strStartDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="strEndDate">تا تاریخ‌</label>
+                                        <input type="text" asp-for="strEndDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="card-header-panel-section-body mt-2">
+                                    <div class=" d-grid p-2">
+                                        <input type="submit" class="garnet-btn garnet-btn-warning mb-2" value="آماده سازی و استخراج فایل" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="alert alert-secondary py-4 px-2 mb-3">
+                        <h5>توضیحات :</h5>
+                       <ul>
+                           <li>این امکان صرفا برای نمایندگی مدیران خودرو نجفی قابل استفاده است</li>
+                           <li>پیش از استفاده، مطمئن شوید که حساب معین فروش را در بحش تنظیمات حسابداری، مشخص کرده باشید. این عملیات یکبار برای همیشه خواهد بود </li>
+                           <li>استخراح اطلاعات بر اساس بازه زمانی انخاب شده در فرم پایین از اسناد حسابداری  انجام می شود</li>
+                           <li>فروش ها بر دو بخش کلی تقسیم شده است : 1- قطعات گارانتی 2 - سایر قطعات</li>
+                           <li>قطعات گارانتی فاکتور نوع اول درنظر گرفته میشوند و سایر فروش ها نوع دوم.</li>
+                           <li>سیستم بصورت اتوماتیک برای هر روز یک فاکتور برای قطعات گارنتی و یک فاکتور برای قطعات غیرگارانتی تولید میکند</li>
+                           <li>در صورت نیاز به هر گونه تغییر در اطلاعات استخراج شده می توانید فایل اکسل ایجاد شده را، قبل از استفاده ویرایش نمایید</li>
+                       </ul>
+                    </div>
+                </div>
+           
+            </div>
+        </form>
+    </div>
+
+
+</div>
+

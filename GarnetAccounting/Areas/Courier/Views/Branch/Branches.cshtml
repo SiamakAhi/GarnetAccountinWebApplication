@@ -1,0 +1,89 @@
+﻿  @model VmBranch
+@{
+    ViewData["Title"] = "لیست شعب و نمایندگان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-panel">
+                <div class="card-panel-header">
+                    <div><span class="card-panel-title">مدیریت نمایندگان</span></div>
+                    <div>
+                        <ul class="card-panel-navbar">
+                            <li>
+                                <a href="javascript:void(0)" data-url="@Url.Action("AddBranch", "Branch", new { Area = "Courier" })" class="quickaccess-link callform">
+                                    <i class="bx bx-plus"></i>
+                                    <span>جـدید</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card-panel-section">
+                    <div class="card-panel-section-header"><span>فیلتر </span></div>
+                    <div class="card-panel-section-body">
+                        <div class="widget-info-container">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-panel-section">
+                    <div class="card-panel-section-header"><span> </span></div>
+                    <div class="card-panel-section-body">
+                        <div class="card-container">
+                            <ul class="list-branch">
+                                @foreach (var x in Model.Branches)
+                                {
+                                    <li>
+                                        <div class="list-branch-branchinfo">
+                                            <h3 class="text-success">@x.BranchCode</h3>
+                                            <h4>@x.BranchName</h4>
+                                            <p>@x.Province /@x.CityName</p>
+                                        </div>
+                                        <div class="list-branch-mojavezha">
+                                            <ul>
+                                                <li>
+                                                    <i class="bx @(x.IsBillOfLadingIssuer==true ?"bx-check text-success":"bx-x text-danger")"></i>
+                                                    <span>مجوز صدور بارنامه</span>
+                                                </li>
+                                                <li>
+                                                    <i class="bx @(x.IsUrbanFleet==true ?"bx-check text-success":"bx-x text-danger")"></i>
+                                                    <span> مجوز جمع آوری و توزیع بار</span>
+                                                </li>
+                                                <li>
+                                                    <i class="bx @(x.IsIntercityFleet==true ?"bx-check text-success":"bx-x text-danger")"></i>
+                                                    <span>  مجوز حمل بین شهری زمینی</span>
+                                                </li>
+                                                <li>
+                                                    <i class="bx @(x.IsSortingAndExchange==true ?"bx-check text-success":"bx-x text-danger")"></i>
+                                                    <span>  همکاری در تجزیه و مبادلات کالا</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="list-branch-party">
+                                            <ul>
+                                                <li><label>طرف حساب :</label> <span>@x.TafsilName</span></li>
+                                                <li><label>مسئول شعبه :</label> <span>@x.BranchManager</span></li>
+                                                <li><label>شماره تماس :</label> <span>@x.BranchManagerPhoneNumber</span></li>
+                                                <li><label>تاریخ تمدید مجوز :</label> <span>@x.RenewalDate.Value.LatinToPersian()</span></li>
+                                            </ul>
+                                        </div>
+                                        <div class="list-branch-btnbox">
+                                            <a href="#" data-url="@Url.Action("CreateBranchManagerUser", "BranchUser", new { Area = "Courier", id = x.Id })" class="callform">ایحاد کاربر </a>
+                                            <a href="#" data-url="@Url.Action("UpdateBranchInfo", "Branch", new { Area = "Courier", id = x.Id })" class="callform">مشاهده کارکرد</a>
+                                            <a href="#" data-url="@Url.Action("UpdateBranchInfo", "Branch", new { Area = "Courier", id = x.Id })" class="callform">صورتحساب</a>
+                                            <a href="#" data-url="@Url.Action("UpdateBranchInfo", "Branch", new { Area = "Courier", id = x.Id })" class="callform">لیست اصلاحات</a>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

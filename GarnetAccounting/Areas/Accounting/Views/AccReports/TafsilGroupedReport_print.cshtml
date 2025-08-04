@@ -1,0 +1,200 @@
+﻿@model VmTafsilReport
+@{
+    ViewData["Title"] = "گزارش تفصیلی حساب‌ها";
+    Layout = null;
+
+    string startDate = "";
+    string endDate = "";
+    if (Model.CreditableCustomerReport.Any())
+    {
+        var fd = Model.CreditableCustomerReport.FirstOrDefault();
+        startDate = fd.FromDate.Value.LatinToPersian();
+        endDate = fd.UntilDate.Value.LatinToPersian();
+    }
+}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>گزارش تفصیلی حساب‌ها</title>
+    <link href="~/css/print.css" rel="stylesheet" />
+    <link href="~/css/font.css" rel="stylesheet" />
+</head>
+<body>
+
+    <!-- سربرگ -->
+    <div class="header no-print">
+        <h4 class="report-title">گزارش تفصیلی حساب‌ها</h4>
+        <p class="report-date">از تاریخ: @startDate - تا تاریخ: @endDate</p>
+    </div>
+
+    <!-- ابزارک‌ها (پرینت، PDF، بازگشت) -->
+    <div class="side no-print">
+        <div class="toolbar">
+            <button class="button print-button" onclick="printPage()">
+                <i>🖨️</i> پرینت
+            </button>
+            <button class="button pdf-button" onclick="exportToPDF()">
+                <i><img src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg" alt="PDF Icon" width="16"></i> PDF
+            </button>
+            <button class="button share-button" onclick="sharePDF()">
+                <i>📤</i> اشتراک‌گذاری
+            </button>
+            <a asp-action="saleInvoices" asp-controller="sale" asp-area="Commercial" class="button close-button">
+                <i>⬅️</i> بازگشت
+            </a>
+        </div>
+    </div>
+
+    <!-- محتوای اصلی -->
+    <div class="container">
+
+        <!-- جدول اصلی -->
+        <table class="accounts-table">
+            <colgroup>
+                <col style="width: 5%;"> <!-- ردیف -->
+                <col style="width: 20%;"> <!-- طرف حساب -->
+                <col style="width: 10%;"> <!-- جمع بدهکار -->
+                <col style="width: 10%;"> <!-- جمع بستانکار -->
+                <col style="width: 5%;"> <!-- تعداد بدهکاری -->
+                <col style="width: 5%;"> <!-- تعداد بستانکاری -->
+                <col style="width: 10%;"> <!-- تاریخ آخرین بدهکاری -->
+                <col style="width: 10%;"> <!-- تاریخ آخرین بستانکاری -->
+                <col style="width: 15%;"> <!-- مانده حساب -->
+                <col style="width: 8%;"> <!-- وضعیت حساب -->
+            </colgroup>
+            <thead>
+                <tr class="tr-headerReport">
+                    <th colspan="10">
+                        <h2>گزارش تفصیلی حساب‌ها</h2>
+                        <h4>از تاریخ: @startDate - تا تاریخ: @endDate</h4>
+                    </th>
+                </tr>
+                <tr class="tr-colheader">
+                    <th>ردیف</th>
+                    <th>طرف حساب</th>
+                    <th>جمع بدهکار</th>
+                    <th>جمع بستانکار</th>
+                    <th>تعداد بدهکاری</th>
+                    <th>تعداد بستانکاری</th>
+                    <th>تاریخ آخرین بدهکاری</th>
+                    <th>تاریخ آخرین بستانکاری</th>
+                    <th>مانده حساب</th>
+                    <th>وضعیت حساب</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.CreditableCustomerReport?.Count() > 0)
+                {
+                    int row = 1;
+                    foreach (var x in Model.CreditableCustomerReport)
+                    {
+                        <tr>
+                            <td>@row</td>
+                            <td>@x.TafsilName</td>
+                            <td>@x.Bed.ToPrice()</td>
+                            <td>@x.Bes.ToPrice()</td>
+                            <td>@x.BedQty</td>
+                            <td>@x.BesQty</td>
+                            <td>@(x.LastBedDate.HasValue ? x.LastBedDate.Value.LatinToPersian() : "-")</td>
+                            <td>@(x.LastBesDate.HasValue ? x.LastBesDate.Value.LatinToPersian() : "-")</td>
+                            <td>@x.Balance.ToPrice()</td>
+                            <td class="text-center">@x.BalanceNature.AccToNatureName()</td>
+                        </tr>
+                        row++;
+                    }
+
+                    <tr class="total-row">
+                        <th colspan="2">جمع کل</th>
+                        <th>@Model.CreditableCustomerReport.Sum(x => x.Bed).ToPrice()</th>
+                        <th>@Model.CreditableCustomerReport.Sum(x => x.Bes).ToPrice()</th>
+                        <th colspan="2"></th>
+                        <th colspan="2"></th>
+                        <th>@Model.CreditableCustomerReport.Sum(x => x.Balance).ToPrice()</th>
+                        <th></th>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10" class="text-center">داده‌ای برای نمایش وجود ندارد.</td>
+                    </tr>
+                }
+            </tbody>
+           
+        </table>
+
+    </div>
+
+    <!-- فوتر -->
+    <div class="footer no-print">
+        <p>تولید شده توسط سیستم مدیریت فروش</p>
+    </div>
+
+    <!-- اسکریپت‌ها -->
+    <script>
+        function printPage() {
+            // پنهان کردن عناصر غیرضروری
+            document.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
+
+            // اجرای پرینت
+            window.print();
+
+            // بازگرداندن حالت اولیه
+            document.querySelectorAll('.no-print').forEach(el => el.style.display = '');
+        }
+
+        function exportToPDF() {
+            const element = document.querySelector(".container");
+            html2pdf()
+                .set({
+                    filename: 'گزارش_تفصیلی_حساب.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, dpi: 192, letterRendering: true },
+                    jsPDF: {
+                        unit: 'mm',
+                        format: 'a4',
+                        orientation: 'landscape',
+                        compressPDF: true,
+                        margin: [15, 15, 15, 15]
+                    }
+                })
+                .from(element)
+                .save();
+        }
+
+        async function sharePDF() {
+            const element = document.querySelector(".container");
+
+            html2pdf()
+                .set({
+                    filename: 'گزارش_تفصیلی_حساب.pdf',
+                    html2canvas: { scale: 2 },
+                    jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4', margin: [10, 10, 10, 10] }
+                })
+                .from(element)
+                .outputPdf('blob')
+                .then(async function (pdfBlob) {
+                    const pdfFile = new File([pdfBlob], 'گزارش_تفصیلی_حساب.pdf', { type: 'application/pdf' });
+
+                    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+                        try {
+                            await navigator.share({
+                                files: [pdfFile],
+                                title: 'اشتراک‌گذاری گزارش',
+                                text: 'گزارش تفصیلی حساب را مشاهده کنید.',
+                            });
+                        } catch (error) {
+                            console.error('اشتراک‌گذاری انجام نشد: ', error);
+                        }
+                    } else {
+                        alert('این مرورگر امکان اشتراک‌گذاری فایل را ندارد. لطفاً با مرورگری دیگر امتحان کنید.');
+                    }
+                });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+</body>
+</html>

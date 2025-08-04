@@ -1,0 +1,86 @@
+﻿@model VmRepresentative
+
+<div class="modal-dialog modal-simple modal-lg">
+    <div class="modal-content">
+        <div class="modal-body">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="alert d-flex align-items-center text-center mb-3" role="alert">
+                <h5>
+                    <i class="bx bx-xs bx-command me-2 text-warning"></i>
+                    رابطین و نمایندگان
+                    <strong class="mx-2 text-info">@ViewBag.PersonName</strong>
+                </h5>
+            </div>
+            <div class="p-2 mb-4">
+                <form asp-action="AddRepresentative" asp-controller="Persen" asp-area="" method="post">
+                    <div class="row">
+                        <input type="hidden" asp-for="presentative.ParentId" value="@ViewBag.PersonId" />
+                        <div class="col-md-8">
+                            <label class="form-label" asp-for="presentative.RepresentativeId"> انتحاب شخص یا شرکت رابط از لیست</label>
+                            <select asp-for="presentative.RepresentativeId" class="select2 form-select" asp-items="@ViewBag.persen">
+                                <option value="0">انتخاب رابط یا نماینده</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 d-grid text-center p-2 mt-3">
+                            <button type="button" class="btn btn-primary accAjaxSubmit">افزودن</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="divider text-start divider-primary my-2">
+                <div class="divider-text">رابطین معرفی شده</div>
+            </div>
+            <div class="table-responsive text-nowrap mt-2">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>نام رابط</th>
+                            <th>شماره ملی</th>
+                            <th>شماره تماس</th>
+                            <th>نام شخص اصلی</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.presentatives.Count > 0)
+                        {
+                            int row = 1;
+                            foreach (var x in Model.presentatives)
+                            {
+                                <tr>
+                                    <td class="text-center">@row</td>
+                                    <td class="text-center">@x.Name</td>
+                                    <td class="text-center">@x.IdentityNumber</td>
+                                    <td class="text-center">@x.phone</td>
+                                    <td class="text-center">@x.ParentName</td>
+                                    <td class="text-center">
+                                        <a href="javascript:void(0)" class="removeRepresentative" data-representative="@x.RepresentativeId" data-party="@x.ParentId" data-url="@Url.Action("RemoveRepresentative","Persen",new{Area=""})">
+                                            <i class="bx bx-x text-warning mx-1"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6">
+                                    <div class="alert alert-primary my-3 text-center" role="alert">
+                                        شخصی بعنوان رابط برای <span class="text-warning mx-2"> @ViewBag.PersonName</span> معرفی نشده است
+                                    </div>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+      
+</div>
+
+<script src="~/js/forms-selects.js"></script>
+<script src="~/js/app/Appgarnet.js"></script>

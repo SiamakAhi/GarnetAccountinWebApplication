@@ -1,0 +1,60 @@
+﻿@using GarnetAccounting.Interfaces.Identity;
+
+@model VmRegisterUser
+@inject IAppRoleManager _roleManager
+@{
+    ViewBag.roles = new SelectList(_roleManager.Roles, "Name", "Name");
+}
+
+
+
+<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+    <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+            <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+            <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+                <h4 class="mb-1" id="modalTitle">افزدون شخص جدید</h4>
+            </div>
+            <div class="p-4 pb-0" id="modalContent">
+                <form class="row g-3" asp-action="Register" asp-controller="usermanager" asp-area="" method="post">
+                    <input type="hidden" asp-for="FName"  value="@Model.FName"/>
+                    <input type="hidden" asp-for="LName" value="@Model.LName" />
+                    <input type="hidden" asp-for="Mobile" value="@Model.Mobile" />
+                    <input type="hidden" asp-for="Gender" value="@Model.Gender" />
+                    <input type="hidden" asp-for="personId" value="@Model.personId" />
+                    <input type="hidden" asp-for="email" value="@Model.email" />
+                    <input type="hidden" asp-for="Birthday" value="@DateTime.Now.AddYears(-24)" />
+
+                    <div class="form-floating">
+                        <input type="text" class="form-control" asp-for="UserName" id="@Model.UserName" type="text" autocomplete="off" placeholder="نام کاربری" />
+                        <label asp-for="UserName"></label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" asp-for="Password" id="@Model.Password" type="password" autocomplete="off" placeholder="کلمه عبور" />
+                        <label asp-for="Password"></label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="password" class="form-control" asp-for="ConfirmPassword" id="@Model.ConfirmPassword" type="password" autocomplete="off" placeholder="تأیید کلمه عبور" />
+                        <label asp-for="ConfirmPassword"></label>
+                    </div>
+
+                  @*  <div class="">
+                        <label asp-for="Roles" id="@Model.Roles"></label>
+                        <select class="form-select" asp-for="Roles" id="@Model.Roles" aria-label="Floating select" asp-items='@new SelectList(_roleManager.Roles, "Name","Description")' multiple>
+                        </select>
+                    </div>*@
+                    <hr />
+                    <div class="row">
+                        <div class="d-grid d-md-block gap-2 pt-3">
+                            <button class="btn btn-primary mb-3 submitajax" title="کاربر جدید ایجاد شود ؟" type="button">ثبت</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

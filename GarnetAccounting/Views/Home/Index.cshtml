@@ -1,0 +1,273 @@
+﻿@model HomePageViewModel
+@{
+    ViewData["Title"] = "مدیریت مالی گارنِت";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    @if (User.IsInRole("AccountingManager") || User.IsInRole("AccountingBoss") || User.IsInRole("AccountingUser"))
+    {
+        <div class="col-md-12">
+            <div class="card card-panel">
+                <div class="card-panel-header">
+                    <div><span class="card-panel-title">دسترسی سریع حسابداری</span></div>
+                    <div class="card-panel-navbar-container">
+                        <ul class="card-panel-navbar">
+                            <li>
+                                <a asp-action="LastDoc" asp-controller="OpAccoucnting" asp-area="" class="quickaccess-link">
+                                    <i class="bx bx-last-page"></i>
+                                    <span>آخرین سند</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" data-url="@Url.Action("CreateDocHeader", "OpAccoucnting", new { Area = "" })" class="quickaccess-link newdoc">
+                                    <i class="bx bx-plus"></i>
+                                    <span>جـدید</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="AccountingDocs" asp-controller="OpAccoucnting" asp-area="" class="quickaccess-link">
+                                    <i class="bx bx-list-ul"></i>
+                                    <span>لیست اسناد</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="AccountBrowserKol" asp-controller="AccReports" asp-area="Accounting" class="quickaccess-link">
+                                    <i class="bx bx-grid-alt"></i>
+                                    <span>مرورگر حساب </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="ReportRooznameh" asp-controller="AccReports" asp-area="Accounting" class="quickaccess-link">
+                                    <i class="bx bx-detail"></i>
+                                    <span>روزنامه</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="TarazAzmayeshi" asp-controller="AccReports" asp-area="Accounting" class="quickaccess-link">
+                                    <i class="bx bx-bar-chart"></i>
+                                    <span>تراز آزمایشی </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-action="TafsilAccounts" asp-controller="AccCoding" asp-area="" class="quickaccess-link">
+                                    <i class="bx bxs-user-detail"></i>
+                                    <span>حساب تفصیلی</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card-panel-section">
+                            <div class="card-panel-section-header"><span>وضعیت اسناد </span></div>
+                            <div class="card-panel-section-body">
+                                <div class="widget-info-container">
+                                    <div class="widget-info">
+                                        <lable>تعداد اسناد</lable>
+                                        <span class="ms-2">@Model.DocumentsInfo.DocumentCount</span>
+                                    </div>
+                                    <div class="widget-info">
+                                        <lable>شماره آخرین سند</lable>
+                                        <span class="ms-2 ">@Model.DocumentsInfo.LastDocumentNumber</span>
+                                    </div>
+                                    <div class="widget-info">
+                                        <lable>بزرگترین تاریخ</lable>
+                                        <span class="ms-2">@Model.DocumentsInfo?.LatestDate?.LatinToPersian()</span>
+                                    </div>
+                                    <div class="widget-info">
+                                        <lable>ترتیب اسناد</lable>
+                                        <span class="ms-2">
+                                            @if (Model.DocumentsInfo.IsSorted)
+                                            {
+                                                <i class="bx bx-check-square text-success"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bx bx-x-circle text-danger"></i>
+                                            }
+                                        </span>
+                                    </div>
+                                    <div class="widget-info">
+                                        <lable> جمع بدهکار</lable>
+                                        <span class="ms-2">@(Model.DocumentsInfo.TotalDebit > 0 ? Model.DocumentsInfo.TotalDebit.ToPrice() : "0")</span>
+                                    </div>
+                                    <div class="widget-info">
+                                        <lable>جمع بستانکار</lable>
+                                        <span class="ms-2">@(Model.DocumentsInfo.TotalCredit > 0 ? Model.DocumentsInfo.TotalCredit.ToPrice() : "0")</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-panel-section">
+                            <div class="card-panel-section-header"><span>جستو در ریز اسناد </span></div>
+                            <div class="card-panel-section-body">
+                                <form asp-action="ReportRooznameh" asp-controller="AccReports" asp-area="Accounting" method="get">
+                                    <div class="row">
+                                        <div class=" col-md-3 mb-1">
+                                            <label asp-for="filter.FromDocNumer" class="form-label">‌از شماره سند</label>
+                                            <input type="number" asp-for="filter.FromDocNumer" class="form-control form-control-sm text-center">
+                                        </div>
+                                        <div class=" col-md-3 mb-1">
+                                            <label asp-for="filter.ToDocNumer" class="form-label">تا شماره سند‌</label>
+                                            <input type="number" asp-for="filter.ToDocNumer" class="form-control form-control-sm text-center">
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <label asp-for="filter.StartDate" class="form-label">از تاریخ‌</label>
+                                            <input type="text" asp-for="filter.strStartDate" class="form-control form-control-sm flatpickr-input" placeholder="YYYY/MM/DD" id="flatpickr-date">
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <label asp-for="filter.EndDate" class="form-label">‌تا تاریخ </label>
+                                            <input type="text" class="form-control form-control-sm flatpickr-input" asp-for="filter.EndDate" placeholder="YYYY/MM/DD" id="flatpickr-Enddate">
+                                        </div>
+                                        <div class="col-md-6 mb-2 select2-dark">
+                                            <label class="form-label">حساب(های) معین</label>
+                                            <select asp-for="filter.MoeinIds" class="select2 form-select form-select-sm gonext" multiple asp-items="@ViewBag.Moeins">
+                                                <option value="null">انتخاب کنید ...</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-2 select2-dark">
+                                            <label class="form-label">تفصیل 4</label>
+                                            <select asp-for="filter.Tafsil4Ids" class="select2 form-select form-select-sm gonext" multiple asp-items="@ViewBag.Tafsils">
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-2 select2-dark">
+                                            <label class="form-label">تفصیل 5</label>
+                                            <select asp-for="filter.Tafsil5Ids" class="select2 form-select form-select-sm gonext" multiple asp-items="@ViewBag.Tafsils5">
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-2 select2-dark">
+                                            <label class="form-label">تفصیل 6</label>
+                                            <select asp-for="filter.Tafsil6Ids" class="select2 form-select form-select-sm gonext" multiple asp-items="@ViewBag.Tafsils6">
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-12 mb-1">
+                                            <input type="text" class="form-control" asp-for="filter.Description" placeholder="جستجو در شرح سند، شرح آرتیکل و ...">
+                                        </div>
+                                        <div class="col-md-3">
+
+                                            <label class="form-label">مبلغ</label>
+                                            <input type="text" class="form-control form-control-sm text-center numberInput" asp-for="filter.strAmount">
+                                        </div>
+                                        <div class="col-md-9 checkboxgroup-container">
+                                            <div class="form-check">
+                                                <input asp-for="filter.SearchAmountFild" class="form-check-input" checked type="radio" value="3" id="SearchAmountFild1">
+                                                <label class="form-check-label" for="SearchAmountFild1"> جستجو در بدهکار و بستانکار </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input asp-for="filter.SearchAmountFild" class="form-check-input" type="radio" value="1" id="SearchAmountFild2">
+                                                <label class="form-check-label" for="SearchAmountFild2"> فقط بدهکار </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input asp-for="filter.SearchAmountFild" class="form-check-input" type="radio" value="2" id="SearchAmountFild3">
+                                                <label class="form-check-label" for="SearchAmountFild3"> فقط بستانکار </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 form-footer mt-2">
+                                            <input type="submit" class="btn btn-warning" value="نمایش اسنــاد" />
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-3">
+                        <div class="card-panel-section">
+                            <div class="card-panel-section-header"><span>گردش حسابهای تفصیلی</span></div>
+                            <div class="card-panel-section-body bg-light">
+                                <form asp-action="GetTafsilReport" asp-controller="AccReports" asp-area="Accounting" method="post" id="frmTafsilReport" class="mt-2">
+                                    <input type="hidden" id="selectedTafsilTexts" asp-for="TafsilReport.filter.SelectedTafsilTexts" />
+                                    <div class="row">
+                                        <div class="col-md-12 mb-2">
+                                            <div class="checkboxgroup2">
+                                                <div class="form-check">
+                                                    <input asp-for="TafsilReport.filter.ReportLevel" class="form-check-input" type="radio" value="4" id="lvl4" checked>
+                                                    <label class="form-check-label" for="lvl4"> گزارش از سطح 4 </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input asp-for="TafsilReport.filter.ReportLevel" class="form-check-input" type="radio" value="5" id="lvl5">
+                                                    <label class="form-check-label" for="lvl5"> گزارش از سطح 5 </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-2 select2-dark">
+                                            <label class="form-label">گروه تفصیلی</label>
+                                            <select asp-for="TafsilReport.filter.TafsilGroup" class="select2 form-select gonext" id="selectTafsilGroup" asp-items="@ViewBag.TafsilGroups" data-filltarget2="#selectTafsil5" data-filltarget="#selectTafsil" data-url="@Url.Action("GetTafsilByGroup", "basedata", new { Area = "" })">
+                                               <option value="null">همــه</option>
+                                            </select>
+                                          
+                                        </div>
+                                        <div class="col-md-12 mb-2 select2-dark">
+                                            <label class="form-label">تفصیل 4</label>
+                                            <select asp-for="TafsilReport.filter.Tafsil4Ids" class="select2 form-select gonext" multiple id="selectTafsil" asp-items="@ViewBag.Tafsils" data-filltarget="#selectKol" data-url="@Url.Action("GetKolsByTafsil", "basedata", new { Area = "" })">
+                                            </select>
+                                        </div>
+                                        <div class="col-md-12 mb-2 select2-dark">
+                                            <label class="form-label"> تفصیل 5 </label>
+                                            <select asp-for="TafsilReport.filter.Tafsil5Ids" class="select2 form-select gonext" multiple id="selectTafsil5" asp-items="@ViewBag.Tafsils5">
+                                            </select>
+                                        </div>
+                                        <div class="col-md-12 mb-2 mt-2 select2-dark">
+                                            <label class="form-label">حساب های کل </label>
+                                            <select asp-for="TafsilReport.filter.Kols" class="select2 form-select gonext" multiple id="selectKol" data-filltarget="#selectMoein" data-url="@Url.Action("GetMoeinsByKolAndTafsil", "basedata", new { Area = "" })">
+                                            </select>
+                                        </div>
+                                        <div class="col-md-12 mb-2 select2-dark">
+                                            <label class="form-label">حساب های معین موردنظر</label>
+                                            <select asp-for="TafsilReport.filter.Moeins" class="select2 form-select gonext" id="selectMoein" multiple>
+                                            </select>
+                                        </div>
+                                        @if (ViewBag.Projects != null)
+                                        {
+                                            <div class="col-md-12 mb-2 select2-primary">
+                                                <label class="form-label">پروژه </label>
+                                                <select asp-for="TafsilReport.filter.ProjectId" class="select2 form-select gonext" id="selectProject" asp-items="@ViewBag.Projects">
+                                                    <option>همه</option>
+                                                </select>
+                                            </div>
+                                        }
+                                        <div class="col-md-6 mb-2">
+                                            <label class="form-label">از تاریخ</label>
+                                            <input type="text" asp-for="TafsilReport.filter.strStartDate" id="tafsil_fromDate" class="form-control form-control-sm flatpickr-input gonext" placeholder="YYYY/MM/DD">
+                                        </div>
+                                       
+                                        <div class="col-md-6 mb-2">
+                                            <label class="form-label">تا تاریخ</label>
+                                            <input type="text" asp-for="TafsilReport.filter.strEndDate" id="tafsil_toDate" class="form-control form-control-sm flatpickr-input gonext" placeholder="YYYY/MM/DD">
+                                        </div>
+
+                                        <div class="col-md-12 mb-2 mt-3">
+                                            <div class="form-check">
+                                                <input asp-for="TafsilReport.filter.ShowJustWithValue" id="onlyHasValue" class="form-check-input" type="checkbox">
+                                                <label class="form-check-label" for="onlyHasValue">تفصیل های با مانده صفر در گزارش لحاظ نشوند.</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-btn-container">
+                                            <button type="submit" class="btn btn-dark"> گردش حساب</button>
+                                            <a href="javascrip:void(0)" data-formid="frmTafsilReport" data-url="@Url.Action("GetTafsil4MoeinTurnover", "AccReports", new { Area = "Accounting" })" class="btn btn-dark submitCustomForm">وضعیت حساب</a>
+                                            <a href="javascrip:void(0)" data-formid="frmTafsilReport" data-url="@Url.Action("TafsilGroupedReport_print", "AccReports", new { Area = "Accounting" })" class="btn btn-dark submitCustomForm">گزارش مانده به تفکیک تفصیل</a>
+                                            <a href="javascrip:void(0)" data-formid="frmTafsilReport" data-url="@Url.Action("printTafsilGrouped", "AccPrint", new { Area = "Accounting" })" class="btn btn-dark tafsilPrint">ریز گردش به تفکیک تفصیل</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+   
+  
+</div>
+
+

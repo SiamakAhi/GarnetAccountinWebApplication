@@ -1,0 +1,101 @@
+﻿ @model VmTafsilReport
+@{
+    ViewData["Title"] = "گزارش تفصیل'";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string startDate = "";
+    string endDate = "";
+    if (Model.CreditableCustomerReport.Any())
+    {
+        var fd = Model.CreditableCustomerReport.FirstOrDefault();
+        startDate = fd.FromDate.Value.LatinToPersian();
+        endDate = fd.UntilDate.Value.LatinToPersian();
+    }
+}
+
+
+
+<div class="card page-header-panel">
+    <div class="card-panel-header">
+        <div>
+            <span class="card-panel-title">
+                گزارش مانده تفصیلی
+            </span>
+              
+            <h4>
+                گزارش از تا ریخ 
+                <strong class="text-info ms-2 me-2"> @startDate</strong>
+                تا تاریخ
+                <strong class="text-info ms-2 me-2"> @endDate</strong>
+
+            </h4>
+        </div>
+           <div class="card-footer text-center">
+    <button id="printButton" class="btn btn-primary">چاپ گزارش</button>
+</div>
+    </div>
+
+    <div class="card-body card-table mt-3">
+        <div class="table-responsive text-nowrap static-height-600 print-area">
+            <table class="table table-hover table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ردیف</th>
+                        <th>طرف حساب </th>
+                        <th>جمع بدهکار</th>
+                        <th>جمع بستانکار</th>
+                        <th>تعداد بدهکاری</th>
+                        <th>تعداد بستانکاری</th>
+                        <th>تاریخ آخرین بدهکاری</th>
+                        <th>تاریخ آخرین بستانکاری</th>
+                        <th>مانده حساب</th>
+                        <th>وضعیت حساب</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.CreditableCustomerReport?.Count() > 0)
+                    {
+                        int row = 1;
+                        foreach (var x in Model.CreditableCustomerReport)
+                        {
+                            <tr>
+                                <td>@row</td>
+                                <td>@x.TafsilName</td>
+                                <td>@x.Bed.ToPrice()</td>
+                                <td>@x.Bes.ToPrice()</td>
+                                <td>@x.BedQty</td>
+                                <td>@x.BesQty</td>
+                                <td>@(x.LastBedDate.HasValue ? x.LastBedDate.Value.LatinToPersian() : "-")</td>
+                                <td>@(x.LastBesDate.HasValue ? x.LastBesDate.Value.LatinToPersian() : "-")</td>
+                                <td>@x.Balance.ToPrice()</td>
+                                <td class="text-center"> @x.BalanceNature.AccToNatureName()</td>
+                            </tr>
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                    <tr>
+                        <td>
+                        </td>
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <div class="card-footer">
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    document.getElementById("printButton").addEventListener("click", function () {
+        // قبل از چاپ، صفحه را به حالت چاپ ببرد
+        window.print();
+    });
+</script>
+
+

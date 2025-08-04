@@ -1,0 +1,41 @@
+﻿@model BankTransactionEditDto
+
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning">درج یادداشت</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form asp-action="AddNoteToTransaction" asp-controller="Assistants" asp-area="Accounting" method="post" >
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <strong  class="text-primary me-2"> شماره تراکنش :</strong>
+                       <stong>@Model.TransactionNumber</stong>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <strong class="text-primary me-2">تاریخ تراکنش : </strong>
+                        <stong>@Model.TransactionDate</stong>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <strong class="text-primary me-2">شــرح : </strong>
+                      <p class="bold m-0">
+                          @Model.Description
+                      </p>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <strong class="form-label text-primary me-2" asp-for="Comment">یادداشت</strong>
+                        <textarea rows="4" asp-for="Comment" class="form-control"></textarea>
+                    </div>
+                    <hr />
+                    <div class="col-md-12 d-grid p-3 mb-2">
+                        <input type="button" class="btn btn-primary accAjaxSubmit" value="ثبت" />
+                    </div>
+                </div>
+            </form>
+           
+        </div>
+    </div>
+</div>

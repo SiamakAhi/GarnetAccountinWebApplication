@@ -1,0 +1,120 @@
+﻿@model AddCustomerUserDto
+@{
+    ViewData["Title"] = "AddCustomerUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <h5 class="card-header">ایجاد کاربر</h5>
+    <div class="card-body">
+        <form asp-action="AddCustomerUser" asp-controller="CustomerManager" asp-area="CustomerArea" method="post" class="mt-2">
+
+            <input type="hidden" asp-for="customerId" value="@Model.customerId" />
+            <div class="row">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="divider text-start divider-primary">
+                            <div class="divider-text">مشخصــات کاربر</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="FName"></label>
+                                <input type="text" asp-for="FName" value="@Model.FName" class="form-control">
+                                <span asp-validation-for="FName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="LName"></label>
+                                <input type="text" asp-for="LName" value="@Model.LName" class="form-control">
+                                <span asp-validation-for="LName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="Mobile"></label>
+                                <input type="text" asp-for="Mobile" value="@Model.Mobile" class="form-control">
+                                <span asp-validation-for="Mobile" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="email"></label>
+                                <input type="email" asp-for="email" value="@Model.email" class="form-control">
+                                <span asp-validation-for="email" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="Gender"></label>
+                                <select asp-for="Gender" class="form-select" aria-label="Default select">
+                                    <option value="1">آقا</option>
+                                    <option value="2">خانم</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label" asp-for="UserName"></label>
+                                <input type="text" asp-for="UserName" class="form-control" autocomplete="off">
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="Password"></label>
+                                <input type="password" asp-for="Password" class="form-control">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="ConfirmPassword"></label>
+                                <input type="password" asp-for="ConfirmPassword" class="form-control">
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="divider text-start divider-warning">
+                            <div class="divider-text">تعیین سطوح دسترسی کاربر</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 select2-dark">
+                                <label asp-for="SellersId" class="form-label"></label>
+                                <select asp-items="ViewBag.sellers" asp-for="SellersId" id="SellersId" class="form-select select2">
+                                </select>
+                            </div>
+                            <div class="col-md-12 p-4">
+                                <small class="text-light fw-semibold">دسترسی های</small>
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="checkbox" asp-for="AllowSellerManagement">
+                                    <label class="form-check-label" asp-for="AllowSellerManagement"></label>
+                                </div>
+                                <div class="form-check mt-1">
+                                    <input class="form-check-input" type="checkbox" value="true" checked asp-for="AllowStuffManagement">
+                                    <label class="form-check-label" asp-for="AllowStuffManagement"></label>
+                                </div>
+                                <div class="form-check mt-1">
+                                    <input class="form-check-input" type="checkbox" value="true" checked asp-for="AllowBuyerManagement">
+                                    <label class="form-check-label" asp-for="AllowBuyerManagement"></label>
+                                </div>
+                                <div class="form-check mt-1">
+                                    <input class="form-check-input" type="checkbox" value="true" checked asp-for="AllowSaleManagement">
+                                    <label class="form-check-label" asp-for="AllowSaleManagement"></label>
+                                </div>
+                                <div class="form-check mt-1">
+                                    <input class="form-check-input" type="checkbox" asp-for="AllowUserManagement">
+                                    <label class="form-check-label" asp-for="AllowUserManagement"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-center mt-4">
+                            <button type="button" class="btn btn-primary me-sm-3 me-1 SubmitByAjax">ثبت</button>
+                            <a asp-action="CustomerUserList" asp-controller="CustomerManager" asp-area="CustomerArea" class="btn btn-label-secondary">
+                                بازگشت به لیست
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+<script src="~/js/forms-selects.js"></script>
+
+

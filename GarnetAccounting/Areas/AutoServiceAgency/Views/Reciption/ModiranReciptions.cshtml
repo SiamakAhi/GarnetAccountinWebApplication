@@ -1,0 +1,223 @@
+﻿@model ReceptionsViewModel
+@{
+    ViewData["Title"] = "اطلاعات پذیرش مدیران خودرو";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-panel">
+    <div class="card-panel-header">
+        <div><span class="card-panel-title">اطلاعات پذیرش مدیران خودرو</span></div>
+        <div class="card-panel-navbar-container">
+            <ul class="card-panel-navbar">
+                <li>
+                    <a href="javascript:void(0)" data-url="@Url.Action("ImportModiranReceptions", "Reciption", new { Area = "AutoServiceAgency" })" class="quickaccess-link callform">
+                        <i class="bx bx-plus"></i>
+                        <span>بارگذاری اطلاعات پذیرش </span>
+                    </a>
+                </li>
+                @* <li>
+                    <a class="quickaccess-link bulkActionformdata-callmodal"
+                       data-formid="frmBankFilter" data-tableid="tblbanktransactions"
+                       data-url="@Url.Action("CreatetransactionDoc", "DocCreator", new { Area = "Accounting" })"
+                       title="ثبت سند " href="javascript:void(0)">
+                        <i class="bx bx-printer"></i>
+                        <span>ثبت سند حسابداری تراکنش های انتخاب شده</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="quickaccess-link bulkAction"
+                       data-tableid="tblbanktransactions"
+                       data-url="@Url.Action("saveTransactionAsChecked", "Assistants", new { Area = "Accounting" })"
+                       data-allerttext="تراکنش های انتخاب شده بعنوان چک شده و تراکنش های دارای سند درنظر گرفته شود ؟"
+                       href="javascript:void(0)">
+                        <i class="bx bx-printer"></i>
+                        <span>ثبت بعنوان چک شده</span>
+                    </a>
+                </li> *@
+                @*   <li>
+                    <a class="uickaccess-link  bulkAction" href="#" data-tableid="tblDocsList" data-url="@Url.Action("DelDocs", "AccFunc", new { Area = "Accounting" })" data-allerttext="اسناد انتخاب شده حذف شوند ؟" title="حذف سنـد">
+                        <i class="bx bx-trash"></i>
+                        <span>حذف گروهی</span>
+                    </a>
+                </li> *@
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        <form asp-action="ModiranReciptions" asp-controller="Reciption" asp-area="AutoServiceAgency" method="get" id="frmBankFilter">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>فیلتـر</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class="row">
+
+                                <div class="col-md-4 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light mb-1">
+                                        <label>شماره پذیرش</label>
+                                        <input type="text" class="text-center" asp-for="filter.ReceptionNumber">
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.strFromDate">از تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strFromDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.strToDate">تا تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strToDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <div class="garnet-checkbox-group garnet-input-group-light">
+                                        <label for="SearchAmountFild3">فقط پذیرش های فاقد سند حسابداری </label>
+                                        <input asp-for="filter.JustNonDoc" type="checkbox" checked id="SearchAmountFild3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>عملیات</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class=" d-grid p-2">
+                                <input type="submit" class="garnet-btn garnet-btn-warning mb-2" value="نمایش" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="card-body card-table">
+        <div class="table-responsive text-nowrap static-height-600">
+            <table class="table table-hover table-striped table-bordered dataTable" id="tblbanktransactions">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="row-chb">
+                            <input type="checkbox" id="SelectRows" />
+                            #
+                        </th>
+                        <th>اقدام</th>
+                        <th>شماره پذیرش</th>
+                        <th>تاریخ فاکتور</th>
+                        <th>مشتری</th>
+                        <th> فروش قطعه آزاد</th>
+                        <th>جمع اجرت آزاد</th>
+                        <th>جمع ارزش افزوده آزاد</th>
+                        <th> فروش قطعه گارانتی</th>
+                        <th>جمع اجرت گارانتی</th>
+                        <th>جمع ارزش افزوده گارانتی</th>
+                        <th>شماره فاکتور</th>
+                        <th>تاریخ پذیرش</th>
+                        <th>سند حسابداری</th>
+                        <th>شماره بایگانی</th>
+                        <th> شماره مرجع</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.Receptions.Any())
+                    {
+                        int row = 1;
+                        foreach (var x in Model.Receptions)
+                        {
+                            <tr>
+                                <td class="row-chb">
+                                    <input type="checkbox" class="tblRow px-3" name="docId" value="@x.ReceptionNumber" />
+                                    @row
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm @(x.HasDoc ?"btn-info":"btn-primary") btn-info"
+                                        asp-action="CompleteAdmissionDetails" 
+                                        asp-controller="Reciption" 
+                                        asp-area="AutoServiceAgency" 
+                                        asp-route-receptionNumber="@x.ReceptionNumber">
+                                      تکمیل اطلاعات و ثبت سند
+                                    </a>
+                                </td>
+                                <td class="text-center">@x.ReceptionNumber</td>
+                                <td class="text-center">@x.InvoiceDate.LatinToPersian()</td>
+                                <td>@x.CustomerName</td>
+                                <td class="col-price">@x.SaleFreeAmount.ToPrice()</td>
+                                <td class="col-price">@x.ojratFreeTotal.ToPrice()</td>
+                                <td class="col-price">@x.VatFree.ToPrice()</td>
+                                <td class="col-price">@x.SaleWarrantyAmount.ToPrice()</td>
+                                <td class="col-price">@x.ojratWarrantyTotal.ToPrice()</td>
+                                <td class="col-price">@x.VatWarranty.ToPrice()</td>
+                                <td class="text-center">@x.InvoiceNumber</td>
+                                <td class="text-center">@x.Date.LatinToPersian()</td>
+                                <td>@x.DocNum</td>
+                                <td>@x.ArchiveNumber</td>
+                                <td>@x.BachNumber</td>
+                            </tr>
+
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+    document.querySelectorAll('#tblbanktransactions tbody tr').forEach(row => {
+        // اضافه کردن رویداد click به هر ردیف
+        row.addEventListener('click', function (event) {
+            // جلوگیری از اجرا شدن رویداد کلیک اگر کاربر مستقیماً روی چک‌باکس کلیک کرده باشد
+            if (event.target.type === 'checkbox') {
+                return;
+            }
+
+            // یافتن چک‌باکس داخل ردیف کلیک‌شده
+            const checkbox = this.querySelector('input[type="checkbox"].tblRow');
+
+            if (checkbox) {
+                // معکوس کردن وضعیت چک‌باکس
+                checkbox.checked = !checkbox.checked;
+                   const event = new Event('change', { bubbles: true });
+                    // اعمال رویداد change به عنصر چک‌باکس
+                    checkbox.dispatchEvent(event);
+            }
+        });
+    });
+
+</script>
+

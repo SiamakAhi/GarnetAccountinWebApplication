@@ -1,0 +1,427 @@
+﻿@model ImportMoadianViewModel
+@{
+    ViewData["Title"] = "مدیریت اطلاعات دریافتی از سامانه مودیان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-panel">
+    <div class="card-panel-header">
+        <div><span class="card-panel-title">مدیریت اطلاعات دریافتی از سامانه مودیان</span></div>
+        <div class="card-panel-navbar-container">
+            <ul class="card-panel-navbar">
+                <li>
+                    <a href="javascript:void(0)" data-url="@Url.Action("ImportMoadianReports", "Assistants", new { Area = "Accounting" })" class="quickaccess-link callform">
+                        <i class="bx bx-plus"></i>
+                        <span>
+                            بارگزاری اکسل گزارش سامانه مودیان
+                            <span class="text-info">xlsx.</span>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a class="quickaccess-link bulkActionformdata-callmodal"
+                       data-formid="frmMoadianFilter" data-tableid="tblbanktransactions"
+                       data-url="@Url.Action("CreatetMoadianDoc", "DocCreator", new { Area = "Accounting" })"
+                       title="ثبت سند " href="javascript:void(0)">
+                        <i class="bx bx-detail"></i>
+                        <span>ثبت سند حسابدای</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="quickaccess-link bulkAction"
+                       data-tableid="tblbanktransactions"
+                       data-url="@Url.Action("saveTransactionAsChecked", "Assistants", new { Area = "Accounting" })"
+                       data-allerttext="تراکنش های انتخاب شده بعنوان چک شده درنظر گرفته شود ؟"
+                       href="javascript:void(0)">
+                        <i class="bx bx-checkbox-checked"></i>
+                        <span>ثبت بعنوان چک شده</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="quickaccess-link bulkAction"
+                       data-tableid="tblbanktransactions"
+                       data-url="@Url.Action("DeleteMoadian", "Assistants", new { Area = "Accounting" })"
+                       data-allerttext="ردیف های انتخاب شده را حذف می کنید ؟"
+                       href="javascript:void(0)">
+                        <i class="bx bx-trash-alt"></i>
+                        <span>حذف</span>
+                    </a>
+                </li>
+                @*   <li>
+                    <a class="uickaccess-link  bulkAction" href="#" data-tableid="tblDocsList" data-url="@Url.Action("DelDocs", "AccFunc", new { Area = "Accounting" })" data-allerttext="اسناد انتخاب شده حذف شوند ؟" title="حذف سنـد">
+                        <i class="bx bx-trash"></i>
+                        <span>حذف گروهی</span>
+                    </a>
+                </li> *@
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        <form asp-action="MoadianReports" asp-controller="Assistants" asp-area="Accounting" method="get" id="frmMoadianFilter">
+            <input type="hidden" asp-for="filter.CurrentPage" value="@Model.filter.CurrentPage" />
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>فیلتـر</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class="row">
+                                <div class="col-lg-3 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.Transactiontype">‌نوع گزارش</label>
+                                        <select asp-for="filter.Transactiontype" class="text-center">
+                                            <option>...</option>
+                                            <option value="1">گزارش خرید از کارپوشه مالیاتی</option>
+                                            <option value="2">گزارش فروش از کارپوشه مالیاتی</option>
+                                            <option value="3">گزارش فروش از نرم افزار واسط گارنت</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>طرف حساب</label>
+                                        <input type="text" class="text-center" asp-for="filter.Description">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.strFromDate">از تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strFromDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.strToDate">تا تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strToDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+
+                               
+                                <!-- 1 -->
+                                <div class="col-lg-6 mb-1">
+                                    <div class="garnet-input-group1 fw garnet-input-group-light mb-1">
+                                        <label asp-for="filter.InvoiceStatuse">‌وضعیت صورتحساب</label>
+                                        <select class="form-select select2" multiple asp-for="filter.InvoiceStatuse" asp-items="@ViewBag.InvoiceStatuse">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 mb-1">
+                                    <div class="garnet-input-group1 fw garnet-input-group-light">
+                                        <label asp-for="filter.InvoiceType">‌نوع صورتحساب</label>
+                                        <select asp-for="filter.InvoiceType">
+                                            <option value="" selected>همه</option>
+                                            <option value="نوع اول">نوع اول</option>
+                                            <option value="نوع دوم">نوع دوم</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 mb-1">
+                                    <div class="garnet-input-group1 fw garnet-input-group-light">
+                                        <label asp-for="filter.InvoiceSubject">‌موضوع صورتحساب</label>
+                                        <select class="form-select select2" multiple asp-for="filter.InvoiceSubject">
+                                            <option value="1">اصلی</option>
+                                            <option value="2">اصلاحی</option>
+                                            <option value="3">برگشت از فروش</option>
+                                            <option value="4">ابطلالی</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 widget-info  mb-1">
+                                    <div class="form-check form-check-inline mb-1">
+                                        <input class="form-check-input" type="checkbox" asp-for="filter.ShowAll">
+                                        <label class="form-check-label" asp-for="filter.ShowAll">
+                                            نمایش تراکنش های چک شده
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 mb-1">
+                                    <div class="garnet-input-group1 fw garnet-input-group-light">
+                                        <label asp-for="filter.PageSize">شماره مرجع ‌</label>
+                                        <input type="text" class="text-center" asp-for="filter.BatchNumber" value="@Model.filter.BatchNumber" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 mb-1">
+                                    <div class="garnet-input-group1 fw garnet-input-group-light">
+                                        <label asp-for="filter.PageSize">تعداد ردیف ‌</label>
+                                        <input type="number" class="text-center" asp-for="filter.PageSize" value="@Model.filter.PageSize" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>عملیات</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class=" d-grid p-2">
+                                <input type="submit" class="garnet-btn garnet-btn-warning mb-2" value="نمایش" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="card-body card-table">
+        <div class="table-responsive static-height-600">
+            <table class="table table-hover table-striped table-bordered  dataTable" id="tblbanktransactions">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="row-chb">
+                            <input type="checkbox" id="SelectRows" />
+                            ردیف
+                        </th>
+                        <th>
+                            اقدام
+                        </th>
+                        <th>نوع ‌</th>
+                        <th>الگو </th>
+                        <th>موضوع </th>
+                        <th>شماره مالیاتی </th>
+                        <th>مجموع</th>
+                        <th>ارزش افزوده</th>
+                        <th>وضعیت ‌</th>
+                        <th>تاریخ صدور </th>
+                        <th>تاریخ درج در کارپوشه</th>
+                        <th>شناسه هویتی خریدار‌</th>
+                        <th>شماره اقتصادی خریدار</th>
+                        <th>شعبه فروشنده</th>
+                        <th>نام خریدار</th>
+                        <th>نام تجاری خریدار</th>
+                        <th>نوع شخص خریدار</th>
+                        <th>روش تسویه</th>
+                        <th>سال و دوره</th>
+                        <th>مبلغ فاکتور بدون ارزش افزوده (ریال)</th>
+                        <th>بارگزاری</th>
+                        <th>مرجع</th>
+
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.Data.Items.Any())
+                    {
+                        int row = 1;
+                        foreach (var x in Model.Data.Items)
+                        {
+                            <tr>
+                                <td class="row-chb">
+                                    <input type="checkbox" class="tblRow px-3" name="docId" value="@x.Id" />
+                                    @row
+                                </td>
+                                <td>
+                                    <div class="btn-group @(x.IsChecked ?"bg-success":"")" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bx bx-menu"></i>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                            <a class="dropdown-item callform" href="javascript:void(0);"
+                                               data-url="@Url.Action("AddNoteToTransaction", "Assistants", new { Area = "Accounting", Id = x.Id })">
+                                                <i class="bx bx-note me-2 text-info"></i>
+                                                یادداشت
+                                            </a>
+                                            <a class="dropdown-item accAjaxPost" href="javascript:void(0);"
+                                               data-url="@Url.Action("TransactionCheckToggle", "Assistants", new { Area = "Accounting" })" data-target="@x.Id">
+                                                <i class="bx bx-checkbox  @(x.IsChecked ?"bx-bx-checkbox":"bx-checkbox-checked")" me-2 text-info"></i>
+                                                @if (x.IsChecked)
+                                                {
+                                                    <span>
+                                                        ثبت بعنوان چک نشده
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span>
+                                                        ثبت بعنوان چک شده
+                                                    </span>
+                                                }
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@x.InvoiceType</td>
+                                <td>@x.InvoicePattern</td>
+                                <td>@x.InvoiceSubject</td>
+                                <td>@x.TaxNumber</td>
+                                <td>@x.TotalInvoiceAmount</td>
+                                <td>@x.VAT</td>
+                                <td>@x.InvoiceStatus</td>
+                                <td>@x.IssueDate.LatinToPersian()</td>
+                                <td>@x.FolderInsertDate.LatinToPersian()</td>
+                                <td>@x.BuyerIdentity</td>
+                                <td>@x.BuyerEconomicNumber</td>
+                                <td>@x.SellerBranch</td>
+                                <td>@x.BuyerName</td>
+                                <td>@x.BuyerTradeName</td>
+                                <td>@x.BuyerPersonType</td>
+                                <td>@x.SettlementMethod</td>
+                                <td>@x.YearAndPeriod</td>
+                                <td>@x.InvoiceAmountWithoutVAT</td>
+                                <td>@x.CreateAt</td>
+                                <td>@x.Batchnuber</td>
+                            </tr>
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+    <div class="card-footer alert-secondary">
+        @if (Model.Data.TotalPages > 1)
+        {
+            <nav aria-label="Page navigation" class="pagin mt-3">
+                <ul class="pagination pagination-sm text-center">
+                    @if (Model.Data.HasPreviousPage)
+                    {
+                        <li class="page-item prev">
+                            <a class="page-link" data-formid="frmMoadianFilter" data-currentpage="@(Model.Data.CurrentPage - 1)">
+                                <i class="tf-icon bx bx-chevrons-left"></i>
+                            </a>
+                        </li>
+                    }
+
+                    @{
+                        int totalPages = Model.Data.TotalPages;
+                        int currentPage = Model.Data.CurrentPage;
+                        int pageRange = 3; // تعداد صفحات قبل و بعد از صفحه فعلی
+
+                        int startPage = Math.Max(1, currentPage - pageRange);
+                        int endPage = Math.Min(totalPages, currentPage + pageRange);
+
+                        if (startPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" data-formid="frmMoadianFilter" data-currentpage="1">1</a>
+                            </li>
+                            if (startPage > 2)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                        }
+
+                        for (int i = startPage; i <= endPage; i++)
+                        {
+                            string strActive = currentPage == i ? "active" : "";
+                            <li class="page-item @strActive">
+                                <a class="page-link" data-formid="frmMoadianFilter" data-currentpage="@i">@i</a>
+                            </li>
+                        }
+
+                        if (endPage < totalPages)
+                        {
+                            if (endPage < totalPages - 1)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                            <li class="page-item">
+                                <a class="page-link" data-formid="frmMoadianFilter" data-currentpage="@totalPages">@totalPages</a>
+                            </li>
+                        }
+                    }
+
+                    @if (Model.Data.HasNextPage)
+                    {
+                        <li class="page-item next">
+                            <a class="page-link" data-formid="frmMoadianFilter" data-currentpage="@(Model.Data.CurrentPage + 1)">
+                                <i class="tf-icon bx bx-chevrons-right"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+
+        }
+    </div>
+</div>
+
+<script src="~/js/forms-selects.js"></script>
+<script type="text/javascript">
+
+
+    // document.querySelectorAll('#tblbanktransactions tbody tr').forEach(row => {
+
+    //     row.addEventListener('click', function (event) {
+    //         if (event.target.type === 'checkbox') {
+    //             return;
+    //         }
+    //         const checkbox = this.querySelector('input[type="checkbox"].tblRow');
+
+    //         if (checkbox) {
+    //             checkbox.checked = !checkbox.checked;
+    //                const event = new Event('change', { bubbles: true });
+    //                 checkbox.dispatchEvent(event);
+    //         }
+    //     });
+    // });
+
+     document.querySelectorAll('#tblbanktransactions tbody tr').forEach(row => {
+        // اضافه کردن رویداد click به هر ردیف
+        row.addEventListener('click', function (event) {
+            // اگر روی چک‌باکس کلیک شده باشد، عملیات را نادیده بگیر
+            if (event.target.type === 'checkbox') {
+                return;
+            }
+
+            // پیدا کردن چک‌باکس داخل ردیف
+            const checkbox = this.querySelector('input[type="checkbox"].tblRow');
+            if (checkbox) {
+                // تغییر وضعیت چک‌باکس
+                checkbox.checked = !checkbox.checked;
+
+                // بررسی وضعیت چک‌باکس و اضافه یا حذف کلاس checkedrow
+                if (checkbox.checked) {
+                    this.classList.add('checkedrow'); // اضافه کردن کلاس به ردیف
+                } else {
+                    this.classList.remove('checkedrow'); // حذف کلاس از ردیف
+                }
+
+                // ایجاد و انتشار رویداد change برای چک‌باکس
+                const changeEvent = new Event('change', { bubbles: true });
+                checkbox.dispatchEvent(changeEvent);
+            }
+        });
+
+</script>
+
+
+

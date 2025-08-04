@@ -1,0 +1,64 @@
+﻿@model ConsignmentNatureDto
+
+<div class="modal-dialog dataentry-modal">
+    <div class="modal-content dataentry">
+        <div class="dataentry-title">
+            <span class="">تعریف ماهیت جدید</span>
+        </div>
+        <form asp-action="AddNewNature" asp-controller="Pricing" asp-area="Courier" method="post">
+            <div class="row dataentry-controls">
+                <!-- بخش مشخصات -->
+                <div class="col-md-6 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>مشخصات</h6>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="Code" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="Code" />
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="Name" />
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="RateImpactTypeId" class="form-label">نوع محاسبه هزینه در بارنامه</label>
+                        <select class="form-select form-select-sm" asp-for="RateImpactTypeId" asp-items="@ViewBag.RateImpacts">
+                            <option value="null">نوع محاسبه در بارنامه </option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="RateImpactValue" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" min="0" asp-for="RateImpactValue" />
+                    </div>
+                </div>
+                <div class="col-md-6 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>نحوه حمل مجاز</h6>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="IsGroundTransportable" />
+                            <label class="form-check-label" asp-for="IsGroundTransportable"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="IsAirTransportable" />
+                            <label class="form-check-label" asp-for="IsAirTransportable"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 garnet-section dataentry-buttons-container mt-3">
+                    <div class="dataentry-buttons">
+                        <a href="javascript:void(0)" class="btn btn-primary accAjaxSubmit">ذخیـره</a>
+                        <button type="reset" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">انصراف</button>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </form>
+    </div>
+</div>

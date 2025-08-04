@@ -1,0 +1,435 @@
+﻿ @model VmInvoices
+@{
+    ViewData["Title"] = "فاکتورهای فروش";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var items = Model.Invoices.Items.ToList();
+    decimal? TotalTaxable =  items.Sum(n=>n.TotalTaxable);
+    decimal? totalDiscount = items.Sum(n => n.TotalDiscount);
+    decimal? totalAfterDiscount = items.Sum(n => n.TotalPriceAfterDiscount);
+    decimal? TotalNoTaxable = items.Sum(n => n.TotalNoTaxable);
+    decimal? totalVat = items.Sum(n => n.TotalVatPrice);
+    decimal? finalPrice = items.Sum(n => n.TotalFinalPrice);
+}
+
+
+<div class="card card-panel">
+    <div class="card-panel-header">
+        <div><span class="card-panel-title">فاکتورهای فروش</span></div>
+        <div class="card-panel-navbar-container">
+            <ul class="card-panel-navbar">
+                <li>
+                    <a href="javascript:void(0)" data-url="@Url.Action("CreateSaleInvoice", "sale", new { Area = "Commercial" })" class="quickaccess-link callform">
+                        <i class="bx bx-cart-add"></i>
+                        <span>جـدید</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="quickaccess-link" asp-action="saleReports" asp-controller="sale" asp-area="Commercial">
+                        <i class="bx bx-printer"></i>
+                        <span>گزارشات فروش</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="quickaccess-link callaction-bulk" data-tableid="tblSaleInvoices" data-url="@Url.Action("print_Invoices", "sale", new { Area = "Commercial" })" data-allerttext="چاپ فاکتورها انجام شود ؟" href="#">
+                        <i class="bx bx-printer"></i>
+                        <span>چاپ گروهی</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="quickaccess-link" asp-action="bulkCreateInvoice" asp-controller="sale" asp-area="Commercial">
+                        <i class="bx bx-import"></i>
+                        <span>ورود اطلاعات گروهی</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="uickaccess-link" asp-action="PersenList" asp-controller="Persen" asp-area="">
+                        <i class="bx bx-group"></i>
+                        <span>اشخاص و شرکت ها</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="uickaccess-link" asp-action="products" asp-controller="product" asp-area="Warehouse">
+                        <i class="bx bx-package"></i>
+                        <span>کالا و محصولات</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <form asp-action="saleInvoices" asp-controller="sale" asp-area="Commercial" method="get" id="frmSaleInvoiceFilter">
+            <input type="hidden" asp-for="filter.CurrentPage" value="1" />
+            <input type="hidden" asp-for="filter.Invoicetype" value="2" />
+
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>فیلتـر</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class="row">
+                                <div class="col-md-2 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.InvoiceNumber">‌شماره فاکتور</label>
+                                        <input type="number" class="text-center" asp-for="filter.InvoiceNumber">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.srtFromDate">از تاریخ‌</label>
+                                        <input type="text" asp-for="filter.srtFromDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.srtToDate">تا تاریخ‌</label>
+                                        <input type="text" asp-for="filter.srtToDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>خریدار  </label>
+                                        <select asp-for="filter.Party" class="form-select select2" asp-items="@ViewBag.buyers">
+                                            <option value="null" selected>همه</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-5 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>جستجو در شرح </label>
+                                        <input type="text" class="text-center" asp-for="filter.Remark">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>وضعیت مالیاتی  </label>
+                                        <select asp-for="filter.WithVat" class="form-select" >
+                                            <option value="null" selected>همه</option>
+                                            <option value="true">با ارزش افزوده</option>
+                                            <option value="false">بدون ازش افزوده</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>تعداد ردیف در هر صفحه</label>
+                                        <input type="number" min="1" asp-for="filter.PageSize" value="@Model.filter.PageSize">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="form-check form-check-inline">
+                                        <input asp-for="filter.Taged" class="form-check-input" type="checkbox" id="invcTaged">
+                                        <label class="form-check-label" for="invcTaged">
+                                            فقط فاکتورهای نشان شده
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>عملیات</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class="d-grid px-2">
+                                <input type="submit" class="garnet-btn garnet-btn-warning mb-1" value="نمایش" />
+                            </div>
+                            <div class="d-grid px-2">
+                                <a href="javascript:void(0)" data-formid="frmSaleInvoiceFilter" data-url="@Url.Action("saleReports", "sale", new { Area = "Commercial" })" class="garnet-btn garnet-btn-info  mb-1 submitCustomForm">
+                                    نمایش به تفکیک مشتری
+                                </a>
+                            </div>
+                            <div class="d-grid px-2">
+                                <a href="javascript:void(0)" data-formid="frmSaleInvoiceFilter" data-url="@Url.Action("print_saleInvoices", "sale", new { Area = "Commercial" })" class="garnet-btn garnet-btn-info  mb-1 submitCustomForm">
+                                    چاپ
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="sumRowPlace">
+        <ul class="totalVariable">
+            <li><label>جمع مشمول :</label><span id="taxable"></span></li>
+            <li><label>جمع غیرمشمول : </label><span id="noTaxable"></span></li>
+            <li><label> جمع تخفیفات :</label><span id="discount"></span></li>
+            <li><label> جمع پس از تخفیف :</label><span id="aftardiscount"></span></li>
+            <li><label>جمع ارزش افزوده :</label><span id="vat"></span></li>
+            <li><label>جمع نهایی : </label><span id="finalPrice"></span></li>
+        </ul>
+        <ul class="mt-1 btnList">
+            <li><a href="javascript:void(0)" data-tableid="tblSaleInvoices" data-allerttext=" خروجی از ردیفهای انتخاب شده" data-url="@Url.Action("PrintSelectedInvoice", "sale", new { Area = "Commercial" })" class="btn btn-sm btn-primary callaction-bulk">پرینت گروهی</a></li>
+            <li><a href="javascript:void(0)" data-tableid="tblSaleInvoices" data-allerttext="ردیف های انتخاب شده را نشان می کنید ؟" data-url="@Url.Action("TagInvoices", "sale", new { Area = "Commercial" })" class="btn btn-sm btn-secondary bulkAction">نشان کردن ردیف ها </a></li>
+            <li><a href="javascript:void(0)" data-tableid="tblSaleInvoices" data-allerttext="نشان ردیف های نشان شده را حذف می کنید؟" data-url="@Url.Action("UnTagInvoices", "sale", new { Area = "Commercial" })" class="btn btn-sm btn-warning bulkAction">حذف نشان ردیف ها </a></li>
+            <li><a href="javascript:void(0)" data-tableid="tblSaleInvoices" data-allerttext="کپی  از فاکتورهای انتخاب شده انجام شود ؟" data-url="@Url.Action("CopySelectedInvoices", "sale", new { Area = "Commercial" })" class="btn btn-sm btn-success bulkAction-callmodal"> کپی از فاکتورهای انتخاب شده</a></li>
+            <li><a href="javascript:void(0)" data-tableid="tblSaleInvoices" data-allerttext="فاکتورهای تکرای حذف شود ؟" data-url="@Url.Action("deleteDuplacated", "sale", new { Area = "Commercial" })" class="btn btn-sm btn-danger bulkAction">حذف فاکتورهای تکراری</a></li>
+        </ul>
+    </div>
+    <div class="card-body card-table">
+        <div class="table-responsive text-nowrap static-height-450">
+            <table class="table table-hover table-striped table-bordered" id="tblSaleInvoices">
+                <thead class="table-dark">
+                    <tr>
+
+                        <th class="row-chb">
+                            <input type="checkbox" class="selectAllRows" />
+                            ردیف
+                        </th>
+                        <th>نشان</th>
+                        <th></th>
+                        <th>شماره </th>
+                        <th>تاریخ</th>
+                        <th>خریدار </th>
+                        <th>نوع تسویه </th>
+                        <th>جمع مشمول</th>
+                        <th>جمع غیرمشمول</th>
+                        <th>تخفیف</th>
+                        <th>جمع پس از تخفیف</th>
+                        <th>جمع ارزش افزوده</th>
+                        <th>مبلغ نهایی فاکتور</th>
+                        <th>ایجاد کننده</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.Invoices.Items.Count() > 0)
+                    {
+                        int row = (Model.filter.CurrentPage - 1) * Model.filter.PageSize +1;
+                        foreach (var x in Model.Invoices.Items)
+                        {
+                            <tr class="dblc-link" data-tax="@x.TotalTaxable" data-afdis="@x.TotalPriceAfterDiscount" data-notax="@x.TotalNoTaxable" data-dis="@x.TotalDiscount" data-vat="@x.TotalVatPrice" data-due="@x.TotalFinalPrice" data-url="@Url.Action("invoice", "sale", new { Area = "Commercial", id = x.Id })">
+
+                                <td class="row-chb">
+                                    <input type="checkbox" class="tblRow px-3" name="itemId" value="@x.Id" />
+                                    @row
+                                </td>
+                                <td class="tdtag">
+                                    @if (x.taged)
+                                    {
+                                        <img src="~/img/icons/tag.png" />
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-action="invoice" asp-controller="sale" asp-area="Commercial" asp-route-id="@x.Id" target="_blank">
+                                        <i class="bx bx-detail text-secondary mx-1"></i>
+                                    </a>
+                                    <a asp-action="print_Invoice" class="me-2" asp-controller="sale" asp-area="Commercial" asp-route-id="@x.Id" target="_blank">
+                                        <i class="bx bx-printer text-peimary mx-1"></i>
+                                    </a>
+                                    <a href="javascript:void(0)" class="removeById" data-target="@x.Id" data-url="@Url.Action("DeleteInvoice", "sale", new { Area = "Commercial" })" title="شماه در حال حذف فاکتور هستید. آیا ادامه می دهید ؟">
+                                        <i class="bx bx-trash-alt text-danger mx-1"></i>
+                                    </a>
+                                </td>
+                                @*  <td>@x.status.Value.com_ToStatusName()</td> *@
+                                <td class="text-center">@x.InvoiceNumber</td>
+                                <td>@x.InvoiceDate.Value.LatinToPersian()</td>
+                                <td>@x.PartyName</td>
+                                @*  <td>@x.Remarks</td> *@
+                                <td>@x.SettlementTypeName</td>
+                                <td>@(x.TotalTaxable > 0 ? x.TotalTaxable.ToPrice() : "0")</td>
+                                <td>@(x.TotalNoTaxable > 0 ? x.TotalNoTaxable.ToPrice() : "0")</td>
+                                <td>@(x.TotalDiscount > 0 ? x.TotalDiscount.ToPrice() : "0")</td>
+                                <td>@(x.TotalPriceAfterDiscount > 0 ? x.TotalPriceAfterDiscount.ToPrice() : "0")</td>
+                                <td>@(x.TotalVatPrice > 0 ? x.TotalVatPrice.ToPrice() : "0")</td>
+                                <td>@(x.TotalFinalPrice > 0 ? x.TotalFinalPrice.ToPrice() : "0")</td>
+                                <td>@x.CreatorUserId</td>
+                                <td>
+                                    <a href="javascript:void(0)" data-target="@x.Id" data-url="@Url.Action("TagInvoice", "sale", new { Area = "Commercial" })" class="btn btn-sm  @(x.taged==true ? "btn-outline-warning":"btn-outline-primary") accAjaxPost m-1">
+                                        @(x.taged==true ?"حذف نشان":"نشان کردن")
+                                    </a>
+
+                                </td>
+                            </tr>
+
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="card-footer">
+
+
+        <div class="row">
+            <div class="col-lg-7 col-md-6">
+                @if (Model.Invoices.TotalPages > 1)
+                {
+                    <nav aria-label="Page navigation" class="pagin mt-3">
+                        <ul class="pagination pagination-sm text-center">
+                            @if (Model.Invoices.HasPreviousPage)
+                            {
+                                <li class="page-item prev">
+                                    <a class="page-link" data-formid="frmSaleInvoiceFilter" data-currentpage="@(Model.Invoices.CurrentPage - 1)">
+                                        <i class="tf-icon bx bx-chevrons-left"></i>
+                                    </a>
+                                </li>
+                            }
+
+                            @{
+                                int totalPages = Model.Invoices.TotalPages;
+                                int currentPage = Model.Invoices.CurrentPage;
+                                int pageRange = 3; // تعداد صفحات قبل و بعد از صفحه فعلی
+
+                                int startPage = Math.Max(1, currentPage - pageRange);
+                                int endPage = Math.Min(totalPages, currentPage + pageRange);
+
+                                if (startPage > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" data-formid="frmSaleInvoiceFilter" data-currentpage="1">1</a>
+                                    </li>
+                                    if (startPage > 2)
+                                    {
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    }
+                                }
+
+                                for (int i = startPage; i <= endPage; i++)
+                                {
+                                    string strActive = currentPage == i ? "active" : "";
+                                    <li class="page-item @strActive">
+                                        <a class="page-link" data-formid="frmSaleInvoiceFilter" data-currentpage="@i">@i</a>
+                                    </li>
+                                }
+
+                                if (endPage < totalPages)
+                                {
+                                    if (endPage < totalPages - 1)
+                                    {
+                                        <li class="page-item disabled">
+                                            <span class="page-link">...</span>
+                                        </li>
+                                    }
+                                    <li class="page-item">
+                                        <a class="page-link" data-formid="frmSaleInvoiceFilter" data-currentpage="@totalPages">@totalPages</a>
+                                    </li>
+                                }
+                            }
+
+                            @if (Model.Invoices.HasNextPage)
+                            {
+                                <li class="page-item next">
+                                    <a class="page-link" data-formid="frmSaleInvoiceFilter" data-currentpage="@(Model.Invoices.CurrentPage + 1)">
+                                        <i class="tf-icon bx bx-chevrons-right"></i>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+
+                }
+            </div>
+            <div class="col-lg-5 col-md-6">
+                <ul class="docfooter-totalAmounts totalAmounts1">
+                    <li class="totalAmounts1-title">
+                        <span class="text-warning">جمع صفحه</span>
+                    </li>
+                    <li>
+                        <label>جمع فروش مشمول  : </label>
+                        <div>
+                            <input type="text" readonly value="@TotalTaxable.ToPrice()" />
+                            <span class="text-sm-end">ريال</span>
+                        </div>
+                    </li>
+                    <li>
+                        <label>جمع فروش غیرمشمول : </label>
+                        <div>
+                            <input type="text" readonly value="@TotalNoTaxable.ToPrice()" />
+                            <span class="text-sm-end">ريال</span>
+                        </div>
+                    </li>
+                    <li>
+                        <label>جمع تخفیفات : </label>
+                        <div>
+                            <input type="text" readonly value="@totalDiscount.ToPrice()" />
+                            <span class="text-sm-end">ريال</span>
+                        </div>
+                    </li>
+                    <li>
+                        <label>جمع پس از تخفیف : </label>
+                        <div>
+                            <input type="text" readonly value="@totalAfterDiscount.ToPrice()" />
+                            <span class="text-sm-end">ريال</span>
+                        </div>
+                    </li>
+                    <li>
+                        <label>جمع ارزش افزوده : </label>
+                        <div>
+                            <input type="text" readonly value="@totalVat.ToPrice()" />
+                            <span class="text-sm-end">ريال</span>
+                        </div>
+                    </li>
+                    <li>
+                        <label>مبلغ نهایی  : </label>
+                        <div>
+                            <input type="text" readonly value="@finalPrice.ToPrice()" />
+                            <span class="text-sm-end">ريال</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<script src="~/vendor/libs/jquery/jquery.js"></script>
+<script src="~/appfunctions/commertialarea.js"></script>
+
+<script type="text/javascript">
+
+        // انتخاب تمام ردیف‌های جدول
+    document.querySelectorAll('#tblSaleInvoices tbody tr').forEach(row => {
+        // اضافه کردن رویداد click به هر ردیف
+        row.addEventListener('click', function (event) {
+            // جلوگیری از اجرا شدن رویداد کلیک اگر کاربر مستقیماً روی چک‌باکس کلیک کرده باشد
+            if (event.target.type === 'checkbox') {
+                return;
+            }
+
+            // یافتن چک‌باکس داخل ردیف کلیک‌شده
+            const checkbox = this.querySelector('input[type="checkbox"].tblRow');
+
+            if (checkbox) {
+                // معکوس کردن وضعیت چک‌باکس
+                checkbox.checked = !checkbox.checked;
+                   const event = new Event('change', { bubbles: true });
+                    // اعمال رویداد change به عنصر چک‌باکس
+                    checkbox.dispatchEvent(event);
+            }
+        });
+    });
+
+</script>

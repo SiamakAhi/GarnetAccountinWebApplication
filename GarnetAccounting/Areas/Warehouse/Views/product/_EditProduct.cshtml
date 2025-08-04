@@ -1,0 +1,93 @@
+﻿  @model ProductBaseDto
+
+<div class="modal-dialog dataentry-modal">
+    <div class="modal-content dataentry">
+        <div class="dataentry-title">
+            <span class="">ویرایش اطلاعات کالا / خدمت</span>
+           
+        </div>
+        <form asp-action="EditProduct" asp-controller="product" asp-area="Warehouse" method="post">
+            <input type="hidden" asp-for="Id" value="@Model.Id" />
+            <input type="hidden" asp-for="SellerId" value="@Model.SellerId" />
+            <div class="row">
+                <div class="col-md-9 dataentry-controls">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" asp-for="IsService">نــوع </label>
+                            <select type="text" asp-for="IsService" class="form-control firstSelect gonext">
+                                <option value="false">کالا / محصول فیزیکی</option>
+                                <option value="true">خدمت</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" asp-for="ProductCode"></label>
+                            <input type="text" asp-for="ProductCode" class="form-control text-center gonext" />
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" asp-for="UniqueId"></label>
+                            <input type="text" asp-for="UniqueId" class="form-control gonext" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" asp-for="CategoryId"></label>
+                            <select type="text" asp-for="CategoryId" class="form-select select2 gonext" asp-items="ViewBag.Categories">
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" asp-for="ProductName"></label>
+                            <input type="text" asp-for="ProductName" class="form-control gonext" />
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label class="form-label" asp-for="Description"></label>
+                            <input type="text" asp-for="Description" class="form-control gonext" />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" asp-for="BaseUnitId">واحد شمارش پایه</label>
+                            <select type="text" asp-for="BaseUnitId" class="form-select select2 gonext" asp-items="ViewBag.UnitOfMeasures">
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label" asp-for="QuantityInPakage"></label>
+                            <input type="number" min="1" asp-for="QuantityInPakage" class="form-control text-center gonext" />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label" asp-for="PakageCountId">واحد شماره کل</label>
+                            <select type="text" asp-for="PakageCountId" class="form-select select2 gonext" asp-items="ViewBag.UnitOfMeasures">
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" asp-for="VATRate">نرخ مالیات بر ارزش افزوده</label>
+                            <input type="number" min="0" asp-for="VATRate" class="form-control text-center gonext" />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="garnet-checkbox-group">
+                                    <label asp-for="HasInventory">کالای دارای گردش در انبار</label>
+                                    <input type="checkbox" asp-for="HasInventory" class="gonext" checked />
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="garnet-checkbox-group">
+                                    <label asp-for="IsActive"></label>
+                                    <input type="checkbox" asp-for="IsActive" class="gonext" checked />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 dataentry-buttons-container">
+                    <div class="dataentry-buttons">
+                        <a href="javascript:void(0)" class="btn btn-primary accAjaxSubmit"> ذخیـره</a>
+                        <button type="reset" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">
+                            انصراف
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+
+

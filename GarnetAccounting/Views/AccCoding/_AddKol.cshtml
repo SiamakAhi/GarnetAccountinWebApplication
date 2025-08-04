@@ -1,0 +1,71 @@
+﻿@model KolDto
+
+<div class="modal-dialog modal-lg modal-simple">
+
+    <div class="modal-content p-3 p-md-5">
+        <div class="modal-header">
+            <div class="alert alert-primary alert-dismissible d-flex align-items-center" role="alert">
+                <h5>
+                    <i class="bx bx-xs bx-command me-2 text-info"></i>
+                    ایجاد سرفصل در گروه <strong class="text-warning">@ViewBag.GroupCode - @ViewBag.GroupName</strong>
+                </h5>
+             
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class=" mb-4 mt-0 mt-md-n2">
+                <form asp-action="AddKol" asp-controller="AccCoding" asp-area="" method="post" class="mt-4 appform1">
+
+                    <input type="hidden" asp-for="GroupId" value="@ViewBag.GroupId" />
+                    <input type="hidden" asp-for="GroupName" value="@ViewBag.GroupName" />
+                    <input type="hidden" asp-for="GroupCode" value="@ViewBag.GroupCode" />
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="KolCode"></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="KolCode" class="form-control firstSelect gonext" value="@ViewBag.kolcode" />
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="KolName"></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="KolName" class="form-control gonext" />
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="TypeId"></label>
+                        <div class="col-sm-9">
+                            <select class="form-select gonext" asp-for="TypeId" asp-items="ViewBag.type">
+                                <option value="null">انتخاب کنید .. </option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="TypeId" class="text-danger"></span>
+                    </div>
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="Nature"></label>
+                        <div class="col-sm-9">
+                            <select class="form-select gonext" asp-for="Nature" asp-items="ViewBag.Nature">
+                                <option value="null">انتخاب کنید .. </option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="TypeId" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <label class="col-sm-3 col-form-label" asp-for="Description"></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="Description" class="form-control gonext" placeholder="..." />
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div class="row d-grid mt-3">
+                        <input type="button" class="btn btn-primary mt-2 addAccountByAjax" value="ایجاد حســاب" />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+

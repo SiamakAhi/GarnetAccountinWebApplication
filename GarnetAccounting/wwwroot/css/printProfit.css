@@ -1,0 +1,90 @@
+﻿body {
+    text-align: right;
+    direction: rtl;
+    margin: auto;
+    font-size: 14px;
+}
+
+.container {
+    width: fit-content;
+    margin: auto;
+}
+
+h4, h5, h3 {
+    text-align: center;
+    color: #6c757d;
+    font-weight: 900;
+    margin: 0;
+}
+
+.reportInfo {
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 20px;
+    margin-bottom: 4px;
+}
+
+p {
+    margin: 0;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.profit-table {
+    margin: auto;
+    border: 2px solid gray;
+    border-radius: 5px;
+    border-collapse: collapse;
+}
+
+    .profit-table th {
+        text-align: center;
+        background: whitesmoke;
+    }
+
+    .profit-table td, .profit-table th {
+        padding: 6px; /* کاهش padding برای جا شدن در صفحه */
+        border: 1px solid gray;
+    }
+
+@media print {
+    @page {
+        size: A4;
+        margin: 10mm; /* کاهش حاشیه‌ها برای جا شدن در صفحه */
+    }
+
+    /* استایل جدول چاپ */
+    .profit-table {
+        width: 100%;
+        font-size: 12px;
+    }
+
+        .profit-table th, .profit-table td {
+            padding: 4px; /* کاهش padding برای چاپ */
+        }
+
+    h3, h5 {
+        font-size: 16px; /* کاهش اندازه عنوان‌ها برای جا شدن در صفحه */
+    }
+
+    .reportInfo {
+        padding-inline: 10px; /* کاهش فاصله بین اطلاعات گزارش */
+        margin-bottom: 2px; /* کاهش فاصله پایین */
+    }
+
+    /* جلوگیری از شکسته شدن جدول و عنوان در صفحات مختلف */
+    .container, table {
+        page-break-inside: avoid;
+    }
+
+    /* جلوگیری از شکستن سطرهای جدول در صفحات مختلف */
+    tbody tr {
+        page-break-inside: avoid;
+    }
+
+    /* حذف استایل‌های اضافی برای چاپ */
+    body {
+        margin: 0;
+        padding: 0;
+    }
+}

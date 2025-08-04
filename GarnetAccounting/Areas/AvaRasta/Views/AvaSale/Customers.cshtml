@@ -1,0 +1,209 @@
+﻿@model Pagination<VmCustomer>
+@{
+    ViewData["Title"] = "لیست مشتریان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row g-4 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div class="content-left">
+                        <span class="secondary-font fw-medium">مشتریان</span>
+                        <div class="d-flex align-items-baseline mt-2">
+                            <h4 class="mb-0 me-2">21,459</h4>
+                            <small class="text-success">(+29%)</small>
+                        </div>
+                        <small>تعداد مشتریان </small>
+                    </div>
+                    <span class="badge bg-label-primary rounded p-2">
+                        <i class="bx bx-buildings bx-sm"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div class="content-left">
+                        <span class="secondary-font fw-medium">کاربران ویژه</span>
+                        <div class="d-flex align-items-baseline mt-2">
+                            <h4 class="mb-0 me-2">4,567</h4>
+                            <small class="text-success">(+18%)</small>
+                        </div>
+                        <small>تحلیل هفته اخیر </small>
+                    </div>
+                    <span class="badge bg-label-danger rounded p-2">
+                        <i class="bx bx-user-plus bx-sm"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div class="content-left">
+                        <span class="secondary-font fw-medium">کاربران فعال</span>
+                        <div class="d-flex align-items-baseline mt-2">
+                            <h4 class="mb-0 me-2">19,860</h4>
+                            <small class="text-danger">(-14%)</small>
+                        </div>
+                        <small>تحلیل هفته اخیر</small>
+                    </div>
+                    <span class="badge bg-label-success rounded p-2">
+                        <i class="bx bx-group bx-sm"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-start justify-content-between">
+                    <div class="content-left">
+                        <span class="secondary-font fw-medium">کاربران در انتظار</span>
+                        <div class="d-flex align-items-baseline mt-2">
+                            <h4 class="mb-0 me-2">237</h4>
+                            <small class="text-success">(+42%)</small>
+                        </div>
+                        <small>تحلیل هفته اخیر</small>
+                    </div>
+                    <span class="badge bg-label-warning rounded p-2">
+                        <i class="bx bx-user-voice bx-sm"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header-search">
+        <h5 class="card-header heading-color">
+            مدیریت مشتــریان
+        </h5>
+        <a class="btn btn-outline-primary" id="addcusbtn" asp-action="AddCustomer" asp-controller="AvaSale" asp-area="AvaRasta"> جـــدیـد</a>
+        <div>
+            <form asp-action="Customers" asp-controller="AvaSale" asp-area="AvaRasta" method="get" class="flex-1">
+                <div class="input-group input-group-merge">
+                    <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-search"></i></span>
+                    <input type="text" name="name" class="form-control" placeholder="جستجو ..." aria-label="Search..." aria-describedby="basic-addon-search31">
+                    <button class="btn btn-outline-primary" type="submit" id="button-addon2">جستجــو</button>
+                </div>
+            </form>
+        </div>
+      
+    </div>
+   
+    <div class="card-body card-table">
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ردیف</th>
+                        <th>نام کسب و کار</th>
+                        <th>نام مشتری</th>
+                        <th>موبایل</th>
+                        <th>تاریخ ایجاد</th>
+                        <th>تعداد شرکت</th>
+                        <th>محدودیت فاکتور</th>
+                        <th>پایان اعتبار</th>
+                        <th>کاربران</th>
+                        <th>نام کاربری مدیر</th>
+                        <th>وضعیت</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.Items?.Count() > 0)
+                    {
+                        int row = (Model.CurrentPage-1)*Model.PageSize +1;
+                        foreach (var x in Model.Items)
+                        {
+                            <tr>
+                                <td>@row</td>
+                                <td>@x.Title</td>
+                                <td>@x.FName  @x.LName</td>
+                                <td>@x.Mobile</td>
+                                <td>@x.ActivationDate.Value.LatinToPersian()</td>
+                                <td class="text-center">@x.LicenseCount</td>
+                                <td class="text-center">@x.InvoiceCountLimit</td>
+                                <td>@x.LicenseExpireDate.Value.LatinToPersian()</td>
+                                <td class="text-center">@x.UserCount</td>
+                                <td class="text-center">
+                                    @if (string.IsNullOrEmpty(x.Username))
+                                    {
+                                        <a href="#" title="ساخت اکانت برای مشتری" class="bymodal" data-url="@Url.Action("AddCustomerAccount","AvaSale",new{Area="AvaRasta", Id=x.Id})"><i class="bx bx-user-plus text-info"></i></a>
+                                    }
+                                    else
+                                    {
+                                        @x.Username
+                                    }
+                                </td>
+                                <td>@(x.IsActive == true ? "فعال" : "غیرفعال")</td>
+
+                                <td class="row-btns text-center">
+                                    <a asp-action="Index" asp-controller="CustomerLicense" asp-area="AvaRasta" asp-route-customerId="@x.Id" title="وبرایش اطلاعات مشتری"><i class="bx bx-user text-info"></i></a>
+                                    <a asp-action="UpdateCustomerInfo" asp-controller="AvaSale" asp-area="AvaRasta" asp-route-id="@x.Id" title="وبرایش اطلاعات مشتری"><i class="bx bx-edit-alt text-gray"></i></a>
+                                    <a href="#" class="delCustomer" data-url="@Url.Action("DelCustomer","AvaSale",new{Area="AvaRasta"})" data-target="@x.Id"><i class="bx bx-user-x text-warning"></i></a>
+                                </td>
+                            </tr>
+
+                            row++;
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            مشتری در سیستم تعریف نشده است
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+            @if (Model.TotalPages > 1)
+            {
+                <nav aria-label="Page navigation" class="pagin mt-3">
+                    <ul class="pagination pagination-sm text-center">
+
+                        @if (Model.HasPreviousPage)
+                        {
+                            <li class="page-item prev">
+                                <a class="page-link" asp-action="Customers" asp-controller="AvaSale" asp-area="AvaRasta" asp-route-currentPage="@(Model.CurrentPage-1)"><i class="tf-icon bx bx-chevrons-left"></i></a>
+                            </li>
+                        }
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            string strActive = Model.CurrentPage == i ? "active" : "";
+                            <li class="page-item @strActive">
+                                <a class="page-link" asp-action="Customers" asp-controller="AvaSale" asp-area="AvaRasta" asp-route-currentPage="@i">@i</a>
+                            </li>
+                        }
+
+                        @if (Model.HasNextPage)
+                        {
+                            <li class="page-item next">
+                                <a class="page-link" asp-action="Customers" asp-controller="AvaSale" asp-area="AvaRasta" asp-route-currentPage="@(Model.CurrentPage+1)"><i class="tf-icon bx bx-chevrons-right"></i></a>
+                            </li>
+                        }
+
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+   
+</div>
+
+<script src="~/vendor/libs/jquery/jquery.js"></script>
+<script src="~/js/app/avarasta.js"></script>
+
+

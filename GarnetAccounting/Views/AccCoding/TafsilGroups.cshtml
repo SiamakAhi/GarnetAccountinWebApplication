@@ -1,0 +1,82 @@
+﻿@model List<TafsilGroupDto>
+@{
+    ViewData["Title"] = "گروه های تفصیلی";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card" id="TafsilGroupsPlace">
+    <div class="card-header-search">
+        <h5 class="card-header heading-color">
+            گروه حساب های تفصیلی
+        </h5>
+        <div class="btn-toolbar demo-inline-spacing" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group" role="group" aria-label="First group">
+                <a href="#" data-url="@Url.Action("AddTafsilGroup","AccCoding",new{Area=""})" class="btn btn-outline-secondary callform">
+                    ایجاد گروه تفصیلی
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="section-nav">
+            <ul>
+                <li>
+                    <span>گروه حساب ها</span>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body card-table">
+            <div class="table-responsive text-nowrap" id="TafsilGroupsPlace">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>نام گروه</th>
+                            <th>شخص</th>
+                            <th>شرح</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @if (Model?.Count() > 0)
+                        {
+                            int row = 1;
+                            foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>@row</td>
+                                    <td>@x.GroupName</td>
+                                    <td>@(x.IsPerson==true ?"بله" : "خیر")</td>
+                                    <td>@x.Description</td>
+                                    <td class="row-btns text-center">
+                                        @if(x.IsEditable){
+                                            <a href="javascript:void(0)" class="callform" data-url="@Url.Action("UpdateTafsilGroup", "AccCoding", new { Area = "", id = x.Id })"><i class="bx bx-edit-alt text-gray " title="ویرایش"></i></a>
+                                            <a href="javascript:void(0)" class="removeById" data-url="@Url.Action("DelTafsilGroups", "AccCoding", new { Area = "" })" data-target="@x.Id" title="گروه @x.GroupName حذف شود ؟"><i class="bx bx-trash text-warning" title="حذف"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+
+                                row++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+

@@ -1,0 +1,56 @@
+﻿@model VmProfit
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>چاپ گزارش سود و زیان</title>
+    <link rel="stylesheet" href="../../css/printProfit.css" /> <!-- فایل CSS مخصوص چاپ -->
+    <link href="../../css/font.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h3>@ViewBag.SellerName</h3>
+        <h5>@ViewBag.ReportTitle</h5>
+        <div class="reportInfo">
+            <p><label>دوره مالی: </label><span class="mx-1">@ViewBag.PeriodName</span></p>
+            <p><label>تاریخ تهیه: </label><span class="mx-1">@ViewBag.ReportDate</span></p>
+        </div>
+        <table class="table profit-table">
+            <thead>
+                <tr>
+                    <th>عنوان</th>
+                    <th>مقدار</th>
+                    <th>جمع کل مقادیر</th>
+                    <th>کل بخش</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ProfitReport.Count > 0)
+                {
+                    foreach (var x in Model.ProfitReport)
+                    {
+                        <tr>
+                            <td>@x.Title</td>
+                            <td>@((x.Amount != 0 && x.Amount!=null) ? x.Amount.ToPrice() : "0")</td>
+                            <td>@((x.SumAmounts != 0 && x.SumAmounts!=null) ? x.SumAmounts.ToPrice() : "0")</td>
+                            <td>@((x.TotalSection != 0 && x.TotalSection !=null) ? x.TotalSection.ToPrice() : "0")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // // اجرا کردن چاپ خودکار بعد از بارگذاری صفحه
+        // window.onload = function () {
+        //     window.print();
+        // };
+    </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+﻿ @model MoadianCreateDocDto
+
+
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning">ثبت حسابداری اطلاعات سامانه مودیان</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form asp-action="InsertMoadianDoc" asp-controller="DocCreator" asp-area="Accounting" method="post">
+                <input type="hidden" asp-for="SellerId" value="@Model.SellerId" />
+                <input type="hidden" asp-for="PeriodId" value="@Model.PeriodId" />
+                <input type="hidden" asp-for="transactionsType" value="@Model.transactionsType" />
+                <input type="hidden" asp-for="UserName" value="@User.Identity.Name" />
+
+                @if (Model.TransactionsId.Any())
+                {
+                    foreach (var item in Model.TransactionsId)
+                    {
+                                <input type="hidden" asp-for="TransactionsId" value="@item" />
+                    }
+                }
+             
+                <div class="row">
+
+                    <div class="col-lg-6">
+                        <!---------------------------------------------------------------------------------------------------- طرف بدهکار سند ----------->
+                        <h5 class="text-info">طرف بدهکار سند</h5>
+                        <div class="select2-dark mb-1">
+                            <label class="form-label" asp-for="BedMoeinId">انتخاب حساب معین *</label>
+                            <select class="form-select select2 " asp-for="BedMoeinId" asp-items="@ViewBag.Moeins" required>
+                                <option>انتخاب حساب معین</option>
+                            </select>
+                        </div>
+                        <div class="select2-dark mb-1">
+                            <label class="form-label" asp-for="BedTafsil4Id">انتخاب تفصیل سطح 4</label>
+                            <select class="form-select select2" asp-for="BedTafsil4Id" asp-items="@ViewBag.Tafsils">
+                                <option value="">انتخاب تفصیلی سطح 4</option>
+                            </select>
+                        </div>
+                        <div class="select2-dark mb-1">
+                            <label class="form-label" asp-for="BedTafsil5Id">انتخاب تفصیل سطح 5</label>
+                            <select class="form-select select2" asp-for="BedTafsil5Id" asp-items="@ViewBag.Tafsils">
+                                <option value="">انتخاب تفصیلی سطح 5</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <!---------------------------------------------------------------------------------------------------- طرف بستانکار سند ----------->
+                        <h5 class="text-info">طرف بستانکار سند</h5>
+                        <div class="select2-dark mb-1">
+                            <label class="form-label" asp-for="BesMoeinId">انتخاب حساب معین *</label>
+                            <select class="form-select select2 " asp-for="BesMoeinId" asp-items="@ViewBag.Moeins" required>
+                                <option>انتخاب حساب معین</option>
+                            </select>
+                        </div>
+                        <div class="select2-dark mb-1">
+                            <label class="form-label" asp-for="BesTafsil4Id">انتخاب تفصیل سطح 4</label>
+                            <select class="form-select select2" asp-for="BesTafsil4Id" asp-items="@ViewBag.Tafsils">
+                                <option value="">انتخاب تفصیلی سطح 4</option>
+                            </select>
+                        </div>
+                        <div class="select2-dark mb-1">
+                            <label class="form-label" asp-for="BesTafsil5Id">انتخاب تفصیل سطح 5</label>
+                            <select class="form-select select2" asp-for="BesTafsil5Id" asp-items="@ViewBag.Tafsils">
+                                <option value="">انتخاب تفصیلی سطح 5</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 select2-dark mb-1">
+                        <label class="form-label" asp-for="Descriptions">شرح آرتیکل</label>
+                       <input type="text" asp-for="Descriptions" class="form-control" />
+                    </div>
+
+                   @*  <div class="col-md-12 mb-2">
+                        <label class="form-check-label" asp-for="DocSelector">
+                           اسناد در سندی با شرح زیر اضافه شوند
+                        </label>
+                        <input class="form-control" type="text" asp-for="DocSelector">
+                        <label class="form-check-label" asp-for="DocSelector">
+                            - اگر یافت نشد، سند جدید ایجاد میشود &nbsp;
+                            - درصورت خالی بودن، نادیده گرفته می شود
+                        </label>
+                    </div> *@
+
+                    <div class="divider divider-dashed"><h5 class="divider-text text-warning">تنظیمات سند</h5></div>
+
+                    <div class="widget-info fw mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="CreateNewDoc">
+                            <label class="form-check-label" asp-for="CreateNewDoc">
+                                اطلاعات در سند جدید ثبت شوند. (در غیراین صورت به سند تاریخ تراکنش اضافه می شود)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="widget-info fw mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="Grouped" checked>
+                            <label class="form-check-label" asp-for="Grouped">
+                               تراکنش ها به صورت تجمیعی در یک ردیف قرار بگیرند
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="p-1 d-grid fw">
+                    <input class="btn btn-primary accAjaxSubmit" type="button" value="ثبت سند حسابداری" />
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/forms-selects.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

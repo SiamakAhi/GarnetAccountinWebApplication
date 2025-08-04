@@ -1,0 +1,253 @@
+﻿@model InvoiceDto
+@{
+    ViewData["Title"] = $" فاکتور خرید {Model.InvoiceHeader.InvoiceNumber}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    decimal totalBeforDiscount = Model.Items.Sum(n => n.PriceBeForDescount);
+    decimal totalDiscount = Model.Items.Sum(n => n.Discount);
+    decimal totalAfterDiscount = Model.Items.Sum(n => n.PriceAfterDiscount);
+    decimal totalVat = Model.Items.Sum(n => n.VatPrice);
+    decimal finalPrice = Model.Items.Sum(n => n.FinalPrice);
+}
+
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="invoice-item-form">
+            <form asp-action="addInvoiceItem" asp-controller="sale" asp-area="Commercial" method="post">
+                <input type="hidden" asp-for="dto.Id" value="@Guid.NewGuid()" />
+                <input type="hidden" asp-for="dto.InvoiceId" value="@Model.InvoiceHeader.Id" />
+
+                <div class="row">
+                    <div class="col-md-12 control-group">
+                        <label class="form-label" asp-for="dto.ProductId">کالا / خدمت</label>
+                        <select class="form-select select2" asp-for="dto.ProductId" id="frminvc_Product" asp-items="@ViewBag.Products" data-url="@Url.Action("GetProductInfo","sale",new{Area="Commercial"})">
+                            <option value="null">انتخاب کالا یا خدمت</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 control-group">
+                        <label class="form-label" asp-for="dto.QuantityInPakageUnit"></label>
+                        <input type="number" class="form-control text-center gonext" asp-for="dto.QuantityInPakageUnit" id="frminvc_QuantityInPakageUnit" value="0" />
+                    </div>
+                    <div class="col-md-6 control-group">
+                        <label class="form-label" asp-for="dto.QuantityInBaseUnit"></label>
+                        <input type="number" class="form-control text-center gonext" asp-for="dto.QuantityInBaseUnit" id="frminvc_QuantityInBaseUnit" value="0" />
+                    </div>
+                    <div class="col-md-6 control-group">
+                        <label class="form-label" asp-for="dto.QuantityInPerPakage"></label>
+                        <input type="text" class="form-control text-center gonext" asp-for="dto.QuantityInPerPakage" id="frminvc_QuantityInPerPakage" tabindex="100" value="1" readonly />
+                    </div>
+                    <div class="col-md-6 control-group">
+                        <label class="form-label" asp-for="dto.TotalQuantity"></label>
+                        <input type="text" class="form-control text-center gonext" asp-for="dto.TotalQuantity" id="frminvc_TotalQuantity" tabindex="101" value="0" readonly />
+                    </div>
+                    <div class="col-md-12 control-group mb-1">
+                        <label class="form-label" asp-for="dto.UnitPrice"></label>
+                        <input type="text" class="form-control text-center numberInput gonext" asp-for="dto.UnitPrice" id="frminvc_UnitPrice" value="0" />
+                    </div>
+                    <div class="col-md-12 control-group">
+                        <label class="form-label" asp-for="dto.PriceBeForDescount"></label>
+                        <input type="text" class="form-control text-center gonext" asp-for="dto.PriceBeForDescount" id="frminvc_PriceBeForDescount" tabindex="102" value="0" readonly />
+                    </div>
+                    <div class="col-md-12 control-group mb-1">
+                        <label class="form-label" asp-for="dto.Discount"></label>
+                        <input type="text" class="form-control text-center numberInput gonext" asp-for="dto.Discount" id="frminvc_Discount" value="0" />
+                    </div>
+                    <div class="col-md-12 control-group">
+                        <label class="form-label" asp-for="dto.PriceBeForDescount"></label>
+                        <input type="text" class="form-control text-center gonext" asp-for="dto.PriceAfterDiscount" id="frminvc_PriceAfterDiscount" tabindex="103" value="0" readonly />
+                    </div>
+                    <div class="col-md-4 control-group mb-1">
+                        <label class="form-label" asp-for="dto.VatRate"></label>
+                        <input type="text" class="form-control text-center numberInput gonext" asp-for="dto.VatRate" id="frminvc_VatRate" value="0" />
+                    </div>
+                    <div class="col-md-8 control-group mb-2">
+                        <label class="form-label" asp-for="dto.VatPrice"></label>
+                        <input type="text" class="form-control text-center numberInput gonext" asp-for="dto.VatPrice" id="frminvc_VatPrice" value="0" readonly />
+                    </div>
+                    <div class="col-md-12 control-group">
+                        <label class="form-label" asp-for="dto.FinalPrice"></label>
+                        <input type="text" class="form-control text-center numberInput gonext" asp-for="dto.FinalPrice" id="frminvc_FinalPrice" value="0" readonly />
+                    </div>
+                    <div class="d-grid mt-3">
+                        <input type="button" class="btn btn-primary mb-2 accAjaxSubmit" value="درج" />
+                        <input type="reset" class="btn btn-warning" value="انصراف" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="invoice-header">
+            <div class="card-header-panel-section-body">
+                <form asp-action="EditHeaderInvoice" asp-controller="sale" asp-area="Commercial" method="post">
+                    <input type="hidden" asp-for="InvoiceHeader.Id" value="@Model.InvoiceHeader.Id" />
+                    <input type="hidden" asp-for="InvoiceHeader.FinancePeriodId" value="@Model.InvoiceHeader.FinancePeriodId" />
+                    <input type="hidden" asp-for="InvoiceHeader.InvoiceType" value="@Model.InvoiceHeader.InvoiceType" />
+
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <span class="innerform-title ">فاکتور خرید</span>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="InvoiceHeader.InvoiceNumber">‌شماره فاکتور</label>
+                                        <input type="text" class="text-center" asp-for="InvoiceHeader.InvoiceNumber">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="InvoiceHeader.strInvoiceDate"> تاریخ‌</label>
+                                        <input type="text" asp-for="InvoiceHeader.strInvoiceDate" class="flatpickr-input" value="@Model.InvoiceHeader.InvoiceDate.Value.LatinToPersian()" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>نوع تسویه</label>
+                                        <select asp-for="InvoiceHeader.SettlementTypeId" asp-items="@ViewBag.SettelmentType">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>فروشنده / تأمین کننده</label>
+                                        <select asp-for="InvoiceHeader.PartyId" class="select2" asp-items="@ViewBag.vendors">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>توضیحات</label>
+                                        <input type="text" class="text-center" multiple asp-for="InvoiceHeader.Remarks">
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card-panel-section">
+                                <div class="card-header-panel-section-body">
+                                    <div class=" d-grid p-2">
+                                        <input type="button" class="garnet-btn garnet-btn-warning accAjaxSubmit" value="ذخیره" />
+                                    </div>
+                                    <div class=" d-grid p-2">
+                                        <a asp-action="SaleInvoices" asp-controller="sale" asp-area="Coomercial" class="garnet-btn garnet-btn-info mb-2 ">لیست فاکتورها</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="invoice-items-container">
+            <div class="table-responsive text-nowrap static-height-450">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>شرح کالا یا خدمت</th>
+                            <th>مقدار</th>
+                            <th>فی</th>
+                            <th>جمع قیمت</th>
+                            <th>تخفیف</th>
+                            <th>مبغ پس از تخفیف</th>
+                            <th>نرخ ارزش افزوده</th>
+                            <th>مبلغ ارزش افزوده</th>
+                            <th>قابل پرداخت</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Items.Count > 0)
+                        {
+                            int row = 1;
+                            foreach (var x in Model.Items)
+                            {
+                                <tr>
+                                    <td class="row-chb">@row</td>
+                                    <td>@x.ProductName</td>
+                                    <td>@x.TotalQuantity.ToPrice()</td>
+                                    <td>@x.UnitPrice.ToString("G").ToPrice()</td>
+                                    <td>@x.PriceBeForDescount.ToString("G").ToPrice()</td>
+                                    <td>@x.Discount.ToString("G").ToPrice()</td>
+                                    <td>@x.PriceAfterDiscount.ToString("G").ToPrice()</td>
+                                    <td>@x.VatRate.ToString("0.##")</td>
+                                    <td>@x.VatPrice.ToString("G").ToPrice()</td>
+                                    <td>@x.FinalPrice.ToString("G").ToPrice()</td>
+                                    <td>
+                                        <a href="#" class="callform" data-url="@Url.Action("EditInvoiceItem", "sale", new { Area = "Commercial", id = x.Id })" title="ویرایش ردیف"><i class="bx bx-edit-alt text-info"></i></a>
+                                        <a href="javascript:void(0)" class="removeById" data-target="@x.Id" data-url="@Url.Action("DeleteInvoiceItem", "sale", new { Area = "Commercial" })" title="شماه در حال حذف ردیف فاکتور هستید. آیا ادامه می دهید ؟"> <i class="bx bx-trash-alt text-warning mx-1"></i></a>
+                                    </td>
+                                </tr>
+                                row++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-7 col-md-6"></div>
+                <div class="col-lg-5 col-md-6">
+                    <ul class="docfooter-totalAmounts totalAmounts1">
+                        <li>
+                            <label>جمع  : </label>
+                            <div>
+                                <input type="text" readonly value="@totalBeforDiscount.ToPrice()" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label>جمع تخفیفات : </label>
+                            <div>
+                                <input type="text" readonly value="@totalDiscount.ToPrice()" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label>جمع پس از تخفیف : </label>
+                            <div>
+                                <input type="text" readonly value="@totalAfterDiscount.ToPrice()" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label>جمع ارزش افزوده : </label>
+                            <div>
+                                <input type="text" readonly value="@totalVat.ToPrice()" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label>مبلغ نهایی فاکتور : </label>
+                            <div>
+                                <input type="text" readonly value="@finalPrice.ToPrice()" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#frminvc_Product').select2('open');
+
+    });
+</script>
+
+
+
+
+

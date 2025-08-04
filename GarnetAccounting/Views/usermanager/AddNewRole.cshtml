@@ -1,0 +1,17 @@
+﻿   @model   AppRolViewModel
+
+<form asp-action="AddNewRole" asp-controller="usermanager" asp-area="" method="post">
+    <div class="form-floating mb-3">
+        <input class="form-control" asp-for="Name" id="@Model.Name" type="text" placeholder="نام نقش به لاتین" />
+        <label asp-for="Name">نام نقش به لاتین</label>
+    </div>
+    <div class="form-floating">
+        <input class="form-control" id="@Model.Description" asp-for="Description" type="text" placeholder="توضیحات" />
+        <label asp-for="Description"></label>
+    </div>
+    <div class="row">
+        <div class="col-12 pt-2">
+            <button class="btn btn-primary submitajax" type="button">ثبت</button>
+        </div>
+    </div>
+</form>

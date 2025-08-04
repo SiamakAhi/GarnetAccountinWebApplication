@@ -1,0 +1,223 @@
+﻿ @model VmTafsilReport
+@{
+    ViewData["Title"] = "گزارش تفصیل'";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+
+    long totalBed = Model.Report.Sum(n => n.Bed);
+    long totalBes = Model.Report.Sum(n => n.Bes);
+    long ekhtelaf = totalBed >= totalBes ? totalBed - totalBes : totalBes - totalBed;
+
+    string strTotalBed = totalBed > 0 ? totalBed.ToPrice() : "0";
+    string strTotalBes = totalBes > 0 ? totalBes.ToPrice() : "0";
+    string strEkhtelaf = ekhtelaf > 0 ? ekhtelaf.ToPrice() : "0";
+    string status = (ekhtelaf > 0 && totalBed > totalBes) ? "بدهکار" : ((ekhtelaf > 0 && totalBes > totalBed) ? "بستانکار" : "");
+    List<string> tafsilName = Model.Report.Select(s => s.Tafsil4Name).Distinct().ToList();
+
+    string selectedTafsils = "";
+    for (int i = 0; i < tafsilName.Count; i++)
+    {
+        selectedTafsils += tafsilName[i];
+        if (i < tafsilName.Count - 1)
+            selectedTafsils += "، ";  // اضافه کردن ویرگول به ازای آیتم‌های میانی
+    }
+
+    selectedTafsils = selectedTafsils.TrimEnd('،');
+}
+
+<div class="card page-header-panel">
+    <div class="card-panel-header">
+        <div>
+            <span class="card-panel-title">گزارش تفصیل در سطح معین :
+                <span class="text-warning ms-2">@selectedTafsils</span>
+            </span>
+          
+        </div>
+    </div>
+    <div>
+        <form asp-action="GetTafsil4Moein" asp-controller="AccReports" asp-area="Accounting" method="post" id="frmTafsilReportFilter">
+            <input type="hidden" asp-for="filter.SellerId" value="@Model.filter.SellerId" />
+            <input type="hidden" asp-for="filter.PeriodId" value="@Model.filter.PeriodId" />
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card-header-panel-section">
+                        <div class="card-header-panel-section-header p-0"><span>فیلتر  </span></div>
+                        <div class="card-header-panel-section-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="row">
+                                        <div class="col-md-12 mb-2">
+                                            <div class="garnet-input-group1 garnet-input-group-light">
+                                                <label asp-for="filter.strEndDate">از تاریخ‌</label>
+                                                <input type="text" asp-for="filter.strEndDate" class="flatpickr-input" value="@Model.filter.strStartDate" placeholder="YYYY/MM/DD">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-2">
+                                            <div class="garnet-input-group1 garnet-input-group-light">
+                                                <label asp-for="filter.strEndDate">تا تاریخ‌</label>
+                                                <input type="text" asp-for="filter.strEndDate" class="flatpickr-input" placeholder="YYYY/MM/DD">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-2 select2-dark">
+                                            <div class="garnet-input-group1 garnet-input-group-light">
+                                                <label> کل</label>
+                                                <select asp-for="filter.Kols" class="select2 gonext" multiple asp-items="@ViewBag.Kols">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-2 select2-dark">
+                                            <div class="garnet-input-group1 garnet-input-group-light">
+                                                <label>معین</label>
+                                                <select asp-for="filter.Moeins" class="select2 gonext" multiple asp-items="@ViewBag.Moeins">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-2 select2-dark">
+                                            <div class="garnet-input-group1 garnet-input-group-light">
+                                                <label> تفصیل</label>
+                                                <select asp-for="filter.Tafsil4Ids" class="select2 gonext" multiple asp-items="@ViewBag.Tafsils">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-header-panel-section">
+                        <div class="card-header-panel-section-header"><span>عملیات </span></div>
+                        <div class="card-header-panel-section-body">
+                            <div class="row">
+                                <div class="col-12 d-grid px-2">
+                                    <button type="submit" class="garnet-btn garnet-btn-warning mb-2">
+                                        <i class="tf-icons bx bx-category mx-1"></i>
+                                        بازیابی گزارش
+                                    </button>
+                                </div>
+                                <div class="col-12 d-grid px-2">
+                                    <a href="javascript:void(0)" data-formid="frmTafsilReportFilter" data-url="@Url.Action("TafsilReport", "AccReports", new { Area = "Accounting" })" class="garnet-btn garnet-btn-info mb-2 submitCustomForm">
+                                        <i class="tf-icons bx bx-list mx-1"></i>
+                                       ریز گردش
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+  
+    <div class="card-body card-table mt-3">
+        <div class="table-responsive text-nowrap static-height-600">
+            <table class="table table-hover table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ردیف</th>
+                        <th>کل</th>
+                        <th>معین </th>
+                        <th>بد</th>
+                        <th>بس</th>
+                        <th>مانده</th>
+                        <th>وضعیت حساب</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.Report?.Count() > 0)
+                    {
+                        int row = 1;
+                        foreach (var x in Model.Report)
+                        {
+                            <tr class="accCoding">
+                                <td class="row-num">@row</td>
+                                <td>@x.KolName</td>
+                                <td>@x.MoeinName</td>
+                                <td class="col-price">@(x.Bed > 0 ? x.Bed.ToPrice() : "0")</td>
+                                <td class="col-price">@(x.Bes > 0 ? x.Bes.ToPrice() : "0")</td>
+                                <td class="col-price">@(x.Balace > 0 ? x.Balace.ToPrice() : "0")</td>
+                                <td>@x.BalaceNature.AccToNatureName()</td>
+                                <td>
+                                    <div class="col-12 d-grid px-2">
+                                        <a href="javascript:void(0)" data-formid="frmTafsilReportFilter" data-url="@Url.Action("TafsilReport", "AccReports", new { Area = "Accounting" })" class="btn btn-sm btn-primary submitCustomForm">
+                                            <i class="tf-icons bx bx-list-ol mx-1"></i>
+                                           مشاهده گردش
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>
+
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="row">
+            <div class="col-md-7"></div>
+            <div class="col-md-5">
+                <div class="custom-box1">
+                    <ul class="docfooter-totalAmounts">
+                        <li>
+                            <label>جمع بدهکار : </label>
+                            <div>
+                                <input type="text" readonly value="@strTotalBed" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label>جمع بستانکار : </label>
+                            <div>
+                                <input type="text" readonly value="@strTotalBes" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label class="docBalance">
+                                @if (status == "بدهکار")
+                                {
+                                    <span class="badge badge-dot bg-label-primary px-3">@status</span>
+                                }
+                                else if (status == "بستانکار")
+                                {
+                                    <span class="badge badge-dot bg-label-warning px-3">@status</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-dot bg-label-success px-3">تسویه</span>
+                                }
+
+                            </label>
+                            <div>
+                                <input type="text" readonly value="@strEkhtelaf" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

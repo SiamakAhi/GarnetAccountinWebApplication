@@ -1,0 +1,54 @@
+﻿   @model RepresentativeDto
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning"> معرفی نماینده جدید</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <form asp-action="AddRepresentative" asp-controller="Representative" asp-area="Courier" method="post" enctype="multipart/form-data" class="mt-2">
+                <input type="hidden" asp-for="Id" value="@Guid.NewGuid()" />
+                <div class="garnet-section garnet-section-info">
+                    <div class="form-avatar-inputgroup">
+                        <div class="avatar">
+                            <img id="avatarPreview" src="~/img/avatars/avatar1.svg" alt="Avatar" />
+                        </div>
+                        <input type="file" class="garnet-imagepicker" asp-for="AvatarFile" id="avatarFileInput" style="display:none;" accept="image/*" />
+                        <button type="button" class="garnet-btn garnet-btn-warning" onclick="document.getElementById('avatarFileInput').click();">
+                            انتخاب عکس
+                        </button>
+                    </div>
+
+                    <div class="row gy-3">
+                        <div class="col-md-12 select2-dark">
+                            <label class="form-label" asp-for="PartyId"></label>
+                            <select asp-for="PartyId" class="form-select select2" asp-items="@ViewBag.Persen" aria-label="Default select gonext">
+                             <option value="null">انتخاب طرف حساب</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label" asp-for="Title"></label>
+                            <input type="text" asp-for="Title" class="form-control gonext" placeholder="عنوان نماینده">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label" asp-for="Description"></label>
+                            <input type="text" asp-for="Description" class="form-control gonext" placeholder="مثال : نماینده رهسپاری و فروش در تهران">
+                        </div>
+                    </div>
+                </div>
+                <div class="garnet-section-footer mt-2">
+                    <button type="button" class="garnet-btn garnet-btn-info accAjaxSubmit">ایجــاد</button>
+                    <button type="reset" class="garnet-btn garnet-btn-warning" data-bs-dismiss="modal" aria-label="Close">
+                        انصراف
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/forms-selects.js"></script>
+
+

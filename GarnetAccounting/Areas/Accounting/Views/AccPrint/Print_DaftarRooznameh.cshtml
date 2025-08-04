@@ -1,0 +1,24 @@
+﻿@using Stimulsoft.Report.Mvc
+<link href="~/css/font.css" rel="stylesheet" />
+@{
+    Layout = null;
+}
+
+<div class="text-center printArea">
+
+    @Html.StiNetCoreViewer(new StiNetCoreViewerOptions(){
+    Actions = {
+        GetReport="GetReport_Print_DaftarRooznameh",
+        ViewerEvent= "ViewerEvent",
+    },
+    Appearance =
+        {
+            InterfaceType = StiInterfaceType.Auto,
+            ScrollbarsMode = true,
+            ShowTooltips = false,
+            FullScreenMode=true,
+        }
+    })
+
+</div>
+

@@ -1,0 +1,254 @@
+﻿@using GarnetAccounting.Areas.Accounting.Dto.AccountingReportDtos
+@model AccountsReportViewModel
+@{
+    ViewData["Title"] = "حسابداری گارنت | گطازش آبشاری حساب ها";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-panel">
+    <div class="card-panel-header">
+        <div><span class="card-panel-title">تراز آزمایشی</span></div>
+    </div>
+    <form asp-action="TarazAzmayeshi" asp-controller="AccReports" asp-area="Accounting" method="get" id="frmTrialBalancFilter">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="card-panel-section">
+                    <div class="card-panel-section-header"><span>نوع تراز آزمایشی </span></div>
+                    <div class="card-panel-section-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="garnet-datawidget datawidget-info-br">
+                                    <div class="form-check form-check-inline">
+                                        <input asp-for="filter.BalanceColumnsQty" class="form-check-input" type="radio" value="4" id="terialBalance4c" checked="">
+                                        <label class="form-check-label" for="terialBalance4c">  تراز 4 ستونی</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="garnet-datawidget datawidget-warning-bl">
+                                    <div class="form-check form-check-inline">
+                                        <input asp-for="filter.BalanceColumnsQty" class="form-check-input" type="radio" value="6" id="terialBalance6c">
+                                        <label class="form-check-label" for="terialBalance6c"> تراز 6 ستونی</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card-panel-section">
+                    <div class="card-panel-section-header"><span>فیلتـر </span></div>
+                    <div class="card-panel-section-body">
+
+                        <div class="widget-info-container mb-3">
+                            <div class="widget-info">
+                                <div class="form-check form-check-inline">
+                                    <input asp-for="filter.ReportLevel" class="form-check-input" type="radio" value="1" id="collapsible-address-type-home" checked="">
+                                    <label class="form-check-label" for="collapsible-address-type-home">تراز آزمایشی در سطح کل</label>
+                                </div>
+                            </div>
+                            <div class="widget-info">
+                                <div class="form-check form-check-inline">
+                                    <input asp-for="filter.ReportLevel" class="form-check-input" type="radio" value="2" id="collapsible-address-type-office">
+                                    <label class="form-check-label" for="collapsible-address-type-office">
+                                        تراز آزمایشی در سطح معین
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="widget-info">
+                                <div class="form-check form-check-inline">
+                                    <input asp-for="filter.ReportLevel" class="form-check-input" type="radio" value="3" id="collapsible-address-type-tafsil">
+                                    <label class="form-check-label" for="collapsible-address-type-tafsil">
+                                        تراز آزمایشی در سطح تفصیل
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 mb-1">
+                                <label asp-for="filter.FromDocNumer" class="form-label">‌از شماره سند</label>
+                                <input type="number" asp-for="filter.FromDocNumer" class="form-control form-control-sm text-center">
+                            </div>
+                            <div class="col-md-2 mb-1">
+                                <label asp-for="filter.ToDocNumer" class="form-label">تا شماره سند‌</label>
+                                <input type="number" asp-for="filter.ToDocNumer" class="form-control form-control-sm text-center">
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label asp-for="filter.strStartDate" class="form-label">از تاریخ‌</label>
+                                <input type="text" asp-for="filter.strStartDate" class="form-control form-control-sm flatpickr-input" placeholder="YYYY/MM/DD" id="flatpickr-date">
+                            </div>
+                            <div class=col-md-3 mb-2">
+                                <label asp-for="filter.strEndDate" class="form-label">‌تا تاریخ </label>
+                                <input type="text" class="form-control form-control-sm flatpickr-input" asp-for="filter.strEndDate" placeholder="YYYY/MM/DD" id="flatpickr-Enddate">
+                            </div>
+                            <div class="col-md-2 mb-1">
+                                <label for="flatpickr-date" class="form-label">وضعیت سند</label>
+                                <select class="form-select form-select-sm" asp-for="filter.docType" asp-items="@ViewBag.docType">
+                                    <option value="null" selected>همه</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card-panel-section">
+                    <div class="card-panel-section-header"><span>عملیات </span></div>
+                    <div class="card-panel-section-body">
+                        <div class="row">
+                            <div class="col-12 d-grid px-2">
+                                <button type="submit" class="btn btn-secondary mb-1">
+                                    <i class="tf-icons bx bx-list mx-1"></i>
+                                    نمایش
+                                </button>
+                            </div>
+                            <div class="col-12 d-grid px-2">
+                                <a href="javascript:void(0)" class="btn btn-primary mb-1 getprint" data-url="@Url.Action("Print_TrialBalance", "AccPrint", new { Area = "Accounting" })">
+                                    <i class="bx bx-printer mx-1"></i>
+                                    چاپ
+                                </a>
+                            </div>
+                            <div class="col-12 d-grid px-2">
+                                <a href="javascript:void(0)" onclick="submitForm('ExportXlsxTrialBalance')" class="btn btn-info iconpng mb-1">
+                                    <i class="tf-icons bx bx-save mx-1"></i>
+                                    خروجی اکسل
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="card-body card-table p-2">
+        <table class="table report-table">
+            <thead>
+                <tr>
+                    <th style="width: 50px;"></th>
+                    <th colspan="3">سطح</th>
+                    <th>کد حساب</th>
+                    <th>نام حساب</th>
+                    <th>بدهکار</th>
+                    <th>بستانکار</th>
+                    <th>مانده بدهکار</th>
+                    <th>مانده بستانکار</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var account in Model.Reports)
+                {
+                    <!-- Group Level -->
+                    <tr class="group-row" data-level="2" data-id="group-@account.AccountId">
+                        <td>
+                            <span class="toggle-icon" onclick="toggleRow('group-@account.AccountId')">+</span>
+                        </td>
+                        <td class="td-level2">کل</td>
+                        <td></td>
+                        <td></td>
+                        <td>@account.AccountCode</td>
+                        <td>@account.AccountName</td>
+                        <td class="col-price">@account.Bed.ToString("N0")</td>
+                        <td class="col-price">@account.Bes.ToString("N0")</td>
+                        <td class="col-price">@account.BalanceBed.ToString("N0")</td>
+                        <td class="col-price">@account.BalanceBes.ToString("N0")</td>
+                    </tr>
+
+                    <!-- Moein Level -->
+                    @foreach (var moein in account.Moeins)
+                    {
+                        <tr class="moein-row child-row group-@account.AccountId" data-level="3" data-id="moein-@moein.AccountId" data-parent="group-@account.AccountId">
+                            <td>
+                                <span class="toggle-icon" onclick="toggleRow('moein-@moein.AccountId')">+</span>
+                            </td>
+                            <td class="td-level2"></td>
+                            <td class="td-level3">معین</td>
+                            <td></td>
+                            <td>@moein.AccountCode</td>
+                            <td>@moein.AccountName</td>
+                            <td class="col-price">@moein.Bed.ToString("N0")</td>
+                            <td class="col-price">@moein.Bes.ToString("N0")</td>
+                            <td class="col-price">@moein.BalanceBed.ToString("N0")</td>
+                            <td class="col-price">@moein.BalanceBes.ToString("N0")</td>
+                        </tr>
+
+                        <!-- Tafsil Level -->
+                        @foreach (var tafsil in moein.Tafsils)
+                        {
+                            <tr class="tafsil-row child-row moein-@moein.AccountId" data-level="4" data-parent="moein-@moein.AccountId">
+                                <td></td>
+                                <td class="td-level2"></td>
+                                <td class="td-level3"></td>
+                                <td class="td-level4">تفصیلی</td>
+                                <td>@tafsil.AccountCode</td>
+                                <td>@tafsil.AccountName</td>
+                                <td class="col-price">@tafsil.Bed.ToString("N0")</td>
+                                <td class="col-price">@tafsil.Bes.ToString("N0")</td>
+                                <td class="col-price">@tafsil.BalanceBed.ToString("N0")</td>
+                                <td class="col-price">@tafsil.BalanceBes.ToString("N0")</td>
+                            </tr>
+                        }
+                    }
+                }
+                <!-- Totals Row -->
+                <tr class="total-row">
+                    <td colspan="4">جمع کل</td>
+                    <td>@Model.Reports.Sum(a => a.Bed).ToString("N0")</td>
+                    <td>@Model.Reports.Sum(a => a.Bes).ToString("N0")</td>
+                    <td>@Model.Reports.Sum(a => a.BalanceBed).ToString("N0")</td>
+                    <td>@Model.Reports.Sum(a => a.BalanceBes).ToString("N0")</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+
+<script>
+    function toggleRow(rowId) {
+        // Toggle current row's children
+        const children = document.querySelectorAll(`.child-row[data-parent="${rowId}"]`);
+        children.forEach(child => {
+            child.classList.toggle('show');
+        });
+
+        // Toggle icon
+        const icon = document.querySelector(`[data-id="${rowId}"] .toggle-icon`);
+        if (icon.textContent === '+') {
+            icon.textContent = '-';
+        } else {
+            icon.textContent = '+';
+        }
+    }
+
+    function toggleAllRows(action) {
+        const allRows = document.querySelectorAll('[data-level]');
+        const allIcons = document.querySelectorAll('.toggle-icon');
+
+        allRows.forEach(row => {
+            if (row.dataset.level !== '2') { // Skip group level
+                if (action === 'expand') {
+                    row.classList.add('show');
+                } else {
+                    row.classList.remove('show');
+                }
+            }
+        });
+
+        allIcons.forEach(icon => {
+            icon.textContent = action === 'expand' ? '-' : '+';
+        });
+    }
+
+    function exportToExcel() {
+        // Implement Excel export functionality
+        alert("خروجی Excel در حال آماده‌سازی است...");
+    }
+</script>
+

@@ -1,0 +1,17 @@
+﻿@model BankDto
+
+<form asp-action="AddBank" asp-controller="AccBsKhazaneh" asp-area="" method="post" class="mt-4 appform1">
+
+    <div class="row mb-4">
+       
+        <div class="col-12">
+            <label class="form-label" asp-for="Name"></label>
+            <input type="text" asp-for="Name" class="form-control" />
+        </div>
+    </div>
+
+    <hr />
+    <div class="row d-grid mt-3">
+        <input type="button" class="btn btn-primary mt-2 accAjaxSubmit" value="افــزودن" />
+    </div>
+</form>

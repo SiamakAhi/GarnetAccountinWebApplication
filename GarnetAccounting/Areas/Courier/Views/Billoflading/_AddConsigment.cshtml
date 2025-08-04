@@ -1,0 +1,107 @@
+﻿@model VmBillofladingPanel
+
+
+<div class="modal-dialog dataentry-modal">
+    <div class="modal-content consignment-modal">
+        <div class="add-consigment-header mb-3 mt-2">
+            <div class="add-consigment-header-item">
+                <h4 class="text-primary mb-0">قبول مرسـوله</h4>
+            </div>
+            <div class="add-consigment-header-item d-flex align-items-center">
+                <div>
+                    <i class="bx bx-tag text-primary me-1" aria-hidden="true"></i>
+                    <span>@Model.BillOfLading.bill.WaybillNumber</span>
+                </div>
+                <div>
+                    <i class="bx bxs-map text-primary me-1" aria-hidden="true"></i>
+                    <span>@Model.BillOfLading.bill.DestinationCity</span>
+                </div>
+
+                <div>
+                    <i class="bx bx-calendar text-primary me-1" aria-hidden="true"></i>
+                    <span>@DateTime.Now.LatinToPersian()</span>
+                </div>
+            </div>
+            
+        </div>
+        <form class="mt-3">
+            <div class="row">
+                <div class="col-md-5">
+                    <h5 class="form-section-title">مشخصات بار</h5>
+                    <ul class="list-control">
+                        <li>
+                            <label asp-for="Consigmen.NatureTypeId"></label>
+                            <select class="form-select form-select-sm" asp-for="Consigmen.NatureTypeId" asp-items="ViewBag.Natures">
+                            </select>
+
+                        </li>
+                        <li class="mb-4">
+                            <label asp-for="Consigmen.ContentDescription"></label>
+                            <input type="text" class="form-control form-control-sm min="0" asp-for="Consigmen.ContentDescription" />
+                        </li>
+                        <li class="mb-4">
+                            <label asp-for="Consigmen.Value"></label>
+                            <input type="text" class="form-control form-control-sm " min="0" asp-for="Consigmen.Value" />
+                        </li>
+                       
+                       
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5 class="form-section-title">وزن و ابعاد</h5>
+                    <ul class="list-control">
+                        <li>
+                            <label asp-for="Consigmen.Length"></label>
+                            <input type="number" class="form-control form-control-sm" min="0" asp-for="Consigmen.Length" />
+                            <span>cm</span>
+                        </li>
+                        <li>
+                            <label asp-for="Consigmen.Width"></label>
+                            <input type="number" class="form-control form-control-sm" min="0" asp-for="Consigmen.Width" />
+                            <span>cm</span>
+                        </li>
+                        <li class="mb-4">
+                            <label asp-for="Consigmen.Height"></label>
+                            <input type="number" class="form-control form-control-sm" min="0" asp-for="Consigmen.Height" />
+                            <span>cm</span>
+                        </li>
+                      
+                        <li>
+                            <label asp-for="Consigmen.Weight"></label>
+                            <input type="number" class="form-control form-control-sm" min="0" asp-for="Consigmen.Weight" />
+                            <span>kg</span>
+                        </li>
+                    </ul>
+                </div>
+              
+                <div class="col-md-4">
+                    <h5 class="form-section-title">بسته بندی</h5>
+                    <ul class="list-control">
+                        <li>
+                            <label asp-for="Consigmen.PackageTypeId">نوع بسته بندی</label>
+                            <select class="form-select form-select-sm" asp-for="Consigmen.PackageTypeId" asp-items="ViewBag.Packages">
+                            </select>
+
+                        </li>
+                        <li>
+                            <label asp-for="Consigmen.PackageTypeId"> بسته بندی</label>
+                            <select class="form-select form-select-sm" asp-for="Consigmen.PackageTypeId" asp-items="ViewBag.Packages">
+                                <option selected>پاکت فلایر آدرس دار سایز A4</option>
+                            </select>
+                        </li>
+                        <li class="mb-3">
+                            <label asp-for="Consigmen.Weight">تعداد/مقدار</label>
+                            <input type="number" class="form-control form-control-sm" min="0" asp-for="Consigmen.Weight" />
+                            <span>عدد</span>
+                        </li>
+                        <li>
+                            <label asp-for="Consigmen.Weight">هزینه بسته بندی</label>
+                            <input type="number" class="form-control form-control-sm" min="0" asp-for="Consigmen.Weight" />
+                            <span>ريال</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

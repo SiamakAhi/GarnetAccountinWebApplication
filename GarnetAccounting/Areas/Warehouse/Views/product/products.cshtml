@@ -1,0 +1,237 @@
+﻿ @model VmProducts
+@{
+    ViewData["Title"] = "کالا و خدمات";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-panel">
+    <div class="card-panel-header">
+        <div><span class="card-panel-title">لیست کالا و خدمات</span></div>
+        <div class="card-panel-navbar-container">
+            <ul class="card-panel-navbar">
+                <li>
+                    <a asp-area="Warehouse" asp-controller="product" asp-action="AddProduct" class="quickaccess-link">
+                        <i class="bx bx-plus"></i>
+                        <span>جـدید</span>
+                    </a>
+                </li>
+                <li>
+
+                    <a class="uickaccess-link  bulkAction" href="#" data-tableid="tblDocsList" data-url="@Url.Action("", "", new { Area = "" })" data-allerttext="اسناد انتخاب شده حذف شوند ؟" title="حذف سنـد">
+                        <i class="bx bx-trash"></i>
+                        <span>حذف گروهی</span>
+                    </a>
+                </li>
+               
+            </ul>
+        </div>
+    </div>
+    <div>
+        <form asp-action="products" asp-controller="product" asp-area="Warehouse" method="get" id="frmProductsFilter">
+            <input type="hidden" asp-for="filter.CurrentPage" value="1" />
+
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>فیلتـر</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class="row">
+                                <div class="col-md-7 mb-2 select2-dark">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>گروه (ها)</label>
+                                        <select asp-for="filter.CategoryIds" class="select2" multiple asp-items="@ViewBag.Categories">
+                                          
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-5"></div>
+                                <div class="col-md-2 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.Code">کـد‌</label>
+                                        <input type="text" asp-for="filter.Code" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.Name">نام‌</label>
+                                        <input type="text" asp-for="filter.Name" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.Name">تعداد ردیف در هر صفحه‌</label>
+                                        <input type="number" min="1" asp-for="filter.PageSize" value="30" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>عملیات</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class=" d-grid p-2">
+                                <input type="submit" class="garnet-btn garnet-btn-warning mb-2" value="نمایش" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="card-body card-table">
+        <div class="table-responsive text-nowrap static-height-600">
+            <table class="table table-hover table-striped table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="row-chb">
+                            <input type="checkbox" id="SelectRows" />
+                            ردیف
+                        </th>
+                        <th>گروه</th>
+                        <th>کد</th>
+                        <th>نام</th>
+                        <th>مشخصه</th>
+                        <th>واحد کل</th>
+                        <th>محتوا</th>
+                        <th>واحد جزء</th>
+                        <th>مشمول/غیرمشمول</th>
+                        <th>وضعیت</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.Products.Items.Count() > 0)
+                    {
+                        int row = 1;
+                        foreach (var x in Model.Products.Items)
+                        {
+                            <tr>
+                                <td class="row-chb">
+                                    <input type="checkbox" class="tblRow px-3" name="docId" value="@x.Id" />
+                                    @row
+                                </td>
+                                  <td>@x.CategoryName</td>
+                                  <td>@x.ProductCode</td>
+                                  <td>@x.ProductName</td>
+                                  <td>@x.Description</td>
+                                  <td>@x.PakageUnitName</td>
+                                  <td>@x.QuantityInPakage</td>
+                                  <td>@x.BaseUnitName</td>
+                                  <td>@(x.VATRate > 0 ?"مشمول":"غیرمشمول")</td>
+                                  <td>
+                                    @if (x.IsActive)
+                                    {
+                                        <a href="javascript:void(0)" class="delByAjax" data-url="@Url.Action("ToggleProductStatus", "product", new { Area = "Warehouse" })" data-target="@x.Id" title="@x.ProductName غیرفعال شود ؟">غیرفعال شود
+
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:void(0)" class="delByAjax " data-url="@Url.Action("ToggleProductStatus", "product", new { Area = "Warehouse" })" data-target="@x.Id" title="@x.ProductName غیرفعال شود ؟">فعال شود
+
+                                        </a>
+                                    }
+                                </td>
+                                <td>
+                                    <a href="javascript:void(0)" class="callform" data-url="@Url.Action("EditProduct", "product", new { Area = "Warehouse", id = x.Id })"><i class="bx bx-edit-alt text-gray" title="ویرایش"></i></a>
+                                    <a href="javascript:void(0)" class="delByAjax" data-url="@Url.Action("DeleteProduct", "product", new { Area = "Warehouse" })" data-target="@x.Id" title="حذف کالا/خدمت انجام شود ؟"><i class="bx bx-trash text-warning" title="حذف"></i></a>
+                                </td>
+                            </tr>
+
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="11">
+                                <div class="text-center p-2 alert-secondary">اطلاعاتی برای نمایش وجود ندارد</div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="card-footer">
+        @if (Model.Products.TotalPages > 1)
+        {
+            <nav aria-label="Page navigation" class="pagin mt-3">
+                <ul class="pagination pagination-sm text-center">
+                    @if (Model.Products.HasPreviousPage)
+                    {
+                        <li class="page-item prev">
+                            <a class="page-link" data-formid="frmProductsFilter" data-currentpage="@(Model.Products.CurrentPage - 1)">
+                                <i class="tf-icon bx bx-chevrons-left"></i>
+                            </a>
+                        </li>
+                    }
+
+                    @{
+                        int totalPages = Model.Products.TotalPages;
+                        int currentPage = Model.Products.CurrentPage;
+                        int pageRange = 3; // تعداد صفحات قبل و بعد از صفحه فعلی
+
+                        int startPage = Math.Max(1, currentPage - pageRange);
+                        int endPage = Math.Min(totalPages, currentPage + pageRange);
+
+                        if (startPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" data-formid="frmProductsFilter" data-currentpage="1">1</a>
+                            </li>
+                            if (startPage > 2)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                        }
+
+                        for (int i = startPage; i <= endPage; i++)
+                        {
+                            string strActive = currentPage == i ? "active" : "";
+                            <li class="page-item @strActive">
+                                <a class="page-link" data-formid="frmProductsFilter" data-currentpage="@i">@i</a>
+                            </li>
+                        }
+
+                        if (endPage < totalPages)
+                        {
+                            if (endPage < totalPages - 1)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                            <li class="page-item">
+                                <a class="page-link" data-formid="frmProductsFilter" data-currentpage="@totalPages">@totalPages</a>
+                            </li>
+                        }
+                    }
+
+                    @if (Model.Products.HasNextPage)
+                    {
+                        <li class="page-item next">
+                            <a class="page-link" data-formid="frmProductsFilter" data-currentpage="@(Model.Products.CurrentPage + 1)">
+                                <i class="tf-icon bx bx-chevrons-right"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    </div>
+
+</div>

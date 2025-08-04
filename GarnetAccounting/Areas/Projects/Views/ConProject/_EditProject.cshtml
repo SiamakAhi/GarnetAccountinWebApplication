@@ -1,0 +1,87 @@
+﻿@model ConProjectDto
+<div class="modal-dialog dataentry-modal">
+    <div class="modal-content dataentry">
+        <div class="dataentry-title">
+            <span>ویرایش پروژه</span>
+        </div>
+        <form asp-action="Edit" asp-controller="ConProject" asp-area="Projects" method="post">
+            <input type="hidden" asp-for="Id" value="@Model.Id" />
+            <input type="hidden" asp-for="CreatedBy" value="@User.Identity.Name" />
+            <div class="row dataentry-controls">
+                <div class="col-md-6 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>مشخصات اصلی</h6>
+                    </div>
+                    <div class="col-md-12 mb-3 select2-dark">
+                        <label asp-for="ClientId" class="form-label"></label>
+                        <select asp-for="ClientId" class="form-select form-select-sm select2"
+                                asp-items="@ViewBag.clients">
+                            <option value="">انتخاب کارفرما</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="ProjectName" class="form-label"></label>
+                        <input asp-for="ProjectName" class="form-control form-control-sm" />
+                        <span asp-validation-for="ProjectName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="ProjectNumber" class="form-label"></label>
+                        <input asp-for="ProjectNumber" class="form-control form-control-sm" />
+                        <span asp-validation-for="ProjectNumber" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="strDate" class="form-label"></label>
+                        <input type="text" asp-for="strDate" class="form-control form-control-sm flatpickr-input" />
+                        <span asp-validation-for="strDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>اطلاعات مالی</h6>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="ProjectAmount" class="form-label"></label>
+                        <input asp-for="ProjectAmount" class="form-control form-control-sm"
+                               type="number" min="0"  />
+                        <span asp-validation-for="ProjectAmount" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="ContractDurationDays" class="form-label"></label>
+                        <input asp-for="ContractDurationDays" class="form-control form-control-sm"
+                               type="number" min="1" />
+                        <span asp-validation-for="ContractDurationDays" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mb-3 select2-dark">
+                        <label asp-for="TafsilId" class="form-label"></label>
+                        <select asp-for="TafsilId" class="form-select form-select-sm select2"
+                                asp-items="@ViewBag.tafsil">
+                            <option value="">حساب تفصیلی</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <div class="widget-info fw mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="IsActive" >
+                            <label class="form-check-label" asp-for="IsActive">
+                                پروژه / قرارداد فعال است .
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dataentry-buttons-container container-row">
+                <div class="dataentry-buttons">
+                    <button type="button" class="btn btn-primary accAjaxSubmit">ذخیره</button>
+                    <button type="reset" class="btn btn-warning" data-bs-dismiss="modal">انصراف</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/js/forms-selects.js"></script>

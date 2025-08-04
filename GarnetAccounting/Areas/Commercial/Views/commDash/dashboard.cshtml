@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "مدیریت مالی گارنت";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="card-panel card-panel-round">
+    <div class="card-panel-header">
+        <div><span class="card-panel-title">داشبورد بازرگانی</span></div>
+    </div>
+    <div class="row card-panel-round-body">
+        @if (User.IsInRole("CommercialManager"))
+        {
+            <div class="col-md-4">
+                <div class="card-panel-section">
+                    <div class="card-panel-section-header"><h4 class="text-info">انبار </h4></div>
+                    <div class="card-panel-section-body">
+                        <a asp-action="products" asp-controller="product" asp-area="Warehouse" class="card garnet-datawidget-info mb-2 mt-2">
+                            <div class="garnet-datawidget-body">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <div class="content-left">
+                                        <h6 class="secondary-font fw-medium">کالا و خدمات </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a asp-action="ProductCategories" asp-controller="ProductCategories" asp-area="Warehouse" class="card garnet-datawidget-warning mb-2">
+                            <div class="garnet-datawidget-body">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <div class="content-left">
+                                        <h6 class="secondary-font fw-medium">دسته بندی کالا و خدمات </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a asp-action="ImportProducts" asp-controller="ImportBaseInfo" asp-area="DataTransfer" class="card garnet-datawidget-info mb-2">
+                            <div class="garnet-datawidget-body">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <div class="content-left">
+                                        <h6 class="secondary-font fw-medium">ورود اطلاعات گروهی کالا و خدمات </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (User.IsInRole("CommercialManager") || User.IsInRole("BuyerExpert"))
+        {
+            <div class="col-md-4">
+                <div class="card-panel-section">
+                    <div class="card-panel-section-header"><h4 class="text-info"> خرید </h4></div>
+                    <div class="card-panel-section-body">
+                        <a asp-action="Invoices" asp-controller="buy" asp-area="Commercial" class="card garnet-datawidget-warning mb-2 mt-2">
+                            <div class="garnet-datawidget-body">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <div class="content-left">
+                                        <h6 class="secondary-font fw-medium">فاکتورهای خرید </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a asp-action="vendors" asp-controller="buy" asp-area="Commercial" class="card garnet-datawidget-info mb-2">
+                            <div class="garnet-datawidget-body">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <div class="content-left">
+                                        <h6 class="secondary-font fw-medium">لیست تأمین کنندگان </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" data-url="@Url.Action("CreatebuyInvoice", "buy", new { Area = "Commercial" })" class="card garnet-datawidget-warning  callform mb-2">
+                            <div class="garnet-datawidget-body">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <div class="content-left">
+                                        <h6 class="secondary-font fw-medium">ثبت فاکتور خرید </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (User.IsInRole("CommercialManager") || User.IsInRole("Seller"))
+        {
+            <div class="col-md-4">
+                <div class="card-panel-section">
+                    <div class="card-panel-section-header"><h4 class="text-info"> فروش </h4></div>
+                    <div class="card-panel-section-body">
+                        <a asp-action="saleInvoices" asp-controller="sale" asp-area="Commercial" class="card garnet-datawidget-info mb-2 mt-2">
+                            <div class="garnet-datawidget-body">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <div class="content-left">
+                                        <h6 class="secondary-font fw-medium">فاکتورهای فروش </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a asp-action="PersenList" asp-controller="Persen" asp-area="" class="card garnet-datawidget-warning mb-2">
+                            <div class="garnet-datawidget-body">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <div class="content-left">
+                                        <h6 class="secondary-font fw-medium">لیست مشتریان </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" data-url="@Url.Action("CreateSaleInvoice", "sale", new { Area = "Commercial" })" class="card garnet-datawidget-info  callform mb-2">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <div class="content-left">
+                                        <h6 class="secondary-font fw-medium">ثبت فاکتور فروش </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a asp-action="bulkCreateInvoice" asp-controller="sale" asp-area="Commercial" class="card garnet-datawidget-warning mb-2">
+                            <div class="garnet-datawidget-body">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <div class="content-left">
+                                        <h6 class="secondary-font fw-medium">ورود اطلاعات گروهی </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+       
+       
+      
+    </div>
+</div>
+</div>
+
+
+

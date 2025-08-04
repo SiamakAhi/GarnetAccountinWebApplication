@@ -1,0 +1,178 @@
+﻿@model BranchDto
+<div class="modal-dialog dataentry-modal">
+    <div class="modal-content dataentry">
+        <div class="dataentry-title">
+            <span class=""> تعریف شعبه / نمایندگی جدید</span>
+
+        </div>
+        <form asp-action="AddBranch" asp-controller="Branch" asp-area="Courier" method="post">
+                <input type="hidden" asp-for="Id" value="@Guid.NewGuid()" />
+            <div class="row dataentry-controls">
+                <div class="col-md-4 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>اطلاعات شعبه</h6>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="BranchCode" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="BranchCode" />
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="BranchName" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="BranchName" />
+                    </div>
+                 
+                    <div class="col-md-12 mb-1 select2-dark">
+                        <label asp-for="CityId" class="form-label">شهر</label>
+                        <select class="form-select form-select-sm select2" asp-for="CityId" asp-items="@ViewBag.Cities">
+                            <option value="">شهر محل فعالیت</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Address" class="form-label"></label>
+                        <textarea rows="2" class="form-control form-control-sm" asp-for="Address"></textarea>
+                    </div>
+                     <div class="col-md-12 mb-1 select2-dark">
+                        <label asp-for="HubId" class="form-label">هاب متصل</label>
+                        <select class="form-select form-select-sm select2" asp-for="HubId" asp-items="@ViewBag.hubs">
+                            <option value="">انتخاب هاب</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>مجوزها</h6>
+                    </div>
+                    <div class="mb-3">
+                       @*  <label class="form-label" asp-for="BranchTypeId"></label> *@
+                        <select asp-for="BranchTypeId" class="form-select form-select-sm">
+                            <option value="null">نوع شعبه را انتخاب کنید ... </option>
+                            <option value="1">ثابت</option>
+                            <option value="1">سیار</option>
+                            <option value="1">ثابت و سیار</option>
+                        </select>
+                    </div>
+                    <div class="widget-info fw mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="IsBillOfLadingIssuer">
+                            <label class="form-check-label" asp-for="IsBillOfLadingIssuer">
+                                مجوز صدور بارنامه
+                            </label>
+                        </div>
+                    </div>
+                    <div class="widget-info fw mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="IsUrbanFleet">
+                            <label class="form-check-label" asp-for="IsUrbanFleet">
+                                ناوگان حمل درون شهری
+                            </label>
+                        </div>
+                    </div>
+                    <div class="widget-info fw mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="IsIntercityFleet">
+                            <label class="form-check-label" asp-for="IsIntercityFleet">
+                                ناوگان حمل بین شهری
+                            </label>
+                        </div>
+                    </div>
+                    <div class="widget-info fw mb-2">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="IsSortingAndExchange">
+                            <label class="form-check-label" asp-for="IsSortingAndExchange">
+                                تجزیه و مبادلات مرسولات
+                            </label>
+                        </div>
+                    </div>
+                    <div class="widget-info fw mb-2">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="IsIntercityFleet">
+                            <label class="form-check-label" asp-for="IsIntercityFleet">
+                               مجوز صدور بارنامه داخلی
+                            </label>
+                        </div>
+                    </div>
+                     <div class="widget-info fw mb-2">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="IsExternalBLIssuer">
+                            <label class="form-check-label" asp-for="IsExternalBLIssuer">
+                               مجوز صدور بارنامه خارجی
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="OpeningDate" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm flatpickr-input" asp-for="OpeningDate" />
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="RenewalDate" class="form-label">تاریخ تمدید همکاری</label>
+                        <input type="text" class="form-control form-control-sm flatpickr-input" asp-for="RenewalDate" />
+                    </div>
+                </div>
+
+                <div class="col-md-4 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>طرف حساب</h6>
+                    </div>
+                    <div class="widget-info fw mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" value="false" asp-for="IsOwnership" id="IsOwnership0">
+                            <label class="form-check-label" for="IsOwnership0">
+                               واگذازی (شراکتی)
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" value="true" asp-for="IsOwnership" id="IsOwnership1">
+                            <label class="form-check-label" for="IsOwnership1">
+                              مالکیت
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-1">
+                        <label class="form-label select2-dark" asp-for="TafsilId">انتخاب طرف حساب</label>
+                        <select asp-for="TafsilId" class="form-select form-select-sm select2" asp-items="@ViewBag.Persen">
+                            <option value="null">انتخاب کنید ... </option>
+                            <option value="1">ثابت</option>
+                            <option value="1">سیار</option>
+                            <option value="1">ثابت و سیار</option>
+                        </select>
+                    </div>
+                     <div class="col-md-12 mb-1">
+                        <label asp-for="BranchManager" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="BranchManager" />
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="BranchManagerPhoneNumber" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="BranchManagerPhoneNumber" />
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="OldBranchName" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="OldBranchName" />
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="OldDistRepName" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="OldDistRepName" />
+                    </div>
+                    <div class="widget-info fw">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="IsActive" checked>
+                            <label class="form-check-label" asp-for="IsActive">
+                              فعال
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+                <div class=" dataentry-buttons-container container-row">
+                    <div class="dataentry-buttons">
+                        <a href="javascript:void(0)" class="btn btn-primary accAjaxSubmit"> ذخیـره</a>
+                        <button type="reset" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">
+                            انصراف
+                        </button>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+<script src="~/js/forms-selects.js"></script>

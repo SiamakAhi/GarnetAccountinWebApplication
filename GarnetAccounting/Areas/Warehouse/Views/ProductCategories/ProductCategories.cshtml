@@ -1,0 +1,83 @@
+﻿@model List<Wh_ProductCategoryDto>
+@{
+    ViewData["Title"] = "دسته بندی کالا و خدمات";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-4 card-panel">
+        <div class="card-panel-header">
+            <div><span class="card-panel-title">دسته بندی کالا و خدمات</span></div>
+            <div class="card-panel-navbar-container">
+                <ul class="card-panel-navbar">
+                    <li>
+                        <a href="#" class="quickaccess-link callform" data-url="@Url.Action("AddCategory", "ProductCategories", new { Area = "Warehouse" })">
+                            <i class="bx bx-plus"></i>
+                            <span>ایجاد سرشاخه جدید</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-panel-section">
+            <div class="card-panel-section-body">
+                <ul class="treeview">
+                    @if (Model.Count > 0)
+                    {
+                        foreach (var category in Model)
+                        {
+                            @await Html.PartialAsync("_CategoryItem", category)
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 card-panel">
+        <div class="card-panel-header">
+            <div><span class="card-panel-title">لیست کالا و خدمات</span></div>
+        </div>
+        <div class="card-panel-section">
+            <div class="card-panel-section-body">
+                <!-- این بخش برای نمایش کالاها یا خدمات است -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/vendor/libs/jquery/jquery.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const caretElements = document.querySelectorAll(".caret");
+        caretElements.forEach(caret => {
+            caret.addEventListener("click", function (event) {
+                const parentItem = this.parentElement;
+                const nestedList = parentItem.querySelector(".nested");
+                if (nestedList) {
+                    nestedList.classList.toggle("opened");
+                    parentItem.classList.toggle("opened");
+                }
+            });
+        });
+
+        // جلوگیری از تداخل بین کلیک روی منو و شاخه
+        document.querySelectorAll('.treeview-item-navbar-button').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.stopPropagation(); // جلوگیری از اجرای رویداد شاخه
+                const dropdownMenu = this.nextElementSibling;
+                if (dropdownMenu) {
+                    dropdownMenu.classList.toggle('show');
+                }
+            });
+        });
+
+        // بستن منو وقتی که بیرون از آن کلیک شود
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('.treeview-item-navbar-button')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.classList.remove('show');
+                });
+            }
+        });
+    });
+
+</script>

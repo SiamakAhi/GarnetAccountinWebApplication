@@ -1,0 +1,294 @@
+﻿@model AccSettingDto
+@{
+    ViewData["Title"] = "تنظیمات حسابداری";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="card">
+        <div class="dataentry-title p-3"><span class="">تنظیمات حسابداری</span></div>
+        <form asp-action="SellerAccSetting" asp-controller="accsettings" asp-area="Accounting" method="post">
+            <div class="nav-align-top mb-4">
+                <ul class="nav nav-tabs" role="tablist">
+
+                    <li class="nav-item" role="presentation">
+                        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-accounting" aria-controls="navs-top-accounting" aria-selected="true">
+                            حسابداری
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-buy" aria-controls="navs-top-buy" aria-selected="false" tabindex="-1">
+                            خرید
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-sale" aria-controls="navs-top-sale" aria-selected="false" tabindex="-1">
+                            فروش
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-warehouse" aria-controls="navs-top-warehouse" aria-selected="false" tabindex="-1">
+                            انبار
+                        </button>
+                    </li>
+
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade p-2 active show" id="navs-top-accounting" role="tabpanel">
+                        <div class="inner-container bg-light">
+                            
+                            <div class="row">
+                                <div class="divider text-start divider-info mt-3 mb-2">
+                                    <div class="divider-text">تنظیمات بستن حساب ها</div>
+                                </div>
+                                <div class="col-md-6 bg-white p-3">
+                                    <strong class="text-info">سبک حسابداری</strong>
+                                    <div class="garnet-checkbox-group d-flex justify-content-around ">
+                                        <div class="mb-2">
+                                            <input type="radio" asp-for="IsTemprory" id="istemp" value="@true" />
+                                            <label for="istemp">
+                                                 موقت
+                                            </label>
+                                        </div>
+                                      <div>
+                                            <input type="radio" asp-for="IsTemprory" id="notemp" value="@false" />
+                                            <label for="notemp">
+                                                (دائم) ادواری
+                                            </label>
+                                      </div>
+                                    
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" asp-for="AccLevel"></label>
+                                        <select type="text" asp-for="AccLevel" class="form-control">
+                                            <option value="null" selected> ... </option>
+                                            <option value="3">حسابداری 3 سطحی</option>
+                                            <option value="4">حسابداری 4 سطحی</option>
+                                            <option value="5">حسابداری 5 سطحی</option>
+                                            <option value="6">حسابداری 6 سطحی</option>
+                                            <option value="7">حسابداری 7 سطحی</option>
+                                            <option value="8">حسابداری 8 سطحی</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="garnet-checkbox-group">
+                                            <label asp-for="MandatoryTafsil"></label>
+                                            <input type="checkbox" asp-for="MandatoryTafsil" value="false" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                              
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label" asp-for="KholaseSoodVaZianMoeinId"></label>
+                                    <select type="text" asp-for="KholaseSoodVaZianMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="null">انتخاب</option>
+                                    </select>
+                                </div>
+                                 <div class="col-md-6 mb-2">
+                                    <label class="form-label" asp-for="SoodVaZianAnbashtehMoeinId"></label>
+                                    <select type="text" asp-for="SoodVaZianAnbashtehMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="null">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label" asp-for="OpeningccountMoeinId"></label>
+                                    <select type="text" asp-for="OpeningccountMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="null">انتخاب</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label" asp-for="ClosingAccountMoeinId"></label>
+                                    <select type="text" asp-for="ClosingAccountMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="null">انتخاب</option>
+                                    </select>
+                                </div>
+                               
+                              
+                                
+                            </div>
+                            <div class="row">
+
+                                <div class="divider text-start divider-info mt-3 mb-2">
+                                    <div class="divider-text">تنظیمات چاپ سنـد</div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" asp-for="DocPrintDefault"></label>
+                                    <select type="text" asp-for="DocPrintDefault" class="form-control">
+                                        <option value="1" selected>پرینت در سطح کل</option>
+                                        <option value="2">پرینت در سطح معین</option>
+                                        <option value="3">پرینت در سطح تفصیل</option>
+                                    </select>
+                                </div>
+                                <div class="col-8 mb-3">
+                                    <div class="garnet-checkbox-group">
+                                        <label asp-for="PrintCreator"></label>
+                                        <input type="checkbox" asp-for="PrintCreator" checked />
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" asp-for="Approver1Title"></label>
+                                    <input type="text" asp-for="Approver1Title" class="form-control" placeholder="مثال : مدیر مالی" />
+                                </div>
+                                <div class="col-md-8 mb-3">
+                                    <label class="form-label" asp-for="Approver1Name"></label>
+                                    <input type="text" asp-for="Approver1Name" class="form-control" placeholder="مثال : آریا ایران دوست" />
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label" asp-for="Approver2Title"></label>
+                                    <input type="text" asp-for="Approver2Title" class="form-control" placeholder="مثال : مدیریت عامل" />
+                                </div>
+                                <div class="col-md-8 mb-3">
+                                    <label class="form-label" asp-for="Approver2Name"></label>
+                                    <input type="text" asp-for="Approver2Name" class="form-control" placeholder="مثال : آراد وطن خواه" />
+                                </div>
+                            </div>
+                            <div class="mt-3 dataentry-buttons-container">
+                                <div class="dataentry-buttons">
+                                    <a href="javascript:void(0)" class="btn btn-primary mb-2 accAjaxSubmit"> ذخیـره تنظیمات</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade p-2 " id="navs-top-buy" role="tabpanel">
+                        <div class="inner-container bg-light">
+                            <h5>تنطیمات سیستم خرید</h5>
+                            <div class="row">
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="BuyMoeinId"></label>
+                                    <select type="text" asp-for="BuyMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="null">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="BuyPartyMoeinId"></label>
+                                    <select type="text" asp-for="BuyPartyMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="null">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="BuyDiscountMoeinId"></label>
+                                    <select type="text" asp-for="BuyDiscountMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="ReturnToBuyMoeinId"></label>
+                                    <select type="text" asp-for="ReturnToBuyMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                
+                               
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="BuyVatMoeinId"></label>
+                                    <select type="text" asp-for="BuyVatMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="InventoryMoeinId"></label>
+                                    <select type="text" asp-for="InventoryMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-2 mt-2">
+                                    <div class="garnet-checkbox-group">
+                                        <label asp-for="BuyIsAutoGenerate"></label>
+                                        <input type="checkbox" asp-for="BuyIsAutoGenerate" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2 mt-2">
+                                    <div class="garnet-checkbox-group">
+                                        <label asp-for="SetTafsilForBuyVat">
+                                            در ثبت اتوماتیک اسناد خرید، تفصیل برای ارزش افزوده درج شود.
+                                        </label>
+                                        <input type="checkbox" asp-for="SetTafsilForBuyVat" />
+                                    </div>
+                                </div>
+                               
+                                <div class="col-md-4 mb-2 mt-4">
+                                    <div class="dataentry-buttons">
+                                        <a href="javascript:void(0)" class="btn btn-primary mb-2 accAjaxSubmit"> ذخیـره تنظیمات</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      
+                    </div>
+                    <div class="tab-pane fade p-2" id="navs-top-sale" role="tabpanel">
+                        <div class="inner-container bg-light">
+                            <h5>تنطیمات سیستم فروش</h5>
+                            <div class="row">
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="saleMoeinId"></label>
+                                    <select type="text" asp-for="saleMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="salePartyMoeinId"></label>
+                                    <select type="text" asp-for="salePartyMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="saleDiscountMoeinId"></label>
+                                    <select type="text" asp-for="saleDiscountMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="ReturnToSaleMoeinId"></label>
+                                    <select type="text" asp-for="ReturnToSaleMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="SaleVatMoeinId"></label>
+                                    <select type="text" asp-for="SaleVatMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-2 mt-2">
+                                    <div class="garnet-checkbox-group">
+                                        <label asp-for="SaleIsAutoGenerate"></label>
+                                        <input type="checkbox" asp-for="SaleIsAutoGenerate" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2 mt-2">
+                                    <div class="garnet-checkbox-group">
+                                        <label asp-for="SetTafsilForSaleVat">
+                                            در ثبت اتوماتیک اسناد فروش، تفصیل برای ارزش افزوده درج شود.
+                                        </label>
+                                        <input type="checkbox" asp-for="SetTafsilForSaleVat" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-2 mt-4">
+                                    <div class="dataentry-buttons">
+                                        <a href="javascript:void(0)" class="btn btn-primary mb-2 accAjaxSubmit"> ذخیـره تنظیمات</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      
+                    </div>
+                    <div class="tab-pane fade p-2" id="navs-top-warehouse" role="tabpanel">
+                        <div class="inner-container bg-light">
+                            <h5>تنطیمات سیستم انبار</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

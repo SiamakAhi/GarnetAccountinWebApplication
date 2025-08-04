@@ -1,0 +1,118 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Accounting\Data\**" />
+    <Compile Remove="Areas\AvaRasta\Data\**" />
+    <Compile Remove="Areas\Courier\Data\**" />
+    <Compile Remove="Areas\Courier\Models\Enams\**" />
+    <Compile Remove="Areas\CustomerArea\Data\**" />
+    <Compile Remove="Areas\Organization \**" />
+    <Compile Remove="Areas\Warehouse\Models\Enam\**" />
+    <Compile Remove="Components\**" />
+    <Compile Remove="Middleware\**" />
+    <Compile Remove="wwwroot\test\**" />
+    <Compile Remove="wwwroot\ticketAttach\**" />
+    <Compile Remove="wwwroot\Uploads\**" />
+    <Content Remove="Areas\Accounting\Data\**" />
+    <Content Remove="Areas\AvaRasta\Data\**" />
+    <Content Remove="Areas\Courier\Data\**" />
+    <Content Remove="Areas\Courier\Models\Enams\**" />
+    <Content Remove="Areas\CustomerArea\Data\**" />
+    <Content Remove="Areas\Organization \**" />
+    <Content Remove="Areas\Warehouse\Models\Enam\**" />
+    <Content Remove="Components\**" />
+    <Content Remove="Middleware\**" />
+    <Content Remove="wwwroot\test\**" />
+    <Content Remove="wwwroot\ticketAttach\**" />
+    <Content Remove="wwwroot\Uploads\**" />
+    <EmbeddedResource Remove="Areas\Accounting\Data\**" />
+    <EmbeddedResource Remove="Areas\AvaRasta\Data\**" />
+    <EmbeddedResource Remove="Areas\Courier\Data\**" />
+    <EmbeddedResource Remove="Areas\Courier\Models\Enams\**" />
+    <EmbeddedResource Remove="Areas\CustomerArea\Data\**" />
+    <EmbeddedResource Remove="Areas\Organization \**" />
+    <EmbeddedResource Remove="Areas\Warehouse\Models\Enam\**" />
+    <EmbeddedResource Remove="Components\**" />
+    <EmbeddedResource Remove="Middleware\**" />
+    <EmbeddedResource Remove="wwwroot\test\**" />
+    <EmbeddedResource Remove="wwwroot\ticketAttach\**" />
+    <EmbeddedResource Remove="wwwroot\Uploads\**" />
+    <None Remove="Areas\Accounting\Data\**" />
+    <None Remove="Areas\AvaRasta\Data\**" />
+    <None Remove="Areas\Courier\Data\**" />
+    <None Remove="Areas\Courier\Models\Enams\**" />
+    <None Remove="Areas\CustomerArea\Data\**" />
+    <None Remove="Areas\Organization \**" />
+    <None Remove="Areas\Warehouse\Models\Enam\**" />
+    <None Remove="Components\**" />
+    <None Remove="Middleware\**" />
+    <None Remove="wwwroot\test\**" />
+    <None Remove="wwwroot\ticketAttach\**" />
+    <None Remove="wwwroot\Uploads\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.102.0" />
+    <PackageReference Include="EFCore.BulkExtensions" Version="8.1.2" />
+    <PackageReference Include="EPPlus" Version="7.0.5" />
+    <PackageReference Include="jose-jwt" Version="4.1.0" />
+    <PackageReference Include="JWT" Version="10.1.1" />
+    <PackageReference Include="KavenegarDotNetCore" Version="1.0.7" />
+    <PackageReference Include="MD.PersianDateTime.Standard" Version="2.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.5" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.8.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="17.11.20" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
+    <PackageReference Include="Pkcs11Interop.X509Store" Version="0.4.0" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+    <PackageReference Include="RestSharp" Version="112.0.0" />
+    <PackageReference Include="Stimulsoft.Reports.Engine.NetCore" Version="2023.1.1" />
+    <PackageReference Include="Stimulsoft.Reports.Web.NetCore" Version="2023.1.1" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Folder Include="Areas\Commercial\Data\" />
+    <Folder Include="Areas\CustomerArea\Models\" />
+    <Folder Include="Areas\CustomerArea\NewFolder\" />
+    <Folder Include="Areas\DataTransfer\Data\" />
+    <Folder Include="Areas\Geolocation\Controllers\" />
+    <Folder Include="Areas\Geolocation\Data\" />
+    <Folder Include="Areas\Geolocation\Views\" />
+    <Folder Include="Areas\Organization\Controllers\" />
+    <Folder Include="Areas\Organization\Data\" />
+    <Folder Include="Areas\Organization\Dtos\" />
+    <Folder Include="Areas\Organization\Views\" />
+    <Folder Include="Areas\Projects\Dtos\" />
+    <Folder Include="Areas\Representatives\Data\" />
+    <Folder Include="Areas\Representatives\Models\" />
+    <Folder Include="Areas\Support\Data\" />
+    <Folder Include="Areas\Support\Models\" />
+    <Folder Include="Areas\Treasury\Data\" />
+    <Folder Include="wwwroot\exports\" />
+    <Folder Include="wwwroot\icons\" />
+    <Folder Include="wwwroot\Reports\acc\NewFolder\" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Content Update="Areas\Warehouse\Views\_ViewImports.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Areas\Warehouse\Views\_ViewStart.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

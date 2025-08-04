@@ -1,0 +1,53 @@
+﻿@model Wh_ProductCategoryDto
+
+<li class="treeview-item">
+    <div class="caret">
+        <div>
+            @if (Model.SubCategories.Any())
+            {
+                <i class="fas fa-chevron-right caret-icon"></i>
+            }
+            <i class="fas fa-folder folder-icon"></i>
+            <span class="categoryToggleBtn">@Model.CategoryName</span>
+        </div>
+
+        <div class="treeview-item-navbar">
+            <a href="javascript:void(0)" class="treeview-item-navbar-button" data-toggle="dropdown" aria-expanded="false">
+                <i class="bx bx-menu"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="dropdown-menu-header">
+                    @Model.CategoryName
+                </li>
+                <li>
+                    <a href="javascript:void(0)" title="ایجاد زیرگروه جدید" class="callformwhithItemid" data-itemid="@Model.CategoryId" data-url="@Url.Action("AddCategory", "ProductCategories", new { Area = "Warehouse" })">
+                        <i class="bx bx-plus"></i>
+                        ایجاد زیرگروه جدید
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" title="ویرایش" class="callformwhithItemid" data-itemid="@Model.CategoryId" data-url="@Url.Action("EditCategory", "ProductCategories", new { Area = "Warehouse" })">
+                        <i class="bx bx-edit-alt"></i>
+                        ویرایش
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" title="حذف" class="callformwhithItemid" data-itemid="@Model.CategoryId" data-url="@Url.Action("DeleteCategory", "ProductCategories", new { Area = "Warehouse" })">
+                        <i class="bx bx-x"></i>
+                        حذف
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    @if (Model.SubCategories != null && Model.SubCategories.Any())
+    {
+        <ul class="nested">
+            @foreach (var subCategory in Model.SubCategories)
+            {
+                @await Html.PartialAsync("_CategoryItem", subCategory)
+            }
+        </ul>
+    }
+</li>

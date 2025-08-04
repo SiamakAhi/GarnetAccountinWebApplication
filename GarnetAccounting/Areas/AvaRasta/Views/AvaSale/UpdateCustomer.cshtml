@@ -1,0 +1,159 @@
+﻿@model VmCustomer
+
+@{
+    ViewData["Title"] = "بروزرسانی اطلاعات مشتری";
+}
+
+<div class="card">
+    <div class="card-header"><h5 class="mb-0 text-danger">ثبت مشتری جدید</h5></div>
+    <div class="card-body">
+        <form asp-action="UpdateCustomer" asp-asp-controller="AvaSale" asp-area="AvaRasta" method="post" class="row g-3 fv-plugins-bootstrap5 fv-plugins-framework">
+            <input type="hidden" asp-for="Id" value="@Model.Id">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" asp-for="FName"></label>
+                            <input type="text" asp-for="FName" class="form-control">
+                            <span asp-validation-for="FName" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" asp-for="LName"></label>
+                            <input type="text" asp-for="LName" class="form-control">
+                            <span asp-validation-for="LName" class="text-danger"></span>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" asp-for="Title"></label>
+                            <input type="text" asp-for="Title" class="form-control" placeholder="گروه نرم افزار گارنِت">
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="switch mt15">
+                                <input type="checkbox" asp-for="Ishoghooghi" class="switch-input" checked="checked">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on"></span>
+                                    <span class="switch-off"></span>
+                                </span>
+                                <span class="switch-label">شخصیت حقوقی است؟</span>
+                            </label>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="dispHoghoghi">
+                                <label class="form-label" asp-for="RegistrationNumber"></label>
+                                <input type="text" asp-for="RegistrationNumber" class="form-control">
+                                <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" asp-for="NationalId"></label>
+                            <input type="text" asp-for="NationalId" class="form-control">
+                            <span asp-validation-for="NationalId" class="text-danger"></span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" asp-for="EconomicNumber"></label>
+                            <input type="text" asp-for="EconomicNumber" class="form-control">
+                            <span asp-validation-for="EconomicNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-6 col-md-6">
+                            <label class="form-label" asp-for="Email"></label>
+                            <input type="email" asp-for="Email" class="form-control text-start" placeholder="example@domain.com" dir="ltr">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="col-6 col-lg-3">
+                            <label class="form-label" asp-for="Mobile"> </label>
+                            <input type="text" asp-for="Mobile" class="form-control phone-number-mask text-start" placeholder="09120000000" dir="ltr">
+                            <span asp-validation-for="Mobile" class="text-danger"></span>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                            <label class="form-label" asp-for="Phone"> </label>
+                            <input type="text" asp-for="Phone" class="form-control phone-number-mask text-start" dir="ltr">
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" asp-for="Address"></label>
+                            <input type="text" asp-for="Address" class="form-control text-start" placeholder="..." dir="ltr">
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-lg-6">
+                    <div class="card shadow-none bg-transparent border border-primary">
+                        <div class="card-body">
+                            <h5 class="card-title">اطلاعات لایسنس</h5>
+                            <div class="row">
+                                <div class="col-md-3 mb-2">
+                                    <label class="form-label" asp-for="LicenseCount"></label>
+                                    <input type="number" value="1" min="1" asp-for="LicenseCount" class="form-control">
+                                    <span asp-validation-for="LicenseCount" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <label class="form-label" asp-for="InvoiceCountLimit"></label>
+                                    <input type="number" value="0" min="0" asp-for="InvoiceCountLimit" class="form-control">
+                                    <span asp-validation-for="InvoiceCountLimit" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="form-label" asp-for="RegisterDate"></label>
+                                    <input type="text" value="@DateTime.Now.mdToLongPersianDate()" disabled class="form-control">
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label asp-for="strActivationDate" class="form-label"></label>
+                                    <input asp-for="strActivationDate" type="hidden" value="@DateTime.Now.LatinToPersianForDatepicker()" class="form-control flatpickr-input" placeholder="YYYY/MM/DD" id="ActivationDate">
+                                    <span asp-validation-for="strActivationDate" class="text-danger"></span>
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <label class="switch">
+                                        <input type="checkbox" asp-for="IsActive" class="switch-input" checked="checked">
+                                        <span class="switch-toggle-slider">
+                                            <span class="switch-on"></span>
+                                            <span class="switch-off"></span>
+                                        </span>
+                                        <span class="switch-label">فعال است </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <input type="hidden" value="@User?.Identity?.Name" asp-for="UserCreator">
+
+
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-primary me-sm-3 me-1">ثبت</button>
+                <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">
+                    انصراف
+                </button>
+            </div>
+            <input type="hidden">
+        </form>
+
+    </div>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+
+        $('input[name="Ishoghooghi"]').change(function () {
+            let disElement = $(document).find('.dispHoghoghi');
+            if (this.checked) {
+                disElement.show();
+            }
+            else {
+                disElement.hide();
+            }
+        })
+
+    })
+</script>

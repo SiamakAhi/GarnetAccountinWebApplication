@@ -1,0 +1,111 @@
+﻿@model AddCustomerUserDto
+
+<link href="~/vendor/libs/choices/choices.min.css" rel="stylesheet" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/vendor/libs/choices/choices.min.js"></script>
+
+<div class="modal-dialog modal-lg modal-simple modal-edit-user">
+    <div class="modal-content p-3 p-md-5">
+        <div class="modal-body">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class=" mb-4 mt-0 mt-md-n2">
+                <h3 class="text-center m-0">ایجاد کاربر</h3>
+                <form asp-action="AddCustomerUser" asp-controller="CustomerManager" asp-area="CustomerArea" method="post" class="mt-2">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="FName"></label>
+                            <input type="text" asp-for="FName" value="@Model.FName" class="form-control">
+                            <span asp-validation-for="FName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="LName"></label>
+                            <input type="text" asp-for="LName" value="@Model.LName" class="form-control">
+                            <span asp-validation-for="LName" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="Mobile"></label>
+                            <input type="text" asp-for="Mobile" value="@Model.Mobile" class="form-control">
+                            <span asp-validation-for="Mobile" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="email"></label>
+                            <input type="email" asp-for="email" value="@Model.email" class="form-control">
+                            <span asp-validation-for="email" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="Gender"></label>
+                            <select asp-for="Gender" class="form-select" aria-label="Default select">
+                                <option value="1">آقا</option>
+                                <option value="2">خانم</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" asp-for="UserName"></label>
+                            <input type="text" asp-for="UserName" class="form-control" autocomplete="off">
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="Password"></label>
+                            <input type="password" asp-for="Password" class="form-control">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="ConfirmPassword"></label>
+                            <input type="password" asp-for="ConfirmPassword" class="form-control">
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label asp-for="SellersId" class="form-label"></label>
+                            <select asp-items="ViewBag.sellers" asp-for="SellersId" id="SellersId" class="form-select js-choice" data-style="btn-default" multiple data-icon-base="bx" data-tick-icon="bx-check text-primary" data-options='{"removeItemButton":true,"placeholder":true}'>
+                            </select>
+                        </div>
+                        <div class="col-md-12 p-4">
+                            <small class="text-light fw-semibold">دسترسی های</small>
+                            <div class="form-check mt-3">
+                                <input class="form-check-input" type="checkbox" asp-for="AllowSellerManagement">
+                                <label class="form-check-label" asp-for="AllowSellerManagement"></label>
+                            </div>
+                            <div class="form-check mt-1">
+                                <input class="form-check-input" type="checkbox" asp-for="AllowStuffManagement">
+                                <label class="form-check-label" asp-for="AllowStuffManagement"></label>
+                            </div>
+                            <div class="form-check mt-1">
+                                <input class="form-check-input" type="checkbox" asp-for="AllowBuyerManagement">
+                                <label class="form-check-label" asp-for="AllowBuyerManagement"></label>
+                            </div>
+                            <div class="form-check mt-1">
+                                <input class="form-check-input" type="checkbox" asp-for="AllowSaleManagement">
+                                <label class="form-check-label" asp-for="AllowSaleManagement"></label>
+                            </div>
+                            <div class="form-check mt-1">
+                                <input class="form-check-input" type="checkbox" asp-for="AllowUserManagement">
+                                <label class="form-check-label" asp-for="AllowUserManagement"></label>
+                            </div>
+                        </div>
+
+                        <input type="hidden" asp-for="customerId" value="@Model.customerId" />
+
+                        <div class="col-12 text-center mt-4">
+                            <button type="submit" class="btn btn-primary me-sm-3 me-1">ثبت</button>
+                            <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">
+                                انصراف
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var sellersBox = $('#SellersId');
+        new Choices(sellersBox);
+    });
+
+</script>

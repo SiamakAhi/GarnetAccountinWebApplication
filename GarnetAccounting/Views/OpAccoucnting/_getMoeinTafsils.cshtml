@@ -1,0 +1,77 @@
+﻿@model AddUpdateDocDto
+
+<div class="alert alert-primary my-1" role="alert">
+    <ul class="accountinfoBox">
+        <li>
+            <label class="text-warning mx-2">نام کامل </label>
+            <span>@(Model.AccountStatus.GroupName + " - " + Model.AccountStatus.KolName)</span>
+        </li>
+        <li>
+            <label class="text-warning mx-2">ماهیت حساب</label>
+            <span>
+                @(Model.AccountStatus.AccountNature == 1 ? "بدهکار" : (Model.AccountStatus.AccountNature == 2 ? "بستانکار" : "بدون ماهیت"))
+            </span>
+        </li>
+        <li>
+            <label class="text-warning mx-2">وضعیت حساب</label>
+            <span>
+                @(Model.AccountStatus.StatusNature == 1 ? "بدهکار" : (Model.AccountStatus.StatusNature == 2 ? "بستانکار" : "-"))
+            </span>
+        </li>
+        <li class="text-center">
+            <a href="javascript:void(0)" data-url="@Url.Action("MoeinSetting", "AccCoding", new { Area = "", id = ViewBag.MoeinId })" class="btn btn-outline-primary callform">تنظیم حساب</a>
+        </li>
+    </ul>
+</div>
+@if (ViewBag.Tafsil4 != null)
+{
+    <div class="col-md-12" id="tafsil4">
+        <label class="form-label" asp-for="Article.Tafsil4Id">تفصیلی 4</label>
+        <select asp-for="Article.Tafsil4Id" class="form-select form-select-sm select2" id="frmArticle_Tafsil4" asp-items="@ViewBag.Tafsil4" aria-label="Default select">
+            <option value="0" selected>انتخاب کنید</option>
+        </select>
+    </div>
+}
+
+@if (ViewBag.Tafsil5 != null)
+{
+    <div class="col-md-12" id="tafsil5">
+        <label asp-for="Article.Tafsil5Id" class="form-label">تفصیلی 5</label>
+        <select asp-for="Article.Tafsil5Id" class="form-select form-select-sm select2" id="frmArticle_Tafsil5" asp-items="@ViewBag.Tafsil5" aria-label="Default select">
+            <option value="0" selected>انتخاب کنید</option>
+        </select>
+    </div>
+}
+
+@if (ViewBag.Tafsil6 != null)
+{
+    <div class="col-md-12" id="tafsil6">
+        <label asp-for="Article.Tafsil6Id" class="form-label">تفصیلی 6</label>
+        <select asp-for="Article.Tafsil6Id" class="form-select form-select-sm select2" id="frmArticle_Tafsil6" asp-items="@ViewBag.Tafsil6" aria-label="Default select">
+            <option value="0" selected>انتخاب کنید</option>
+        </select>
+    </div>
+}
+
+@if (ViewBag.Tafsil7 != null)
+{
+    <div class="col-md-12" id="tafsil7">
+        <label asp-for="Article.Tafsil7Id" class="form-label">تفصیلی 7</label>
+        <select asp-for="Article.Tafsil7Id" class="form-select form-select-sm select2" id="frmArticle_Tafsil7" asp-items="@ViewBag.Tafsil7" aria-label="Default select">
+            <option value="0" selected>انتخاب کنید</option>
+        </select>
+    </div>
+}
+
+@if (ViewBag.Tafsil8 != null)
+{
+    <div class="col-md-12" id="tafsil8">
+        <label asp-for="Article.Tafsil8Id" class="form-label">تفصیلی 8</label>
+        <select asp-for="Article.Tafsil8Id" class="form-select form-select-sm select2" id="frmArticle_Tafsil8" asp-items="@ViewBag.Tafsil8" aria-label="Default select">
+            <option value="null" selected>انتخاب کنید</option>
+        </select>
+    </div>
+}
+
+<script src="~/js/forms-selects.js" defer></script>
+

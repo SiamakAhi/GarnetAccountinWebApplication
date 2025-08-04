@@ -1,0 +1,317 @@
+﻿
+@model TaxpayerInfoDto
+
+@{
+    ViewData["Title"] = "اطلاعات مودی";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-3">
+    <div class="card border-right-warning">
+        <div class="card-header">
+            <h2 class="text-center mb-3 header-title text-info">اطلاعات مودی</h2>
+            <h4 class="text-center">@ViewBag.Name</h4>
+        </div>
+        <div class="card-body">
+            <!-- Form for updating data -->
+            <form asp-action="UpdateTaxpayerInfo" asp-controller="Seller" method="post" class="needs-validation" novalidate>
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+                <input type="hidden" asp-for="SellerId" value="@Model.SellerId" />
+
+                <!-- Accordion -->
+                <div class="accordion" id="taxpayerAccordion">
+
+                    <!-- Section 1: اطلاعات پرونده -->
+                    <div class="accordion-item  mb-2">
+                        <h2 class="accordion-header bg-light" id="headingOne">
+                            <button class="accordion-button collapsed bg-light " type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                اطلاعات پرونده
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#taxpayerAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label asp-for="NationalCode" class="form-label">شناسه/کد ملی</label>
+                                        <input asp-for="NationalCode" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="TaxId" class="form-label">شناسه مالیاتی</label>
+                                        <input asp-for="TaxId" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="PostalCode" class="form-label">کد پستی گواهی شده</label>
+                                        <input asp-for="PostalCode" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="RegistrationNumber" class="form-label">شماره ثبت</label>
+                                        <input asp-for="RegistrationNumber" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="RegisteredAddress" class="form-label">آدرس ثبتی</label>
+                                        <input asp-for="RegisteredAddress" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="CompanySubject" class="form-label">موضوع شرکت</label>
+                                        <input asp-for="CompanySubject" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="CompanyActivity" class="form-label">فعالیت شرکت</label>
+                                        <input asp-for="CompanyActivity" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="CompanyType" class="form-label">نوع شرکت</label>
+                                        <input asp-for="CompanyType" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="VATStatus" class="form-label">وضعیت ارزش افزوده</label>
+                                        <input asp-for="VATStatus" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="DeclarationType" class="form-label">نوع اظهارنامه</label>
+                                        <input asp-for="DeclarationType" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Section 3: سامانه‌ها و رمزعبور -->
+                    <div class="accordion-item mb-2">
+                        <h2 class="accordion-header bg-light" id="headingThree">
+                            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                سامانه‌ها و رمزعبور
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#taxpayerAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label asp-for="AccountingSoftwareName" class="form-label">نام نرم‌افزار حسابداری</label>
+                                        <input asp-for="AccountingSoftwareName" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="AccountingSoftwarePassword" class="form-label">رمز عبور نرم‌افزار حسابداری</label>
+                                        <input  asp-for="AccountingSoftwarePassword" class="form-control" type="text" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="InterfaceSoftwareName" class="form-label">نام نرم‌افزار واسط سامانه مودیان</label>
+                                        <input asp-for="InterfaceSoftwareName" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="InterfaceSoftwarePassword" class="form-label">رمز عبور نرم‌افزار واسط</label>
+                                        <input asp-for="InterfaceSoftwarePassword" class="form-control" type="text" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="AssetPanelPassword" class="form-label">کلمه عبور پنل دارایی</label>
+                                        <input asp-for="AssetPanelPassword" class="form-control" type="text" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: اطلاعات کادر مالی شرکت -->
+                    <div class="accordion-item mb-2">
+                        <h2 class="accordion-header bg-light" id="headingFour">
+                            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                اطلاعات کادر مالی شرکت
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#taxpayerAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label asp-for="CFOName" class="form-label">نام مدیرمالی شرکت</label>
+                                        <input asp-for="CFOName" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="CFOMobile" class="form-label">تلفن همراه مدیرمالی</label>
+                                        <input asp-for="CFOMobile" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="FinancialAdvisorName" class="form-label">نام مشاور مالی</label>
+                                        <input asp-for="FinancialAdvisorName" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="FinancialAdvisorMobile" class="form-label">شماره همراه مشاور</label>
+                                        <input asp-for="FinancialAdvisorMobile" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="AccountantName" class="form-label">نام حسابدار</label>
+                                        <input asp-for="AccountantName" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="AccountantMobile" class="form-label">شماره همراه حسابدار</label>
+                                        <input asp-for="AccountantMobile" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="AuditFirmName" class="form-label">نام موسسه حسابرسی</label>
+                                        <input asp-for="AuditFirmName" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 5: افراد مسئول پرونده در اداره مالیات -->
+                    <div class="accordion-item mb-2">
+                        <h2 class="accordion-header bg-light" id="headingFive">
+                            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                افراد مسئول پرونده در اداره مالیات
+                            </button>
+                        </h2>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#taxpayerAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label asp-for="TaxUnitCode" class="form-label">کد واحد مالیاتی</label>
+                                        <input asp-for="TaxUnitCode" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="TaxOfficeAddress" class="form-label">آدرس حوزه مالیاتی</label>
+                                        <input asp-for="TaxOfficeAddress" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="TaxGroupHead" class="form-label">رییس گروه مالیاتی</label>
+                                        <input asp-for="TaxGroupHead" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="TaxAuditor" class="form-label">ممیز مالیاتی</label>
+                                        <input asp-for="TaxAuditor" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="SeniorTaxAuditor" class="form-label">سرممیز مالیاتی</label>
+                                        <input asp-for="SeniorTaxAuditor" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="ChiefTaxAuditor" class="form-label">ممیز کل مالیاتی</label>
+                                        <input asp-for="ChiefTaxAuditor" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="PreRegistrationTrackingCode" class="form-label">کد رهگیری پیش ثبت نام</label>
+                                        <input asp-for="PreRegistrationTrackingCode" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="TaxFileNumber" class="form-label">شماره پرونده مالیاتی</label>
+                                        <input asp-for="TaxFileNumber" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="UniqueTaxMemoryId" class="form-label">شناسه یکتا حافظه مالیاتی</label>
+                                        <input asp-for="UniqueTaxMemoryId" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: اعضای هیئت مدیره -->
+                    <div class="accordion-item mb-2">
+                        <h2 class="accordion-header bg-light" id="headingTwo">
+                            <button class="accordion-button collapsed bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                اعضای هیئت مدیره
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#taxpayerAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <!-- مدیرعامل -->
+                                    <div class="col-md-12">
+                                        <h5 class="mb-3">مدیرعامل</h5>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="CEOName" class="form-label">نام مدیرعامل</label>
+                                        <input asp-for="CEOName" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="CEONationalCode" class="form-label">کد ملی مدیرعامل</label>
+                                        <input asp-for="CEONationalCode" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="CEOPhone" class="form-label">تلفن مدیرعامل</label>
+                                        <input asp-for="CEOPhone" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="CEOAddress" class="form-label">آدرس مدیرعامل</label>
+                                        <input asp-for="CEOAddress" class="form-control" />
+                                    </div>
+
+                                    <!-- عضو هیئت مدیره 1 -->
+                                    <div class="col-md-12">
+                                        <h5 class="mt-4 mb-3">عضو هیئت مدیره 1</h5>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="BoardMember1Name" class="form-label">نام عضو هیئت مدیره 1</label>
+                                        <input asp-for="BoardMember1Name" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="BoardMember1NationalCode" class="form-label">کد ملی عضو هیئت مدیره 1</label>
+                                        <input asp-for="BoardMember1NationalCode" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="BoardMember1Phone" class="form-label">تلفن عضو هیئت مدیره 1</label>
+                                        <input asp-for="BoardMember1Phone" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="BoardMember1Address" class="form-label">آدرس عضو هیئت مدیره 1</label>
+                                        <input asp-for="BoardMember1Address" class="form-control" />
+                                    </div>
+
+                                    <!-- عضو هیئت مدیره 2 -->
+                                    <div class="col-md-12">
+                                        <h5 class="mt-4 mb-3">عضو هیئت مدیره 2</h5>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="BoardMember2Name" class="form-label">نام عضو هیئت مدیره 2</label>
+                                        <input asp-for="BoardMember2Name" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="BoardMember2NationalCode" class="form-label">کد ملی عضو هیئت مدیره 2</label>
+                                        <input asp-for="BoardMember2NationalCode" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="BoardMember2Phone" class="form-label">تلفن عضو هیئت مدیره 2</label>
+                                        <input asp-for="BoardMember2Phone" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="BoardMember2Address" class="form-label">آدرس عضو هیئت مدیره 2</label>
+                                        <input asp-for="BoardMember2Address" class="form-control" />
+                                    </div>
+
+                                    <!-- عضو هیئت مدیره 3 -->
+                                    <div class="col-md-12">
+                                        <h5 class="mt-4 mb-3">عضو هیئت مدیره 3</h5>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="BoardMember3Name" class="form-label">نام عضو هیئت مدیره 3</label>
+                                        <input asp-for="BoardMember3Name" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="BoardMember3NationalCode" class="form-label">کد ملی عضو هیئت مدیره 3</label>
+                                        <input asp-for="BoardMember3NationalCode" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="BoardMember3Phone" class="form-label">تلفن عضو هیئت مدیره 3</label>
+                                        <input asp-for="BoardMember3Phone" class="form-control" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="BoardMember3Address" class="form-label">آدرس عضو هیئت مدیره 3</label>
+                                        <input asp-for="BoardMember3Address" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-grid mt-4 text-center">
+                    <button type="button" class="btn btn-primary accAjaxSubmit">ذخیره تغییرات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

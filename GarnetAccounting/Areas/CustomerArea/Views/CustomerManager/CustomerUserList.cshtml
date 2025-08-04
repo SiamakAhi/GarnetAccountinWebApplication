@@ -1,0 +1,81 @@
+﻿@model List<VmCustomerUsers>
+@{
+    ViewData["Title"] = "نرم افزار واسط سامانه مودیان گارنِت";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="alert alert-primary alert-dismissible d-flex align-items-center text-center mb-3" role="alert">
+    <h4>
+        <i class="bx bx-xs bx-command me-2 text-info"></i>
+        مدیریت کاربران
+    </h4>
+    <a class="btn btn-label-primary bymoda ms-4" asp-action="AddCustomerUserAccount" asp-controller="CustomerManager" asp-area="CustomerArea">
+        <i class="bx bx-user-plus text-info"></i>
+        افزودن کاربر جدید
+    </a>
+   
+</div>
+
+
+<div class="row pd-3">
+    @if (Model.Count() > 0)
+    {
+        foreach (var x in Model)
+        {
+            var userAvatar = string.IsNullOrEmpty(x.Image) ? (x.Gender == 1 ? "1.png" : "2.png") : x.Image;
+            <div class="col-lg-3 col-md-4">
+                <!-- User Card -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="user-avatar-section">
+                            <div class="d-flex align-items-center flex-column">
+                                <img class="img-fluid rounded my-4" src="../../img/avatars/@userAvatar" height="110" width="110" alt="@x.FullName">
+                                <div class="user-info text-center">
+                                    <h5 class="mb-2">@x.FullName</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="pb-2 border-bottom mb-4  text-info">جزئیات</h5>
+                        <div class="info-container">
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <span class="me-2">نام کاربری:</span>
+                                    <span>@x.UserName</span>
+                                </li>
+                                <li class="mb-3">
+                                    <span class="me-2">ایمیل:</span>
+                                    <span>@x.email</span>
+                                </li>
+                                <li class="mb-3">
+                                    <span class="me-2">وضعیت:</span>
+                                    <span class="badge bg-label-success">@(x.IsActive == true ? "فعال" : "معلق")</span>
+                                </li>
+                                <li class="mb-3">
+                                    <span class="me-2">نقش (ها):</span>
+                                    @foreach (var r in x.UserRolesArry)
+                                    {
+                                        <span class="badge bg-label-info">@r </span>
+                                    }
+                                   
+                                </li>
+                                <li class="mb-3">
+                                    <span class="me-2">تماس:</span>
+                                    <span class="d-inline-block" dir="ltr">@x.phoneNumber</span>
+                                </li>
+                            </ul>
+                            <div class="d-flex justify-content-center pt-3">
+                                <a href="javascript:;" class="btn btn-primary me-3 callform" data-url="@Url.Action("GetUserRole","usermanager",new{Area="",userName=x.UserName})" data-bs-toggle="modal">مدیریت نقش ها</a>
+                                <a href="javascript:;" class="btn btn-label-danger suspend-user">تعلیق</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /User Card -->
+            </div>
+        }
+    }
+</div>
+
+
+
+

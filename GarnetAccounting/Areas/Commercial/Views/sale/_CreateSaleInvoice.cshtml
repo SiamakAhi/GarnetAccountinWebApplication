@@ -1,0 +1,54 @@
+﻿ @model InvoiceHeaderDto
+
+<div class="modal-dialog dataentry-modal">
+    <div class="modal-content dataentry">
+        <div class="dataentry-title">
+            <span class="">ثبت فاکتور فروش</span>
+
+        </div>
+        <form asp-action="CreateSaleInvoice" asp-controller="sale" asp-area="Commercial" method="post">
+            <input type="hidden" asp-for="Id" value="@Guid.NewGuid()" />
+            <input type="hidden" asp-for="InvoiceType" value="2" />
+            <div class="row">
+                <div class="col-md-9 dataentry-controls">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" asp-for="strInvoiceDate"></label>
+                            <input type="text" asp-for="strInvoiceDate" class="form-control flatpickr-input gonext" value="@DateTime.Now.LatinToPersianForDatepicker()" placeholder="YYYY/MM/DD">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" asp-for="InvoiceNumber"></label>
+                            <input type="text" asp-for="InvoiceNumber" class="form-control firstSelect gonext" value="@ViewBag.InvoiceNumber" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" asp-for="PartyId">طرف حساب </label>
+                            <select type="text" asp-for="PartyId" class="form-select select2 gonext" asp-items="@ViewBag.Buyers">
+                                <option value="null">انتخاب مشتری ..</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label" asp-for="SettlementTypeId">نوع تسویه حساب </label>
+                            <select type="text" asp-for="SettlementTypeId" class="form-select gonext" asp-items="@ViewBag.SettelmentType">
+                                
+                            </select>
+                        </div>
+                        <div class="col-md-9 mb-3 zi-0">
+                            <label class="form-label" asp-for="Remarks"></label>
+                            <input type="text" asp-for="Remarks" class="form-control firstSelect gonext" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 dataentry-buttons-container">
+                    <div class="dataentry-buttons">
+                        <a href="javascript:void(0)" class="btn btn-primary accAjaxSubmit"> ایجــاد</a>
+                        <button type="reset" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">
+                            انصراف
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<script src="~/js/forms-selects.js"></script>

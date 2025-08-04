@@ -1,0 +1,118 @@
+﻿@model VmBilloflading
+@{
+    string text_class = "text-info";
+    string borderright_class = "border-right-info";
+    string bg_class = "bg-info";
+    string payType = Model.Billodlading.PaymentMethod;
+    string borderColor_class = "border-color-info";
+    if (payType == "نقدی")
+    {
+        text_class = "text-success";
+        borderright_class = "border-right-success";
+        bg_class = "bg-success";
+        borderColor_class = "border-color-success";
+    }
+
+    else if (payType == "پسکرایه")
+    {
+        text_class = "text-primary";
+        borderright_class = "border-right-primary";
+        bg_class = "bg-primary";
+        borderColor_class = "border-color-primary";
+    }
+   
+}
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header billoflading @bg_class ">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="billoflading-title">
+                <img src="~/img/Logos/11.png" />
+                <h3>بارنامه</h3>
+            </div>
+            <div class="billoflading-header">
+                <h3 class="text-light">@Model.Billodlading.BillOfLadingNumber</h3>
+                <div class="billoflading-header-sec2">
+                    <div class="billoflading-header-sec2-item">
+                        <span>مبدأ </span>
+                        <h5>@Model.Billodlading.FromOrigin</h5>
+                     </div>
+
+                    <div class="billoflading-header-sec2-item">
+                        
+                        <span>@Model.Billodlading.AgencyName </span>
+                    </div>
+
+                    <div class="billoflading-header-sec2-item">
+                        <span>مقصد </span>
+                        <h5>@Model.Billodlading.ToDestination</h5>
+                     </div>
+                </div>
+                <h6 class="ladingDate">@Model.Billodlading.MiladiDate.Value.mdToLongPersianDate()</h6>
+            </div>
+        </div>
+        <div class="modal-body">
+            <section class="billoflading sec2">
+                <ul class="@borderright_class">
+                    <li class="li-header"><h5>فرستنـده</h5></li>
+                   <li><h6>@Model.Billodlading.SenderName</h6></li>
+                   <li><label class="text-secondary">تلفن</label>@Model.Billodlading.SenderPhone</li>
+                    <li><label class="text-secondary">آدرس</label>@Model.Billodlading.SenderAddress</li>
+                    <li><label class="text-secondary">شناسه ملی</label>@Model.Billodlading.SenderNationalCode</li>
+                </ul>
+                <ul class="@borderright_class">
+                    <li class="li-header"><h5>گیرنـده</h5></li>
+                    <li><h6>@Model.Billodlading.RecipientName</h6></li>
+                    <li><label class="text-secondary">تلفن</label>@Model.Billodlading.RecipientPhone</li>
+                    <li><label class="text-secondary">آدرس</label>@Model.Billodlading.RecipientAddress</li>
+                </ul>
+             </section>
+
+            <section class="billoflading sec2">
+                <ul class="@borderright_class">
+                    <li class="li-header"><h5>مشخصات بار</h5></li>
+                    <li><label class="text-secondary">محتویات</label>@Model.Billodlading.Contents</li>
+                    <li><label class="text-secondary">وزن احتسابی</label>@Model.Billodlading.ChargeableWeight</li>
+                    <li><label class="text-secondary">وزن واقعی</label>@Model.Billodlading.ActualCargoWeight</li>
+                    <li><label class="text-secondary">تعداد</label>@Model.Billodlading.GoodsCount</li>
+                </ul>
+                <ul class="@borderright_class">
+                    <li><label class="text-secondary">وزن واقعی</label>@Model.Billodlading.ActualCargoWeight</li>
+                    <li><label class="text-secondary">تعداد</label>@Model.Billodlading.GoodsCount</li>
+                </ul>
+            </section>
+           <section class="billoflading cost ">
+                <ul>
+                    <li class="li-header"><label class="text-secondary">نحوه پرداخت</label><h5>صورتحساب</h5></li>
+                    <li><label class="text-secondary">هزینه حمل بار</label>@Model.Billodlading.CargoFare.ToPrice()</li>
+                    <li><label class="text-secondary">هزینه تمبر و بارنامه</label>@Model.Billodlading.StampFee.ToPrice()</li>
+                    <li><label class="text-secondary">هزینه بسته بندی</label>@Model.Billodlading.PackagingFee.ToPrice()</li>
+                    <li><label class="text-secondary">هزینه بیمه</label>@Model.Billodlading.InsuranceFee.ToPrice()</li>
+                </ul>
+                <ul>
+                    <li class="li-header @text_class"><h5>@Model.Billodlading.PaymentMethod</h5></li>
+                    <li><label class="text-secondary">هزینه خدمات مبدأ</label>@((Model.Billodlading.CollectionOrSeparationFee+Model.Billodlading.OtherOriginFees).ToPrice())</li>
+                    <li><label class="text-secondary">هزینه خدمات مقصد</label>@((Model.Billodlading.DistributionCostDescription + Model.Billodlading.DestinationMiscellaneousFee).ToPrice())</li>
+                    <li><label class="text-secondary">مالیات بر ارزش افزوده</label>@Model.Billodlading.AddedValue</li>
+                    <li class="li-total"><label class="text-secondary">جمع کل</label><h6 class="@text_class">@Model.Billodlading.TotalBillOfLadingAmount.ToPrice()</h6></li>
+                </ul>
+           </section>
+
+            <div class="c2">
+                <ul class="garnet__list-group-item_btnList">
+                    <li><a href="#" class="btn btn-sm btn-light">اعلام مشکل در بارنامه </a></li>
+                    <li><a href="#" class="btn btn-sm btn-light">واگذاری به پیک</a></li>
+                    <li><a href="#" class="btn btn-sm btn-light">ثبت هزینه بارنامه</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

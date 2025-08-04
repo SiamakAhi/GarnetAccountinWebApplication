@@ -1,0 +1,158 @@
+﻿@model VmCSR
+@{
+    ViewData["Title"] = "نرم افزار واسط سامانه مودیان گارنت";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    string privateKeyFileName = $" {Model.Haghighi.CommonName}_PrivateKey.txt";
+    string publickKeyFileName = $" {Model.Haghighi.CommonName}_Public.txt";
+    string CsrKeyFileName = $" {Model.Haghighi.CommonName}_Csr.txt";
+}
+
+<div class="row">
+    <div class="card mb-4">
+        <h5 class="card-header heading-color">دریافت کد CSR، کلیــد عمومی و کلید خصـوصی</h5>
+
+        <div class="row">
+
+            <div class="col-md-5">
+                <div class="card-body">
+                    <div class="row mt-4">
+                        <div class="col-md mb-md-0 mb-2">
+                            <a class="selectbox active" asp-action="GetCSRHagh" asp-controller="csr" asp-area="">
+                                <i class="bx bx-user"></i>
+                                <span class="custom-option-title my-2">شخص حقیقی مستقل</span>
+                            </a>
+                        </div>
+                        <div class="col-md mb-md-0 mb-2">
+                            <a class="selectbox" asp-action="GetCSRCompany" asp-controller="csr" asp-area="">
+                                <i class="bx bx-buildings"></i>
+                                <span class="custom-option-title my-2">حقوقی غیر وابسته به دولت</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                @*  <div class="card shadow-none bg-transparent border border-primary mb-3">
+                <div class="card-body">
+                <h5>راهنما</h5>
+                <p class="card-text">- نام عمومی شرکت یا سازمان باید به انگلیسی و بدون فاصله نوشته شود.</p>
+                <p class="card-text">- برای سازمان ها و شرکت ها فیلد نام شرکت باید دقیقا با نامی که در اساس نامه شرکت ذکر شده مطابقت داشته باشد</p>
+                <p class="card-text">- پس از تولید کلیدها، هر سه را دانلود کرده و در کنار هم نگهداری کنید</p>
+                </div>
+                </div>*@
+            </div>
+
+            <div class="col-md-7">
+                <div id="csrFormPlace" class="card-body">
+                    <form asp-action="GetCSRHagh" asp-controller="csr" asp-area="" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Haghighi.GivenName" class="form-label"></label>
+                                <input asp-for="Haghighi.GivenName" type="text" class="form-control text-start" placeholder="">
+                                <span asp-validation-for="Haghighi.GivenName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Haghighi.Surname" class="form-label"></label>
+                                <input asp-for="Haghighi.Surname" type="text" class="form-control text-start" placeholder="">
+                                <span asp-validation-for="Haghighi.Surname" class="text-danger"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="Haghighi.CommonName" class="form-label"></label>
+                                <input asp-for="Haghighi.CommonName" type="text" class="form-control text-start" placeholder="">
+                                <span asp-validation-for="Haghighi.CommonName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Haghighi.SerialNumber" class="form-label"></label>
+                                <input asp-for="Haghighi.SerialNumber" type="text" class="form-control text-start" placeholder="">
+                                <span asp-validation-for="Haghighi.SerialNumber" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Haghighi.Email" class="form-label"></label>
+                                <input asp-for="Haghighi.Email" type="text" class="form-control text-start" placeholder="">
+                                <span asp-validation-for="Haghighi.Email" class="text-danger"></span>
+                            </div>
+                            @*  <div class="col-md-6">
+                            <label asp-for="State" class="form-label"></label>
+                            <input asp-for="State" type="text" class="form-control text-start" placeholder="">
+                            <span asp-validation-for="State" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                            <label asp-for="Locality" class="form-label"></label>
+                            <input asp-for="Locality" type="text" class="form-control text-start" placeholder="">
+                            <span asp-validation-for="Locality" class="text-danger"></span>
+                            </div>*@
+
+                            <div class="row">
+                                <div class="pt-4 text-center">
+                                    <button type="submit" class="btn btn-primary me-sm-3 me-1">دریافت کلیدهای عمومی و خصوصی و CSR</button>
+                                    <button type="reset" class="btn btn-label-secondary">انصراف</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@if (Model?.CsrResult != null)
+{
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="DownloadText" asp-controller="csr" asp-area="">
+                <h5>کلید عمـومی</h5>
+                <input type="hidden" name="fileName" value="PublicKey">
+                <textarea name="keytext" rows="10" class="form-control">
+                    @Model.CsrResult.GeneralKey
+                                            </textarea>
+                <div class="d-grid mt-2">
+                    <button type="submit" class="btn btn-primary downloadbyform" data-target="@publickKeyFileName">دانلود کلید عمـومی</button>
+                </div>
+            </form>
+
+        </div>
+        <div class="col-md-4">
+            <form asp-action="DownloadText" asp-controller="csr" asp-area="">
+                <h5>کد CSR</h5>
+                <input type="hidden" name="fileName" value="CSRCod">
+                <textarea name="keytext" rows="10" class="form-control">
+                    @Model.CsrResult.CSRCod
+                                                </textarea>
+                <div class="d-grid mt-2">
+                    <button type="submit" class="btn btn-primary downloadbyform" data-target="@CsrKeyFileName">دانلود کد CSR</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <form asp-action="DownloadText" asp-controller="csr" asp-area="">
+                <h5>کلید خصــوصی</h5>
+                <input type="hidden" name="fileName" value="PrivateKey">
+                <textarea name="keytext" rows="10" class="form-control">
+                    @Model.CsrResult.PrivateKey
+                                                    </textarea>
+                <div class="d-grid mt-2">
+                    <button type="submit" class="btn btn-primary downloadbyform" data-target="@privateKeyFileName">دانلود کلید خصــوصی</button>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+
+<script src="~/lib/jquery/dist/jquery.min.js" defer></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#csrcom').click(function () {
+
+            let ActionUrl = "@Url.Action("GetCSRCompany","csr",new{Area=""})";
+            window.location.href = ActionUrl;
+        })
+
+    })
+</script>

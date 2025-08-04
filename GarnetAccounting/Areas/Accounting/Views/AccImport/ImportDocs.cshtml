@@ -1,0 +1,105 @@
+﻿@model List<ImportDocDto>
+@{
+    ViewData["Title"] = "بارگذاری گروهی اسناد";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string alert = ViewBag.msg;
+}
+
+
+<div class="card">
+
+    <h5 class="card-header heading-color">
+        ورود گروهی اسناد حسابداری
+    </h5>
+    <div class="card-body">
+        <div class="alert alert-primary mb-3" role="alert">
+            کاربر گرامی! جهت ثبت اسناد حسابداری به صورت گروهی از فایل اکسل، می بایست ابتدا اطلاعات اسناد مالی خود را در قالب فایل نمونه و مطابق با دستورالعمل آماده کنید. جهت دریافت فایل نمونه
+            <a href="~/sticFiles/Garnet_SampleInvoices.xlsx"><strong class="text-warning">اینجــا</strong></a>
+            کلیک کنید.
+        </div>
+
+        <form asp-action="ImportDocs" asp-controller="AccImport" asp-area="Accounting" method="post" enctype="multipart/form-data">
+
+            <div class="row mt-1">
+                <div class="col-12c mb-4">
+                    <label class="form-label">انتخاب فایل اکسل </label>
+                    <input type="file" class="form-control" name="file" accept=".xls, .xlsx" placeholder="انتخاب اکسل حاوی اطلاعات اسناد حسابداری" />
+                </div>
+                <div class="mt-2">
+                    <input type="submit" class="btn btn-primary mb-2" value="بارگزاری اطلاعات" />
+                    @*<a class="btn btn-warning mb-2" asp-action="" asp-controller="Sale" asp-area="Sale">بازگشت به مدیریت صورتحساب ها</a>*@
+                </div>
+            </div>
+        </form>
+
+        <div>
+
+            @if(Model.Count > 0)
+            {
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ردیف</th>
+                                <th>ردیف سند</th>
+                                <th>شماره سند قدیم</th>
+                                <th>شماره سند جدید</th>
+                                <th>تاریخ شمسی</th>
+                                <th>تاریخ میلادی</th>
+                                <th>بد</th>
+                                <th>بس</th>
+                                <th>کد کل</th>
+                                <th>نام کل</th> 
+                                <th>کد معین</th>
+                                <th>نام معین</th>
+                                <th>کد تفصیلی</th>
+                                <th>نام تفصیلی</th>
+                                <th>تفصیلی 5</th>
+                                <th>تفصیلی 6</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            @if (Model.Count() > 0)
+                            {
+                                int row = 1;
+                                foreach (var x in Model)
+                                {
+                                    <tr>
+                                       <td>@row</td> 
+                                       <td>@x.RowNumber</td>
+                                        <td>@x.OldDocnumber</td>
+                                        <td>@x.DocNumber</td>
+                                        <td>@x.PersianDate</td> 
+                                        <td>@x.DocDate</td> 
+                                       <td>@x.Bed</td>
+                                        <td>@x.Bes</td>
+                                        <td>@x.KolCode</td>
+                                        <td>@x.KolName</td>
+                                        <td>@x.MoeinCod</td>
+                                        <td>@x.MoeinName</td>
+                                        <td>@x.TafsilCode</td>
+                                        <td>@x.TafsilName</td>
+                                        <td>@x.TafsilName5</td>
+                                        <td>@x.TafsilName6</td>
+                                    </tr>
+                                    row++;
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="8" class="text-center"> داده ای یافت نشد</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+

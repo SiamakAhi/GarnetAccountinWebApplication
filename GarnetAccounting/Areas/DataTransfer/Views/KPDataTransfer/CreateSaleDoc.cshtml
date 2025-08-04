@@ -1,0 +1,61 @@
+﻿@model List<ImportSaleDocDto>
+@{
+    ViewData["Title"] = "CreateSaleDoc";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ردیف</th>
+                        <th>تاریخ</th>
+                        <th>حساب</th>
+                        <th>شرح</th>
+                        <th>ت 4</th>
+                        <th>ت 5</th>
+                        <th>ت 6</th>
+                        <th>بدهکار</th>
+                        <th>بستانکار</th>
+                        <th>بارنامه</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var x in Model)
+                    {
+                        <tr>
+                            <td>@x.RowNumber</td>
+                            <td>@x.DocDate.LatinToPersian()</td>
+                            <td>@x.MoeinCod</td>
+                            <td>@x.Description</td>
+                            <td>@x.Tafsil4Name</td>
+                            <td>@x.Tafsil5Name</td>
+                            <td>@x.Tafsil6Name</td>
+                            <td>@x.Bed</td>
+                            <td>@x.Bes</td>
+                            <td>@x.BillOfLadingNumber</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @if (Model.Count > 0)
+            {
+                <h5 class="mt-2">
+                    <strong class="mx-2">بدهکار</strong>
+                    <span>@Model.Sum(n=>n.Bed)</span>
+                </h5>
+                <h5 class="mt-2">
+                    <strong class="mx-2">بستانکار</strong>
+                    <span>@Model.Sum(n=>n.Bes)</span>
+                </h5>
+                <h5 class="mt-2">
+                    <strong class="mx-2">مانده </strong>
+                    <span>@(Model.Sum(n => n.Bed) - Model.Sum(n => n.Bes))</span>
+                </h5>
+            }
+        </div>
+
+    </div>
+</div>

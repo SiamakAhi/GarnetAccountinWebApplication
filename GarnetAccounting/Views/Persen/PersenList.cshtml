@@ -1,0 +1,126 @@
+﻿ @model List<PersonDto>
+@{
+    ViewData["Title"] = "مدیریت مالی گارنت - مدیریت اشخاص";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header-search">
+        <h5 class="card-header heading-color">
+            مدیریت اشخاص
+        </h5>
+        <div class="btn-toolbar demo-inline-spacing" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group" role="group" aria-label="First group">
+                <a href="javascript:void(0)" data-url="@Url.Action("AddPerson","Persen", new{Area=""})" class="btn btn-sm btn-primary callform">
+                    <i class="tf-icons bx bx-plus"></i>
+                    جــدید
+                </a>  
+                <a href="javascript:void(0)" data-url="@Url.Action("CreateAllPersenTafsil","Persen", new{Area=""})" class="btn btn-sm btn-warning ajaxAction">
+                    <i class="tf-icons bx bx-plus"></i>
+                    ایجاد تفصیل برای همه اشخاص
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body card-table">
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover table-striped dt-column-search dataTable" id="tblPerson">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-center">ردیف</th>
+                        @if (User.IsInRole("Manager"))
+                        {
+                            <th class="text-center">اطلاعات مودی</th>
+                        }
+                        <th class="text-center">نوع</th>
+                        <th class="text-center">نام</th>
+                        <th class="text-center">شماره / شناسه ملی</th>
+                        <th class="text-center">کد اقتصادی</th>
+                        <th class="text-center">شماره تماس</th>
+                        <th class="text-center">حساب تفصیلی</th>
+                        <th class="text-center">نشانی</th>
+                        <th class="text-center">رابطین</th>
+                        <th class="text-center"></th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.Count() > 0)
+                    {
+                        int row = 1;
+                        foreach (var x in Model)
+                        {
+                            <tr>
+                                <td class="text-center">@row</td>
+                                @if (User.IsInRole("Manager"))
+                                {
+                                    <td class="text-center">
+                                        <a class="btn btn-primary btn-sm" asp-route-id="@x.Id" asp-route-name="@x.Name" asp-action="GetTaxpayerInfo" asp-controller="Seller" asp-area="" >
+                                            اطلاعات امور مالیاتی
+                                        </a>
+                                    </td>
+                                }
+                                <td class="text-center">@(x.LegalStatus == 2 ? "حقوقی" : "حقیقی")</td>
+                                <td>@x.Name</td>
+                                <td>@x.NationalId</td>
+                                <td>@x.EconomicCode</td>
+                                <td>@x.MobilePhone</td>
+                               
+                                <td>
+                                    @if (x.TafsilId == null || x.TafsilId == 0)
+                                    {
+                                        <a href="#" class="btn btn-sm btn-outline-secondary callform" data-url="@Url.Action("SetTafsil","Persen",new {Area="",name=x.Name, id=x.Id})">انتخاب حساب تفصیلی</a>
+                                    }
+                                    else
+                                    {
+                                        @x.TafsilCode
+                                        <a href="#" class="mx-1 callform" data-url="@Url.Action("RemovePersonTafsil","Persen",new {Area="", id=x.Id})"><i class="bx bx-x text-danger"></i>  </a>
+                                    }
+                                </td>
+                                <td>@x.Address</td>
+                                <td class="text-center">
+                                    <a href="javascript:void(0)" data-url="@Url.Action("Representatives","Persen",new{Area="",id=x.Id})" class="btn btn-sm btn-warning callform">رابطین</a>
+                                    </td>
+                                <td class="row-btns text-center">
+                                    <a class="callform" href="javascript:void(0)" data-url="@Url.Action("UpdatePerson","Persen",new{Area="",id=x.Id})"> <i class="bx bx-edit-alt text-info" title="ویرایش"></i></a>
+                                    <a href="javascript:void(0)" class="removeById" data-url="@Url.Action("DelPerson","Persen",new{Area=""})" data-target="@x.Id"><i class="bx bx-trash-alt text-warning" title=""></i></a>
+                                </td>
+                            </tr>
+
+                            row++;
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (Model.Count == 0)
+            {
+                <div class="alert alert-primary my-3 text-center" role="alert">
+                    شخصی در سیستم تعریف نشده است. برای تعریف شخص از دکمه <strong class="text-warning p-1"> جدید</strong> استفاده نمایید.
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).find('#tblPerson').DataTable();
+</script>
+

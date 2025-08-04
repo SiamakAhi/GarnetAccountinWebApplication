@@ -1,0 +1,275 @@
+﻿@model AccountsBrowserDto
+@{
+    ViewData["Title"] = "مرورگر حساب ها";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    long totalBed = Model.Kols.Sum(n => n.Bed);
+    long totalBes = Model.Kols.Sum(n => n.Bes);
+    long ekhtelaf = totalBed >= totalBes ? totalBed - totalBes : totalBes - totalBed;
+
+    long mandehBed = 0;
+    long mandeBes = 0;
+    string strTotalBed = totalBed > 0 ? totalBed.ToPrice() : "0";
+    string strTotalBes = totalBes > 0 ? totalBes.ToPrice() : "0";
+    string strEkhtelaf = ekhtelaf > 0 ? ekhtelaf.ToPrice() : "0";
+
+    string status = (ekhtelaf > 0 && totalBed > totalBes) ? "بدهکار" : ((ekhtelaf > 0 && totalBes > totalBed) ? "بستانکار" : "");
+}
+
+
+<div class="card page-header-panel">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="card-panel-header">
+                <div><span class="card-panel-title">مرورگر حساب ها</span> <span class="text-warning mx-1">  کل </span> </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <form asp-action="AccountBrowserKol" asp-controller="AccReports" asp-area="Accounting" method="get" id="frm_AccountBrowser">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card-header-panel-section">
+                            <div class="card-header-panel-section-header p-0"><span>فیلتر مرورگر </span></div>
+                            <div class="card-header-panel-section-body">
+                                <input type="hidden" asp-for="filter.targetId" />
+                                <div class="filter-controls-container">
+                                  @*   <div class="garnet-input-group">
+                                        <label>وضعیت سند</label>
+                                        <select asp-for="filter.docType" asp-items="@ViewBag.docType">
+                                            <option value="null" selected>همه</option>
+                                        </select>
+                                    </div> *@
+                                    <div class="garnet-input-group">
+                                        <label asp-for="filter.FromDocNumer">‌از شماره سند</label>
+                                        <input type="number" asp-for="filter.FromDocNumer" class="text-center">
+                                    </div>
+                                    <div class="garnet-input-group">
+                                        <label asp-for="filter.ToDocNumer">تا شماره سند‌</label>
+                                        <input type="number" asp-for="filter.ToDocNumer" class="text-center">
+                                    </div>
+                                    <div class="garnet-input-group">
+                                        <label asp-for="filter.StartDate">از تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strStartDate" class=" flatpickr-input" placeholder="YYYY/MM/DD">
+                                    </div>
+                                    <div class="garnet-input-group">
+                                        <label asp-for="filter.EndDate">از تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strEndDate" class="flatpickr-input" placeholder="YYYY/MM/DD">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-header-panel-section">
+                            <div class="card-header-panel-section-header"><span>عملیات </span></div>
+                            <div class="card-header-panel-section-body">
+                                <div class="row">
+                                    <div class="col-12 d-grid px-1">
+                                        <button type="submit" class="btn btn-primary mb-1">
+                                            <i class="tf-icons bx bx-list mx-1"></i>
+                                            نمایش
+                                        </button>
+                                    </div>
+                                    <div class="col-6 d-grid px-1">
+                                        <a href="javascript:void(0)" data-formid="frm_AccountBrowser" data-url="@Url.Action("ExportKol", "AccExport", new { Area = "Accounting" })" class="btn btn-secondary iconpng mb-1 submitCustomForm">
+                                            خروجی اکسل
+                                        </a>
+                                    </div>
+                                    <div class="col-6 d-grid px-1">
+                                        <a href="javascript:void(0)" class="btn btn-primary mb-1 getprint" data-url="@Url.Action("Print_BrowserKol", "AccPrint", new { Area = "Accounting" })">
+                                           چاپ
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="section-nav">
+        <ul class="">
+            <li>
+                <span class="text-primary nav-pagenametext">حساب های کل</span>
+            </li>
+        </ul>
+    </div>
+    <div class="reportPlace" id="accountBrowswePlace">
+        <div class="card-body m-0">
+            <div class="table-responsive text-nowrap static-height-450">
+                <table class="table table-striped table-bordered dataTable" id="tbl-accountBrowserKol">
+                    <thead class="table-dark">
+                        <tr>
+                            <th rowspan="2" class="text-center row-num">ردیف</th>
+                            <th rowspan="2"> حساب</th>
+                            <th colspan="2" class="text-center">گردش طی دوره</th>
+                            <th colspan="2" class="text-center">مانده</th>
+                            @*  <th rowspan="2">ماهیت حساب</th> *@
+                        </tr>
+                        <tr>
+                            <th class="col-price">بدهکار</th>
+                            <th class="col-price">بستانکار</th>
+                            <th class="col-price">بدهکار</th>
+                            <th class="col-price">بستانکار</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @if (Model.Kols?.Count() > 0)
+                        {
+                            int row = 1;
+                            foreach (var x in Model.Kols)
+                            {
+                                string cssClass = (x.Nature != x.MandehNature && x.MandehNature != 3 && x.Nature != 3) ? "bg-warning text-black" : "";
+                                <tr class="accountBrowser_itemLink @cssClass" data-deb="@x.Bed" data-bes="@x.Bes" data-target="@x.KolId" data-url="@Url.Action("AccountBrowserMoein", "AccReports", new { Area = "Accounting" })">
+                                    <td class="row-num text-center">
+                                        <input type="checkbox" name="articleRow" />
+                                        @row
+                                    </td>
+                                    <td>@x.KolName</td>
+                                    <td class="col-price">@(x.Bed > 0 ? x.Bed.ToPrice() : "0")</td>
+                                    <td class="col-price">@(x.Bes > 0 ? x.Bes.ToPrice() : "0")</td>
+                                    <td class="col-price">
+                                        @{
+                                            if (x.MandehNature == 1)
+                                            {
+                                                <span>@(x.Mandeh > 0 ? x.Mandeh.ToPrice() : "0")</span>
+                                                mandehBed += x.Mandeh;
+                                            }
+                                            else
+                                            {
+                                                <span>0</span>
+                                            }
+                                        }
+                                    </td>
+                                    <td class="col-price">
+                                        @{
+                                            if (x.MandehNature == 2)
+                                            {
+                                                <span>@(x.Mandeh > 0 ? x.Mandeh.ToPrice() : "0")</span>
+                                                mandeBes += x.Mandeh;
+                                            }
+                                            else
+                                            {
+                                                <span>0</span>
+                                            }
+                                        }
+                                    </td>
+                                    @* <td><small>@x.Nature.AccToNatureName()</small></td> *@
+                                </tr>
+
+                                row++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+        <div class=" alert-secondary p-2 m-0 mt-2">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="open my-2" id="sumRowsPlace">
+                        <div class="divider text-start divider-primary">
+                            <div class="divider-text">
+                                <h6 class="mb-0">
+                                    جمع ردیف های انتخاب شده
+                                </h6>
+                            </div>
+                        </div>
+                        <div class="bulkActionBox ps-3">
+                            <ul class="accountinfoBox me-2">
+                                <li>
+                                    <label class="text-secondary">بدهکار  </label>
+                                    <span class="text16 mx-3" id="totalBed"></span>
+                                </li>
+                                <li>
+                                    <label class="text-secondary">بستانکار </label>
+                                    <span class="text16 mx-3" id="totalBes"></span>
+                                </li>
+                                <li>
+                                    <label class="text-secondary">اختلاف </label>
+                                    <span class="text16 text-danger mx-3" id="ekhtelaf"></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <ul class="docfooter-totalAmounts">
+                        <li>
+                            <label>جمع بدهکار : </label>
+                            <div>
+                                <input type="text" readonly value="@strTotalBed" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label>جمع بستانکار : </label>
+                            <div>
+                                <input type="text" readonly value="@strTotalBes" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label>جمع مانده بدهکار : </label>
+                            <div>
+                                <input type="text" readonly value="@(mandehBed > 0?mandehBed.ToPrice():"0")" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label>جمع مانده بستانکار : </label>
+                            <div>
+                                <input type="text" readonly value="@(mandeBes > 0?mandeBes.ToPrice():"0")" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label class="docBalance">
+                                @if (status == "بدهکار")
+                                {
+                                    <span class="badge badge-dot bg-label-danger px-3">@status</span>
+                                }
+                                else if (status == "بستانکار")
+                                {
+                                    <span class="badge badge-dot bg-label-danger px-3">@status</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-dot bg-label-success px-3">تـراز</span>
+                                }
+
+                            </label>
+                            <div>
+                                <input type="text" class="text-danger" readonly value="@strEkhtelaf" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/vendor/libs/jquery/jquery.js"></script>
+<script src="~/appfunctions/export.js"></script>

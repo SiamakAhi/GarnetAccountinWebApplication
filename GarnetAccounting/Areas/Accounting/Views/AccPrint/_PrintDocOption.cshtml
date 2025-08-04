@@ -1,0 +1,39 @@
+﻿@{
+    short lvl = ViewBag.printLevel;
+}
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning">پرینت سند شماره <span class="text-info mx-1">@ViewBag.DocNumber</span></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <form asp-action="PrintDoc" asp-controller="AccPrint" asp-area="Accounting" method="get" class="mt-2">
+                <input type="hidden" name="id" value="@ViewBag.DocId" />
+                <div class="garnet-section garnet-section-info">
+                    <div class="filter-controls-container p-2">
+                        <div class="garnet-checkbox-group">
+                            <label for="print-kol">‌چاپ سند در سطح کل</label>
+                            <input type="radio" name="level" value="1" id="print-kol" @(lvl == 1 ? "checked" : "")>
+                        </div>
+                        <div class="garnet-checkbox-group">
+                            <label for="print-Moein">‌چاپ سند در سطح معین</label>
+                            <input type="radio" name="level" value="2" id="print-Moein" @(lvl == 2 ? "checked" : "")>
+                        </div>
+                        <div class="garnet-checkbox-group">
+                            <label for="print-tafsil">‌چاپ سند در سطح تفصیل</label>
+                            <input type="radio" name="level" value="3" id="print-tafsil" @(lvl == 3 ? "checked" : "")>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="d-grid p-2 mt-2 garnet-form-btncontainer">
+                    <a class="btn btn-warning pringDoc">چاپ</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,224 @@
+﻿@model SaleReportsViewModel
+@{
+    ViewData["Title"] = "گزارش فروش";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card-panel">
+    <div class="card-panel-header">
+        <div>
+            <span>
+                <i class="bx bxs-plane text-warning me-1"></i>
+                گزارش فروش در سیستم قدیم کیهان پست
+            </span>
+        </div>
+    </div>
+    <div>
+        <form asp-action="SaleReport" asp-controller="KPDataTransfer" asp-area="DataTransfer" method="get" id="frmKpSaleFilter">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>فیلتـر</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.BillOfLadingNumber">‌شماره بارنامه</label>
+                                        <input type="text" class="text-center" asp-for="filter.BillOfLadingNumber">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.strStartDate">از تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strStartDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.strEndDate">تا تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strEndDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>نوع تسویه</label>
+                                        <select asp-for="filter.PaymentMethod">
+                                            <option value="" selected>همه</option>
+                                            <option value="نقدی">نقدی</option>
+                                            <option value="اعتباری">اعتباری</option>
+                                            <option value="پسکرایه">پسکرایه</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>صادر کننده</label>
+                                        <select asp-for="filter.Agency" class="select2" asp-items="@ViewBag.agency">
+                                            <option value="" selected>همه</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>نماینده مقصد</label>
+                                        <select asp-for="filter.DestinationRepresentative" class="select2" asp-items="@ViewBag.reps">
+                                            <option value="" selected>همه</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>وضعیت حسابداری</label>
+                                        <select asp-for="filter.HasAccountingDoc">
+                                            <option value="null">همه</option>
+                                            <option value="false" selected>فاقد سند حسابداری</option>
+                                            <option value="true">دارای سند حسابداری</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>عملیات</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class=" d-grid p-2">
+                                <input type="submit" class="garnet-btn garnet-btn-info mb-2 text-center" value="نمایش اطلاعات فروش" />
+                            </div>
+                            <div class=" d-grid p-2">
+                                <a href="javascript:void(0)" data-formid="frmKpSaleFilter" data-url="@Url.Action("SaleErrorsReport", "KPDataTransfer", new { Area = "DataTransfer" })" target="_blank" class="garnet-btn garnet-btn-warning mb-2 text-center submitCustomForm">گزارش بارنامه های اصلاحی</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="card-body card-table">
+        <div class="table-responsive text-nowrap height-vh80">
+            <form asp-action="CreateSaleDoc" asp-controller="KPDataTransfer" asp-area="DataTransfer" method="post" id="frmOldSystemSales">
+                <table class="table table-striped table-bordered dataTable" id="tblOldSystemSales">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="row-num">
+                                <input type="checkbox" id="selectTblRows" />
+                                ردیف</th>
+                            <th>شماره بارنامه</th>
+                            <th>تاریخ</th>
+                            <th>گروه برنامه</th>
+                            <th>شعبه</th>
+                            <th>مقصد</th>
+                            <th>حمل بار</th>
+                            <th>مبلغ تمبر</th>
+                            <th>هزینه جمع آوری</th>
+                            <th>بسته بندی</th>
+                            <th>بیمه</th>
+                            <th>تخفیف</th>
+                            <th>ارزش افزوده</th>
+                            <th>سایر هزینه های مبدأ</th>
+                            <th>هزینه توزیع</th>
+                            <th>هزینه های مقصد</th>
+                            <th>مبلغ بارنامه</th>
+                            <th>نحوه تسویه</th>
+                            <th>نماینده توزیع</th>
+                            <th>وزن واقعی</th>
+                            <th>شماره سند حسابداری</th>
+                            <th>خطای بارگذاری</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Reports?.Count > 0)
+                        {
+                            int RowNumber = 1;
+
+                            foreach (var x in Model.Reports)
+                            {
+                                string style = (x.RecordLock != true && x.BillOfLadingGroupCode != 100) ? " bg-warning text-white " : "";
+                                <tr class="@style">
+                                    <td class="row-num">
+                                        <input type="checkbox" class="tblRow" name="tableRow" value="@x.Id" />
+                                        @RowNumber</td>
+                                    <td>@x.BillOfLadingNumber</td>
+                                    <td>@x.MiladiDate.Value.LatinToPersian()</td>
+                                    <td>@x.BillOfLadingGroup</td>
+                                    <td>@x.AgencyName</td>
+                                    <td>@x.ToDestination</td>
+                                    <td>@(x.CargoFare > 0 ? x.CargoFare.ToPrice() : "0")</td>
+                                    <td>@(x.StampFee > 0 ? x.StampFee.ToPrice() : "0")</td>
+                                    <td>@(x.CollectionOrSeparationFee > 0 ? x.CollectionOrSeparationFee.ToPrice() : "0")</td>
+                                    <td>@(x.PackagingFee > 0 ? x.PackagingFee.ToPrice() : "0")</td>
+                                    <td>@(x.InsuranceFee > 0 ? x.InsuranceFee.ToPrice() : "0")</td>
+                                    <td>@(x.Discount > 0 ? x.Discount.ToPrice() : "0")</td>
+                                    <td>@(x.VAT > 0 ? x.VAT.ToPrice() : "0")</td>
+                                    <td>@(x.OtherOriginFees > 0 ? x.OtherOriginFees.ToPrice() : "0")</td>
+                                    <td>@(x.DistributionOrSeparationFee > 0 ? x.DistributionOrSeparationFee.ToPrice() : "0")</td>
+                                    <td>@(x.DestinationMiscellaneousFee > 0 ? x.DestinationMiscellaneousFee.ToPrice() : "0")</td>
+                                    <td>@(x.TotalBillOfLadingAmount > 0 ? x.TotalBillOfLadingAmount.ToPrice() : "0")</td>
+                                    <td>@x.PaymentMethod</td>
+                                    <td>@x.DestinationRepresentative</td>
+                                    <td>@x.ActualCargoWeight</td>
+                                    <td>@x.DocNumber</td>
+                                    <td>@x.ErrorMessage</td>
+                                </tr>
+                                RowNumber++;
+                            }
+                        }
+                    </tbody>
+                    @if (Model.Reports.Count > 0)
+                    {
+                        <tfoot class="table-dark">
+
+                            <tr>
+                                <td colspan="6" class="text-center"> جمع : </td>
+                                <td>@Model.Reports.Sum(n => n.CargoFare).ToPrice()</td>
+                                <td>@Model.Reports.Sum(n => n.StampFee).ToPrice()</td>
+                                <td>@Model.Reports.Sum(n => n.CollectionOrSeparationFee).ToPrice()</td>
+                                <td>@Model.Reports.Sum(n => n.PackagingFee).ToPrice()</td>
+                                <td>@Model.Reports.Sum(n => n.InsuranceFee).ToPrice()</td>
+                                <td>@Model.Reports.Sum(n => n.Discount).ToPrice()</td>
+                                <td>@Model.Reports.Sum(n => n.VAT).ToPrice()</td>
+                                <td>@Model.Reports.Sum(n => n.OtherOriginFees).ToPrice()</td>
+                                <td>@Model.Reports.Sum(n => n.DistributionOrSeparationFee).ToPrice()</td>
+                                <td>@Model.Reports.Sum(n => n.DestinationMiscellaneousFee).ToPrice()</td>
+                                <td>@Model.Reports.Sum(n => n.TotalBillOfLadingAmount).ToPrice()</td>
+                                <td colspan="2"></td>
+                                <td>@Model.Reports.Sum(n => n.ActualCargoWeight).ToPrice()</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+
+                        </tfoot>
+                    }
+                    else
+                    {
+                        <tfoot>
+                            <tr>
+                                <td colspan="22">اطلاعاتی جهت نمایش وجود ندارد</td>
+                            </tr>
+                        </tfoot>
+                    }
+
+                </table>
+            </form>
+
+        </div>
+
+    </div>
+    <div class="card-footer">
+        <div class="mt-2 d-flex">
+            <a class="btn btn-secondary m-1" asp-action="KpSaleImport" asp-controller="KPDataTransfer" asp-area="DataTransfer">ورود اطلاعات فروش </a>
+            <button type="button" class="btn btn-primary m-1 bulkAction" data-tableid="frmOldSystemSales" data-allerttext="برای ردیف های انتخاب شده سند حسابداری صادر شود ؟" data-url="@Url.Action("CreateSaleDoc", "KPDataTransfer", new { Area = "DataTransfer" })">ثبت اسناد حسابداری </button>
+            <button type="button" class="btn btn-danger m-1  bulkAction" data-tableid="frmOldSystemSales" data-allerttext="شما در حال حذف آیتم های انتخاب شده هستید. آیا ادامه میدهید ؟" data-url="@Url.Action("DelInvoices", "KPDataTransfer", new { Area = "DataTransfer" })">حذف ردیف های انتخاب شده</button>
+            <button type="button" class="btn btn-secondary m-1  bulkAction" data-tableid="frmOldSystemSales" data-allerttext=" عملیات خروجی فایل سامانه مودیان انجام شود؟ " data-url="@Url.Action("ExportTax", "KPDataTransfer", new { Area = "DataTransfer" })">خروجی اکسل برای سامانه مودیان</button>
+        </div>
+    </div>
+</div>
+
+

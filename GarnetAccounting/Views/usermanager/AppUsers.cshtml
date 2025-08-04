@@ -1,0 +1,103 @@
+﻿@model List<GarnetAccounting.ViewModels.IdentityViewModels.UserViewModel>
+
+@{
+    ViewData["Title"] = "کاربران";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card mb-3">
+    <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url(../../lib/falcon/assets/img/icons/spot-illustrations/corner-4.png);"></div>
+    <!--/.bg-holder-->
+    <div class="card-body position-relative">
+        <div class="row">
+            <div class="col-lg-8">
+                <h3>مدیریت کاربران</h3>
+                <p class="mb-0">مشاهده اطلاعات کاربران، اختصاص نقش به کاربران یا گرفتن نقش های داده شده از آنها، ویرایش اطلاعات کاربر و حذف</p>
+                @*<a class="btn btn-link btn-sm ps-0 mt-2" href="#" target="_blank">جداول در بوت استرپ<svg class="svg-inline--fa fa-chevron-left fa-w-10 ms-1 fs--2" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-left" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg=""><path fill="currentColor" d="M34.52 239.03L228.87 44.69c9.37-9.37 24.57-9.37 33.94 0l22.67 22.67c9.36 9.36 9.37 24.52.04 33.9L131.49 256l154.02 154.75c9.34 9.38 9.32 24.54-.04 33.9l-22.67 22.67c-9.37 9.37-24.57 9.37-33.94 0L34.52 272.97c-9.37-9.37-9.37-24.57 0-33.94z"></path></svg><!-- <span class="fas fa-chevron-left ms-1 fs--2"></span> Font Awesome fontawesome.com --></a>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-2">
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header border-bottom">
+                <div class="row flex-between-end">
+                    <div class="col-auto align-self-center">
+                        <h5 class="mb-0" data-anchor="data-anchor">کاربر جدید</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+                   @await Html.PartialAsync("_Register",new VmRegisterUser())
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header border-bottom">
+                <div class="row flex-between-end">
+                    <div class="col-auto align-self-center">
+                        <h5 class="mb-0" data-anchor="data-anchor">لیست کاربران<a class="anchorjs-link " aria-label="Anchor" data-anchorjs-icon="#" style="padding-left: 0.375em;"></a></h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body pt-0">
+                <div class="tab-content">
+                    <div class="table-responsive scrollbar">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">نام کاریری</th>
+                                    <th scope="col">نام و نام خانوادگی</th>
+                                    <th scope="col">همراه</th>
+                                    <th scope="col">ایمیل</th>
+                                    <th scope="col">نقش ها</th>
+                                    <th class="text-end" scope="col">اقدامات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Count > 0)
+                                {
+                                    foreach (var x in Model)
+                                    {
+                                        <tr>
+                                            <td>@x.UserName</td>
+                                            <td>@x.FirstName @x.LastName</td>
+                                            <td>@x.PhoneNumber</td>
+                                            <td>@x.Email</td>
+                                            <td>
+                                                <button class="btn p-0 callModalForm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="نقش ها" data-url="@Url.Action("GetUserRole","usermanager",new {Area="", userName=x.UserName})">مشاهده</button>
+
+                                            </td>
+                                            <td class="text-end">
+                                                <div>
+                                                    <button class="btn p-0 callModalForm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="ویرایش" data-confirmtext="اطلاعات کاربر بروز شود ؟" data-url="@Url.Action("UpdateUser","usermanager",new {Area="", id=x.Id})"><span class="text-500 fas fa-edit"></span></button>
+                                                    <button class="btn p-0 ms-2 deleteAjax" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="حذف" data-confirmtext="کاربر مورد نظر حذف شود ؟" data-url="@Url.Action("DeleteUser","usermanager",new {Area="", id=x.Id})"><span class="text-500 fas fa-trash-alt"></span></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+
+                            </tbody>
+                           
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/js_usermanager.js"></script>
+<script src="~/js/js_ticket.js"></script>
+
+
+

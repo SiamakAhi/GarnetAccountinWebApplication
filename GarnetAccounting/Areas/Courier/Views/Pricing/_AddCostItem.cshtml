@@ -1,0 +1,94 @@
+﻿@model CostItemDto
+<div class="modal-dialog dataentry-modal">
+    <div class="modal-content dataentry">
+        <div class="dataentry-title">
+            <span class="">تعریف آیتم هزینه جدید</span>
+        </div>
+        <form asp-action="AddCostItem" asp-controller="Pricing" asp-area="Courier" method="post">
+            <div class="row dataentry-controls">
+                <!-- بخش مشخصات -->
+                <div class="col-md-4 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>مشخصات</h6>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="CostCode" class="form-label">کد هزینه</label>
+                        <input type="text" class="form-control form-control-sm" asp-for="CostCode" />
+                        <span asp-validation-for="CostCode" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="Description" class="form-label">شرح آیتم</label>
+                        <input type="text" class="form-control form-control-sm" asp-for="Description" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mb-1 select2-dark">
+                        <label asp-for="RateImpactTypeCode" class="form-label">نوع محاسبه هزینه در بارنامه</label>
+                        <select class="form-select form-select-sm" asp-for="RateImpactTypeCode" asp-items="@ViewBag.RateImpact">
+                            <option value="null">نوع محاسبه در بارنامه </option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- بخش مقادیر و وضعیت -->
+                <div class="col-md-4 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>مقادیر و وضعیت</h6>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="Amount" class="form-label">مقدار</label>
+                        <input type="number" class="form-control form-control-sm" asp-for="Amount" />
+                        <span asp-validation-for="Amount" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="ForBillOfLading" />
+                            <label class="form-check-label" asp-for="ForBillOfLading">مربوط به بارنامه</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="ForConsignment" />
+                            <label class="form-check-label" asp-for="ForConsignment">مربوط به مرسوله</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="IsAutoAdded" checked/>
+                            <label class="form-check-label" asp-for="IsAutoAdded">اتوماتیک در زمان صدور بارنامه محاسبه شود</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- بخش ارتباط با بخش حسابداری -->
+                <div class="col-md-4 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>تنظیمات حسابداری</h6>
+                    </div>
+                    <div class="col-md-12 mb-1 select2-dark">
+                        <label asp-for="AccountMoeinId" class="form-label">حساب معین مربوزط به هزینه در حسابداری</label>
+                        <select class="form-select form-select-sm select2" asp-for="AccountMoeinId" asp-items="@ViewBag.Moeins">
+                            <option value="0">انتخاب حساب معین </option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-1 select2-dark">
+                        <label asp-for="AccountTafsilId" class="form-label">تعسن حساب تفصیلی در صورت وجود</label>
+                        <select class="form-select form-select-sm select2" asp-for="AccountTafsilId" asp-items="@ViewBag.Tafsils">
+                            <option value="0">حساب تفصیلی</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- دکمه‌های ذخیره و انصراف -->
+            <div class="row">
+                <div class="col-md-4 offset-8 dataentry-buttons-container container-row">
+                    <div class="dataentry-buttons">
+                        <a href="javascript:void(0)" class="btn btn-primary accAjaxSubmit">ذخیـره</a>
+                        <button type="reset" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">انصراف</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="~/js/forms-selects.js"></script>

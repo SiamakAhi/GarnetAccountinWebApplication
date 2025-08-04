@@ -1,0 +1,93 @@
+﻿@model RouteDto
+<div class="modal-dialog dataentry-modal">
+    <div class="modal-content dataentry">
+        <div class="dataentry-title">
+            <span class=""> وایرایش اطلاعات مسیـر </span>
+
+        </div>
+        <form asp-action="UpdateRoute" asp-controller="CourierService" asp-area="Courier" method="post">
+
+            <input type="hidden" asp-for="RouteId" value="@Model.RouteId" />
+            <div class="row dataentry-controls">
+                <div class="col-md-4 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>مشخصات</h6>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="RouteCode" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="RouteCode" />
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="RouteName" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm text-left" asp-for="RouteName" />
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="RouteName_En" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm text-left" asp-for="RouteName_En" />
+                    </div>
+
+
+
+                </div>
+                <div class="col-md-4 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>مبدأ / مقصد</h6>
+                    </div>
+
+                    <div class="col-md-12 mb-1 select2-dark">
+                        <label asp-for="OriginCityId" class="form-label">شهـر مبدأ</label>
+                        <select class="form-select form-select-sm select2" asp-for="OriginCityId" asp-items="@ViewBag.Cities">
+                            <option value="">انتخاب شهر مبدأ</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-1 select2-dark">
+                        <label asp-for="DestinationCityId" class="form-label">شهـر مقصد</label>
+                        <select class="form-select form-select-sm select2" asp-for="DestinationCityId" asp-items="@ViewBag.Cities">
+                            <option value="">انتخاب شهر مقصد</option>
+                        </select>
+                    </div>
+
+
+                </div>
+
+                <div class="col-md-4 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>وضعیت </h6>
+                    </div>
+                    <div class="widget-info fw mb-2">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="IsTransit">
+                            <label class="form-check-label" asp-for="IsTransit">
+                                مسیر ترانزیتی است
+                            </label>
+                        </div>
+                    </div>
+                    <div class="widget-info fw">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="IsActive" checked>
+                            <label class="form-check-label" asp-for="IsActive">
+                                فعال
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-1 select2-dark">
+                        <label asp-for="ZoneId" class="form-label">محدوده نرخ</label>
+                        <select class="form-select form-select-sm select2" asp-for="ZoneId" asp-items="@ViewBag.Zones">
+                          
+                        </select>
+                    </div>
+                </div>
+            </div>
+                <div class=" dataentry-buttons-container container-row">
+                    <div class="dataentry-buttons">
+                        <a href="javascript:void(0)" class="btn btn-primary accAjaxSubmit"> ذخیـره</a>
+                        <button type="reset" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">
+                            انصراف
+                        </button>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+<script src="~/js/forms-selects.js"></script>

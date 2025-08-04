@@ -1,0 +1,100 @@
+﻿@model BuyerUpdateDto
+@{
+    ViewData["Title"] = "نرم افزار واسط سامانه مودیان گارنِت";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header"><h5 class="mb-0 text-primary">شما در حال ویرایش اطلاعات <strong>@Model.Name</strong> هستید.</h5></div>
+    <div class="card-body">
+        <form asp-action="UpdateBuyer" asp-asp-controller="Buyer" asp-area="" method="post" class=" g-3 fv-plugins-bootstrap5 fv-plugins-framework">
+
+            <input type="hidden" asp-for="CustomerId" value="@Model.CustomerId" />
+            <input type="hidden" asp-for="Id" value="@Model.Id" />
+            <div class="row">
+
+                <div class="col-md-3">
+                    <label class="form-label" asp-for="LegalStatus"></label>
+                    <select asp-for="LegalStatus" class="form-control">
+                        <option selected>انتخاب کنید</option>
+                        <option value="1">حقیقی</option>
+                        <option value="2">حقوقی</option>
+                    </select>
+                    <span asp-validation-for="LegalStatus" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" asp-for="NationalId"></label>
+                    <input type="text" asp-for="NationalId" class="form-control">
+                    <span asp-validation-for="NationalId" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" asp-for="EconomicCode"></label>
+                    <input type="text" asp-for="EconomicCode" class="form-control">
+                    <span asp-validation-for="EconomicCode" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="Name"></label>
+                    <input type="text" asp-for="Name" class="form-control" placeholder="گروه نرم افزار گارنِت">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label" asp-for="RegistrationNumber"></label>
+                    <input type="text" asp-for="RegistrationNumber" class="form-control">
+                    <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                </div>
+
+                <div class=" col-md-3">
+                    <label class="form-label" asp-for="Province"></label>
+                    <input type="text" asp-for="Province" class="form-control">
+                    <span asp-validation-for="Province" class="text-danger"></span>
+                </div>
+                <div class=" col-md-3">
+                    <label class="form-label" asp-for="City"></label>
+                    <input type="text" asp-for="City" class="form-control">
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class=" col-md-3">
+                    <label class="form-label" asp-for="PostalCode"></label>
+                    <input type="text" asp-for="PostalCode" class="form-control">
+                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" asp-for="MobilePhone"></label>
+                    <input type="text" asp-for="MobilePhone" class="form-control">
+                    <span asp-validation-for="MobilePhone" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="Address"></label>
+                    <textarea class="form-control" rows="2" asp-for="Address"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" asp-for="InvoiceDescription"></label>
+                    <textarea class="form-control" rows="2" asp-for="InvoiceDescription"></textarea>
+                    <span asp-validation-for="InvoiceDescription" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label" asp-for="AccountingSystemId"></label>
+                    <input type="text" asp-for="AccountingSystemId" class="form-control">
+                    <span asp-validation-for="AccountingSystemId" class="text-danger"></span>
+                </div>
+            </div>
+
+
+
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-primary me-sm-3 me-1">ثبت</button>
+                <a asp-action="Buyers" asp-controller="Buyer" asp-asp-area="" class="btn btn-label-secondary">
+                    بازگشت به لیست
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+

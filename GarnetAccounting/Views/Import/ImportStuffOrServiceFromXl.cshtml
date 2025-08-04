@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "نرم افزار واسط سامانه مودسان گارنِت";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string alert = ViewBag.msg;
+}
+
+<div class="card">
+
+    <h5 class="card-header heading-color">
+        ورود اطلاعات کالا و خدمات از اکسل
+    </h5>
+    <div class="card-body">
+        <div class="alert alert-primary mb-3" role="alert">
+            کاربر گرامی! شما باید لیست کالا و خدمات مورنظر خود را مطابق با فایل نمونه آماده و از طریق فرم زیر وارد نمایید. جهت دریافت فایل نمونه
+            <a href="~/sticFiles/Garnet stuff templates heet.xlsx"><strong class="text-warning">اینجــا</strong></a>
+            کلیک کنید.
+        </div>
+        <form asp-action="ImportStuffOrServiceFromXl" asp-controller="Import" asp-area="" method="post" enctype="multipart/form-data">
+            <div class="row mt-3">
+                <div class="col-12c mb-4">
+                    <label class="form-label">انتخاب فایل اکسل </label>
+                    <input type="file" class="form-control" name="excelFile" accept=".xls, .xlsx" placeholder="انتخاب اکسل حاوی اطلاعات کالا یا خدمات" />
+                </div>
+                <div class="mt-2">
+                    <input type="submit" class="btn btn-primary mb-2" value="دریافت و ثبت اطلاعات" />
+                    <a class="btn btn-warning mb-2" asp-action="Stuffs" asp-controller="Stuff" asp-area="">بازگشت به لیست کالا و خدمات</a>
+                </div>
+            </div>
+        </form>
+
+        <div>
+
+            @if (!string.IsNullOrEmpty(alert))
+            {
+                <div class="alert alert-info alert-dismissible mt-4 mb-2" role="alert">
+                    <h6 class="alert-heading mb-1"><i class="bx bx-xs bx-detail me-2"></i>کاربر گرامی !</h6>
+                    <span>
+                        @Html.Raw(alert)
+                    </span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+            }
+
+
+        </div>
+    </div>
+</div>
+

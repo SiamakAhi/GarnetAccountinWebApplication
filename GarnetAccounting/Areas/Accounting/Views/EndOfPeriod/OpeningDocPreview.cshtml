@@ -1,0 +1,141 @@
+﻿@model clsResult
+@{
+    ViewData["Title"] = "ثبت سند افتتاحیه";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var articles = new List<DocArticleDto>();
+
+    if (Model.DataObject != null)
+        articles = (List<DocArticleDto>)Model.DataObject;
+}
+
+<div class="card card-primary">
+    <h6 class="card-header">ایجاد سنـد افتتاحیـه</h6>
+
+    <div class="card-body">
+        <dov class="row">
+            <div class="col-md-3 p-3 alert-secondary box-radius pb-5">
+                <div class="divider text-start divider-danger">
+                    <div class="divider-text">
+                        <span class="text-primary">تنظیمات</span>
+                    </div>
+                </div>
+
+                <div>
+                    <form asp-action="AddOpeningAccounts" asp-controller="EndOfPeriod" asp-area="Accounting" method="post">
+                        <div class="row">
+
+                            <div class="col-md-12 mb-2">
+                                <label>انتخاب دوره مالی جدید</label>
+                                <select asp-for="DocNumber" class="select2 form-select" asp-items="@ViewBag.Periods">
+                                    <option value="null" selected>انتخاب کنید ...</option>
+                                </select>
+                            </div>
+                            <hr />
+                            @if (ViewBag.hasNextPeriod == false)
+                            {
+                                <div class="alert alert-warning text-dark">
+                                    دوره مالی بزرگتر از دوره جاری در سیستم تعریف نشده است.
+                                    <br />
+                                    از طریق دکمه زیر، دوره مالی جدید را ایجاد کنید.
+                                </div>
+
+                                <div class="col-md-12 d-grid mt-2 mb-3 px-4">
+                                    <a asp-action="FinancePeriods" asp-controller="AccCoding" asp-area=""
+                                    class="btn btn-primary mb-2">
+                                        ایجاد دوره مالی جدید
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-12 d-grid mt-2 mb-3 px-4">
+                                    <input type="button" class="btn btn-success mb-2 accAjaxSubmit" value="ثبت سند افتاحیه" />
+                                </div>
+                            }
+                          
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="col-md-9 p-3">
+                <div class="divider text-start divider-danger">
+                    <div class="divider-text">
+                        <span class="text-primary">پیش نمایش سند افتتاحیه</span>
+                    </div>
+                </div>
+
+                @if (Model.Success)
+                {
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="row-chb">ردیف</th>
+                                    <th class="limit-text">
+                                        حساب
+                                    </th>
+                                <th>تفصیل 4</th>
+                                    <th>بدهکار</th>
+                                    <th>بستانکار</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (articles.Count > 0)
+                                {
+                                    int rownumber = 1;
+                                    foreach (var x in articles)
+                                    {
+                                        <tr>
+                                            <td class="row-chb">@rownumber</td>
+                                            <td>
+                                                <span class="text-secondary">@x.MoeinCode</span>
+                                                <span class="text-secondary">@x.KolName</span>-
+                                                <span class="me-2">@x.MoeinName</span>
+                                            </td>
+                                            <td class="limit-text" title="@x.Comment">
+
+                                                @x.Tafsil4Name
+                                            </td>
+                                            <td>
+                                                <span>@(x.Bed > 0 ? x.Bed.ToPrice() : "0")</span>
+                                            </td>
+                                            <td>
+                                                <span>@(x.Bes > 0 ? x.Bes.ToPrice() : "0")</span>
+                                            </td>
+                                        </tr>
+                                        rownumber++;
+                                    }
+                                }
+
+                            </tbody>
+                            <tfoot>
+                                @if (articles.Count > 0)
+                                {
+                                    <tr>
+                                        <td colspan="3" class="text-center"> <h5>جمع :</h5></td>
+                                        <td class="text-center">@articles.Sum(n => n.Bed)</td>
+                                        <td class="text-center">@articles.Sum(n => n.Bes)</td>
+                                    </tr>
+                                }
+                            </tfoot>
+                        </table>
+                    </div>
+
+
+                }
+                else
+                {
+                    <div class="alert alert-danger p-5">
+                        <h4>کاربر گرامی :</h4>
+                       <h5>
+                            @Model.Message
+                       </h5>
+                    </div>
+                }
+
+            </div>
+        </dov>
+    </div>
+</div>
+

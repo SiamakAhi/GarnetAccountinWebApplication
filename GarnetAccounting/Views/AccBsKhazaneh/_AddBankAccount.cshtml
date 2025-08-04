@@ -1,0 +1,87 @@
+﻿@model BankAccountDto
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">معرفی حساب بانکی</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="mt-3" asp-action="AddBankAccount" asp-controller="AccBsKhazaneh" asp-area="" method="post">
+                <div class="row">
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="BankId" class="form-label"></label>
+                        <select asp-for="BankId" class="form-control form-control-sm select2" asp-items="@ViewBag.Banks">
+                            <option value="">انتخاب کنید</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label asp-for="BranchCode" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="BranchCode" />
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label asp-for="AccountType" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="AccountType" />
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label asp-for="AccountNumber" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="AccountNumber" />
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label asp-for="AccountName" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="AccountName" />
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="SHABA" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="SHABA" />
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="CardNumber" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="CardNumber" />
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label asp-for="cvvt" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="cvvt" />
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label asp-for="CardDate" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="CardDate" />
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="BankAddress" class="form-label"></label>
+                        <textarea rows="2" class="form-control form-control-sm" asp-for="BankAddress"></textarea>
+                    </div>
+
+                    <div class="divider divider-dashed">
+                        <span class="divider-text">تنظیمات حسابداری</span>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="MoeinId" class="form-label">حساب معین بانک ها</label>
+                        <select asp-for="MoeinId" class="form-control form-control-sm select2" asp-items="@ViewBag.Moeins">
+                            <option value="">انتخاب حساب معین</option>
+                        </select>
+                    </div>
+                  
+                    <div class="col-md-12">
+                        <label class="switch">
+                            <input type="checkbox" asp-for="IsActive" class="switch-input" id="tst" checked="checked">
+                            <span class="switch-toggle-slider">
+                                <span class="switch-on"></span>
+                                <span class="switch-off"></span>
+                            </span>
+                            <span class="switch-label">حساب فعال است</span>
+                        </label>
+                    </div>
+                    
+                </div>
+                <hr />
+
+                <div class="d-grid mb-1 p-2">
+                    <a href="#" class="btn btn-primary accAjaxSubmit"> ثبت</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/forms-selects.js"></script>

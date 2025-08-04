@@ -1,0 +1,190 @@
+﻿ @model SaleReportsViewModel
+
+
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>گزارش خطای فروش</title>
+    <link href="~/css/printinvoice.css" rel="stylesheet" />
+    <link href="~/css/font.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="side">
+        <div class="toolbar no-print">
+            <button class="button print-button" onclick="printPage()">
+                <i>🖨️</i> پرینت
+            </button>
+            <button class="button pdf-button" onclick="exportToPDF()">
+                <i><img src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg" alt="PDF Icon" width="16"></i> PDF
+            </button>
+            <button class="button print-button" onclick="exportToExcel()">
+                <i>📊</i> ذخیره به Excel
+            </button>
+
+            <button class="button share-button" onclick="sharePDF()">
+                <i>📤</i> اشتراک‌گذاری
+            </button>
+            <a asp-action="SaleReport" asp-controller="KPDataTransfer" asp-area="DataTransfer" class="button close-button">
+                <i>⬅️</i> بازگشت
+            </a>
+
+        </div>
+        <div class="side-brand">
+            <h1>@ViewBag.SellerName</h1>
+        </div>
+    </div>
+    <div class="container">
+        <!-- دکمه‌های پرینت و PDF و بستن -->
+
+        <table class="table accounts-table" id="tbl-invoice">
+            <thead>
+                <tr>
+                    <th colspan="10" style="border: none; background: white;">
+                        <div class="header-content">
+                            <h3>@ViewBag.title</h3>
+                            <h5>@ViewBag.subtitle</h5>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th class="row-chb">
+                        ردیف
+                    </th>
+                    <th>گروه بارنامه</th>
+                    <th>شماره بارنامه</th>
+                    <th>تاریخ</th>
+                    <th>صادر کننده </th>
+                    <th>نماینده مقصد </th>
+                    <th>نوع تسویه حساب</th>
+                    <th>مبلغ بارنامه</th>
+                    <th>شرکت اعتباری</th>
+                    <th>خطای بارنامه</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Reports.Count > 0)
+                {
+                    int row = 1;
+                    foreach (var x in Model.Reports)
+                    {
+                        <tr>
+                            <td>
+                                @row
+                            </td>
+                            <td>@x.BillOfLadingNumber</td>
+                            <td>@x.BillOfLadingGroup</td>
+                            <td>@x.MiladiDate.Value.LatinToPersian()</td>
+                            <td>@x.AgencyName</td>
+                            <td>@x.DestinationRepresentative</td>
+                            <td>@x.PaymentMethod</td>
+                            <td>@x.TotalBillOfLadingAmount.ToPrice()</td>
+                            <td>@x.CreditCompany</td>
+                            <td>@x.ErrorMessage</td>
+                         
+                        </tr>
+                        row++;
+                    }
+                 
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10" class="text-center p-2 "> اطلاعاتی جهت نمایش وجود ندارد</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+    <script src="~/fonts/yekanbakhbase64.js"></script>
+    <script>
+
+        //Print
+        function printPage() {
+            window.print();
+        }
+        function exportToPDF() {
+            // document.querySelectorAll('.no-print').forEach(el => el.style.display = 'none');
+            const element = document.querySelector(".container");
+            html2pdf()
+                .set({
+                    filename: 'فاکتور.pdf',
+                    html2canvas: { scale: 2 },
+                    jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4', margin: [20, 20, 20, 20] }
+                })
+                .from(element)
+                .save();
+        }
+
+        //--------------------
+        async function sharePDF() {
+            const element = document.querySelector(".container");
+
+            html2pdf()
+                .set({
+                    filename: 'فاکتور.pdf',
+                    html2canvas: { scale: 2 },
+                    jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4', margin: [20, 20, 20, 20] }
+                })
+                .from(element)
+                .outputPdf('blob')
+                .then(async function (pdfBlob) {
+                    const pdfFile = new File([pdfBlob], 'فاکتور.pdf', { type: 'application/pdf' });
+
+                    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+                        try {
+                            await navigator.share({
+                                files: [pdfFile],
+                                title: 'اشتراک‌گذاری فاکتور',
+                                text: 'فاکتور فروش را ببینید.',
+                            });
+                        } catch (error) {
+                            console.error('اشتراک‌گذاری انجام نشد: ', error);
+                        }
+                    } else {
+                        alert('این مرورگر امکان اشتراک‌گذاری فایل را ندارد. لطفاً با مرورگری دیگر امتحان کنید.');
+
+                    }
+                });
+        }
+
+        function exportToExcel() {
+            // گرفتن اطلاعات جدول
+            const element = document.getElementById("tbl-invoice");
+            const worksheet = XLSX.utils.table_to_sheet(element);
+
+            // تنظیمات راست به چپ برای محتوای فارسی
+            worksheet['!rtl'] = true;
+
+            for (let cell in worksheet) {
+                if (worksheet[cell] && typeof worksheet[cell] === 'object') {
+                    worksheet[cell].s = {
+                        alignment: {
+                            horizontal: 'right',
+                            readingOrder: 2 // فعال کردن جهت RTL برای محتوای فارسی
+                        }
+                    };
+                }
+            }
+
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "گزارش فروش");
+
+            const reportTitle = "@Html.Raw(ViewBag.ReportTitle)";
+            const reportDate = "@Html.Raw(ViewBag.ReportDate)";
+            const fileName = `${reportTitle}-${reportDate}.xlsx`;
+
+            XLSX.writeFile(workbook, fileName);
+        }
+
+
+    </script>
+
+</body>
+</html>

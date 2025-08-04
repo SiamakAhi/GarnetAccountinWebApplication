@@ -1,0 +1,33 @@
+﻿@model AppRolViewModel
+
+
+<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+    <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+            <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+            <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+                <h4 class="mb-1" id="modalTitle">ویرایش نقش </h4>
+            </div>
+            <div class="p-4 pb-0" id="modalContent">
+                <form asp-action="EditRole" asp-controller="usermanager" asp-area="" method="post">
+                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+                    <div class="form-floating mb-3">
+                        <input class="form-control" asp-for="Name" id="@Model.Name" type="text" placeholder="نام نقش به لاتین" />
+                        <label asp-for="Name">نام نقش به لاتین</label>
+                    </div>
+                    <div class="form-floating">
+                        <input class="form-control" id="@Model.Description" asp-for="Description" type="text" placeholder="توضیحات" />
+                        <label asp-for="Description"></label>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">انصراف</button>
+                        <button class="btn btn-primary submitajax" type="button">ثبت اطلاعات </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

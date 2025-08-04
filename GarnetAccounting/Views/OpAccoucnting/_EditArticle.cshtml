@@ -1,0 +1,128 @@
+﻿@model AddUpdateDocDto
+
+
+
+
+<div class="modal-dialog modal-wide modal-simple">
+
+    <div class="modal-content p-2 p-md-5">
+       <div class="custom-modal-header bg-customdark">
+            <i class="bx bx-edit-alt me-2"></i>
+            <span>ویرایش آرتیکل سند حسابداری</span>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-header custom-card1 mb-3">
+                <form asp-action="EditArticle" asp-controller="OpAccoucnting" asp-area="" method="post" class="p-2 mt-2">
+                    <input type="hidden" asp-for="Article.Id" value="@Model.Article.Id" />
+                    <input type="hidden" asp-for="Article.DocId" value="@Model.Article.DocId" />
+                    <input type="hidden" asp-for="Article.PeriodId" value="@Model.Article.PeriodId" />
+                    <input type="hidden" asp-for="Article.SellerId" value="@Model.Article.SellerId" />
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="form-label">شماره ردیف</label>
+                            <input type="number" asp-for="Article.RowNumber" class="form-control text-center firstSelect gonext" value="@Model.Article.RowNumber">
+                        </div>
+                        <div class="col-md-3 mt-1">
+                            <label class="form-label">شماره بایگانی</label>
+                            <input type="text" id="frmEdit-archveCode" asp-for="Article.ArchiveCode" class="form-control form-control-sm text-center gonext">
+                        </div>
+                        <div class="col-md-7">
+                            <label class="form-label" asp-for="Article.MoeinId">حساب معین</label>
+                            <select asp-for="Article.MoeinId" class="form-select form-select-sm select2 gonext" asp-items="@ViewBag.Moeins" id="frmEditArticle_MoeinId" aria-label="Default select" data-url="@Url.Action("editArticle_getMoeinTafsils","OpAccoucnting",new{Area=""})">
+                                <option>انتخاب حساب</option>
+                            </select>
+                        </div>
+                        <div class="col-12" id="frmEditArticle_TafsilPlace">
+                            <div class="row">
+                                @if (ViewBag.Tafsil4 != null)
+                                {
+                                    <div class="col-md-4" id="tafsil4">
+                                        <label class="form-label" asp-for="Article.Tafsil4Id">تفصیلی 4</label>
+                                        <select asp-for="Article.Tafsil4Id" id="frmEdit_Tafsil4" class="form-select form-select-sm select2 gonext" asp-items="@ViewBag.Tafsil4" aria-label="Default select">
+                                            <option value="0" selected>انتخاب کنید</option>
+                                        </select>
+                                    </div>
+                                }
+
+                                @if (ViewBag.Tafsil5 != null)
+                                {
+                                    <div class="col-md-4" id="tafsil5">
+                                        <label asp-for="Article.Tafsil5Id" class="form-label">تفصیلی 5</label>
+                                        <select asp-for="Article.Tafsil5Id" id="frmEdit_Tafsil5" class="form-select form-select-sm select2 gonext" asp-items="@ViewBag.Tafsil5" aria-label="Default select">
+                                            <option value="0" selected>انتخاب کنید</option>
+                                        </select>
+                                    </div>
+                                }
+
+                                @if (ViewBag.Tafsil4 != null)
+                                {
+                                    <div class="col-md-6" id="tafsil6">
+                                        <label asp-for="Article.Tafsil6Id" class="form-label">تفصیلی 6</label>
+                                        <select asp-for="Article.Tafsil6Id" id="frmEdit_Tafsil6" class="form-select form-select-sm select2 gonext" asp-items="@ViewBag.Tafsil6" aria-label="Default select">
+                                            <option value="0" selected>انتخاب کنید</option>
+                                        </select>
+                                    </div>
+                                }
+
+                                @if (ViewBag.Tafsil7 != null)
+                                {
+                                    <div class="col-md-4" id="tafsil7">
+                                        <label asp-for="Article.Tafsil7Id" class="form-label">تفصیلی 7</label>
+                                        <select asp-for="Article.Tafsil7Id" id="frmEdit_Tafsil7" class="form-select form-select-sm select2" asp-items="@ViewBag.Tafsil7" aria-label="Default select">
+                                            <option value="0" selected>انتخاب کنید</option>
+                                        </select>
+                                    </div>
+                                }
+
+                                @if (ViewBag.Tafsil8 != null)
+                                {
+                                    <div class="col-md-4" id="tafsil8">
+                                        <label asp-for="Article.Tafsil8Id" class="form-label">تفصیلی 8</label>
+                                        <select asp-for="Article.Tafsil8Id" id="frmEdit_Tafsil8" class="form-select form-select-sm select2 gonext" asp-items="@ViewBag.Tafsil8" aria-label="Default select">
+                                            <option value="null" selected>انتخاب کنید</option>
+                                        </select>
+                                    </div>
+                                }
+                                @if (ViewBag.Projects != null)
+                                {
+                                    <div class="col-md-4">
+                                        <label class="form-label" asp-for="Article.ProjectId">انتخاب پروژه</label>
+                                        <select asp-for="Article.ProjectId" class="form-control form-control-sm select2" asp-items="@ViewBag.Projects">
+                                            <option value="0" selected>انتخاب کنید</option>
+                                        </select>
+                                    </div>
+                                }
+                            </div>
+
+                        </div>
+                        <div class="col-md-12 mt-1">
+                            <label asp-for="Article.Comment" class="form-label">شرح آرتیکل</label>
+                            <textarea asp-for="Article.Comment" id="frmEdit_artDesc" rows="1" class="form-control form-control-sm gonext"></textarea>
+                        </div>
+                        
+                    </div>
+                    <div class="row mb-2 mt-1">
+                        <div class="col-md-4">
+                            <label class="form-label" asp-for="Article.strBed">مبلغ بدهکار</label>
+                            <input type="text" id="frmEdit-bed" asp-for="Article.strBed" class="form-control text-center numberInput gonext">
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label class="form-label" asp-for="Article.strBes">مبلغ بستانکار</label>
+                            <input type="text" id="frmEdit-bes" asp-for="Article.strBes" class="form-control text-center numberInput gonext">
+                        </div>
+                       
+                        <div class="col-md-4 d-grid mt-2 p-3">
+                            <button type="button" class="btn  btn-primary m-2 accAjaxSubmit">ذخیــره</button>
+                        </div>
+                       
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/forms-selects.js" defer></script>
+
+
+

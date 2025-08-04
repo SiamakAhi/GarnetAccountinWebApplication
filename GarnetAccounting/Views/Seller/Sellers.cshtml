@@ -1,0 +1,108 @@
+﻿@model List<VmSeller>
+
+@{
+    ViewData["Title"] = "نرم افزار مدیریت مالی گارنت";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string message = ViewBag.Message;
+}
+  <div class="container-fluid" >
+    <div class="card">
+        <div class="card-header-search">
+            <h5 class="card-header heading-color">
+                مدیریت شرکت ها
+            </h5>
+            <p>@message</p>
+
+            <a class="btn btn-outline-primary" asp-action="AddSeller" asp-controller="Seller" asp-area=""> شرکت جدید</a>
+        </div>
+
+        <div class="card-body card-table">
+            <div class="table-responsive text-nowrap">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>نام کسب و کار</th>
+                            <th>حقیقی/حقوقی</th>
+                            <th class="text-center">کد اقتصادی</th>
+                            <th class="text-center">شماره ثبت</th>
+                            <th class="text-center">شماره پرونده مالیاتی</th>
+                            <th class="text-center">شعبه مالیاتی</th>
+                            <th class="text-center">ممیز</th>
+                            <th>مدیرعامل</th>
+                            <th class="text-center">شماره تماس </th>
+                           @*  <th>وضهیت ارتباط با سامانه</th> *@
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @if (Model.Count() > 0)
+                        {
+                            int row = 1;
+                            foreach (var x in Model)
+                            {
+                                <tr>
+                                    <td>@row</td>
+                                    <td>@x.Name</td>
+                                    <td class="text-center">@(x.LegalStatus == 1 ? "حقیقی" : "حقوقی")</td>
+                                    <td class="text-center">@x.EconomicCode</td>
+                                    <td class="text-center">@x.RegistrationNumber</td>
+                                    <td class="text-center">@x.TaxFileNumber</td>
+                                    <td class="text-center">@x.TaxUnitCode</td>
+                                    <td class="text-center">@x.TaxAuditor</td>
+                                    <td class="text-center">@x.CEOName</td>
+                                    <td class="text-center">@x.CEOContactNumber</td>
+                                    
+                                   @*  <td class="text-center d-grid">
+                                        <a href="#" data-url="@Url.Action("CheckConnection","moadian",new{Area="Moadian", sellerId=x.Id})" class="btn btn-xs btn-success checkconnection"> استعلام </a>
+                                    </td> *@
+                                    <td class="row-btns text-center">
+                                        <a href="javascript:void(0)" class="callform" data-url="@Url.Action("SellerInfo", "Seller", new { Area = "", id = x.Id })"><i class="bx bx-info-square text-info"></i></a>
+                                        <a asp-action="UpdateSellerInfo" asp-controller="Seller" asp-area="" asp-route-id="@x.Id"><i class="bx bx-edit-alt text-gray"></i></a>
+                                        @*  <a href="#"><i class="bx bx-user-x text-warning"></i></a>*@
+                                    </td>
+                                </tr>
+
+                                row++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8">   فروشنده ای در سیستم تعریف نشده است</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+  </div>
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var Alert = "@Html.Raw(message)";
+
+        if (Alert != null && Alert != '') {
+            Swal.fire({
+                title: 'کاربـر گـرامی !',
+                text: Alert,
+                icon: 'success',
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                },
+                confirmButtonText: 'باشه',
+                buttonsStyling: false
+            });
+        }
+
+    });
+</script>

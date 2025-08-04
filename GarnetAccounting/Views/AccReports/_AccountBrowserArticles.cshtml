@@ -1,0 +1,166 @@
+﻿@model AccountsBrowserDto
+@{
+    long totalBed = Model.Articles.Sum(n => n.Bed);
+    long totalBes = Model.Articles.Sum(n => n.Bes);
+    long ekhtelaf = totalBed >= totalBes ? totalBed - totalBes : totalBes - totalBed;
+
+    string strTotalBed = totalBed > 0 ? totalBed.ToPrice() : "0";
+    string strTotalBes = totalBes > 0 ? totalBes.ToPrice() : "0";
+    string strEkhtelaf = ekhtelaf > 0 ? ekhtelaf.ToPrice() : "0";
+    string status = (ekhtelaf > 0 && totalBed > totalBes) ? "بدهکار" : ((ekhtelaf > 0 && totalBes > totalBed) ? "بستانکار" : "");
+}
+<div class="alert alert-primary alert-dismissible m-0 py-1" role="alert">
+    <div class="section-nav">
+        <ul class="text-medium">
+            <li>
+                <a href="javascript:void(0)" class="submitFormById" data-target="frm_accBrowser">
+                    <span class="text-small text-primary">سطـح کل</span>
+                </a>
+            </li>
+            <li>
+                <span class="mx-2 text-warning">|</span>
+            </li>
+            <li>
+                <a href="javascript:void(0)" class="accountBrowser_nav" data-target="@Model.Articles?.FirstOrDefault()?.KolId" data-url="@Url.Action("AccountBrowserMoein","AccReports",new{Area=""})">
+                    <span class="text-small text-primary">سطـح معین</span>
+                </a>
+            </li>
+            <li>
+                <span class="mx-2 text-warning">|</span>
+            </li>
+            <li>
+                <a href="javascript:void(0)" class="accountBrowser_nav" data-target="@Model.Articles?.FirstOrDefault()?.MoeinId" data-url="@Url.Action("AccountBrowserTafsil","AccReports",new{Area=""})">
+                    <span class="text-small text-primary me-5">سطـح تفصیلی</span>
+                </a>
+            </li>
+            <li>
+                <span class="text-secondary">@Model.Articles?.FirstOrDefault()?.GroupName</span>
+            </li>
+            <li>
+                <i class="bx bx-chevron-left text-warning"></i>
+            </li>
+            <li>
+                <span class="text-secondary">@Model.Articles?.FirstOrDefault()?.KolName</span>
+            </li>
+            <li>
+                <i class="bx bx-chevron-left text-warning"></i>
+            </li>
+            <li>
+                <span class="text-secondary">@Model.Articles?.FirstOrDefault()?.MoeinName</span>
+            </li>
+            <li>
+                <i class="bx bx-chevron-left text-warning"></i>
+            </li>
+            <li>
+                <span class="text-warning">@Model.Articles?.FirstOrDefault()?.Tafsil4Name</span>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="card-body card-table">
+    <div class="table-responsive text-nowrap" id="accountBrowswePlace">
+        <table class="table table-hover table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th class="text-center">ردیف</th>
+                    <th>شماره سند</th>
+                    <th>تاریخ سند</th>
+                    <th>شرح</th>
+                    <th>تفصیل 4</th>
+                    <th>تفصیل 5</th>
+                    <th>6 تفصیل</th>
+                    <th>7 تفصیل</th>
+                    <th>8 تفصیل</th>
+                    <th>بدهکار</th>
+                    <th>بستانکار</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @if (Model.Articles?.Count() > 0)
+                {
+                    int row = 1;
+                    foreach (var x in Model.Articles)
+                    {
+                        <tr class="dblc-link" data-target="@x.Id" data-url="@Url.Action("Doc","OpAccoucnting",new{Area="",id=x.DocId})">
+                            <td class="text-center">@row</td>
+                            <td>@x.DocNumber</td>
+                            <td>@x.DocDate.Value.LatinToPersian()</td>
+                            <td>@x.Comment</td>
+                            <td>@x.Tafsil4Name</td>
+                            <td>@x.Tafsil5Name</td>
+                            <td>@x.Tafsil6Name</td>
+                            <td>@x.Tafsil7Name</td>
+                            <td>@x.Tafsil8Name</td>
+                            <td>@(x.Bed > 0 ? x.Bed.ToPrice() : "0")</td>
+                            <td>@(x.Bes > 0 ? x.Bes.ToPrice() : "0")</td>
+                            <td></td>
+                        </tr>
+
+                        row++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="12">
+                            <div class="alert alert-primary my-3 text-center" role="alert">
+                               آرتیکلی برای نمایش وجود ندارد
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
+
+<div class="alert alert-secondary alert-dismissible m-0 mt-5" role="alert">
+    <div class="row">
+        <div class="col-md-8"></div>
+        <div class="col-md-4">
+            <ul class="docfooter-totalAmounts">
+                <li>
+                    <label>جمع بدهکار : </label>
+                    <div>
+
+                        <input type="text" readonly value="@strTotalBed" />
+                        <span class="text-sm-end">ريال</span>
+                    </div>
+                </li>
+                <li>
+                    <label>جمع بستانکار : </label>
+                    <div>
+                        <input type="text" readonly value="@strTotalBes" />
+                        <span class="text-sm-end">ريال</span>
+                    </div>
+                </li>
+                <li>
+                    <label class="docBalance">
+                        @if (status == "بدهکار")
+                        {
+                            <span class="badge badge-dot bg-label-primary px-3">@status</span>
+                        }
+                        else if (status == "بستانکار")
+                        {
+                            <span class="badge badge-dot bg-label-warning px-3">@status</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-dot bg-label-success px-3">تـراز</span>
+                        }
+
+                    </label>
+                    <div>
+                        <input type="text" readonly value="@strEkhtelaf" />
+                        <span class="text-sm-end">ريال</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>

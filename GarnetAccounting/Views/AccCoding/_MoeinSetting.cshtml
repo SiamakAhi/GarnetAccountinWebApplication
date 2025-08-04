@@ -1,0 +1,67 @@
+﻿  @model AccountTafsilDto
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning"> شما در حال تنظیم حساب <span class="text-info mx-1">@Model.MoeinName</span> هستید.</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="mb-3" asp-action="MoeinSetting" asp-controller="AccCoding" asp-area="" method="post">
+                <input type="hidden" asp-for="Id" value="@ViewBag.MoeinId" />
+                <div class="garnet-section garnet-section-info">
+                    <div class="row gy-3">
+                        <div class="row tafsilControls">
+                            <div class="col-md-12 mb-2">
+                                <h5>گروه(های) تفصیلی سطح 4</h5>
+                                <div class="select2-dark">
+                                    <select asp-for="Tafsil4_Array" class="select2 form-select" multiple asp-items="@ViewBag.Groups">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-2">
+                                <h5>گروه(های) تفصیلی سطح 5</h5>
+                                <div class="select2-dark">
+                                    <select asp-for="Tafsil5_Array" class="select2 form-select" multiple asp-items="@ViewBag.Groups">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-2">
+                                <h5>گروه(های) تفصیلی سطح 6</h5>
+                                <div class="select2-dark">
+                                    <select asp-for="Tafsil6_Array" class="select2 form-select" multiple asp-items="@ViewBag.Groups">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-2">
+                                <h5>گروه(های) تفصیلی سطح 7</h5>
+                                <div class="select2-dark">
+                                    <select asp-for="Tafsil7_Array" class="select2 form-select" multiple asp-items="@ViewBag.Groups">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-2">
+                                <h5>گروه(های) تفصیلی سطح 8</h5>
+                                <div class="select2-dark">
+                                    <select asp-for="Tafsil8_Array" class="select2 form-select" multiple asp-items="@ViewBag.Groups">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="garnet-section-footer">
+                    <input type="button" class="btn btn-sm btn-primary mx-2 accAjaxSubmit" value="ذخیره تنظیمات حساب" />
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">
+                        انصراف
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/js/forms-selects.js"></script>
+
+
+
+

@@ -1,0 +1,72 @@
+﻿  @model WarehouseDto
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning"> ایجاد انبار</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <form asp-action="EditWarehouse" asp-controller="phWarehouse" asp-area="Warehouse" method="post" class="mt-2">
+
+                <div class="garnet-section garnet-section-info">
+                    <div class="row gy-3">
+                        <input type="hidden" asp-for="WarehouseId" value="@Model.WarehouseId" />
+                        <input type="hidden" asp-for="SellerId" value="@Model.SellerId" />
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label" asp-for="WarehouseCode"></label>
+                            <input type="text" asp-for="WarehouseCode" class="form-control firstSelect gonext">
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <label class="form-label" asp-for="WarehouseName"></label>
+                            <input type="text" asp-for="WarehouseName" class="form-control gonext">
+                        </div>
+
+                        <div class="col-md-12 mb-2">
+                            <label class="form-label" asp-for="Address"></label>
+                            <input type="text" asp-for="Address" class="form-control gonext">
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <label class="form-label" asp-for="Description"></label>
+                            <input asp-for="Description" class="form-control gonext" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="garnet-checkbox-group">
+                                <label asp-for="IsActive">فعال</label>
+                                <input type="checkbox" asp-for="IsActive" />
+                            </div>
+                        </div>
+
+                        <div class="divider divider-dashed divider-warning">
+                            <span class="divider-text">تنظیمات حسابداری</span>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <label class="form-label" asp-for="MoeinId"></label>
+                            <select asp-for="MoeinId" class="select2 form-select gonext" asp-items="ViewBag.Moeins">
+                                <option value="0"> ... </option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <label class="form-label" asp-for="TafsilId"></label>
+                            <select asp-for="TafsilId" class="select2 form-select gonext" asp-items="ViewBag.Tafsils">
+                                <option value="0"> ... </option>
+                            </select>
+                        </div>iv>
+                    </div>
+                </div>
+                <div class="garnet-section-footer">
+                    <button type="button" class="btn btn-warning me-sm-3 me-1 accAjaxSubmit">ایجــاد</button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">
+                        انصراف
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<script src="~/js/forms-selects.js"></script>
+

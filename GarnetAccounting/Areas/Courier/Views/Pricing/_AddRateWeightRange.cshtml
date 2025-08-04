@@ -1,0 +1,51 @@
+﻿@model RateWeightRangeDto
+<div class="modal-dialog dataentry-modal">
+    <div class="modal-content dataentry">
+        <div class="dataentry-title">
+            <span class="">تعریف رنج وزنی جدید</span>
+        </div>
+        <form asp-action="AddRateWeightRange" asp-controller="Pricing" asp-area="Courier" method="post">
+            <div class="row dataentry-controls">
+                <!-- بخش مشخصات -->
+                <div class="col-md-6 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>مشخصات</h6>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="StartWeight" class="form-label">وزن شروع (کیلوگرم)</label>
+                        <input type="number" class="form-control form-control-sm" asp-for="StartWeight" />
+                        <span asp-validation-for="StartWeight" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="EndWeight" class="form-label">وزن پایان (کیلوگرم)</label>
+                        <input type="number" class="form-control form-control-sm" asp-for="EndWeight" />
+                        <span asp-validation-for="EndWeight" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- بخش درصد ضریب وزن -->
+                <div class="col-md-6 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>درصد ضریب وزن</h6>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="WeightFactorPercent" class="form-label">درصد ضریب وزن</label>
+                        <input type="number" class="form-control form-control-sm" asp-for="WeightFactorPercent" />
+                        <span asp-validation-for="WeightFactorPercent" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- دکمه‌های ذخیره و انصراف -->
+            <div class="row">
+                <div class="col-md-4 offset-8 dataentry-buttons-container container-row">
+                    <div class="dataentry-buttons">
+                        <a href="javascript:void(0)" class="btn btn-primary accAjaxSubmit">ذخیـره</a>
+                        <button type="reset" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">انصراف</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="~/js/forms-selects.js"></script>

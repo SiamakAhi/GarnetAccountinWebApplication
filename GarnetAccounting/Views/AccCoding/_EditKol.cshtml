@@ -1,0 +1,72 @@
+﻿@model KolDto
+
+<div class="modal-dialog modal-lg modal-simple">
+
+    <div class="modal-content p-3 p-md-5">
+        <div class="modal-header">
+            <div class="alert alert-primary alert-dismissible d-flex align-items-center" role="alert">
+                <h5>
+                    <i class="bx bx-xs bx-edit-alt me-2 text-info"></i>
+                  ویرایش سرفصل <strong class="text-warning"> @Model.KolName</strong>
+                </h5>
+
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class=" mb-4 mt-0 mt-md-n2">
+                <form asp-action="EditKol" asp-controller="AccCoding" asp-area="" method="post" class="mt-4 appform1">
+
+                    <input type="hidden" asp-for="Id" value="@Model.Id" />
+                    <input type="hidden" asp-for="GroupId" value="@Model.GroupId" />
+                    <input type="hidden" asp-for="GroupName" value="@Model.GroupName" />
+                    <input type="hidden" asp-for="GroupCode" value="@Model.GroupCode" />
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="KolCode"></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="KolCode" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="KolName"></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="KolName" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="TypeId"></label>
+                        <div class="col-sm-9">
+                            <select class="form-select" asp-for="TypeId" asp-items="ViewBag.type">
+                                <option value="null">انتخاب کنید .. </option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="TypeId" class="text-danger"></span>
+                    </div>
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="Nature"></label>
+                        <div class="col-sm-9">
+                            <select class="form-select" asp-for="Nature" asp-items="ViewBag.Nature">
+                                <option value="null">انتخاب کنید .. </option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="TypeId" class="text-danger"></span>
+                    </div>
+
+                    <div class="row mb-4">
+                        <label class="col-sm-3 col-form-label" asp-for="Description"></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="Description" class="form-control" placeholder="..." />
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div class="row d-grid mt-3">
+                        <input type="button" class="btn btn-primary mt-2 accAjaxSubmit" value="ایجاد حســاب" />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+

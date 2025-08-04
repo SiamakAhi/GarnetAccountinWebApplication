@@ -1,0 +1,52 @@
+﻿@model List<ArticleListItem>
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">کنترل تراز سند بر اساس شماره بایگانی</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <hr />
+            <div class="mt-2">
+                @if (Model.Any())
+                {
+                    <table class="table table-bordered table-striped mt-2">
+                        <thead class="table-danger">
+                            <tr>
+                                <th>کد بایگانی</th>
+                                <th>تعداد ردیف ها</th>
+                                <th>جمع بدهکار</th>
+                                <th>جمع بستانکار</th>
+                                <th>اختلاف</th>
+                                <th>تشخیص</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="text-center">@item.ArchveCode</td>
+                                    <td class="text-center">@item.Count</td>
+                                    <td>@item.TotalBed.ToPrice()</td>
+                                    <td>@item.TotalBes.ToPrice()</td>
+                                    <td>@item.Balance.ToPrice()</td>
+                                    <td>@item.Nature</td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-secondary p-4">
+                        <strong>با توجه به کدهای بایگانی، اختلافی در ردیف های مرتبط به یک شماره بایگانی، شناسایی نشد</strong>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+

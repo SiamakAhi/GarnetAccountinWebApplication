@@ -1,0 +1,104 @@
+﻿@model List<TafsilDto>
+@{
+    ViewData["Title"] = "حساب های تفصیلی";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card" id="TafsilGroupsPlace">
+    <div class="card-header-search">
+        <h5 class="card-header heading-color">
+            حساب های تفصیلی
+        </h5>
+        <div class="btn-toolbar demo-inline-spacing" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group" role="group" aria-label="First group">
+                <a href="#" data-url="@Url.Action("AddTafsil","AccCoding",new{Area=""})" class="btn btn-outline-primary callform">
+                    ایجاد حساب تفصیلی
+                </a>
+                <a href="#" data-url="@Url.Action("AddPerson","Persen",new{Area=""})" class="btn btn-outline-warning callform">
+                    تعریف شخص
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="section-nav">
+            <ul>
+                <li>
+                    <span>لیست حساب های تفصیلی</span>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body card-table">
+            <div class="table-responsive text-nowrap" id="TafsilGroupsPlace">
+                <table class="table table-hover table-striped  dt-column-search dataTable" id="tblTafsils">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>کد حساب</th>
+                            <th>نام حساب</th>
+                            <th>گروه</th>
+                            <th>شرح</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @if (Model?.Count() > 0)
+                        {
+                            int row = 1;
+                            foreach (var x in Model)
+                            {
+                                <tr data-url="@Url.Action("","AccCoding",new{Area="",id=x.Id})">
+                                    <td>@row</td>
+                                    <td>@x.Code</td>
+                                    <td>@x.Name</td>
+                                    <td>
+                                        @for (int i = 0; i < x.GroupsName.Length; i++)
+                                        {
+                                            <span class="badge bg-label-secondary">@x.GroupsName[i]</span>
+                                        }
+                                        
+                                    </td>
+                                    <td>@x.Description</td>
+                                    <td class="row-btns text-center">
+
+                                        <a href="#"><i class="bx bx-info text-info"></i></a>
+                                        <a href="#" data-url="@Url.Action("UpdateTafsil", "AccCoding", new { Area = "", id = x.Id })" class="bymodal"><i class="bx bx-edit-alt text-gray" title="ویرایش"></i></a>
+                                        <a href="#" class="removeById" data-url="@Url.Action("DelTafsil","AccCoding", new{Area=""})" data-target="@x.Id"><i class="bx bx-trash text-warning" title="حذف"></i></a>
+
+                                    </td>
+                                </tr>
+
+                                row++;
+                            }
+
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6">
+                                    <div class="alert alert-primary text-center mb-3" role="alert">
+                                        حسابی در سیستم تعریف نشده است.
+                                        <br>
+                                        @* <a href="#" data-url="@Url.Action("AddTafsil","Coding",new{Area="Accounting"})" class="text-warning  mt-2 callform">
+                                    ایجاد حساب تفصیلی
+                                    </a>*@
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+

@@ -1,0 +1,67 @@
+﻿@model LamariServiceDto
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning">افزودن سرویس جدید </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form asp-action="UpdateLamariService" asp-controller="Contractor" asp-area="AutoServiceAgency" method="post">
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label" asp-for="ServiceName"></label>
+                        <input type="text" asp-for="ServiceName" class="form-control" placeholder="مثال : سرویس دوره ای 5000" />
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label" asp-for="ServiceType"></label>
+                        <select class="form-select select2" asp-for="ServiceType">
+                            <option value="1">سرویس دوره ای</option>
+                            <option value="2">سایر خدمات</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label" asp-for="IsActive"></label>
+                        <select class="form-select" asp-for="IsActive">
+                            <option value="true" selected>قابل ارایه</option>
+                            <option value="false">غیرفعال</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label" asp-for="MechanicShareAmount">
+                            سهم مکانیک
+                            <small class="text-info">ريال</small>
+                        </label>
+                        <input type="number" asp-for="MechanicShareAmount" class="form-control"  />
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label" asp-for="ElectricianShareAmount">
+                            سهم برقکار
+                            <smallclass ="text-info">ريال</smallclass>
+                        </label>
+                        <input type="number" asp-for="ElectricianShareAmount" class="form-control"  />
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label" asp-for="MoeinId"></label>
+                        <select class="form-select select2" asp-for="MoeinId" asp-items="@ViewBag.Moeins">
+                            <option value="null">انتخاب ...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label" asp-for="TafsilId"></label>
+                        <select class="form-select select2" asp-for="TafsilId" asp-items="@ViewBag.Tafsils">
+                            <option value="0">انتخاب ...</option>
+                        </select>
+                    </div>
+
+                    <hr />
+                    <div class="col-md-12 d-grid p-3 mb-2">
+                        <input type="button" class="btn btn-primary accAjaxSubmit" value="ثبت" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/js/forms-selects.js"></script>

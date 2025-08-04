@@ -1,0 +1,54 @@
+﻿@model FinancePeriodsDto
+
+<div class="modal-dialog modal-lg modal-simple">
+
+    <div class="modal-content p-3 p-md-5">
+        <div class="modal-header">
+            <div class="alert alert-primary alert-dismissible d-flex align-items-center" role="alert">
+                <h4>
+                    <i class="bx bx-xs bx-command me-2 text-warning"></i>
+                    تعریف دوره مالی
+                </h4>
+            
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class=" mb-4 mt-0 mt-md-n2">
+                <form asp-action="AddFinancePeriod" asp-controller="AccCoding" asp-area="" method="post" class="mt-4 appform1">
+
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="Name"></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="Name" class="form-control" />
+                        </div>
+                    </div>
+                     <div class="row mb-1">
+                       <label class="col-sm-3 col-form-label" asp-for="StartDate"></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="strStartDate" class="form-control flatpickr-input" placeholder="YYYY/MM/DD" />
+                        </div>
+                    </div>
+                     <div class="row mb-1">
+                       <label class="col-sm-3 col-form-label" asp-for="EndDate"></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="strEndDate" class="form-control flatpickr-input" placeholder="YYYY/MM/DD" id="flatpickr-date" />
+                        </div>
+                    </div>
+                     <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="DefualtVatRate"></label>
+                        <div class="col-sm-9">
+                            <input type="number" min="0" asp-for="DefualtVatRate" value="0" class="form-control" />
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row d-grid mt-3">
+                        <input type="button" class="btn btn-primary mt-2 accAjaxSubmit" value="ایجاد" />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,55 @@
+﻿ @model Cu_ServiceDto
+
+<div class="modal-dialog dataentry-modal">
+    <div class="modal-content dataentry">
+        <div class="dataentry-title">
+            <span class=""> تعریف سرویس جدید </span>
+
+        </div>
+        <form asp-action="AddCourierService" asp-controller="CourierService" asp-area="Courier" method="post">
+            <div class="row dataentry-controls">
+                <div class="col-md-6 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>اطلاعات سرویس</h6>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label asp-for="ServiceCode" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="ServiceCode" />
+                    </div>
+                    <div class="col-md-6 mb-1">
+                         <label class="form-label" asp-for="ShipmentTypeCode">نوع حمل</label>
+                        <select asp-for="ShipmentTypeCode" class="form-select form-select-sm">
+                            <option value="null">نوع حمل را انتخاب کنید ... </option>
+                            <option value="1">زمینی</option>
+                            <option value="2">هوایی</option>
+                            <option value="3">دریایی</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-1">
+                        <label class="form-label" asp-for="RatingType">نوع نرخ</label>
+                        <select asp-for="RatingType" class="form-select form-select-sm" asp-items="ViewBag.RatingType">
+                            <option value="null">نوع نرخ را انتخاب کنید ... </option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="ServiceName" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="ServiceName" />
+                    </div>
+                    <div class="col-md-12 mb-1">
+                        <label asp-for="ServiceName_En" class="form-label"></label>
+                        <input type="text" class="form-control form-control-sm" asp-for="ServiceName_En" />
+                    </div>
+                   
+                </div>
+            </div>
+                <div class=" dataentry-buttons-container container-row">
+                    <div class="dataentry-buttons">
+                        <a href="javascript:void(0)" class="btn btn-primary accAjaxSubmit"> ذخیـره</a>
+                        <button type="reset" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">
+                            انصراف
+                        </button>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>

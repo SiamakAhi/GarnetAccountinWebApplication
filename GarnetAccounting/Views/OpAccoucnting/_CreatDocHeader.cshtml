@@ -1,0 +1,53 @@
+﻿@model DocDto_AddNew
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning"> ایجاد سند حسابداری</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <form asp-action="CreateDocHeader" asp-controller="OpAccoucnting" asp-area="" method="post" class="mt-2">
+                <input type="hidden" asp-for="Id" value="@Guid.NewGuid()" />
+                <div class="garnet-section garnet-section-info">
+                    <div class="row gy-3">
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="TypeId"></label>
+                            <select asp-for="TypeId" class="form-select" asp-items="@ViewBag.DocTypes" aria-label="Default select gonext">
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="strDocDate"></label>
+                            <input type="text" asp-for="strDocDate" class="form-control flatpickr-input gonext" value="@DateTime.Now.LatinToPersianForDatepicker()" placeholder="YYYY/MM/DD" id="docDate">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="DocNumber"></label>
+                            <input type="number" asp-for="DocNumber" class="form-control gonext" value="@ViewBag.DocNumber">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label" asp-for="AtfNumber"></label>
+                            <input type="number" asp-for="AtfNumber" class="form-control gonext firstSelect">
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <label class="form-label" asp-for="Description"></label>
+                            <input asp-for="Description" class="form-control gonext" value="   بابت منظور نمودن مدارک مثبته ضمیمه سند حسابداری" />
+                        </div>
+                    </div>
+                </div>
+                <div class="garnet-section-footer">
+                    <button type="button" class="btn btn-warning me-sm-3 me-1 accAjaxSubmit">ایجــاد</button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">
+                        انصراف
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+

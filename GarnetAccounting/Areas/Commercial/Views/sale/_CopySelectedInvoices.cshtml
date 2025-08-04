@@ -1,0 +1,101 @@
+﻿     @model CoppyInvoiceSettingDto
+
+<div class="modal-dialog dataentry-modal">
+    <div class="modal-content dataentry">
+        <div class="dataentry-title">
+            <span class=""> کپی از فاکتور</span>
+
+        </div>
+        <form asp-action="CreateSelectedInvoices" asp-controller="sale" asp-area="Commercial" method="post">
+
+            <input type="hidden" asp-for="SellerId" value="@Model.SellerId" />
+            <input type="hidden" asp-for="PeriodId" value="@Model.PeriodId" />
+
+            @for (int i = 0; i < Model.InvoicesId.Count; i++)
+            {
+                <input type="hidden" name="InvoicesId[@i]" class="form-control" value="@Model.InvoicesId[i]" />
+            }
+
+            <div class="row dataentry-controls">
+                <div class="col-md-4 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>تنظیمات ارزش افزوده</h6>
+                    </div>
+                    <div class="garnet-checkbox-group">
+                        <label for="print-kol">‌آیتم مشمول و غیرمشمول کپی شود</label>
+                        <input type="radio" asp-for="TaxableType" value="1" />
+
+                    </div>
+                    <div class="garnet-checkbox-group">
+                        <label for="print-Moein">‌فقط ردیف های مشمول  ارزش افزوده</label>
+                        <input type="radio" asp-for="TaxableType" value="2" />
+
+                    </div>
+                    <div class="garnet-checkbox-group">
+                        <label for="print-tafsil">‌فقط ردیف های غیرمشمول ارزش افزوده</label>
+                        <input type="radio" asp-for="TaxableType" value="3" />
+
+                    </div>
+                </div>
+
+                <div class="col-md-8 garnet-section garnet-section-info">
+                    <div class="garnet-section-header">
+                        <h6>تنظیم تاریخ فاکتورها</h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="garnet-checkbox-group">
+                                <label for="typ1">‌تغییر در تاریخ داده نشود.</label>
+                                <input type="radio" asp-for="GenerateDataType" id="typ1" value="1" />
+
+                            </div>
+                            <div class="garnet-checkbox-group">
+                                <label for="typ2">‌فاکتورها در تاریخ ماه بعد صادر شوند.</label>
+                                <input type="radio" asp-for="GenerateDataType" id="typ2" value="2" />
+
+                            </div>
+                            <div class="garnet-checkbox-group">
+                                <label for="typ3">‌فاکتورها در تاریخ ماه قبل صادر شوند.</label>
+                                <input type="radio" asp-for="GenerateDataType" id="typ3" value="3" />
+                            </div>
+                        </div   >
+                        <div class="col-md-6">
+                            <div class="garnet-checkbox-group">
+                                <label for="typ4">‌تعیین فاصله با تاریخ اصلی بصورت دستی.</label>
+                                <input type="radio" asp-for="GenerateDataType" id="typ4" value="4" />
+                            </div>
+                            <div id="addDays">
+                                <label class="form-label"></label>
+                                <input type="number" asp-for="VarDay" class="form-control text-center" value="0" min="-365" max="365" />
+                            </div>
+
+                            <div class="garnet-checkbox-group">
+                                <label for="typ5">‌ایجاد در تاریخ مشخص</label>
+                                <input type="radio" asp-for="GenerateDataType" id="typ5" value="5" />
+                            </div>
+                            <div id="selectDate">
+                                <label class="form-label"></label>
+                                <input type="text" asp-for="strInvoiceDate" class="form-control flatpickr-input" />
+                            </div>
+                        </div>
+                       
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 offset-8  dataentry-buttons-container container-row">
+                    <div class="dataentry-buttons">
+                        <a href="javascript:void(0)" class="btn btn-primary accAjaxSubmit"> ایجاد فاکتور</a>
+                        <button type="reset" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">
+                            انصراف
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,47 @@
+﻿@model ContractorDto
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning">معرفی پیمانکار جدید</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form asp-action="AddContractor" asp-controller="Contractor" asp-area="AutoServiceAgency" method="post">
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label" asp-for="Name"></label>
+                        <input type="text" asp-for="Name" class="form-control"  placeholder="نام کامل پیکانکار / سرویس دهنده" />
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label" asp-for="SkillArea"></label>
+                        <input type="text" asp-for="SkillArea" class="form-control"  placeholder="مثال : مکانیک" />
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label" asp-for="SharePercentage"></label>
+                        <input type="number" asp-for="SharePercentage" min="0" max="100" class="form-control text-center"  />
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label" asp-for="IsActive"></label>
+                        <select class="form-select" asp-for="IsActive">
+                            <option value="true" selected>فعال</option>
+                            <option value="false">غیرفعال</option>
+                        </select>
+                    </div>
+                  
+                    <div class="col-md-12 mb-4 mt-2">
+                        <label class="form-label" asp-for="TafsilId"></label>
+                        <select class="form-select select2" asp-for="TafsilId" asp-items="@ViewBag.Tafsils">
+                            <option>انتخاب ...</option>
+                        </select>
+                    </div>
+                    <hr />
+                    <div class="col-md-12 d-grid p-3 mb-2">
+                        <input type="button" class="btn btn-primary accAjaxSubmit" value="ثبت" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/js/forms-selects.js"></script>

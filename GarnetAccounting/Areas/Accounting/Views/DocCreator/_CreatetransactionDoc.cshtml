@@ -1,0 +1,116 @@
+﻿ @model BankTransactionsCreateDocDto
+
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning">ثبت تراکنش های بانکی</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form asp-action="CreatetBankReportDoc" asp-controller="DocCreator" asp-area="Accounting" method="post">
+                <input type="hidden" asp-for="SellerId" value="@Model.SellerId" />
+                <input type="hidden" asp-for="PeriodId" value="@Model.PeriodId" />
+                <input type="hidden" asp-for="TransactionsType" value="@Model.TransactionsType" />
+                <input type="hidden" asp-for="BankAccountId" value="@Model.BankAccountId" />
+                <input type="hidden" asp-for="UserName" value="@User.Identity.Name" />
+
+                @if (Model.TransactionsId.Any())
+                {
+                    foreach (var item in Model.TransactionsId)
+                    {
+                        <input type="hidden" asp-for="TransactionsId" value="@item" />
+                    }
+                }
+
+                <div class="row">
+                    <div class="col-md-12 select2-dark mb-1">
+                        <label class="form-label" asp-for="MoeinId">انتخاب حساب معین *</label>
+                        <select class="form-select select2 " asp-for="MoeinId" asp-items="@ViewBag.Moeins" required>
+                            <option>انتخاب حساب معین</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 select2-dark mb-1">
+                        <label class="form-label" asp-for="Tafsil4Id">انتخاب تفصیل سطح 4</label>
+                        <select class="form-select select2" asp-for="Tafsil4Id" asp-items="@ViewBag.Tafsils">
+                            <option value="">انتخاب تفصیلی سطح 4</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 select2-dark mb-1">
+                        <label class="form-label" asp-for="Tafsil5Id">انتخاب تفصیل سطح 5</label>
+                        <select class="form-select select2" asp-for="Tafsil5Id" asp-items="@ViewBag.Tafsils">
+                            <option value="">انتخاب تفصیلی سطح 5</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 select2-dark mb-1">
+                        <label class="form-label" asp-for="Descriptions">شرح آرتیکل</label>
+                       <input type="text" asp-for="Descriptions" class="form-control" />
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label class="form-check-label" asp-for="DocSelector">
+                           اسناد در سندی با شرح زیر اضافه شوند. <br />
+                           - اگر یافت نشد، سند جدید ایجاد میشود <br />
+                           - درصورت خالی بودن، نادیده پرفته می شود
+                        </label>
+                        <input class="form-control" type="text" asp-for="DocSelector">
+                    </div>
+                    <div class="divider divider-dashed"><span class="divider-text">تنظیمات سند</span></div>
+                    <div class="widget-info fw mb-2">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="AppendBankDescription">
+                            <label class="form-check-label" asp-for="AppendBankDescription">
+                               شرح تراکنش به شرح آرتیکل اضافه شود.
+                            </label>
+                        </div>
+                    </div>
+                  
+                    <div class="widget-info fw mb-2">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="InsertTrackingNumber" checked>
+                            <label class="form-check-label" asp-for="InsertTrackingNumber">
+                               شماره سند/پیگیری تراکنش ثبت شود
+                            </label>
+                        </div>
+                    </div>
+                    <div class="widget-info fw mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="CreateNewDoc">
+                            <label class="form-check-label" asp-for="CreateNewDoc">
+                                تراکنش ها در سند جدید ثبت شود. (در غیراین صورت به سند تاریخ تراکنش اضافه می شود)
+                            </label>
+                        </div>
+                    </div>
+                 @*    <div class="widget-info fw mb-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" asp-for="Grouped" checked>
+                            <label class="form-check-label" asp-for="Grouped">
+                               تراکنش ها به صورت تجمیعی در یک ردیف قرار بگیرند
+                            </label>
+                        </div>
+                    </div> *@
+                </div>
+                <hr />
+                <div class="p-1 d-grid fw">
+                    <input class="btn btn-primary accAjaxSubmit" type="button" value="ثبت سند حسابداری" />
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/forms-selects.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

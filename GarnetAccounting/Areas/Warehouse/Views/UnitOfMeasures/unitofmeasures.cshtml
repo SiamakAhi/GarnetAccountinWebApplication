@@ -1,0 +1,122 @@
+﻿@model VmUnitOfMeasures
+@{
+    ViewData["Title"] = "واحدهای اندازه گیری";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header-search">
+        <h5 class="card-header">
+            واحدهای اندازه گیری و شمارش کالا و خدمات
+        </h5>
+        <div>
+            <form asp-action="unitofmeasures" asp-controller="UnitOfMeasures" asp-area="Warehouse" method="get" class="flex-1">
+                <div class="input-group input-group-merge">
+                    <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-search"></i></span>
+                    <input type="text" name="name" class="form-control" placeholder="جستجو در نام  ...">
+                    <button class="btn btn-outline-primary" type="submit">جستجــو</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header-sidebar">
+                        <h5 class="text-info"> افزودن واحد جدید</h5>
+                        <div class="card-body mt-4">
+                            <form asp-action="AddUnitCount" asp-controller="UnitOfMeasures" asp-area="Warehouse" method="post">
+                                <div class="mb-3">
+                                    <label asp-for="Dto.UnitName" class="form-label">نام</label>
+                                    <input type="text" class="form-control" asp-for="Dto.UnitName" placeholder="کیلوگرم">
+                                </div>
+                                <div>
+                                    <label asp-for="Dto.UnitSymbol" class="form-label">نماد</label>
+                                    <input type="text" class="form-control" asp-for="Dto.UnitSymbol" placeholder="Kg">
+                                </div>
+                                <div>
+                                    <label asp-for="Dto.UnitCode" class="form-label">کد کشوری</label>
+                                    <input type="text" class="form-control" asp-for="Dto.UnitCode" placeholder="164">
+                                </div>
+                                <div>
+                                    <label asp-for="Dto.Description" class="form-label">توضیحات</label>
+                                    <input type="text" class="form-control" asp-for="Dto.Description">
+                                </div>
+                                <div class="d-grid mt-2">
+                                    <input type="button" class="btn btn-warning accAjaxSubmit" value="ثبت">
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="">
+                            <div class="alert alert-primary mt-3 py-4" role="alert">
+                                <h6 class="alert-heading mb-1 text-info mb-2"><i class="bx bx-xs bx-command me-2"></i>کـد واحدهای اندازه گیری</h6>
+                                <span>
+                                    لطفاً کد واحد اندازه‌گیری کالا یا خدمت را مطابق با استاندارد تعریف شده در سازمان امور مالیاتی کشور وارد کنید. برای مشاهده لیست واحدهای اندازه‌گیری کشوری، می توانید از لینک زیر استفاده نمایید.
+                                </span>
+                                <a href="https://www.intamedia.ir/Portals/0/news/Terminals/RC_UMGS_ST_V1_13%D9%88%D8%A7%D8%AD%D8%AF%20%D8%A7%D9%86%D8%AF%D8%A7%D8%B2%D9%87%20%DA%AF%DB%8C%D8%B1%DB%8C%20%DA%A9%D8%A7%D9%84%D8%A7.pdf?ver=7iBzK3gTkUiAvnMbLjt0zA%3d%3d" class="btn btn-outline-info mt-3">دریافت آخرین لیست واحدهای اندازه گیری کالا/خدمت</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-8">
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ردیف</th>
+                                <th>واحد اندازه گیری</th>
+                                <th>نماد</th>
+                                <th>کد کشوری</th>
+                                <th>توضیحات</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            @if (Model.Measures?.Count() > 0)
+                            {
+                                int row = 1;
+                                foreach (var x in Model.Measures)
+                                {
+                                    <tr>
+                                        <td>@row</td>
+                                        <td>@x.UnitName</td>
+                                        <td>@x.UnitSymbol</td>
+                                        <td>@x.UnitCode</td>
+                                        <td>@x.Description</td>
+                                        <td class="row-btns text-center">
+                                            <a class="callform" data-url="@Url.Action("EditTheMeasures", "UnitOfMeasures", new { Area = "Warehouse",id=x.Id })" title="ویرایش">
+                                                <i class="bx bx-edit-alt text-info"></i>
+                                            </a>
+                                            <a href="#"><i class="bx bx-trash-alt text-warning" title="حذف"></i></a>
+                                        </td>
+                                    </tr>
+
+                                    row++;
+                                }
+
+                            }
+                            else
+                            {
+                                <tr>
+                                    اطلاعاتی برای نمایش وجود ندارد
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script src="../../vendor/libs/jquery/jquery.js"></script>
+<script src="../../js/app/appgarnet.js"></script>
+

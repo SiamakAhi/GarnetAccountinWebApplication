@@ -1,0 +1,94 @@
+﻿@model List<FinancePeriodsDto>
+@{
+    ViewData["Title"] = "مدیریت کالی کسب و کار گارنِت - دوره های مالی";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="card" id="TafsilGroupsPlace">
+        <div class="card-header-search">
+            <h5 class="card-header heading-color">
+                دوره های مالی
+            </h5>
+            <div class="btn-toolbar demo-inline-spacing" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-group" role="group" aria-label="First group">
+                    <a href="#" data-url="@Url.Action("AddFinancePeriod","AccCoding",new{Area=""})" class="btn btn-outline-secondary callform">
+                        ایجاد دوره مالی جـدید
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="section-nav">
+                <ul>
+                    <li>
+                        <span>لیست دوه های مالی</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body card-table">
+                <div class="table-responsive text-nowrap" id="TafsilGroupsPlace">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ردیف</th>
+                                <th>نام دوره</th>
+                                <th>تاریخ شروع</th>
+                                <th>تاریخ پایان</th>
+                                <th>نرخ ارزش افزوده</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            @if (Model?.Count() > 0)
+                            {
+                                int row = 1;
+                                foreach (var x in Model)
+                                {
+                                    <tr data-url="@Url.Action("","AccCoding",new{Area="",id=x.Id})">
+                                        <td>@row</td>
+                                        <td>@x.Name</td>
+                                        <td>@x.strStartDate</td>
+                                        <td>@x.strEndDate</td>
+                                        <td>@x.DefualtVatRate</td>
+                                        <td class="row-btns text-center">
+
+                                            <a href="javascript:void(0)" class="callform" data-url="@Url.Action("EditFinancePeriod","AccCoding", new{Area="", id=x.Id})"><i class="bx bx-edit-alt text-gray " title="ویرایش"></i></a>
+                                            <a href="#" class="removeById" data-url="@Url.Action("DeletePeriod","AccCoding", new{Area=""})" data-target="@x.Id"><i class="bx bx-trash text-warning" title="حذف"></i></a>
+
+                                        </td>
+                                    </tr>
+
+                                    row++;
+                                }
+
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="alert alert-primary text-center mb-3" role="alert">
+                                            دوره مالی جهت نمایش وجود ندارد
+                                            <br>
+                                            <a href="#" data-url="@Url.Action("AddFinancePeriod","AccCoding",new{Area=""})" class="text-warning  mt-2 callform">
+                                                تعریف دوره مالی
+                                            </a>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

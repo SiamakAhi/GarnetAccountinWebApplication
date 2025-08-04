@@ -1,0 +1,161 @@
+﻿@model SaveDetailsDto
+@{
+    ViewData["Title"] = "تکمیل اطلاعات پذیرش";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="card">
+
+        <div class="card-body">
+            <h4 class="text-info">تکمیل اطلاعات و ثبت سند حسابداری پذیرش</h4>
+            @if (Model != null)
+            {
+                <form id="receptionForm" asp-action="SaveReceptionDetails" asp-controller="Reciption" asp-area="AutoServiceAgency" method="post">
+                    <input type="hidden" asp-for="ReceptionNember" value="@Model.ReceptionNember" />
+
+                    <div class="row receptionHeader">
+                        <div class="col-md-4 mb-2 receptionHeader-section">
+                            <h5 class="text-warning">آزاد</h5>
+                            <ul>
+                                <li>
+                                    <label asp-for="ClientName">جمع مبالغ فروش قطعه:</label>
+                                    <strong class="ms-1">@Model.SaleFreeAmount.ToPrice()</strong>
+                                </li>
+                                <li>
+                                    <label asp-for="ClientName">جمع مبالغ خدمات:</label>
+                                    <strong class="ms-1">@Model.ojratFreeTotal.ToPrice()</strong>
+                                </li>
+                                <li>
+                                    <label asp-for="ClientName">مبلغ ارزش افزوده:</label>
+                                    <strong class="ms-1">@Model.VatFree.ToPrice()</strong>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 mb-2 receptionHeader-section">
+                            <h5 class="text-warning">گارانتی</h5>
+                            <ul>
+                                <li>
+                                    <label asp-for="ClientName">جمع مبالغ فروش قطعه:</label>
+                                    <strong class="ms-1">@Model.SaleWarrantyAmount.ToPrice()</strong>
+                                </li>
+                                <li>
+                                    <label asp-for="ClientName">جمع مبالغ خدمات:</label>
+                                    <strong class="ms-1">@Model.ojratWarrantyTotal.ToPrice()</strong>
+                                </li>
+                                <li>
+                                    <label asp-for="ClientName">مبلغ ارزش افزوده:</label>
+                                    <strong class="ms-1">@Model.VatWarranty.ToPrice()</strong>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 mb-2  receptionHeader-section">
+                            <h5 class="text-warning">اطلاعات پذیرش</h5>
+                            <ul>
+                                <li>
+                                    <label asp-for="ReceptionNember">شماره پذیرش:</label>
+                                    <strong>@Model.ReceptionNember</strong>
+                                </li>
+                                <li>
+                                    <label asp-for="ClientName">نام مشتری:</label>
+                                    <strong>@Model.ClientName</strong>
+                                </li>
+                                <li>
+                                    <label asp-for="InvoiceDate">تاریخ فاکتور:</label>
+                                    <strong>@Model.InvoiceDate.LatinToPersian()</strong>
+                                </li>
+                            </ul>
+                            <div class="CarNumber ClientName mt-2">
+                                <label asp-for="CarNumber">شماره پلاک خودرو را بنویسید:</label>
+                                <input asp-for="CarNumber" class="form-control" placeholder="99 س 369" />
+                            </div>
+                           
+                        </div>
+                    </div>
+
+                    <div class="table-responsive text-nowrap static-height-400">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>نام آیتم</th>
+                                    <th>نوع</th>
+                                    <th>سرویس انجام شده</th>
+                                    <th>پیمانکار</th>
+                                    <th>قیمت</th>
+                                    <th>درصد پورسانت</th>
+                                    <th>سهم پیمانکار</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Items.Count; i++)
+                                {
+                                    var item = Model.Items[i];
+                                    <tr>
+                                        <td>
+                                            <input type="hidden" asp-for="Items[@i].Id" name="Items[@i].Id" value="@item.Id" />
+                                            <input type="hidden" asp-for="Items[@i].ItemName" name="Items[@i].ItemName" value="@item.ItemName" />
+                                            @item.ItemName
+                                        </td>
+                                        <td>@item.Income</td>
+                                        <td>
+                                            <select asp-for="Items[@i].ServiceId" class="form-control service-select" asp-items="@ViewBag.Services" data-item-id="@item.Id">
+                                                <option value="">انتخاب کنید</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select asp-for="Items[@i].ContractorId" class="form-control contractor-select" asp-items="@ViewBag.Contractors" data-item-id="@item.Id">
+                                                <option value="">انتخاب کنید</option>
+                                            </select>
+                                        </td>
+                                        <td>@item.Price.ToString("N0")</td>
+                                        <td>
+                                            <input type="text" asp-for="Items[@i].Percentage" class="form-control contractor-percentage" />
+                                        </td>
+                                        <td>
+                                            <input type="text" asp-for="Items[@i].ContractorShareAmount" class="form-control contractor-share" />
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row reciption-btnbox">
+                        <div class="col-md-3 d-grid p-2">
+                            <button type="button" class="btn btn-primary  accAjaxSubmit">ذخیره و ثبت سند حسابداری </button>
+                        </div>
+                        <div class="col-md-3 d-grid p-2">
+                            <a asp-action="ModiranReciptions" asp-controller="Reciption" asp-area="AutoServiceAgency" class="btn btn-warning ">بازگشت به لیست پذیرش</a>
+                        </div>
+                    </div>
+                </form>
+            }
+        </div>
+    </div>
+</div>
+
+<script src="~/vendor/libs/jquery/jquery.js"></script>
+<script>
+    $(document).on('change', '.contractor-select', function () {
+        var row = $(this).closest('tr');
+        var contractorId = $(this).val();
+        var price = parseFloat(row.find('td:eq(4)').text().replace(/,/g, ''));
+
+        if (contractorId) {
+            $.get('@Url.Action("GetContractorPercentage", "Reciption", new { area = "AutoServiceAgency" })', { id: contractorId }, function (data) {
+                if (data.success) {
+                    var percentage = data.percentage;
+                    var share = (price * percentage) / 100;
+
+                    row.find('.contractor-percentage').val(percentage);
+                    row.find('.contractor-share').val(share.toLocaleString());
+                }
+            });
+        } else {
+            row.find('.contractor-percentage').val('');
+            row.find('.contractor-share').val('');
+        }
+    });
+
+
+</script>

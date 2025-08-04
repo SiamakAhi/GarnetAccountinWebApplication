@@ -1,0 +1,44 @@
+﻿
+@model DocPrintOptionDto
+
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning">پرینت گروهی اسناد </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <form asp-action="PrintDocs" asp-controller="AccPrint" asp-area="Accounting" method="get" class="mt-2">
+                @for (int i = 0; i < Model.DocIds.Count; i++)
+                {
+                    <input type="hidden" name="DocIds[@i]" value="@Model.DocIds[i]" />
+                }
+               
+                <div class="garnet-section garnet-section-info">
+                    <div class="garnet-checkbox-group">
+                        <label for="print-kol">‌چاپ سند در سطح کل</label>
+                        <input type="radio" asp-for="PrintLevel" value="1" id="print-kol"
+                               checked="@(Model.PrintLevel == 1 ? "checked" : null)" />
+                    </div>
+                    <div class="garnet-checkbox-group">
+                        <label for="print-Moein">‌چاپ سند در سطح معین</label>
+                        <input type="radio" asp-for="PrintLevel" value="2" id="print-Moein"
+                               checked="@(Model.PrintLevel == 2 ? "checked" : null)" />
+                    </div>
+                    <div class="garnet-checkbox-group">
+                        <label for="print-tafsil">‌چاپ سند در سطح تفصیل</label>
+                        <input type="radio" asp-for="PrintLevel" value="3" id="print-tafsil"
+                               checked="@(Model.PrintLevel == 3 ? "checked" : null)" />
+                    </div>
+                </div>
+                <div class="d-grid p-2 mt-2 garnet-form-btncontainer">
+                   @*  <a class="btn btn-warning pringDoc">چاپ</a> *@
+                    <button type="submit" class="btn btn-warning" >چاپ اسناد</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

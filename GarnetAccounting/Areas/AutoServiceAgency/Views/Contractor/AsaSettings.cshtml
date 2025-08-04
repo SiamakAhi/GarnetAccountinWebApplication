@@ -1,0 +1,130 @@
+﻿ @model ReceptionAccountingSettingDto
+@{
+    ViewData["Title"] = "تنظیمات حسابداری پذیرش خدمات خودرو";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="card card-panel">
+        <div class="card-panel-header">
+            <div>
+                <span class="card-panel-title">
+                    تنظیمات ثبت اسناد اطلاعات پذیرش
+                </span>
+            </div>
+
+        </div>
+        <form asp-action="Settings" asp-controller="Contractor" asp-area="AutoServiceAgency" method="post">
+            @if (Model != null && Model.Id > 0)
+            {
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+            }
+            <div class="card-body alert-secondary">
+                <div class="row">
+                    <div class="divider text-start divider-info mt-1">
+                        <div class="divider-text">
+                            <strong class="ms-2">بدهکاران تجاری</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" asp-for="CommercialDebtorMoeinId"></label>
+                        <select class="form-select select2" asp-for="CommercialDebtorMoeinId" asp-items="@ViewBag.Moeins">
+                            <option value="0">انتخاب ...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" asp-for="DebtorTafsil4Free"></label>
+                        <select class="form-select select2" asp-for="DebtorTafsil4Free" asp-items="@ViewBag.Tafsils">
+                            <option value="0">انتخاب ...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" asp-for="DebtorTafsil4Warranty"></label>
+                        <select class="form-select select2" asp-for="DebtorTafsil4Warranty" asp-items="@ViewBag.Tafsils">
+                            <option value="0">انتخاب ...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="divider text-start divider-info mt-1">
+                        <div class="divider-text"> <strong class="ms-2">فروش</strong></div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" asp-for="SaleMoeinId"></label>
+                        <select class="form-select select2" asp-for="SaleMoeinId" asp-items="@ViewBag.Moeins">
+                            <option value="0">انتخاب ...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" asp-for="SaleFreeTafsilId"></label>
+                        <select class="form-select select2" asp-for="SaleFreeTafsilId" asp-items="@ViewBag.Tafsils">
+                            <option value="0">انتخاب ...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" asp-for="SaleWarrantyTfsilId"></label>
+                        <select class="form-select select2" asp-for="SaleWarrantyTfsilId" asp-items="@ViewBag.Tafsils">
+                            <option value="0">انتخاب ...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="divider text-start divider-info mt-1">
+                        <div class="divider-text"> <strong class="ms-2">درآمد</strong></div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" asp-for="NonCommercialCreditorMoeinId"></label>
+                        <select class="form-select select2" asp-for="NonCommercialCreditorMoeinId" asp-items="@ViewBag.Moeins">
+                            <option value="0">انتخاب ...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" asp-for="FreeTafsiltId"></label>
+                        <select class="form-select select2" asp-for="FreeTafsiltId" asp-items="@ViewBag.Tafsils">
+                            <option value="0">انتخاب ...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" asp-for="WarrantyTafsilId"></label>
+                        <select class="form-select select2" asp-for="WarrantyTafsilId" asp-items="@ViewBag.Tafsils">
+                            <option value="0">انتخاب ...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="divider text-start divider-info mt-1">
+                        <div class="divider-text"><strong class="ms-2"> بانک و ارزش افزوده فروش</strong></div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" asp-for="SaleVatMoeinId"></label>
+                        <select class="form-select select2" asp-for="SaleVatMoeinId" asp-items="@ViewBag.Moeins">
+                            <option value="0">انتخاب ...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" asp-for="BankMoeinId"></label>
+                        <select class="form-select select2" asp-for="BankMoeinId" asp-items="@ViewBag.Moeins">
+                            <option value="0">انتخاب ...</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label" asp-for="BankTafsilId"></label>
+                        <select class="form-select select2" asp-for="BankTafsilId" asp-items="@ViewBag.Tafsils">
+                            <option value="0">انتخاب ...</option>
+                        </select>
+                    </div>
+
+
+                </div>
+                <div class=" p-3 d-flex mt-4 justify-content-center">
+                    <button type="button" class="btn btn-warning p-2 text-black accAjaxSubmit">
+                        ذخیره تنظیمات ثبت سیستمی اسناد پذیرش
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+

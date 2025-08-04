@@ -1,0 +1,308 @@
+﻿@model TarazDto
+@{
+    ViewData["Title"] = " مدیریت مالی گارنت - تراز آزمایشی";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int balanceLevel = 1;
+    if (Model.report.Count > 0)
+        balanceLevel = Model.report.FirstOrDefault().BalanceLevel.Value;
+
+    long startbed = 0;
+    long startbes = 0;
+    if (Model.filter.BalanceColumnsQty == 6)
+    {
+        startbed = Model.report.Sum(n => n.StartBed);
+        startbes = Model.report.Sum(n => n.StartBes);
+    }
+    long bed =Model.report.Sum(n => n.TotalBed);
+    long bes = Model.report.Sum(n => n.TotalBes);
+    long MandehBed = Model.report.Sum(n => n.MandehBed);
+    long MandehBes = Model.report.Sum(n => n.MandehBes);
+}
+
+<div class="card card-panel">
+    <div class="card-panel-header">
+        <div><span class="card-panel-title">تراز آزمایشی</span></div>
+    </div>
+    <form asp-action="TarazAzmayeshi" asp-controller="AccReports" asp-area="Accounting" method="get" id="frmTrialBalancFilter">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="card-panel-section">
+                    <div class="card-panel-section-header"><span>نوع تراز آزمایشی </span></div>
+                    <div class="card-panel-section-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="garnet-datawidget datawidget-info-br">
+                                    <div class="form-check form-check-inline">
+                                        <input asp-for="filter.BalanceColumnsQty" class="form-check-input" type="radio" value="4" id="terialBalance4c" checked="">
+                                        <label class="form-check-label" for="terialBalance4c">  تراز 4 ستونی</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="garnet-datawidget datawidget-warning-bl">
+                                    <div class="form-check form-check-inline">
+                                        <input asp-for="filter.BalanceColumnsQty" class="form-check-input" type="radio" value="6" id="terialBalance6c">
+                                        <label class="form-check-label" for="terialBalance6c"> تراز 6 ستونی</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card-panel-section">
+                    <div class="card-panel-section-header"><span>فیلتـر </span></div>
+                    <div class="card-panel-section-body">
+
+                        <div class="widget-info-container mb-3">
+                            <div class="widget-info">
+                                <div class="form-check form-check-inline">
+                                    <input asp-for="filter.ReportLevel" class="form-check-input" type="radio" value="1" id="collapsible-address-type-home" checked="">
+                                    <label class="form-check-label" for="collapsible-address-type-home">تراز آزمایشی در سطح کل</label>
+                                </div>
+                            </div>
+                            <div class="widget-info">
+                                <div class="form-check form-check-inline">
+                                    <input asp-for="filter.ReportLevel" class="form-check-input" type="radio" value="2" id="collapsible-address-type-office">
+                                    <label class="form-check-label" for="collapsible-address-type-office">
+                                        تراز آزمایشی در سطح معین
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="widget-info">
+                                <div class="form-check form-check-inline">
+                                    <input asp-for="filter.ReportLevel" class="form-check-input" type="radio" value="3" id="collapsible-address-type-tafsil">
+                                    <label class="form-check-label" for="collapsible-address-type-tafsil">
+                                        تراز آزمایشی در سطح تفصیل
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-2 mb-1">
+                                <label asp-for="filter.FromDocNumer" class="form-label">‌از شماره سند</label>
+                                <input type="number" asp-for="filter.FromDocNumer" class="form-control form-control-sm text-center">
+                            </div>
+                            <div class="col-md-2 mb-1">
+                                <label asp-for="filter.ToDocNumer" class="form-label">تا شماره سند‌</label>
+                                <input type="number" asp-for="filter.ToDocNumer" class="form-control form-control-sm text-center">
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label asp-for="filter.strStartDate" class="form-label">از تاریخ‌</label>
+                                <input type="text" asp-for="filter.strStartDate" class="form-control form-control-sm flatpickr-input" placeholder="YYYY/MM/DD" id="flatpickr-date">
+                            </div>
+                            <div class=col-md-3 mb-2">
+                                <label asp-for="filter.strEndDate" class="form-label">‌تا تاریخ </label>
+                                <input type="text" class="form-control form-control-sm flatpickr-input" asp-for="filter.strEndDate" placeholder="YYYY/MM/DD" id="flatpickr-Enddate">
+                            </div>
+                            <div class="col-md-2 mb-1">
+                                <label for="flatpickr-date" class="form-label">وضعیت سند</label>
+                                <select class="form-select form-select-sm" asp-for="filter.docType" asp-items="@ViewBag.docType">
+                                    <option value="null" selected>همه</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card-panel-section">
+                    <div class="card-panel-section-header"><span>عملیات </span></div>
+                    <div class="card-panel-section-body">
+                        <div class="row">
+                            <div class="col-12 d-grid px-2">
+                                <button type="submit" class="btn btn-secondary mb-1">
+                                    <i class="tf-icons bx bx-list mx-1"></i>
+                                    نمایش
+                                </button>
+                            </div>
+                            <div class="col-12 d-grid px-2">
+                                <a href="javascript:void(0)" class="btn btn-primary mb-1 getprint" data-url="@Url.Action("Print_TrialBalance", "AccPrint", new { Area = "Accounting" })">
+                                    <i class="bx bx-printer mx-1"></i>
+                                    چاپ
+                                </a>
+                            </div>
+                            <div class="col-12 d-grid px-2">
+                                <a href="javascript:void(0)" onclick="submitForm('ExportXlsxTrialBalance')" class="btn btn-info iconpng mb-1">
+                                    <i class="tf-icons bx bx-save mx-1"></i>
+                                    خروجی اکسل
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="card-body card-table">
+        <div class="table-responsive text-nowrap static-height-450">
+            <table class="table table-hover table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th rowspan="2">ردیف</th>
+                        <th colspan="@balanceLevel">اطلاعات حساب</th>
+                        @if (Model.filter.BalanceColumnsQty == 6)
+                        {
+                            <th colspan="2">اول دوره</th>
+                        }
+                        <th colspan="2">گردش طی دوره</th>
+                        <th colspan="2">مانده</th>
+                    </tr>
+                    <tr>
+                        <th> کل</th>
+                        @if (balanceLevel > 1)
+                        {
+                            <th>معین</th>
+                        }
+                        @if (balanceLevel > 2)
+                        {
+                            <th>تفصیل 4</th>
+                        }
+                        @if (Model.filter.BalanceColumnsQty == 6)
+                        {
+                            <th>بدهکار</th>
+                            <th>بستانکار</th>
+                        }
+                        <th>بدهکار</th>
+                        <th>بستانکار</th>
+                        <th> بدهکار</th>
+                        <th> بستانکار</th>
+
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.report?.Count() > 0)
+                    {
+                        int row = 1;
+                        foreach (var x in Model.report)
+                        {
+                            string cssClass = x.AccountNature != x.BalanceNature && x.AccountNature != 3 && x.BalanceNature != 3 ? "bg-danger text-white" : "";
+                            <tr class="accountBrowser_item @cssClass">
+                                <td class="text-center">@row</td>
+                                <td>@x.AccountKolName</td>
+                                @if (balanceLevel > 1)
+                                {
+                                    <td>@x.AccountMoeinName</td>
+                                }
+                                @if (balanceLevel > 2)
+                                {
+                                    <td>@x.AccountTafsil4Name</td>
+                                }
+                                @if (Model.filter.BalanceColumnsQty==6)
+                                {
+                                    <td class="col-price">@(x.StartBed > 0 ? x.StartBed.ToPrice() : "0")</td>
+                                    <td class="col-price">@(x.StartBes > 0 ? x.StartBes.ToPrice() : "0")</td>
+                                }
+                                <td class="col-price">@(x.TotalBed > 0 ? x.TotalBed.ToPrice() : "0")</td>
+                                <td class="col-price">@(x.TotalBes > 0 ? x.TotalBes.ToPrice() : "0")</td>
+                                <td class="col-price">@(x.MandehBed > 0 ? x.MandehBed.ToPrice() : "0")</td>
+                                <td class="col-price">@(x.MandehBes > 0 ? x.MandehBes.ToPrice() : "0")</td>
+
+                            </tr>
+
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8">
+                                <div class="alert alert-primary my-3 text-center" role="alert">
+                                    @ViewBag.Allert
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        
+          <div class=" alert-secondary">
+            <div class="row">
+                <div class="col-md-6">
+                 
+                </div>
+
+                <div class="col-md-6">
+                    <ul class="docfooter-totalAmounts p-2 mt-2">
+                        @* @if (Model.filter.BalanceColumnsQty == 6)
+                        {
+                            <li>
+                            <label>جمع بدهکار : </label>
+                            <div>
+                                <input type="text" readonly value="@strTotalBed" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label>جمع بستانکار : </label>
+                            <div>
+                                <input type="text" readonly value="@strTotalBes" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        } *@
+                        <li>
+                            <label>جمع بدهکار : </label>
+                            <div>
+                                <input type="text" readonly value="@(bed >0 ? bed.ToPrice():"0")" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label>جمع بستانکار : </label>
+                            <div>
+                                <input type="text" readonly value="@(bes >0 ? bes.ToPrice():"0")" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label> مانده بدهکار : </label>
+                            <div>
+                                <input type="text" readonly value="@(MandehBed > 0?MandehBed.ToPrice():"0")" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label> مانده بستانکار : </label>
+                            <div>
+                                <input type="text" readonly value="@(MandehBes > 0?MandehBes.ToPrice():"0")" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function submitForm(action) {
+        var form = document.getElementById('frmTrialBalancFilter');
+        var url = '';
+
+        if (action === 'Print') {
+            url = '@Url.Action("Print_TrialBalance", "AccPrint", new { area = "Accounting" })';
+        } else if (action === 'ExportXlsxTrialBalance') {
+            url = '@Url.Action("ExportXlsxTrialBalance", "AccReports", new { area = "Accounting" })';
+        }
+
+        form.action = url;
+        form.submit();
+    }
+</script>
+
+
+
+

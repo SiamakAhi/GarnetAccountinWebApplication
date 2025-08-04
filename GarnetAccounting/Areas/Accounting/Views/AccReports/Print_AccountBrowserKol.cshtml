@@ -1,0 +1,119 @@
+﻿@model AccountsBrowserDto
+@{
+    Layout = null;
+
+    long totalBed = Model.Kols.Sum(n => n.Bed);
+    long totalBes = Model.Kols.Sum(n => n.Bes);
+    long ekhtelaf = totalBed >= totalBes ? totalBed - totalBes : totalBes - totalBed;
+
+    long mandehBed = 0;
+    long mandeBes = 0;
+    string strTotalBed = totalBed > 0 ? totalBed.ToPrice() : "0";
+    string strTotalBes = totalBes > 0 ? totalBes.ToPrice() : "0";
+    string strEkhtelaf = ekhtelaf > 0 ? ekhtelaf.ToPrice() : "0";
+
+    string status = (ekhtelaf > 0 && totalBed > totalBes) ? "بدهکار" : ((ekhtelaf > 0 && totalBes > totalBed) ? "بستانکار" : "");
+}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تراز آزمایشی در سطح کل</title>
+    <link href="../../css/printbrowser.css" rel="stylesheet" />
+    <link href="../../css/font.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <button id="printButton" class="btn btn-primary" onclick="printPage()">چاپ</button>
+        <table class="table accounts-table" id="tbl-accountBrowserKol">
+            <thead>
+                <tr >
+                    <th colspan="6" style="border: none; background: white;">
+                        <div class="header-content">
+                            <h3>@ViewBag.SellerName</h3>
+                            <h5>@ViewBag.ReportTitle</h5>
+                            <h5>@ViewBag.PeriodName</h5>
+                            <div class="reportInfo">
+                                <p><label>تاریخ تهیه: </label><span class="mx-1">@DateTime.Now.LatinToPersian()</span></p>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th>ردیف</th>
+                    <th>حساب</th>
+                    <th>بدهکار</th>
+                    <th>بستانکار</th>
+                    <th>مانده بدهکار</th>
+                    <th>مانده بستانکار</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Kols?.Count() > 0)
+                {
+                    int row = 1;
+                    foreach (var x in Model.Kols)
+                    {
+                        string cssClass = (x.Nature != x.MandehNature && x.MandehNature != 3 && x.Nature != 3) ? "bg-warning text-black" : "";
+                        <tr class="@cssClass">
+                            <td class="text-center">@row</td>
+                            <td>@x.KolName</td>
+                            <td class="col-price">@(x.Bed > 0 ? x.Bed.ToPrice() : "0")</td>
+                            <td class="col-price">@(x.Bes > 0 ? x.Bes.ToPrice() : "0")</td>
+                            <td class="col-price">
+                                @{
+                                    if (x.MandehNature == 1)
+                                    {
+                                        <span>@(x.Mandeh > 0 ? x.Mandeh.ToPrice() : "0")</span>
+                                        mandehBed += x.Mandeh;
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                }
+                            </td>
+                            <td class="col-price">
+                                @{
+                                    if (x.MandehNature == 2)
+                                    {
+                                        <span>@(x.Mandeh > 0 ? x.Mandeh.ToPrice() : "0")</span>
+                                        mandeBes += x.Mandeh;
+                                    }
+                                    else
+                                    {
+                                        <span>0</span>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        row++;
+                    }
+                    <tr class="total">
+
+                        <td colspan="2"> جمع :</td>
+                        <td class="col-price">@strTotalBed</td>
+                        <td class="col-price">@strTotalBes</td>
+                        <td class="col-price">@(mandehBed > 0 ? mandehBed.ToPrice():"0")</td>
+                        <td class="col-price">@(mandeBes > 0 ? mandeBes.ToPrice() : "0")</td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">داده‌ای برای نمایش وجود ندارد</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function printPage() {
+            window.print();
+        }
+    </script>
+</body>
+</html>

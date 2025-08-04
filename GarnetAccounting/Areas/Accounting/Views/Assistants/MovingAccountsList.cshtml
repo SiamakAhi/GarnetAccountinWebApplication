@@ -1,0 +1,344 @@
+﻿@model DocReportDto
+@{
+    ViewData["Title"] = "انتقال حساب ها";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    bool hasTafsil4 = false;
+    bool hasTafsil5 = false;
+    bool hasTafsil6 = false;
+    bool hasTafsil7 = false;
+    bool hasTafsil8 = false;
+
+    if (Model.ArticlesPagin != null)
+    {
+        hasTafsil4 = Model.ArticlesPagin.Items.Any(n => n.Tafsil4Id != null);
+        hasTafsil5 = Model.ArticlesPagin.Items.Any(n => n.Tafsil5Id != null);
+        hasTafsil6 = Model.ArticlesPagin.Items.Any(n => n.Tafsil6Id != null);
+        hasTafsil7 = Model.ArticlesPagin.Items.Any(n => n.Tafsil7Id != null);
+        hasTafsil8 = Model.ArticlesPagin.Items.Any(n => n.Tafsil8Id != null);
+
+    }
+}
+
+<div class="card page-header-panel card-panel">
+    <div class="card-panel-header">
+        <div><span class="card-panel-title">انتقال گروهی حساب ها</span></div>
+        <div class="card-panel-navbar-container">
+            <ul class="card-panel-navbar">
+                <li>
+                    <a class="quickaccess-link bulkAction-callmodal"
+                       data-formid="frmBankFilter" data-tableid="tblArticles"
+                       data-url="@Url.Action("ConvertMoeinAccounts", "Assistants", new { Area = "Accounting" })"
+                       title="ثبت سند " href="javascript:void(0)">
+                        <i class="bx bx-detail"></i>
+                        <span>  تبدیل حساب</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+    <div>
+        <form asp-action="MovingAccountsList" asp-controller="Assistants" asp-area="Accounting" method="get" id="frmFilterRooznameh">
+            <input type="hidden" asp-for="filter.CurrentPage" value="1" />
+            <input type="hidden" asp-for="filter.FromBody" value="@true" />
+
+            <div class="card-header-panel-section">
+                <div class="card-header-panel-section-header p-0"><span>آرتیکل های موردنظر را جستجو و بازیابی کنید  </span></div>
+                <div class="card-header-panel-section-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class=" col-md-6 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.FromDocNumer">‌از شماره سند</label>
+                                        <input type="number" asp-for="filter.FromDocNumer">
+                                    </div>
+                                </div>
+                                <div class=" col-md-6 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.ToDocNumer">‌تا شماره سند</label>
+                                        <input type="number" asp-for="filter.ToDocNumer">
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.StartDate">از تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strStartDate" class="flatpickr-input" placeholder="YYYY/MM/DD">
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.strEndDate">تا تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strEndDate" class="flatpickr-input" placeholder="YYYY/MM/DD">
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.Description">‌کلید واژه </label>
+                                        <input type="text" asp-for="filter.Description" placeholder="جستجو در شرح سند، شرح آرتیکل و ...">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="row">
+                                <div class="col-md-12 mb-2 select2-dark">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>حساب(های) معین</label>
+                                        <select asp-for="filter.MoeinIds" class="select2 gonext" id="selectMoein" multiple asp-items="@ViewBag.Moeins">
+                                            <option value="null">انتخاب کنید ...</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 mb-2 select2-dark">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>تفصیل 4</label>
+                                        <select asp-for="filter.Tafsil4Ids" class="select2 gonext" id="selectTafsil" multiple asp-items="@ViewBag.Tafsils">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-2 select2-dark">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>تفصیل 5</label>
+                                        <select asp-for="filter.Tafsil5Ids" class="select2 gonext" id="selectTafsil5" multiple asp-items="@ViewBag.Tafsils">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-2 select2-dark">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>تفصیل 6</label>
+                                        <select asp-for="filter.Tafsil6Ids" class="select2 gonext" multiple asp-items="@ViewBag.Tafsils">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-md-12 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label class="form-label">تعداد ردیف </label>
+                                        <input type="text" class="text-center numberInput" asp-for="filter.PageSize" value="@Model.filter.PageSize">
+                                    </div>
+                                </div>
+                                <div class="col-12 d-grid px-2">
+                                    <button type="submit" class="garnet-btn garnet-btn-info mb-2">
+                                        <i class="tf-icons bx bx-list mx-1"></i>
+                                        دریافت اطلاعات
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="card-body pb-0">
+        <div class="table-responsive text-nowrap static-height-600">
+            <table class="table table-bordered table-hover table-striped" id="tblArticles">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-center">
+                            <input type="checkbox" id="SelectRows" />
+                            ردیف
+                        </th>
+                        <th>بایگانی</th>
+                        <th>شماره سند</th>
+                        <th>تاریخ سند</th>
+                        <th>حساب کل</th>
+                        <th>حساب معین</th>
+
+                        @if (hasTafsil4)
+                        {
+                            <th>4تفضیلی</th>
+                        }
+                        @if (hasTafsil5)
+                        {
+                            <th>تفضیلی5</th>
+                        }
+                        @if (hasTafsil6)
+                        {
+                            <th>تفضیلی6</th>
+                        }
+                        @if (hasTafsil7)
+                        {
+                            <th>تفضیلی7</th>
+                        }
+                        @if (hasTafsil8)
+                        {
+                            <th>تفضیلی8</th>
+                        }
+                        <th>بدهکار</th>
+                        <th>بستانکار</th>
+                        <th>شرح</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.ArticlesPagin != null && Model.ArticlesPagin?.Items?.Count() > 0)
+                    {
+                        int row = 1;
+                        foreach (var x in Model.ArticlesPagin.Items)
+                        {
+                            <tr class="dblc-link" data-url="@Url.Action("Doc", "OpAccoucnting", new { Area = "", id = x.DocId })">
+                                <td class="row-chb">
+                                    <input type="checkbox" class="tblRow px-3" name="docId" value="@x.Id" />
+                                    @row
+                                </td>
+
+                                <td>@x.ArchiveCode</td>
+                                <td>@x.DocNumber</td>
+                                <td>@x.DocDate.Value.LatinToPersian()</td>
+                                <td>@x.KolName</td>
+                                <td>@x.MoeinName</td>
+                                @if (hasTafsil4)
+                                {
+                                    <td>@x.Tafsil4Name</td>
+                                }
+                                @if (hasTafsil5)
+                                {
+                                    <td>@x.Tafsil5Name</td>
+                                }
+                                @if (hasTafsil6)
+                                {
+                                    <td>@x.Tafsil6Name</td>
+                                }
+                                @if (hasTafsil7)
+                                {
+                                    <td>@x.Tafsil7Name</td>
+                                }
+                                @if (hasTafsil8)
+                                {
+                                    <td>@x.Tafsil8Name</td>
+                                }
+                                <td>@(x.Bed > 0 ? x.Bed.ToPrice() : "0")</td>
+                                <td>@(x.Bes > 0 ? x.Bes.ToPrice() : "0")</td>
+                                <td>@x.Comment</td>
+                            </tr>
+
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer pt-0">
+        @if (Model.ArticlesPagin != null && Model.ArticlesPagin?.TotalPages > 1)
+        {
+            <nav aria-label="Page navigation" class="pagin mt-3">
+                <ul class="pagination pagination-sm text-center">
+                    @if (Model.ArticlesPagin != null && Model.ArticlesPagin.HasPreviousPage)
+                    {
+                        <li class="page-item prev">
+                            <a class="page-link" data-formid="frmFilterRooznameh" data-currentpage="@(Model.ArticlesPagin.CurrentPage - 1)">
+                                <i class="tf-icon bx bx-chevrons-left"></i>
+                            </a>
+                        </li>
+                    }
+
+                    @{
+                        int totalPages = Model.ArticlesPagin.TotalPages;
+                        int currentPage = Model.ArticlesPagin.CurrentPage;
+                        int pageRange = 3; // تعداد صفحات قبل و بعد از صفحه فعلی
+
+                        int startPage = Math.Max(1, currentPage - pageRange);
+                        int endPage = Math.Min(totalPages, currentPage + pageRange);
+
+                        if (startPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" data-formid="frmFilterRooznameh" data-currentpage="1">1</a>
+                            </li>
+                            if (startPage > 2)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                        }
+
+                        for (int i = startPage; i <= endPage; i++)
+                        {
+                            string strActive = currentPage == i ? "active" : "";
+                            <li class="page-item @strActive">
+                                <a class="page-link" data-formid="frmFilterRooznameh" data-currentpage="@i">@i</a>
+                            </li>
+                        }
+
+                        if (endPage < totalPages)
+                        {
+                            if (endPage < totalPages - 1)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                            <li class="page-item">
+                                <a class="page-link" data-formid="frmFilterRooznameh" data-currentpage="@totalPages">@totalPages</a>
+                            </li>
+                        }
+                    }
+
+                    @if (Model.ArticlesPagin.HasNextPage)
+                    {
+                        <li class="page-item next">
+                            <a class="page-link" data-formid="frmFilterRooznameh" data-currentpage="@(Model.ArticlesPagin.CurrentPage + 1)">
+                                <i class="tf-icon bx bx-chevrons-right"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+
+        }
+        <div class="alert alert-secondary m-0 mt-2" role="alert">
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+
+    document.querySelectorAll('#tblbanktransactions tbody tr').forEach(row => {
+        // اضافه کردن رویداد click به هر ردیف
+        row.addEventListener('click', function (event) {
+            // جلوگیری از اجرا شدن رویداد کلیک اگر کاربر مستقیماً روی چک‌باکس کلیک کرده باشد
+            if (event.target.type === 'checkbox') {
+                return;
+            }
+
+            // یافتن چک‌باکس داخل ردیف کلیک‌شده
+            const checkbox = this.querySelector('input[type="checkbox"].tblRow');
+
+            if (checkbox) {
+                // معکوس کردن وضعیت چک‌باکس
+                checkbox.checked = !checkbox.checked;
+                   const event = new Event('change', { bubbles: true });
+                    // اعمال رویداد change به عنصر چک‌باکس
+                    checkbox.dispatchEvent(event);
+            }
+        });
+    });
+
+</script>

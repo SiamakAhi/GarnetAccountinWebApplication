@@ -1,0 +1,252 @@
+﻿ @model InvoiceDto
+@{
+    decimal totalBeforDiscount = Model.Items.Sum(n => n.PriceBeForDescount);
+    decimal totalDiscount = Model.Items.Sum(n => n.Discount);
+    decimal totalAfterDiscount = Model.Items.Sum(n => n.PriceAfterDiscount);
+    decimal totalVat = Model.Items.Sum(n => n.VatPrice);
+    decimal finalPrice = Model.Items.Sum(n => n.FinalPrice);
+}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> فاکتور @Model.InvoiceHeader.InvoiceNumber</title>
+    <link href="~/css/printinvoice.css" rel="stylesheet" />
+    <link href="~/css/font.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="side">
+        <!-- دکمه‌های پرینت و PDF و بستن -->
+        <div class="toolbar no-print">
+            <button class="button print-button" onclick="printPage()">
+                <i>🖨️</i> پرینت
+            </button>
+            <button class="button pdf-button" onclick="exportToPDF()">
+                <i><img src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg" alt="PDF Icon" width="16"></i> PDF
+            </button>
+            <button class="button share-button" onclick="sharePDF()">
+                <i>📤</i> اشتراک‌گذاری
+            </button>
+            <button class="button close-button" onclick="window.close()">
+                <i>❌</i> بستن
+            </button>
+        </div>
+        <div class="side-brand">
+            <h1>@Model.sellerInfo.Name</h1>
+        </div>
+    </div>
+    <div class="container">
+        <!-- دکمه‌های پرینت و PDF و بستن -->
+
+
+        <table class="table accounts-table" id="tbl-invoice">
+            <thead>
+                <tr>
+                    <th colspan="15" style="background: white;">
+                        <div class="header-content">
+                            <h3>@Model.sellerInfo.Name</h3>
+                            <h5>صروتحساب فروش کالا و خدمات</h5>
+                            <div class="reportInfo">
+                                <p><label>تاریخ فاکتور: </label><span class="mx-1">@Model.InvoiceHeader.InvoiceNumber</span></p>
+                                <p><label>تاریخ چاپ : </label><span class="mx-1">@DateTime.Now.LatinToPersian()</span></p>
+                            </div>
+                            <div class="reportInfo">
+                                <p><label>تاریخ فاکتور: </label><span class="mx-1">@Model.InvoiceHeader.InvoiceDate.Value.LatinToPersian()</span></p>
+                                <p><label>شماره مالیاتی: </label><span class="mx-1"></span></p>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                <tr style="padding: 0;">
+                    <th colspan="15" style=" padding: 0; background: white;">
+                        <div class="sellerinfo">
+                            <div class="title"><span class="vertical-text">فروشنده</span></div>
+                            <ul class="personinfo">
+                                <li>
+                                    <label>نام : </label>
+                                    <span>@Model.sellerInfo.Name</span>
+                                </li>
+                                <li>
+                                    <label> شناسه ملی :</label>
+                                    <span>@Model.sellerInfo.NationalId</span>
+                                </li>
+
+                                <li>
+                                    <label>کد اقتصادی : </label>
+                                    <span>@Model.sellerInfo.EconomicCode</span>
+                                </li>
+                                <li>
+                                    <label>شماره تماس : </label>
+                                    <span>@Model.sellerInfo.MobilePhone</span>
+                                </li>
+                                <li>
+                                    <label>نشانی : </label>
+                                    <span>@Model.sellerInfo.Address</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="15" style="padding: 0; background: white;">
+                        <div class="sellerinfo">
+                            <div class="title"><span class="vertical-text">خـریـدار</span></div>
+                            <ul class="personinfo">
+                                <li>
+                                    <label>نام : </label>
+                                    <span>@Model.buyerInfo.Name</span>
+                                </li>
+                                <li>
+                                    <label> شناسه ملی :</label>
+                                    <span>@Model.buyerInfo.NationalId</span>
+                                </li>
+
+                                <li>
+                                    <label>کد اقتصادی : </label>
+                                    <span>@Model.buyerInfo.EconomicCode</span>
+                                </li>
+                                <li>
+                                    <label>شماره تماس : </label>
+                                    <span>@Model.buyerInfo.MobilePhone</span>
+                                </li>
+                                <li>
+                                    <label>نشانی : </label>
+                                    <span>@Model.buyerInfo.Address</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th rowspan="2" class="rowcount">ردیف</th>
+                    <th rowspan="2">شناسه کالا</th>
+                    <th rowspan="2">شرح کالا</th>
+                    <th rowspan="2">واحد</th>
+                    <th colspan="3">تعداد / مقدار</th>
+                    <th rowspan="2">جزء در واحد</th>
+                    <th rowspan="2">بهاء جزء</th>
+                    <th rowspan="2">مبلغ کل</th>
+                    <th rowspan="2">تخفیف</th>
+                    <th rowspan="2">مبلغ کل پس از تخفیف</th>
+                    <th colspan="2">مالیات</th>
+                    <th rowspan="2">جمع کل با مالیات</th>
+
+                </tr>
+                <tr>
+
+                    <th> واحد</th>
+                    <th>جزء</th>
+                    <th>کل</th>
+                    <th>%</th>
+                    <th>مبلغ</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int row = 1;
+                }
+                @foreach (var x in Model.Items)
+                {
+                    <tr>
+                        <td>@row</td>
+                        <td>@x.ProductId</td>
+                        <td>@x.ProductName</td>
+                        <td>@x.PakageUnitName</td>
+                        <td>@x.QuantityInPakageUnit.ToPrice()</td>
+                        <td>@x.QuantityInBaseUnit.ToPrice()</td>
+                        <td>@x.TotalQuantity.ToPrice()</td>
+                        <td>@x.QuantityInPerPakage.ToPrice()</td>
+                        <td>@x.UnitPrice.ToPrice()</td>
+                        <td>@x.PriceBeForDescount.ToPrice()</td>
+                        <td>@x.Discount.ToPrice()</td>
+                        <td>@x.PriceAfterDiscount.ToPrice()</td>
+                        <td>@x.VatRate.ToPrice()</td>
+                        <td>@x.VatPrice.ToPrice()</td>
+                        <td>@x.FinalPrice.ToPrice()</td>
+                    </tr>
+                    row++;
+                }
+                <tr class="total">
+                    <td colspan="9">جمع کل: @(finalPrice.ToPersianWords())</td>
+                    <td>@totalBeforDiscount.ToPrice()</td>
+                    <td>@totalDiscount.ToPrice()</td>
+                    <td>@totalAfterDiscount.ToPrice()</td>
+                    <td colspan="2">@totalVat.ToPrice()</td>
+                    <td>@finalPrice.ToPrice()</td>
+                </tr>
+                <tr class="footer">
+                    <td colspan="15">
+                        <div> <label>روش پرداخت : </label><span>@Model.InvoiceHeader.SettlementTypeId.Value.com_ToSettelmentTypeName()</span></div>
+                        <div> <label>توضیحات :</label>@Html.Raw(Model.InvoiceHeader.Remarks) </div>
+                        <div class="remarkbox">
+                            @if (User.Identity.Name.ToLower() == "behfaran")
+                            {
+                                <h4> شماره کارت اقتصاد نوین : 6274-1219-4004-9174  به نام شرکت بهفران </h4>
+                            }
+                        </div>
+                        <div class="sign">
+                            <span>مهر و امضاء فروشنده</span>
+                            <span> امضاء راننده</span>
+                            <span>مهر و امضاء خریدار</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+                function printPage() {
+                    window.print();
+                }
+
+                function exportToPDF() {
+                    const element = document.querySelector(".container");
+                    html2pdf()
+                        .set({
+                            filename: 'فاکتور.pdf',
+                            html2canvas: { scale: 2 },
+                            jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4', margin: [10, 10, 10, 10] }
+                        })
+                        .from(element)
+                        .save();
+                }
+
+                async function sharePDF() {
+            const element = document.querySelector(".container");
+
+            html2pdf()
+                .set({
+                    filename: 'فاکتور.pdf',
+                    html2canvas: { scale: 2 },
+                    jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4', margin: [10, 10, 10, 10] }
+                })
+                .from(element)
+                .outputPdf('blob')
+                .then(async function (pdfBlob) {
+                    const pdfFile = new File([pdfBlob], 'فاکتور.pdf', { type: 'application/pdf' });
+
+                    if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+                        try {
+                            await navigator.share({
+                                files: [pdfFile],
+                                title: 'اشتراک‌گذاری فاکتور',
+                                text: 'فاکتور فروش را ببینید.',
+                            });
+                        } catch (error) {
+                            console.error('اشتراک‌گذاری انجام نشد: ', error);
+                        }
+                    } else {
+                        alert('این مرورگر امکان اشتراک‌گذاری فایل را ندارد. لطفاً با مرورگری دیگر امتحان کنید.');
+                    }
+                });
+        }
+
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+</body>
+</html>

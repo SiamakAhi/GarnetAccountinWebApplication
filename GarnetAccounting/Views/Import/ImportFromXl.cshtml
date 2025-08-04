@@ -1,0 +1,82 @@
+﻿@model List<VmInvoiceItem>
+@{
+    ViewData["Title"] = "ImportFromXl";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <!-- Import Excel  -->
+    <div class="col-12">
+        <div class="card mb-4">
+            <h5 class="card-header heading-color">دریافت اطلاعات از فایل اکسل</h5>
+            <div class="card-body">
+                <form asp-action="ImportStuffOrServiceFromXl" asp-controller="Import" asp-area="" enctype="multipart/form-data" method="post">
+
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">انتخاب فایل صورتحساب</label>
+                        <input class="form-control" type="file" name="excelFile" id="excelFile">
+                    </div>
+                    <button type="submit" class="btn btn-facebook">
+                        <i class="tf-icons bx bx-data me-1"></i>دریافت اطلاعات
+                    </button>
+                </form>
+            </div>
+            @if (Model?.Count > 0)
+            {
+                <div class="mt-2">
+                    <h5 class="card-header heading-color"> لیست صورتحساب   </h5>
+                    <div class="mb-3">
+                        <label for="defaultSelect" class="form-label">فیلدهای متناظر</label>
+                        <select class="form-select" asp-items="@ViewBag.Columns">
+                            <option>انتخاب پیش </option>
+                        </select>
+                    </div>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>شناسه آیتم</th>
+                                    <th>شناسه فاکتور</th>
+                                    <th>شماره فاکتور</th>
+                                    <th>تاریخ</th>
+                                    <th>‌شناسه مشتری</th>
+                                    <th>‌نام مشتری</th>
+                                    <th>‌شناسه کالا</th>
+                                    <th>‌نام کالا / خدمت</th>
+                                    <th>فی‌</th>
+                                    <th>تعداد‌</th>
+                                    <th>جمع مبلغ‌</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                                @foreach (var x in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center"><input type="checkbox" checked/></td>
+                                        <td>@x.ItemId</td>
+                                        <td>@x.InvoiceId</td>
+                                        <td>@x.InvoiceNo</td>
+                                        <td>@x.Date</td>
+                                        <td>@x.AccountCode</td>
+                                        <td>@x.AccountName</td>
+                                        <td>@x.ProductId</td>
+                                        <td>@x.ProductName</td>
+                                        <td>@x.UnitPrice</td>
+                                        <td>@x.Qty</td>
+                                        <td>@x.TotalPrice</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+
+
+
+    <!-- /Import Excel  -->
+</div>

@@ -1,0 +1,20 @@
+﻿@using Stimulsoft.Report.Mvc
+<link href="~/css/font.css" rel="stylesheet" />
+@{
+    Layout = null;
+}
+
+<div class="text-center printArea">
+
+    @Html.StiNetCoreViewer(new StiNetCoreViewerOptions(){
+    Actions = {
+    GetReport="GetReport_PrintDoc",
+    ViewerEvent= "ViewerEvent",
+    },
+    Appearance={
+        FullScreenMode=true
+    }
+
+    })
+
+</div>

@@ -1,0 +1,91 @@
+﻿@model MoeinDto
+
+<div class="modal-dialog modal-lg modal-simple">
+
+    <div class="modal-content p-3 p-md-5">
+        <div class="modal-header">
+            <div class="alert alert-primary alert-dismissible d-flex align-items-center" role="alert">
+                <h5>
+                    <i class="bx bx-xs bx-command me-2 text-info"></i>
+                    ایجاد حساب معین در سرفصل <strong class="text-warning">@ViewBag.KolCode - @ViewBag.KolName</strong>
+                </h5>
+               
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class=" mb-4 mt-0 mt-md-n2">
+                <form asp-action="AddMoein" asp-controller="AccCoding" asp-area="" method="post" class="mt-4 appform1">
+
+                    <input type="hidden" asp-for="KolId" value="@ViewBag.KolId" />
+                    <input type="hidden" asp-for="KolName" value="@ViewBag.KolName" />
+                    <input type="hidden" asp-for="KolCode" value="@ViewBag.KolCode" />
+                    <input type="hidden" asp-for="GroupId" value="@ViewBag.GroupId" />
+                    <input type="hidden" asp-for="GroupName" value="@ViewBag.GroupName" />
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="MoeinCode"></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="MoeinCode" class="form-control firstSelect gonext" value="@ViewBag.MoeinCode" />
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="MoeinName"></label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="MoeinName" class="form-control gonext" />
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="Nature"></label>
+                        <div class="col-sm-9">
+                            <select class="form-select gonext" asp-for="Nature" asp-items="ViewBag.Nature">
+                                <option value="0">انتخاب کنید .. </option>
+                            </select>
+                        </div>
+                    </div>
+                   
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="MoeinContraryNatureId"></label>
+                        <div class="col-sm-9">
+                            <select class="form-select gonext" asp-for="MoeinContraryNatureId">
+                                <option value="0">. . . </option>
+                            </select>
+                        </div>
+                    </div>
+                      <div class="row mb-1">
+                          <div class="col-md-3" >
+
+                          </div>
+                        <div class="col-md-4">
+                              <label class="switch mt15">
+                                <input type="checkbox" asp-for="IsCurrencyAccount" class="switch-input gonext">
+                                <span class="switch-toggle-slider">
+                                    <span class="switch-on"></span>
+                                    <span class="switch-off"></span>
+                                </span>
+                                <span class="switch-label">حساب ارزی</span>
+                            </label>
+                        </div>
+                        <div class="col-md-5">
+                            <select class="form-select  mt-3" asp-for="CurrencyId">
+                                <option value="0">انتخاب نوع ارز ... </option>
+                            </select>
+                        </div>
+                    </div>
+                     <div class="row mb-4">
+                        <label class="col-sm-3 col-form-label" asp-for="Description"></label>
+                        <div class="col-sm-9">
+                            <textarea rows="3" asp-for="Description" class="form-control gonext" placeholder="..."></textarea>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div class="row d-grid mt-3">
+                        <input type="button" class="btn btn-primary mt-2 addAccountByAjax" value="ایجاد حســاب" />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+

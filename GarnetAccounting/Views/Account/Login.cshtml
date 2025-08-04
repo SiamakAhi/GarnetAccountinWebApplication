@@ -1,0 +1,140 @@
+﻿@model VmLogin
+@inject IConfigurationLoader _config
+
+@{
+    Layout = null;
+    var _set = _config.GetConfigurations();
+}
+
+<!DOCTYPE html>
+
+<html lang="fa" dir="rtl">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Loginn</title>
+    <link rel="stylesheet" href="../../vendor/fonts/boxicons.css">
+    <link rel="stylesheet" href="../../vendor/fonts/fontawesome.css">
+    <link rel="stylesheet" href="../../vendor/fonts/flag-icons.css">
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../../vendor/css/rtl/core.css" class="template-customizer-core-css">
+    <link href="~/css/loginstyles.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/font.css" rel="stylesheet" />
+</head>
+<body>
+    <main class="main">
+
+        <!-- Hero Section -->
+        <section id="hero" class="hero section dark-background">
+            <img src="~/img/backgrounds/bg3.webp" alt="" class="hero-bg">
+
+            <div class="container">
+                <div class="row gy-4 justify-content-between">
+                    <div class="col-lg-6  d-flex flex-column justify-content-center" data-aos="fade-in">
+                        <div class="login-box">
+                            <!-- Logo -->
+                            <div class="login-form-header">
+                                <h1>گارنِت</h1>
+                                <h3 class="login-appName">@_set.AppName</h3>
+                               @*  <p>@_set.LoginMessage</p> *@
+                            </div>
+                            <!-- /Logo -->
+
+
+
+                            <form class="mb-3" asp-fragment="Login" asp-controller="Account" asp-area="" method="post">
+                                <input type="hidden" name="ReturnUrl" />
+                                <div class="mb-3">
+                                    <label class="form-label" asp-for="UserName"></label>
+                                    <input type="text" class="form-control text-start" asp-for="UserName" placeholder=" نام کاربری خود را وارد کنید" autofocus dir="ltr">
+                                </div>
+                                <div class="mb-3 form-password-toggle">
+                                    <div class="d-flex justify-content-between">
+                                        <label class="form-label" asp-for="Password">رمز عبور</label>
+                                        <a href="auth-forgot-password-cover.html">
+                                            <small>رمز عبور را فراموش کردید؟</small>
+                                        </a>
+                                    </div>
+                                    <div class="input-group input-group-merge">
+                                        <input type="password" class="form-control text-start" asp-for="Password" placeholder="············" aria-describedby="password" dir="ltr">
+                                        <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" asp-for="RememberMe">
+                                        <label class="form-check-label" asp-for="RememberMe"> به خاطر سپاری </label>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-login d-grid w-100">ورود</button>
+                            </form>
+
+
+                            <div asp-validation-summary=All class="mt-1">
+                            </div>
+
+                            @* <p class="text-center">
+                            <span>کاربر جدید هستید؟</span>
+                            <a href="https://avaandish.ir/contact-us/" target="_blank">
+                            <span>با مـا تماس بگیرید.</span>
+                            </a>
+                            </p>*@
+
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 order-lg-last hero-img" data-aos="zoom-out" data-aos-delay="100">
+                        <img src="~/img/backgrounds/Garnet 1.png" class="img-fluid animated" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <svg class="hero-waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28 " preserveAspectRatio="none">
+                <defs>
+                    <path id="wave-path" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"></path>
+                </defs>
+                <g class="wave1">
+                    <use xlink:href="#wave-path" x="50" y="3"></use>
+                </g>
+                <g class="wave2">
+                    <use xlink:href="#wave-path" x="50" y="0"></use>
+                </g>
+                <g class="wave3">
+                    <use xlink:href="#wave-path" x="50" y="9"></use>
+                </g>
+            </svg>
+
+        </section><!-- /Hero Section -->
+
+        <div class="divider-text appversion">
+            <span class="garnet">G A R N E T </span>  Financial system v 1.7.9 &nbsp;&nbsp; 2025-26-07 &nbsp; 1:25
+        </div>
+    </main>
+
+    <!-- / Content -->
+    <!-- Core JS -->
+    <!-- build:js vendor/js/core.js -->
+    <script src="../../vendor/libs/jquery/jquery.js"></script>
+    <script src="../../vendor/libs/popper/popper.js"></script>
+    <script src="../../vendor/js/bootstrap.js"></script>
+    <script src="../../vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+    <script src="../../vendor/libs/hammer/hammer.js"></script>
+
+    <script src="../../vendor/libs/i18n/i18n.js"></script>
+    <script src="../../vendor/libs/typeahead-js/typeahead.js"></script>
+
+    <script src="../../vendor/js/menu.js"></script>
+    <!-- endbuild -->
+    <!-- Vendors JS -->
+    <script src="../../vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
+    <script src="../../vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
+    <script src="../../vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js"></script>
+
+    <!-- Main JS -->
+    <script src="../../js/main.js"></script>
+
+    <!-- Page JS -->
+    <script src="../../js/pages-auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+﻿
+
+<div class="modal-dialog modal-lg modal-simple modal-edit-user">
+    <div class="modal-content p-3 p-md-5">
+        <div class="modal-body">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class=" mb-4 mt-0 mt-md-n2">
+                <h3 class="text-center m-0">تغییر شرکت و دوره مالی فعال</h3>
+                <p class="text-center m-0">شرکت  موردنظر را از لیست انتخاب کنید</p>
+                <form asp-action="SetAndGetActiveSeller" asp-controller="Home" asp-area="" class="p-3" method="post">
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <lable class="form-lable">شرکت</lable>
+                            <select name="sellerId" class="form-control" asp-items="@ViewBag.Sellers" id="activeSeller1">
+                            </select>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                            <lable class="form-lable">دوره مالی</lable>
+                            <select name="periodId" class="form-control" asp-items="@ViewBag.FinancePeriods" id="activePeriod1">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="p-2 mt-2" >
+                           <a href="#">تعریف دوره مالی جـدید</a>
+                    </div>
+                    <div class="d-grid mt-3">
+                        <input type="submit" class="btn btn-primary" value="ثبت" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#activeSeller1').val('@ViewBag.ActiveSellerId').change();
+        $('#activePeriod1').val('@ViewBag.ActiveSellerPeriod').change();
+
+       
+        $('#activeSeller1').change(function () {
+            var selectedSellerId = $(this).val(); 
+            $.ajax({
+                url: '/Home/GetSellerPeriods', 
+                type: 'GET',
+                data: { sellerId: selectedSellerId }, 
+                success: function (response) {
+                    $('#activePeriod1').empty();
+                    $.each(response, function (index, period) {
+                        $('#activePeriod1').append($('<option>', {
+                            value: period.id,
+                            text: period.name
+                        }));
+                    });
+                },
+                error: function () {
+                    alert('خطا در دریافت اطلاعات دوره‌های مالی');
+                }
+            });
+        });
+    });
+
+</script>

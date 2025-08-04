@@ -1,0 +1,834 @@
+﻿<!DOCTYPE html>
+
+@inject IConfigurationLoader _config
+@inject IAppIdentityUserManager _usermanager
+@inject IGeneralService _gs
+@inject SignInManager<AppIdentityUser> _sign
+
+<html lang="fa" class="light-style layout-navbar-fixed layout-menu-fixed" dir="rtl" data-theme="theme-default" data-assets-path="../../" data-template="vertical-menu-template">
+<head>
+
+    <title>@ViewData["Title"]</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+    <meta name="description" content="نرم افزار مدیریت مالی گارنِت">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="~/img/favicon/favicon.ico">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="~/vendor/fonts/boxicons.css">
+    <link rel="stylesheet" href="~/vendor/fonts/fontawesome.css">
+    <link rel="stylesheet" href="~/vendor/fonts/flag-icons.css">
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="~/vendor/css/rtl/core.css" class="template-customizer-core-css">
+    <link rel="stylesheet" href="~/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css">
+    <link rel="stylesheet" href="~/css/demo.css">
+    <link rel="stylesheet" href="~/vendor/css/rtl/rtl.css">
+    <link rel="stylesheet" href="~/vendor/fonts/farsi-fonts-styles-fa-num/primary-yekanbakh.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="~/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="~/vendor/libs/typeahead-js/typeahead.css">
+    <link rel="stylesheet" href="~/vendor/libs/select2/select2.css">
+    <link rel="stylesheet" href="~/vendor/libs/dropzone/dropzone.css">
+    <link rel="stylesheet" href="~/vendor/libs/datatables-bs5/datatables.bootstrap5.css">
+    <link href="~/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/vendor/libs/sweetalert2/sweetalert2.css">
+    <link rel="stylesheet" href="~/vendor/libs/typeahead-js/typeahead.css">
+    <link href="~/vendor/libs/choices/choices.min.css" rel="stylesheet" />
+    <link href="~/vendor/libs/flatpickr/flatpickr.css" rel="stylesheet" />
+    <link href="~/css/dashboard.css" rel="stylesheet" />
+    <!-- Page CSS -->
+    <!-- Helpers -->
+    <script src="~/vendor/js/helpers.js"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
+    <script src="~/vendor/js/template-customizer.js"></script>
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="~/js/config.js"></script>
+</head>
+
+<body>
+    <div id="loader" class="loader-wrapper">
+        <div class="loader"></div>
+    </div>
+    @{
+        var _set = _config.GetConfigurations();
+
+        UserViewModel? user = new UserViewModel();
+        string userFullName = "کاربر لاگین نشده";
+        string avatarSrc = "~/img/avatars/1.png";
+        string userRole = "نامشخص";
+        string ActiveSeller = await _gs.ActiveSellerName(User.Identity.Name);
+        var userPermisions = await _gs.UserSettingAsync(User.Identity.Name);
+        if (_sign.IsSignedIn(User))
+        {
+            user = _usermanager.UserInfo(User.Identity.Name);
+            userFullName = user.FirstName + " " + user.LastName;
+
+            if (string.IsNullOrEmpty(user.Image))
+                avatarSrc = user.Gender == 1 ? "../../img/avatars/1.png" : "../../img/avatars/2.png";
+            else
+                avatarSrc = "../../img/avatars/" + user.Image;
+
+            var roles = await _usermanager.GetUserRolesVmAsync(user.UserName);
+            if (roles.Count > 0)
+                userRole = roles.Any(n => n.RoleName.Contains("Admin")) ? "مدیر" : roles.FirstOrDefault().RoleDescription;
+        }
+    }
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <!-- Menu -->
+
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                <div class="app-brand demo">
+                    <a href="index.html" class="app-brand-link">
+                        <span class="app-brand-logo">
+                            <a class="app-brand-link gap-2">
+                                <img src="@_set.LogoUrl" alt="@_set.CompanyName" />
+                            </a>
+                        </span>
+                        <span class="app-brand-text demo menu-text fw-bold ms-2"></span>
+                    </a>
+
+                    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+                        <i class="bx menu-toggle-icon d-none d-xl-block fs-4 align-middle"></i>
+                        <i class="bx bx-x d-block d-xl-none bx-sm align-middle"></i>
+                    </a>
+                </div>
+
+                <div class="menu-divider mt-0"></div>
+
+                <div class="menu-inner-shadow"></div>
+
+                <ul class="menu-inner py-1">
+                    <!-- Dashboards -->
+                    <li class="menu-item">
+                        <a asp-action="Index" asp-controller="Home" asp-area="" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home"></i>
+                            <div data-i18n="Home">صفحه اصلی </div>
+                        </a>
+                    </li>
+                    @if (User.IsInRole("courier"))
+                    {
+                        <li class="menu-item bg-success ">
+                            <a asp-action="SaleReport" asp-controller="KPDataTransfer" asp-area="DataTransfer" class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-cart-add text-white"></i>
+                                <div class="text-black" data-i18n="Home">اطلاعات فروش (سامانه بار) </div>
+                            </a>
+                        </li>
+                    }
+
+                    @if (User.IsInRole("AccountingManager") || User.IsInRole("AccountingBoss") || User.IsInRole("AccountingUser"))
+                    {
+                        <li class="menu-item  active open">
+                            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bx-food-menu"></i>
+                                <div data-i18n="Accounting">حسابداری</div>
+                            </a>
+                            <ul class="menu-sub">
+                                <li class="menu-item">
+                                    <a href="javascript:void(0)" data-url="@Url.Action("CreateDocHeader", "OpAccoucnting", new { Area = "" })" class="menu-link newdoc">
+                                        <div data-i18n="Accounting Code">ثبت سند حسابداری</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="AccountingDocs" asp-controller="OpAccoucnting" asp-area="" class="menu-link">
+                                        <div data-i18n="Accounting Code">اسناد حسابداری</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                        <div data-i18n="Accounting Report">گزارشات</div>
+                                    </a>
+                                    <ul class="menu-sub">
+                                        <li class="menu-item">
+                                            <a asp-action="AccountBrowserKol" asp-controller="AccReports" asp-area="Accounting" class="menu-link">
+                                                <div data-i18n="Accounting Code">مرورگر حساب ها</div>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a asp-action="ReportArticles" asp-controller="AccReports" asp-area="Accounting" class="menu-link">
+                                                <div data-i18n="Accounting Articles">ریز اسناد</div>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a asp-action="TarazAzmayeshi" asp-controller="AccReports" asp-area="Accounting" class="menu-link">
+                                                <div data-i18n="Accounting Code">تراز آزمایشی</div>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a asp-action="CalcProfit" asp-controller="EndOfPeriod" asp-area="Accounting" class="menu-link">
+                                                <div data-i18n="Tafsil Accounting Groups">سود زیان</div>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a asp-action="Print_Balance" asp-controller="AccPrint" asp-area="Accounting" target="_blank" class="menu-link">
+                                                <div data-i18n="Accounting Code">ترازنامه</div>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a href="javascript:void(0)" data-url="@Url.Action("DaftarRooznameh", "AccPrint", new { Area = "Accounting" })" class="menu-link callform">
+                                                <div data-i18n="Accounting Articles">پرینت دفتر روزنامه</div>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a href="javascript:void(0)" data-url="@Url.Action("DaftarKol", "AccPrint", new { Area = "Accounting" })" class="menu-link callform">
+                                                <div data-i18n="Accounting Articles">پرینت دفتر کـل</div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="menu-item">
+                                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                        <div data-i18n="Accounting Report">عملیات پایان دوره</div>
+                                    </a>
+                                    <ul class="menu-sub">
+
+                                        <li class="menu-item">
+                                            <a asp-action="CloseTemporaryAccounts" asp-controller="EndOfPeriod" asp-area="Accounting" class="menu-link">
+                                                <div data-i18n="Accounting Code">بستن حساب های موقت</div>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a asp-action="ClosePermanentAccounts" asp-controller="EndOfPeriod" asp-area="Accounting" class="menu-link">
+                                                <div data-i18n="Tafsil Accounting Groups">بستن حساب های دائم</div>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a asp-action="" asp-controller="EndOfPeriod" asp-area="" class="menu-link">
+                                                <div data-i18n="Tafsil Accounting Groups">سند اختتامیه</div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                @if (User.IsInRole("AccountingManager") || User.IsInRole("AccountingBoss"))
+                                {
+
+                                    <li class="menu-item">
+                                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                            <div data-i18n="Accounting Report">اطلاعات پایه حسابداری</div>
+                                        </a>
+                                        <ul class="menu-sub">
+                                            <li class="menu-item">
+                                                <a asp-action="Groups" asp-controller="AccCoding" asp-area="" class="menu-link">
+                                                    <div data-i18n="Accounting Code">گروه بندی و سرفصل حساب ها</div>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a asp-action="TafsilGroups" asp-controller="AccCoding" asp-area="" class="menu-link">
+                                                    <div data-i18n="Tafsil Accounting Groups">گروه های تفصیلی</div>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a asp-action="TafsilAccounts" asp-controller="AccCoding" asp-area="" class="menu-link">
+                                                    <div data-i18n="Tafsil Accounts">حساب های تفصیلی</div>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a asp-action="FinancePeriods" asp-controller="AccCoding" asp-area="" class="menu-link">
+                                                    <div data-i18n="Finance Periods">دوره های مالی</div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                            <div data-i18n="Layouts">سایر امکانات</div>
+                                        </a>
+                                        <ul class="menu-sub">
+                                            <li class="menu-item">
+                                                <a asp-action="DocSorting" asp-controller="AccFunc" asp-area="Accounting" class="menu-link">
+                                                    <div data-i18n="Sorting Documents">مرتب سازی اسناد</div>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a asp-action="ImportDocs" asp-controller="AccImport" asp-area="Accounting" class="menu-link">
+                                                    <div data-i18n="Accounting Code">ورود گروهی اسناد</div>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a asp-action="ImportCustomCoding" asp-controller="AccImport" asp-area="Accounting" class="menu-link">
+                                                    <div data-i18n="Tafsil Accounting Groups">بارگذاری کدینک از فایل</div>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a asp-action="DeletedDocs" asp-controller="AccFunc" asp-area="Accounting" class="menu-link">
+                                                    <div data-i18n="Sorting Documents">اسناد حذف شده</div>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#" data-url="@Url.Action("LoadCommercialCoding", "AccCoding", new { Area = "" })" data-target="0" class="menu-link accAjaxPost">
+                                                    بارگذاری کدینگ پیش فرض
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#" data-url="@Url.Action("SetGroupIdToKol", "AccCoding", new { Area = "" })" data-target="0" class="menu-link accAjaxPost">
+                                                    اصلاح شناسه
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="#" data-url="@Url.Action("ResetSellerAccountingData", "AccCoding", new { Area = "" })" data-target="0" class="menu-link accAjaxPost">
+                                                    حذف همه اطلاعات مالی
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                }
+
+                            </ul>
+                        </li>
+                        <li class="menu-item">
+                            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bx-dollar"></i>
+                                <div data-i18n="Accounting">خزانه داری</div>
+                            </a>
+                            <ul class="menu-sub">
+                                <li class="menu-item">
+                                    <a asp-action="BankAccounts" asp-controller="AccBsKhazaneh" asp-area="" class="menu-link">
+                                        <div data-i18n="Accounting Code">حساب های بانکی</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="Banks" asp-controller="AccBsKhazaneh" asp-area="" class="menu-link">
+                                        <div data-i18n="Accounting Code">بانک ها</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="" asp-controller="AccCoding" asp-area="" class="menu-link">
+                                        <div data-i18n="Tafsil Accounting Groups">دسته چک</div>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    }
+
+                    <li class="menu-item">
+                        <a asp-action="PersenList" asp-controller="Persen" asp-area="" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-male-female"></i>
+                            <div data-i18n="Home">مدیریت اشخاص حقیقی و حقوقی </div>
+                        </a>
+                    </li>
+                    @if (User.IsInRole("CustomerOwner"))
+                    {
+                        <li class="menu-item">
+                            <a href="#" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bx-package"></i>
+                                <div data-i18n="seller">کالا و خدمات </div>
+                            </a>
+                            <ul class="menu-sub">
+
+                                <li class="menu-item">
+                                    <a asp-action="Stuffs" asp-controller="Stuff" asp-area="" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-list-check"></i>
+                                        <div data-i18n="csr">مدیریت کالا و خدمات</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="AddStuff" asp-controller="Stuff" asp-area="" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-list-plus"></i>
+                                        <div data-i18n="Add Stuff"> تعریف کالا و خدمت جدید </div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="UnitCounts" asp-controller="Stuff" asp-area="" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-ruler"></i>
+                                        <div data-i18n="Unit Count">واحدهای اندازه گیری</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a data-url="@Url.Action("searchStuffFilter", "Stuff", new { Area = "" })" class="menu-link StuffSearchForm">
+                                        <i class="menu-icon tf-icons bx bx-download"></i>
+                                        <div data-i18n="Stuff Id">دریافت شناسه کالا</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bx-cart-download"></i>
+                                <div data-i18n="seller">خرید </div>
+                            </a>
+                            <ul class="menu-sub">
+                                <li class="menu-item">
+                                    <a asp-action="" asp-controller="Stuff" asp-area="" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-list-check"></i>
+                                        <div data-i18n="csr">--</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bx-cart-add"></i>
+                                <div data-i18n="seller">فروش </div>
+                            </a>
+                            <ul class="menu-sub">
+                                <li class="menu-item">
+                                    <a asp-action="SaleReport" asp-controller="KPDataTransfer" asp-area="DataTransfer" class="menu-link">
+                                        <div data-i18n="newSeller">گزارش فروش (سیستم قدیم)</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="AddInvoice" asp-controller="Sale" asp-area="Sale" class="menu-link">
+                                        <div data-i18n="newSeller">صورتحساب جدید</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="SaleInvoices" asp-controller="Sale" asp-area="Sale" class="menu-link">
+                                        <div data-i18n="Sellers">مدیریت صورتحساب ها</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="ImportInvoice" asp-controller="Import" asp-area="" class="menu-link">
+                                        <div data-i18n="Sellers">ایجاد صورتحساب گروهی از اکسل</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="AddBuyer" asp-controller="Buyer" asp-area="" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-user-plus"></i>
+                                        <div data-i18n="newSeller">تعریف مشتری</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="Buyers" asp-controller="Buyer" asp-area="" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-group"></i>
+                                        <div data-i18n="Sellers">مدیریت مشتریان</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="Index" asp-controller="Home" asp-area="" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-check-double"></i>
+                                        <div data-i18n="Sellers">استعلام کد اقتصادی</div>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li class="menu-item">
+                            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bx-location"></i>
+                                <div data-i18n="Accounting">اطلاعات پایه</div>
+                            </a>
+                            <ul class="menu-sub">
+                                <li class="menu-item">
+                                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                                        <div data-i18n="Accounting Report">آدرس</div>
+                                    </a>
+                                    <ul class="menu-sub">
+                                        <li class="menu-item">
+                                            <a asp-action="Cuntries" asp-controller="AddressManager" asp-area="Courier" class="menu-link">
+                                                <div data-i18n="Cuntries">کشور</div>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a asp-action="TafsilGroups" asp-controller="AccCoding" asp-area="Courier" class="menu-link">
+                                                <div data-i18n="Tafsil Accounting Groups">استان ها</div>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a asp-action="TafsilAccounts" asp-controller="AccCoding" asp-area="Courier" class="menu-link">
+                                                <div data-i18n="Tafsil Accounts">شهر</div>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a asp-action="FinancePeriods" asp-controller="AccCoding" asp-area="Courier" class="menu-link">
+                                                <div data-i18n="Finance Periods">محلات</div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li class="menu-item">
+                            <a href="javascript:void(0)" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bxs-user"></i>
+                                <div data-i18n="Layouts">مدیریت کاربران</div>
+                            </a>
+                            <ul class="menu-sub">
+                                <li class="menu-item">
+                                    <a asp-action="CustomerUserList" asp-controller="CustomerManager" asp-area="CustomerArea" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-group"></i>
+                                        <div>لیست کاربران</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="AddCustomerUserAccount" asp-controller="CustomerManager" asp-area="CustomerArea" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-user-plus"></i>
+                                        <div>کاربر جدید</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="menu-item">
+                            <a href="javascript:void(0)" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bxs-cog"></i>
+                                <div data-i18n="Layouts">تنظیمات و امکانات</div>
+                            </a>
+                            <ul class="menu-sub">
+                                <li class="menu-item">
+                                    <a asp-action="GetCSRHagh" asp-controller="csr" asp-area="" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-key"></i>
+                                        <div data-i18n="Without menu">تولید کلید عمومی وخصوصی</div>
+                                    </a>
+
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="AddSeller" asp-controller="Seller" asp-area="" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-user-plus"></i>
+                                        <div data-i18n="Without menu">تعریف شرکت جدید</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="Sellers" asp-controller="Seller" asp-area="" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-group"></i>
+                                        <div data-i18n="Without menu">مدیریت شرکت ها</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+
+                    }
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="menu-item">
+                            <a href="javascript:void(0)" class="menu-link menu-toggle">
+                                <i class="menu-icon tf-icons bx bx-store-alt"></i>
+                                <div data-i18n="Layouts" class="text-danger">گارنِت</div>
+                            </a>
+
+                            <ul class="menu-sub">
+                                <li class="menu-item">
+                                    <a asp-action="Index" asp-controller="CustomerLicense" asp-area="AvaRasta" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-user"></i>
+                                        <div data-i18n="Without menu">مدیریت لایسنس</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="AddCustomer" asp-controller="AvaSale" asp-area="AvaRasta" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-user"></i>
+                                        <div data-i18n="Without menu">معرفی مشتری جدید</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a asp-action="Customers" asp-controller="AvaSale" asp-area="AvaRasta" class="menu-link">
+                                        <i class="menu-icon tf-icons bx bx-group"></i>
+                                        <div data-i18n="Without menu">لیست مشتریان</div>
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </li>
+                    }
+                </ul>
+            </aside>
+            <!-- / Menu -->
+            <!-- Layout container -->
+            <div class="layout-page">
+                <!-- Navbar -->
+
+                <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
+                    <div class="container-fluid">
+                        <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                                <i class="bx bx-menu bx-sm"></i>
+                            </a>
+                        </div>
+
+                        <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                            <!-- Search -->
+                            <div class="navbar-nav align-items-center">
+                                <div class="nav-item navbar-search-wrapper mb-0">
+                                    <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
+                                        <i class="bx bx-search-alt bx-sm"></i>
+                                        <span class="d-none d-md-inline-block text-muted">جستجو <span class="d-inline-block" dir="ltr">(Ctrl+/)</span></span>
+                                    </a>
+                                </div>
+                            </div>
+                            <!-- /Search -->
+
+                            <ul class="navbar-nav flex-row align-items-center ms-auto">
+                                <!--/ Language -->
+                                <!-- Style Switcher -->
+                                <li class="nav-item me-2 me-xl-0">
+                                    <a class="nav-link style-switcher-toggle hide-arrow" href="javascript:void(0);">
+                                        <i class="bx bx-sm"></i>
+                                    </a>
+                                </li>
+                                <!--/ Style Switcher -->
+                                <!-- Quick links  -->
+                                <li class="nav-item dropdown-shortcuts navbar-dropdown dropdown me-2 me-xl-0">
+                                    <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                        <i class="bx bx-grid-alt bx-sm"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end py-0">
+                                        <div class="dropdown-menu-header border-bottom">
+                                            <div class="dropdown-header d-flex align-items-center py-3">
+                                                <h5 class="text-body mb-0 me-auto secondary-font">میانبرها</h5>
+                                            </div>
+                                        </div>
+                                        <div class="dropdown-shortcuts-list scrollable-container">
+                                            <div class="row row-bordered overflow-visible g-0">
+                                                <div class="dropdown-shortcuts-item col">
+                                                    <span class="dropdown-shortcuts-icon bg-label-danger rounded-circle mb-2">
+                                                        <i class="bx bx-store fs-4"></i>
+                                                    </span>
+                                                    <a href="#" data-url="@Url.Action("SettActiveSeller", "Home", new { Area = "" })" class="sellerName" id="activeSellerName">فروشنده فعال</a>
+                                                    <small class="text-muted mb-0">@ActiveSeller</small>
+                                                </div>
+                                                <div class="dropdown-shortcuts-item col">
+                                                    <span class="dropdown-shortcuts-icon bg-label-primary rounded-circle mb-2">
+                                                        <i class="bx bx-plus fs-4"></i>
+                                                    </span>
+                                                    <a asp-action="AddInvoice" asp-controller="Sale" asp-area="Sale" class="stretched-link"> صورتحساب جدید</a>
+                                                    <small class="text-muted mb-0">مدیریت فاکتورها</small>
+                                                </div>
+                                            </div>
+                                            <div class="row row-bordered overflow-visible g-0">
+                                                <div class="dropdown-shortcuts-item col">
+                                                    <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
+                                                        <i class="bx bx-package fs-4"></i>
+                                                    </span>
+                                                    <a asp-action="Dashboard_Accounting" asp-controller="Home" asp-area="" class="stretched-link">شناسه کالا</a>
+                                                    <small class="text-muted mb-0">پنل حسابداری</small>
+                                                </div>
+                                                <div class="dropdown-shortcuts-item col">
+                                                    <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
+                                                        <i class="bx bx-user fs-4"></i>
+                                                    </span>
+                                                    <a asp-action="AddBuyer" asp-controller="Buyer" asp-area="Buyer" class="stretched-link">تعریف مشتری</a>
+                                                    <small class="text-muted mb-0">مدیریت مشتریان</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- Quick links -->
+                                <!-- Notification -->
+                                <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
+                                    <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                                        <i class="bx bx-bell bx-sm"></i>
+                                        <span class="badge bg-danger rounded-pill badge-notifications">5</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end py-0">
+                                        <li class="dropdown-menu-header border-bottom">
+                                            <div class="dropdown-header d-flex align-items-center py-3">
+                                                <h5 class="text-body mb-0 me-auto secondary-font">اعلان‌ها</h5>
+                                                <a href="javascript:void(0)" class="dropdown-notifications-all text-body" data-bs-toggle="tooltip" data-bs-placement="top" title="Mark all as read"><i class="bx fs-4 bx-envelope-open"></i></a>
+                                            </div>
+                                        </li>
+                                        <li class="dropdown-notifications-list scrollable-container">
+                                            <ul class="list-group list-group-flush">
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown-menu-footer border-top">
+                                            <a href="javascript:void(0);" class="dropdown-item d-flex justify-content-center p-3">
+                                                مشاهده همه اعلان‌ها
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!--/ Notification -->
+                                <!-- User -->
+                                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                                    <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                                        <div class="avatar avatar-online">
+                                            <img src="@avatarSrc" alt="Avatar" class="rounded-circle">
+                                        </div>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <div class="avatar avatar-online">
+                                                            <img src="@avatarSrc" alt="Avatar" class="rounded-circle">
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1">
+                                                        <span class="fw-semibold d-block">@userFullName</span>
+                                                        <small>@userRole</small>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <div class="dropdown-divider"></div>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-action="UserProfile" asp-controller="usermanager" asp-area="">
+                                                <i class="bx bx-user me-2"></i>
+                                                <span class="align-middle">پروفایل من</span>
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <div class="dropdown-divider"></div>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-action="SignOut" asp-controller="usermanager" asp-area="">
+                                                <i class="bx bx-power-off me-2"></i>
+                                                <span class="align-middle">خروج</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <!--/ User -->
+                            </ul>
+                        </div>
+
+                        <!-- Search Small Screens -->
+                        <div class="navbar-search-wrapper search-input-wrapper d-none">
+                            <input type="text" class="form-control search-input container-fluid border-0" placeholder="جستجو ..." aria-label="Search...">
+                            <i class="bx bx-x bx-sm search-toggler cursor-pointer"></i>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- / Navbar -->
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <!-- Content -->
+
+                    <div class="container-fluid flex-grow-1 container-p-y">
+                        @RenderBody()
+                    </div>
+                    <!-- / Content -->
+                    <!-- Footer -->
+                    <footer class="content-footer footer bg-footer-theme">
+                        <div class="container-xxl d-flex justify-content-between flex-wrap flex-md-row ">
+
+                            <div>
+                                <span class="text-info me-3"> @DateTime.Now.mdToLongPersianDate() </span>
+                                <span class="text-primary"> @ActiveSeller </span>
+                                <span class="text-primary">  </span>
+                            </div>
+                            <div>
+                                <a href="https://avaandish.ir/" target="_blank" class="footer-link me-3">
+                                    Version 1.3.18 1403-06-20 <span class="footer-developername"> Garnet Developers Group</span>
+                                </a>
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- / Footer -->
+
+                    <div class="content-backdrop fade"></div>
+                </div>
+                <!-- Content wrapper -->
+            </div>
+            <!-- / Layout page -->
+        </div>
+
+
+        <!-- Model -->
+        <div class="modal fade" id="model-general-larg" tabindex="-1" style="display: none;" aria-hidden="true">
+        </div>
+        <div class="modal fade" id="accmodal" tabindex="-1" style="display: none;" aria-hidden="true">
+        </div>
+        <!-- End Model -->
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+
+        <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+        <div class="drag-target"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    <!-- Core JS -->
+    <!-- build:js vendor/js/core.js -->
+    <script src="~/vendor/libs/jquery/jquery.js"></script>
+    <script src="~/vendor/libs/popper/popper.js"></script>
+    <script src="~/vendor/js/bootstrap.js"></script>
+    <script src="~/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+    <script src="~/vendor/libs/hammer/hammer.js"></script>
+
+    <script src="~/vendor/libs/typeahead-js/typeahead.js"></script>
+
+    <script src="~/vendor/js/menu.js"></script>
+    <!-- endbuild -->
+    <!-- Vendors JS -->
+    <script src="~/vendor/libs/jdate/jdate.js"></script>
+
+    <script src="~/vendor/libs/choices/choices.min.js"></script>
+    <script src="~/vendor/libs/dropzone/dropzone.js"></script>
+    <script src="~/vendor/libs/sweetalert2/sweetalert2.js"></script>
+    <script src="~/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+    <script src="~/vendor/libs/datatables-bs5/i18n/fa.js"></script>
+
+    <script src="~/js/forms-file-upload.js"></script>
+    <script src="~/vendor/libs/select2/select2.js"></script>
+    <script src="~/vendor/libs/flatpickr/flatpickr-jdate.js"></script>
+    <script src="~/vendor/libs/flatpickr/l10n/fa-jdate.js"></script>
+
+    <!-- Main JS -->
+    <script src="~/js/main.js"></script>
+
+
+    <script src="~/js/app/Appgarnet.js"></script>
+    <script src="~/js/app/stufflist.js"></script>
+    <script src="~/js/app/acccoding.js"></script>
+    <script src="~/js/app/uisettings.js"></script>
+    <script src="~/js/app/accprint.js"></script>
+    <!-- Page JS -->
+    <script src="../../js/forms-pickers.js"></script>
+    <script src="~/js/forms-selects.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $(document).find('#tblDocs').DataTable();
+            $(document).find('.select2').select2();
+            $(document).find('#tblPerson').DataTable();
+            $(document).find('#tblDocsSorting').DataTable({
+                "paging": false
+            });
+
+            $(document).find('#tblDocsList').DataTable({
+                "paging": false
+            });
+            $(document).find('#docArticles').DataTable({
+                "paging": false,
+                "searching": false
+            });
+
+
+            $(document).find('#report_articles').DataTable({
+                "pageLength": 50,
+
+            });
+            $(document).find('#tbl-accountBrowserKol, #tbl-accountBrowserTafsil, #tbl-accountBrowserMoein, #tbl-accountBrowserArt').DataTable({
+                "paging": false,
+                "searching": false
+            });
+
+            $(document).find('#tblTafsils').DataTable();
+
+            $(document).find('#flatpickr-Enddate').flatpickr({
+                locale: 'fa',
+                altInput: true,
+                altFormat: 'Y/m/d',
+                allowInput: true,
+            });
+            $(document).find('.flatpickr-input').flatpickr({
+                locale: 'fa',
+                altInput: true,
+                altFormat: 'Y/m/d',
+                allowInput: true,
+            });
+        })
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+﻿body {
+    text-align: right;
+    direction: rtl;
+    margin: auto;
+    font-size: 14px;
+}
+
+.container {
+    position: relative;
+    max-width: 1200px;
+    margin: auto;
+}
+
+h3, h4, h5 {
+    text-align: center;
+    color: #6c757d;
+    font-weight: 900;
+    margin: 0;
+    page-break-after: avoid;
+}
+
+.reportInfo {
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 20px;
+    page-break-after: avoid;
+}
+
+#printButton {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 4px 40px;
+}
+
+p {
+    margin: 0;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+.accounts-table {
+    width: 100%;
+    margin: auto;
+    border-radius: 5px;
+    border-collapse: collapse;
+}
+
+    .accounts-table th {
+        text-align: center;
+        background: whitesmoke;
+    }
+
+    .accounts-table td, .accounts-table th {
+        padding: 6px;
+        border: 1px solid gray;
+    }
+
+    .accounts-table thead tr:first-child {
+        border: none;
+    }
+
+        .accounts-table thead tr:first-child th {
+            border: none;
+            background-color: unset;
+        }
+
+tbody tr td:first-child {
+    text-align: center;
+    width: 40px;
+}
+
+.col-price {
+    text-align: left;
+    padding-left: 10px !important;
+}
+
+tr.total td {
+    font-weight: 600;
+    background: whitesmoke;
+}
+
+@media print {
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-size: 12px;
+    }
+
+    .container {
+        width: 100%;
+        margin: auto;
+    }
+
+    .accounts-table {
+        width: 99.5%;
+        font-size: 12px;
+        page-break-inside: auto;
+    }
+
+        .accounts-table th, .accounts-table td {
+            padding: 4px;
+        }
+
+    h3, h5 {
+        font-size: 16px;
+        page-break-after: avoid;
+    }
+
+    .reportInfo {
+        padding-inline: 10px;
+        page-break-after: avoid;
+    }
+
+    .container, table {
+        page-break-inside: avoid;
+    }
+
+    tbody tr {
+        page-break-inside: avoid;
+    }
+
+    #printButton {
+        display: none;
+    }
+}

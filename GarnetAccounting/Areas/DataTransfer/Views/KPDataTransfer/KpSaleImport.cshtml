@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewData["Title"] = "نرم افزار مدیریت کسب و کار گارنِت";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string alert = ViewBag.msg;
+}
+
+
+<div class="card">
+
+    <h5 class="card-header heading-color">
+        ایجاد صورتحساب از فایل اکسل
+    </h5>
+    <div class="card-body">
+
+        <form asp-action="KpSaleImport" asp-controller="KPDataTransfer" asp-area="DataTransfer" method="post" enctype="multipart/form-data">
+
+            <div class="row mt-1">
+                <div class="col-12c mb-4">
+                    <label class="form-label">انتخاب فایل اکسل </label>
+                    <input type="file" class="form-control" name="ExcelFile" accept=".xls, .xlsx" placeholder="انتخاب اکسل حاوی اطلاعات صورتحساب های فروش" />
+                </div>
+                <div class="mt-2">
+                    <input type="submit" class="btn btn-primary mb-2" value="دریافت و ثبت اطلاعات" />
+                    <a class="btn btn-warning mb-2" asp-action="SaleReport" asp-controller="KpDataTransfer" asp-area="DataTransfer">بازگشت به لیست بارنامه ها</a>
+                </div>
+            </div>
+        </form>
+
+        <div>
+
+            @if (!string.IsNullOrEmpty(alert))
+            {
+                <div class="alert alert-info alert-dismissible mt-4" role="alert">
+                    <h6 class="alert-heading mb-1"><i class="bx bx-xs bx-detail me-2"></i>کاربر گرامی !</h6>
+                    <span>
+                        @Html.Raw(alert)
+                    </span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+            }
+
+
+        </div>
+    </div>
+</div>
+

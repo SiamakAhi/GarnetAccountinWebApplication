@@ -1,0 +1,306 @@
+﻿@model BankTransactionViewModel
+@{
+    ViewData["Title"] = "مدیریت تراکنش های بانکی";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-panel">
+    <div class="card-panel-header">
+        <div><span class="card-panel-title">تراکنش های بانکی</span></div>
+        <div class="card-panel-navbar-container">
+            <ul class="card-panel-navbar">
+                <li>
+                    <a href="javascript:void(0)" data-url="@Url.Action("ImportBankTransaction", "Assistants", new { Area = "Accounting" })" class="quickaccess-link callform">
+                        <i class="bx bx-plus"></i>
+                        <span>بارگذاری گزارش بانک 
+                            <span class="text-info">xlsx.</span>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a class="quickaccess-link bulkActionformdata-callmodal"
+                    data-formid="frmBankFilter" data-tableid="tblbanktransactions"
+                    data-url="@Url.Action("CreatetransactionDoc", "DocCreator", new { Area = "Accounting" })"
+                    title="ثبت سند " href="javascript:void(0)">
+                        <i class="bx bx-detail"></i>
+                        <span>ثبت سند حسابدای</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="quickaccess-link bulkAction"
+                    data-tableid="tblbanktransactions"
+                    data-url="@Url.Action("saveTransactionAsChecked", "Assistants", new { Area = "Accounting" })"
+                    data-allerttext="تراکنش های انتخاب شده بعنوان چک شده درنظر گرفته شود ؟"
+                    href="javascript:void(0)">
+                        <i class="bx bx-checkbox-checked"></i>
+                        <span>ثبت بعنوان چک شده</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="quickaccess-link bulkAction"
+                       data-tableid="tblbanktransactions"
+                       data-url="@Url.Action("DeleteTransactions", "Assistants", new { Area = "Accounting" })"
+                       data-allerttext="تراکنش های انتخاب شده را حذف می کنید ؟"
+                       href="javascript:void(0)">
+                        <i class="bx bx-trash-alt"></i>
+                        <span>حذف</span>
+                    </a>
+                </li>
+                @*   <li>
+                    <a class="uickaccess-link  bulkAction" href="#" data-tableid="tblDocsList" data-url="@Url.Action("DelDocs", "AccFunc", new { Area = "Accounting" })" data-allerttext="اسناد انتخاب شده حذف شوند ؟" title="حذف سنـد">
+                        <i class="bx bx-trash"></i>
+                        <span>حذف گروهی</span>
+                    </a>
+                </li> *@
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        <form asp-action="BankTransactions" asp-controller="Assistants" asp-area="Accounting" method="get" id="frmBankFilter">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>فیلتـر</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class="row">
+                                <div class="col-lg-6 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.AccountId">‌حساب بانکی</label>
+                                        <select asp-for="filter.AccountId" class="text-center" asp-items="@ViewBag.BankAccounts">
+                                            <option value="0">انتخاب حساب بانکی</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.strFromDate">از تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strFromDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 mb-1">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.strToDate">تا تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strToDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-1">
+                                    <div class=" mb-1">
+                                        <div class="garnet-input-group1 garnet-input-group-light mb-1">
+                                            <label>جستجو در شرح</label>
+                                            <input type="text" class="text-center" asp-for="filter.Description">
+                                        </div>
+                                    </div>
+                                    <div class="widget-info fw">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" value="1" asp-for="filter.searchtype" id="contain">
+                                            <label class="form-check-label" for="contain">
+                                                شامل عبارت نوشته شده
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" value="2" asp-for="filter.searchtype" id="fixed">
+                                            <label class="form-check-label" for="fixed">
+                                                مساوی عبارت نوشته شده
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-1"> 
+                                    <div class="garnet-input-group1 garnet-input-group-light mb-1">
+                                        <label asp-for="filter.AccountId">‌نوع تراکنش</label>
+                                        <select class="form-select" asp-for="filter.Transactiontype">
+                                            <option value="1">واریز</option>
+                                            <option value="2">برداشت</option>
+                                        </select>
+                                    </div>
+                                    <div class="widget-info fw mb-1">
+                                        <div class="form-check form-check-inline mb-1">
+                                            <input class="form-check-input" type="checkbox" asp-for="filter.ShowAll">
+                                            <label class="form-check-label" asp-for="filter.ShowAll">
+                                                نمایش تراکنش های چک شده
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>عملیات</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class=" d-grid p-2">
+                                <input type="submit" class="garnet-btn garnet-btn-warning mb-2" value="نمایش" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="card-body card-table">
+        <div class="table-responsive static-height-600">
+            <table class="table table-hover table-striped table-bordered dataTable" id="tblbanktransactions">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="row-chb">
+                            <input type="checkbox" id="SelectRows" />
+                            ردیف
+                        </th>
+                        <th>
+                            اقدام
+                        </th>
+                        <th>تاریخ</th>
+                        <th>ساعت</th>
+                        <th>پیگیری</th>
+                        <th>نوع عملیات</th>
+                        <th>شرح</th>
+                        <th>شرح کاربر</th>
+                        <th> واریز</th>
+                        <th> برداشت</th>
+                        <th>مانده</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.transactions.Any())
+                    {
+                        int row = 1;
+                        foreach (var x in Model.transactions)
+                        {
+                            <tr>
+                                <td class="row-chb">
+                                    <input type="checkbox" class="tblRow px-3" name="docId" value="@x.Id" />
+                                    @row
+                                </td>
+                                <td>
+                                    <div class="btn-group @(x.IsChecked ?"bg-success":"")" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="bx bx-menu"></i>
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                            <a class="dropdown-item callform" href="javascript:void(0);"
+                                            data-url="@Url.Action("AddNoteToTransaction", "Assistants", new { Area = "Accounting", Id = x.Id })">
+                                                <i class="bx bx-note me-2 text-info"></i>
+                                                یادداشت
+                                            </a>
+                                            <a class="dropdown-item accAjaxPost" href="javascript:void(0);"
+                                               data-url="@Url.Action("TransactionCheckToggle", "Assistants", new { Area = "Accounting"})" data-target="@x.Id">
+                                                <i class="bx bx-checkbox  @(x.IsChecked ?"bx-bx-checkbox":"bx-checkbox-checked")" me-2 text-info"></i>
+                                                @if (x.IsChecked)
+                                                {
+                                                    <span>
+                                                        ثبت بعنوان چک نشده
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span>
+                                                        ثبت بعنوان چک شده
+                                                    </span>
+                                                }
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@x.Date?.LatinToPersian()</td>
+                                <td>@x.Time</td>
+                                <td>@x.DocumentNumber</td>
+                                <td>@x.Operation</td>
+                                <td>@x.Description</td>
+                                <td>@x.Note</td>
+                                <td>@x.Debtor?.ToPrice()</td>
+                                <td>@x.Creditor?.ToPrice()</td>
+                                <td>@x.Balance?.ToPrice()</td>
+                            </tr>
+
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class=" alert-secondary">
+            <div class="row">
+                <div class="col-lg-8 col-md-6">
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <ul class="docfooter-totalAmounts p-2 mt-2">
+                        <li>
+                            <label>جمع بدهکار : </label>
+                            <div>
+                                <input type="text" readonly value="@Model.transactions?.Sum(n=>n.Debtor).ToPrice()" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label>جمع بستانکار : </label>
+                            <div>
+                                <input type="text" readonly value="@Model.transactions?.Sum(n=>n.Creditor).ToPrice()" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                      <li></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+      
+    document.querySelectorAll('#tblbanktransactions tbody tr').forEach(row => {
+        // اضافه کردن رویداد click به هر ردیف
+        row.addEventListener('click', function (event) {
+            // جلوگیری از اجرا شدن رویداد کلیک اگر کاربر مستقیماً روی چک‌باکس کلیک کرده باشد
+            if (event.target.type === 'checkbox') {
+                return;
+            }
+
+            // یافتن چک‌باکس داخل ردیف کلیک‌شده
+            const checkbox = this.querySelector('input[type="checkbox"].tblRow');
+
+            if (checkbox) {
+                // معکوس کردن وضعیت چک‌باکس
+                checkbox.checked = !checkbox.checked;
+                   const event = new Event('change', { bubbles: true });
+                    // اعمال رویداد change به عنصر چک‌باکس
+                    checkbox.dispatchEvent(event);
+            }
+        });
+    });
+
+</script>
+
+
+

@@ -1,0 +1,115 @@
+﻿@model VmUserProfile
+
+<link rel="stylesheet" href="../../vendor/css/pages/page-profile.css">
+@{
+    var userAvatar = string.IsNullOrEmpty(Model.UpdateProfile.Image) ? (Model.UpdateProfile.Gender == 1 ? "1.png" : "2.png") : Model.UpdateProfile.Image;
+}
+
+<h4 class="py-3 breadcrumb-wrapper mb-4">
+    <span class="text-muted fw-light">پروفایل کاربر /</span> پروفایل
+</h4>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="user-profile-header-banner">
+                <img src="../../img/backgrounds/Profile-banner.webp" alt="Banner image" class="rounded-top">
+            </div>
+            <div class="user-profile-header d-flex flex-column flex-sm-row text-sm-start text-center mb-4">
+                <div class="flex-shrink-0 mt-n2 mx-sm-0 mx-auto profile-avatarbox">
+                    <img src="../../img/avatars/@userAvatar" alt="user image" class="d-block h-auto ms-0 ms-sm-4 rounded-3 user-profile-img">
+                </div>
+                <div class="flex-grow-1 mt-3 mt-sm-5">
+                    <div class="d-flex align-items-md-end align-items-sm-start align-items-center justify-content-md-between justify-content-start mx-4 flex-md-row flex-column gap-4">
+                        <div class="user-profile-info">
+                            <h4>@Model.UpdateProfile.FirstName @Model.UpdateProfile.LastName</h4>
+                            <ul class="list-inline mb-0 d-flex align-items-center flex-wrap justify-content-sm-start justify-content-center gap-2">
+                                <li class="list-inline-item fw-semibold"><i class="bx bx-user"></i>@Model.UpdateProfile.userName</li>
+                                <li class="list-inline-item fw-semibold"><i class="bx bx-map"></i> @(Model.UpdateProfile.Gender == 1 ? "آقا" : "خانم")</li>
+                                <li class="list-inline-item fw-semibold">
+                                    <i class="bx bx-calendar-alt"></i> عضویت در  @Model.UpdateProfile.RegisterDate.mdToLongPersianDate()
+                                </li>
+                            </ul>
+                        </div>
+                        <a href="javascript:void(0)" class="btn btn-primary text-nowrap">
+                            <i class="bx bx-calendar me-1"></i>@DateTime.Now.mdToLongPersianDate()
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-4 col-lg-5 col-md-5">
+        <!-- About User -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <small class="text-muted text-uppercase">درباره</small>
+                <ul class="list-unstyled mb-4 mt-3">
+                    <li class="d-flex align-items-center mb-3">
+                        <i class="bx bx-user"></i>
+                        <span class="fw-semibold mx-2">نام کامل:</span>
+                        <span>@Model.UpdateProfile.FirstName @Model.UpdateProfile.LastName</span>
+                    </li>
+                    <li class="d-flex align-items-center mb-3">
+                        <i class="bx bx-check"></i>
+                        <span class="fw-semibold mx-2">وضعیت:</span>
+                        <span>فعال</span>
+                    </li>
+                    <li class="d-flex align-items-center mb-3">
+                        <i class="bx bx-star"></i>
+                        <span class="fw-semibold mx-2">نقش:</span>
+                        <span>@Model.UserRoles.FirstOrDefault().Name</span>
+                    </li>
+                    <li class="d-flex align-items-center mb-3">
+                        <i class="bx bx-detail"></i><span class="fw-semibold mx-2">نوضیح نقش :</span>
+                        <span>@Model.UserRoles.FirstOrDefault().Description</span>
+                    </li>
+                </ul>
+                <small class="text-muted text-uppercase">تماس</small>
+                <ul class="list-unstyled mb-4 mt-3">
+                    <li class="d-flex align-items-center mb-3">
+                        <i class="bx bx-phone"></i><span class="fw-semibold mx-2">تماس:</span>
+                        <span class="d-inline-block" dir="ltr">@Model.UpdateProfile.PhoneNumber</span>
+                    </li>
+                    <li class="d-flex align-items-center mb-3">
+                        <i class="bx bx-chat"></i><span class="fw-semibold mx-2">شماره همراه:</span> <span>@Model.UpdateProfile.Mobile</span>
+                    </li>
+                    <li class="d-flex align-items-center mb-3">
+                        <i class="bx bx-envelope"></i><span class="fw-semibold mx-2">ایمیل:</span>
+                        <span>@Model.UpdateProfile.Email</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--/ About User -->
+
+            <div class="card shadow-none bg-transparent border border-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">بروزرسانی رمزعبور</h5>
+                @await Html.PartialAsync("_ChangePassword",new VmChangePass())
+                </div>
+            </div>
+    </div>
+    <div class="col-xl-8 col-lg-7 col-md-7">
+        <!-- Activity Timeline -->
+        <div class="card card-action mb-4">
+            <div class="card-header align-items-center">
+                <h5 class="card-action-title mb-3"><i class="bx bx-list-ul bx-sm me-2"></i>ویرایش پروفایل</h5>
+            </div>
+            <div class="card-body">
+                @await Html.PartialAsync("_UpdateUserProfile",Model.UpdateProfile)
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="../../js/pages-profile.js"></script>
+
+
+
+

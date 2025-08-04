@@ -1,0 +1,26 @@
+﻿
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">حذف ارتباط با حساب تفصیلی</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+            <form class="mt-3" asp-action="RemoveAccountTafsilA" asp-controller="AccBsKhazaneh" asp-area="" method="post">
+                <input type="hidden" name="BankId" id="BankId" value="@ViewBag.BankAccountId" />
+
+                <div class="alert alert-danger" role="alert">
+                    شما در حال حذف ارتباط حساب بانکی با حساب تفصیلی مرتبط با آن هستید. آیا از ادامه کار مطمئن هستید ؟
+                    </div>
+                <div class="modal-footer mt-2 mb-5">
+                    <input type="button" class="btn btn-primary mt-2 accAjaxSubmit" value="بلی" />
+                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                        خیر
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

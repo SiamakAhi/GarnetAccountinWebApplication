@@ -1,0 +1,241 @@
+﻿@model AgentPerformanceOverviewDto
+
+@{
+    ViewData["Title"] = "عملکرد نمایندگان";
+    // Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-panel">
+    <div class="card-panel-header">
+        <div><span class="card-panel-title"></span></div>
+        <div class="card-panel-navbar-container">
+            <ul class="card-panel-navbar">
+                <li>
+                    <a href="javascript:void(0)" data-url="@Url.Action("", "", new { Area = "" })" class="quickaccess-link newdoc">
+                        <i class="bx bx-plus"></i>
+                        <span>جـدید</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="quickaccess-link bulk-DocPrint" data-tableid="tblDocsList" data-url="@Url.Action("", "", new { Area = "Accounting" })" title="چاپ اسناد" href="#">
+                        <i class="bx bx-printer"></i>
+                        <span>چاپ گروهی</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        <form asp-action="AgentPerformanceOverview" asp-controller="Representative" asp-area="Courier" method="get" id="frmRepFilter">
+            <input type="hidden" asp-for="filter.CurrentPage" value="1" />
+
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>فیلتـر</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.strStartDate">از تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strStartDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.strEndDate">تا تاریخ‌</label>
+                                        <input type="text" asp-for="filter.strEndDate" class="flatpickr-input" placeholder="YYYY/MM/DD" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.name"></label>
+                                        <select asp-for="filter.name" asp-items="@ViewBag.Agents">
+                                            <option value="" selected>همه</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.Destination"></label>
+                                        <select asp-for="filter.Destination" >
+                                            <option value="" selected>همه</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="filter.PaymentMethod"></label>
+                                        <select asp-for="filter.PaymentMethod" >
+                                            <option value="" selected>همه</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label>تعداد ردیف در هر صفحه</label>
+                                        <input type="number" min="1" asp-for="filter.PageSize" value="@Model.filter.PageSize">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card-panel-section">
+                        <div class="card-header-panel-section-header">
+                            <span>عملیات</span>
+                        </div>
+                        <div class="card-header-panel-section-body">
+                            <div class=" d-grid p-2">
+                                <input type="submit" class="garnet-btn garnet-btn-warning mb-2" value="نمایش" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+
+
+
+    <div class="card-body card-table">
+        <div class="table-responsive text-nowrap static-height-600">
+            <table class="table table-hover table-striped table-bordered dataTable" id="tblDocsList">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="row-chb">
+                           @*  <input type="checkbox" id="SelectRows" /> *@
+                            ردیف
+                        </th>
+                        <th>نماینده</th>
+                        <th>شهر</th>
+                        <th>تاریخ آخرین بارنامه</th>
+                        <th>تعداد بارنامه</th>
+                        <th>مبلغ کل بارنامه ها</th>
+                        <th>سهم نماینده</th>
+                        <th>جمع پسکرایه</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.Report.Items.Count() > 0)
+                    {
+                        int row = 1;
+                        foreach (var x in Model.Report.Items)
+                        {
+                            <tr class="dblc-link" data-url="@Url.Action("", "", new { Area = "", id = x.Name })">
+                                <td class="row-chb">
+                                  @*   <input type="checkbox" class="tblRow px-3" name="docId" value="@x.Id" /> *@
+                                    @row
+                                </td>
+                                <td>@x.Name</td>
+                                <td>@x.City</td>
+                                <td>@x.LastDayOfWork.Value.LatinToPersian()</td>
+                                <td>@x.Qty.ToPrice()</td>
+                                <td>@x.TotalBill.ToPrice()</td>
+                                <td>@x.RepresentativeShare.ToPrice()</td>
+                                <td>@x.CashOnDelivery.ToPrice()</td>
+                                
+                            </tr>
+
+                            row++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="card-footer">
+        @if (Model.Report.TotalPages > 1)
+        {
+            <nav aria-label="Page navigation" class="pagin mt-3">
+                <ul class="pagination pagination-sm text-center">
+                    @if (Model.Report.HasPreviousPage)
+                    {
+                        <li class="page-item prev">
+                            <a class="page-link" data-formid="frmRepFilter" data-currentpage="@(Model.Report.CurrentPage - 1)">
+                                <i class="tf-icon bx bx-chevrons-left"></i>
+                            </a>
+                        </li>
+                    }
+
+                    @{
+                        int totalPages = Model.Report.TotalPages;
+                        int currentPage = Model.Report.CurrentPage;
+                        int pageRange = 3; // تعداد صفحات قبل و بعد از صفحه فعلی
+
+                        int startPage = Math.Max(1, currentPage - pageRange);
+                        int endPage = Math.Min(totalPages, currentPage + pageRange);
+
+                        if (startPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" data-formid="frmRepFilter" data-currentpage="1">1</a>
+                            </li>
+                            if (startPage > 2)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                        }
+
+                        for (int i = startPage; i <= endPage; i++)
+                        {
+                            string strActive = currentPage == i ? "active" : "";
+                            <li class="page-item @strActive">
+                                <a class="page-link" data-formid="frmRepFilter" data-currentpage="@i">@i</a>
+                            </li>
+                        }
+
+                        if (endPage < totalPages)
+                        {
+                            if (endPage < totalPages - 1)
+                            {
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            }
+                            <li class="page-item">
+                                <a class="page-link" data-formid="frmRepFilter" data-currentpage="@totalPages">@totalPages</a>
+                            </li>
+                        }
+                    }
+
+                    @if (Model.Report.HasNextPage)
+                    {
+                        <li class="page-item next">
+                            <a class="page-link" data-formid="frmRepFilter" data-currentpage="@(Model.Report.CurrentPage + 1)">
+                                <i class="tf-icon bx bx-chevrons-right"></i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+
+        }
+    </div>
+
+</div>

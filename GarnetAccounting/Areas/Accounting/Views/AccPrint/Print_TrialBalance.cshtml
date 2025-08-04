@@ -1,0 +1,21 @@
+﻿@using Stimulsoft.Report.Mvc
+<link href="~/css/font.css" rel="stylesheet" />
+@{
+    Layout = null;
+    ViewData["Title"] = "تراز آزمایشی";
+}
+
+<div class="text-center printArea">
+
+    @Html.StiNetCoreViewer(new StiNetCoreViewerOptions(){
+    Actions = {
+    GetReport="GetReport_Print_TrialBalance",
+    ViewerEvent= "ViewerEvent",
+    },
+    Appearance={
+    FullScreenMode=true,
+
+    }
+    })
+
+</div>

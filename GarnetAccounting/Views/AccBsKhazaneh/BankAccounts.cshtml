@@ -1,0 +1,113 @@
+﻿@model List<BankAccountDto>
+@{
+    ViewData["Title"] = "مدیریت مالی گارنت - مدیریت حسابهای بانکی";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header-search">
+        <h5 class="card-header heading-color">
+            مدیریت حساب های بانکی
+        </h5>
+        <div class="btn-toolbar demo-inline-spacing" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group" role="group" aria-label="First group">
+                <a href="#" data-url="@Url.Action("AddBankAccount","accBsKhazaneh", new{Area=""})" class="btn btn-primary iconpng callform">
+                    <i class="tf-icons bx bx-plus"></i>
+                    جــدید
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body card-table">
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th class="text-center">ردیف</th>
+                        <th>بانک</th>
+                        <th>شعبه</th>
+                        <th>نوع حساب</th>
+                        <th>صاحب حساب</th>
+                        <th>شماره حساب</th>
+                        <th>شماره شبا</th>
+                        <th>شماره کارت فعال</th>
+                        <th>cvv2 کارت</th>
+                        <th>تاریخ انقضای کارت</th>
+                        <th>آدرس شعبه</th>
+                        <th>حساب تفصیلی</th>
+                        <th>فعال</th>
+                        <th>عملیات</th>
+
+
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @if (Model.Count() > 0)
+                    {
+                        int row = 1;
+                        foreach (var x in Model)
+                        {
+                            <tr>
+                                <td class="text-center">@row</td>
+                                <td>@x.BankName</td>
+                                <td>@x.BranchCode</td>
+                                <td>@x.AccountType</td>
+                                <td>@x.AccountName</td>
+                                <td>@x.AccountNumber</td>
+                                <td>@x.SHABA</td>
+                                <td>@x.CardNumber</td>
+                                <td>@x.cvvt</td>
+                                <td>@x.CardDate</td>
+                                <td>@x.BankAddress</td>
+                                <td>
+                                    @if(x.TafsilId==null || x.TafsilId == 0)
+                                    {
+                                         <a href="#" class="btn btn-sm btn-outline-secondary callform" data-url="@Url.Action("SetAccountBankTafsil","AccBsKhazaneh",new {Area="", bankId=x.Id, name=x.BankName+" "+x.AccountNumber+" - "+x.AccountName})" >انتخاب حساب تفصیلی</a>
+                                    }
+                                    else
+                                    {
+                                        @x.TafsilCode
+                                        <a href="#" class="mx-1 callform" data-url="@Url.Action("RemoveAccountTafsil","AccBsKhazaneh",new {Area="", id=x.Id})"><i class="bx bx-x text-danger"></i>  </a>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if(x.IsActive){
+                                        <i class="bx bx-check text-success"></i>
+                                    }
+                                    else
+                                    {
+                                       <i class="bx bx-x text-danger"></i>  
+                                    }
+                                </td>
+
+                                <td class="row-btns text-center">
+                                    <a class="callform" href="#" data-url="@Url.Action("UpdateBankAccount","AccBsKhazaneh",new{Area="",id=x.Id})"> <i class="bx bx-edit-alt text-info" title="ویرایش اطلاعات حساب بانکی"></i></a>
+                                    <a href="#" data-url="@Url.Action("","AccBsKhazaneh",new{Area="",id=x.Id})"><i class="bx bx-trash-alt text-warning" title=""></i></a>
+                                </td>
+                            </tr>
+
+                            row++;
+                        }
+
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="14">
+                                <div class="alert alert-primary my-3 text-center" role="alert">
+                                    حساب بانکی در سیستم تعریف نشده است. برای تعریف حساب بانکی از دکمه <strong class="text-warning p-1"> جدید</strong> استفاده نمایید.
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+
+</div>
+

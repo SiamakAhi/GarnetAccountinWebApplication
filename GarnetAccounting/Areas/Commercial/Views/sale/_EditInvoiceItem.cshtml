@@ -1,0 +1,82 @@
+﻿    @model InvoiceItemDto
+
+<div class="modal-dialog dataentry-modal">
+    <div class="modal-content dataentry">
+        <div class="dataentry-title">
+            <span class="">ویرایش فاکتور</span>
+
+        </div>
+        <form asp-action="EditInvoiceItem" asp-controller="sale" asp-area="Commercial" method="post">
+            <input type="hidden" asp-for="Id" value="@Model.Id" />
+            <input type="hidden" asp-for="InvoiceId" value="@Model.InvoiceId" />
+            <div class="row">
+                <div class="col-md-9 dataentry-controls">
+                    <div class="row">
+                        <div class="col-md-12 control-group">
+                            <label class="form-label" asp-for="ProductId">کالا / خدمت</label>
+                            <select class="form-select select2" asp-for="ProductId" id="frminvc_Product" asp-items="@ViewBag.products" data-url="@Url.Action("GetProductInfo","sale",new{Area="Commercial"})">
+                              
+                            </select>
+                        </div>
+                        <div class="col-md-3 control-group">
+                            <label class="form-label" asp-for="QuantityInPakageUnit"></label>
+                            <input type="number" class="form-control text-center gonext" asp-for="QuantityInPakageUnit" tabindex="200" id="frminvc_QuantityInPakageUnit" />
+                        </div>
+                        <div class="col-md-3 control-group">
+                            <label class="form-label" asp-for="QuantityInBaseUnit"></label>
+                            <input type="number" class="form-control text-center gonext" asp-for="QuantityInBaseUnit" id="frminvc_QuantityInBaseUnit" tabindex="201" />
+                        </div>
+                        <div class="col-md-3 control-group">
+                            <label class="form-label" asp-for="QuantityInPerPakage"></label>
+                            <input type="text" class="form-control text-center gonext" asp-for="QuantityInPerPakage" id="frminvc_QuantityInPerPakage" tabindex="1000"  readonly />
+                        </div>
+                        <div class="col-md-3 control-group">
+                            <label class="form-label" asp-for="TotalQuantity"></label>
+                            <input type="text" class="form-control text-center gonext" asp-for="TotalQuantity" id="frminvc_TotalQuantity" tabindex="1001"  readonly />
+                        </div>
+                        <div class="col-md-4 control-group mb-1">
+                            <label class="form-label" asp-for="UnitPrice"></label>
+                            <input type="text" class="form-control text-center numberInput gonext" asp-for="UnitPrice" id="frminvc_UnitPrice" tabindex="202" />
+                        </div>
+                        <div class="col-md-4 control-group">
+                            <label class="form-label" asp-for="PriceBeForDescount"></label>
+                            <input type="text" class="form-control text-center gonext" asp-for="PriceBeForDescount" id="frminvc_PriceBeForDescount" tabindex="1002"  readonly />
+                        </div>
+                        <div class="col-md-4 control-group mb-1">
+                            <label class="form-label" asp-for="Discount"></label>
+                            <input type="text" class="form-control text-center numberInput gonext" asp-for="Discount" id="frminvc_Discount" tabindex="203" />
+                        </div>
+                        <div class="col-md-4 control-group">
+                            <label class="form-label" asp-for="PriceBeForDescount"></label>
+                            <input type="text" class="form-control text-center gonext" asp-for="PriceAfterDiscount" id="frminvc_PriceAfterDiscount" tabindex="1003"  readonly />
+                        </div>
+                        <div class="col-md-4 control-group mb-1">
+                            <label class="form-label" asp-for="VatRate"></label>
+                            <input type="text" class="form-control text-center numberInput " asp-for="VatRate" id="frminvc_VatRate" tabindex="204" />
+                        </div>
+                        <div class="col-md-4 control-group mb-2">
+                            <label class="form-label" asp-for="VatPrice"></label>
+                            <input type="text" class="form-control text-center numberInput " asp-for="VatPrice" id="frminvc_VatPrice" readonly />
+                        </div>
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6 control-group">
+                            <label class="form-label" asp-for="FinalPrice"></label>
+                            <input type="text" class="form-control text-center numberInput " asp-for="FinalPrice" id="frminvc_FinalPrice"  readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 dataentry-buttons-container">
+                    <div class="dataentry-buttons">
+                        <a href="javascript:void(0)" class="btn btn-primary accAjaxSubmit" tabindex="205"> ذخیره</a>
+                        <button type="reset" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close" >
+                            انصراف
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<script src="~/vendor/libs/jquery/jquery.js"></script>
+<script src="~/appfunctions/salefunc.js"></script>

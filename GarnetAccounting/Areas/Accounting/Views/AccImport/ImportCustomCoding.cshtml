@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewData["Title"] = "بارگزاری کدینگ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string alert = ViewBag.msg;
+}
+
+
+<div class="card">
+
+    <h5 class="card-header heading-color">
+       بارگذاری کدینک از فایل اکسل
+    </h5>
+    <div class="card-body">
+        <form asp-action="ImportCustomCoding" asp-controller="AccImport" asp-area="Accounting" method="post" enctype="multipart/form-data">
+
+            <div class="row mt-1">
+                <div class="col-12c mb-4">
+                    <label class="form-label">انتخاب فایل اکسل</label>
+                    <input type="file" class="form-control" name="file" accept=".xls, .xlsx" placeholder="انتخاب اکسل حاوی اطلاعات اسناد حسابداری" />
+                </div>
+                <div class="mt-2">
+                    <input type="button" class="btn btn-primary mb-2 accAjaxSubmit" value="بارگذاری اطلاعات" />
+                    @*<a class="btn btn-warning mb-2" asp-action="" asp-controller="Sale" asp-area="Sale">بازگشت به مدیریت صورتحساب ها</a>*@
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
