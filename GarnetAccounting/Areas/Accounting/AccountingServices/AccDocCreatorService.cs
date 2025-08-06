@@ -2392,23 +2392,32 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                     }
                     else
                     {
-                        doc.Id = Guid.NewGuid();
-                        doc.SellerId = dto.SellerId;
-                        doc.PeriodId = dto.PeriodId;
-                        doc.DocDate = x.date;
-                        doc.AtfNumber = docAutonumber;
-                        doc.AutoDocNumber = docAutonumber;
-                        doc.DocNumber = docNumber;
-                        doc.Description = $"بابت ثبت حسابداری اسناد ضمیمه";
-                        if (!string.IsNullOrEmpty(dto.DocSelector))
-                            doc.Description = dto.DocSelector;
-                        doc.StatusId = 1;
-                        doc.SubsystemId = 2;
-                        doc.CreateDate = DateTime.Now;
-                        doc.CreatorUserName = dto.UserName;
-                        doc.IsDeleted = false;
-                        doc.TypeId = 1;
-                        Docs.Add(doc);
+                        var dateInNewDoc = Docs.Where(n => n.DocDate == x.date.Date).FirstOrDefault();
+                        if (dateInNewDoc != null)
+                        {
+                            doc = dateInNewDoc;
+                            rownumber = Articles.Where(n => n.DocId == doc.Id).Count() + 1;
+                        }
+                        else
+                        {
+                            doc.Id = Guid.NewGuid();
+                            doc.SellerId = dto.SellerId;
+                            doc.PeriodId = dto.PeriodId;
+                            doc.DocDate = x.date;
+                            doc.AtfNumber = docAutonumber;
+                            doc.AutoDocNumber = docAutonumber;
+                            doc.DocNumber = docNumber;
+                            doc.Description = $"بابت ثبت حسابداری اسناد ضمیمه";
+                            if (!string.IsNullOrEmpty(dto.DocSelector))
+                                doc.Description = dto.DocSelector;
+                            doc.StatusId = 1;
+                            doc.SubsystemId = 2;
+                            doc.CreateDate = DateTime.Now;
+                            doc.CreatorUserName = dto.UserName;
+                            doc.IsDeleted = false;
+                            doc.TypeId = 1;
+                            Docs.Add(doc);
+                        }
 
                         docAutonumber++;
                         docNumber++;
