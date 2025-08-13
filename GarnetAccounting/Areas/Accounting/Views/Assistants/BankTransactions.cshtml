@@ -164,6 +164,7 @@
                         <th>ساعت</th>
                         <th>پیگیری</th>
                         <th>نوع عملیات</th>
+                        <th>کد عملیات</th>
                         <th>شرح</th>
                         <th>شرح کاربر</th>
                         <th> واریز</th>
@@ -216,6 +217,7 @@
                                 <td>@x.Time</td>
                                 <td>@x.DocumentNumber</td>
                                 <td>@x.Operation</td>
+                                <td>@x.OperationCode</td>
                                 <td>@x.Description</td>
                                 <td>@x.Note</td>
                                 <td>@x.Debtor?.ToPrice()</td>
@@ -229,6 +231,7 @@
                     else
                     {
                         <tr>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>

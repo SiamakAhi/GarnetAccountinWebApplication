@@ -14,6 +14,7 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryInterfaces
         Task<clsResult> ImportTejaratAsync(BankImporterDto dto);
         Task<clsResult> ImportTejaratInternetBankAsync(BankImporterDto dto);
         Task<clsResult> ImportMelatAsync(BankImporterDto dto);
+        Task<clsResult> ImportMelat12Async(BankImporterDto dto);
         Task<clsResult> ImportEghtesadNovinAsync(BankImporterDto dto);
         Task<clsResult> ImportEghtesadInternetBankAsync(BankImporterDto dto);
         Task<clsResult> ImportEghtesadInternetBank2Async(BankImporterDto dto);

@@ -93,7 +93,7 @@
                                 <tr>
                                     <td colspan="4" class="text-center"> <h5>جمع :</h5></td>
                                     <td class="text-center"><h5>@Model.Articles.Sum(n => n.Bed).ToPrice()</h5></td>
-                                    <td class="text-center"><h5>@Model.Articles.Sum(n => n.Bes).ToString()</h5></td>
+                                    <td class="text-center"><h5>@Model.Articles.Sum(n => n.Bes).ToPrice()</h5></td>
                                 </tr>
                             }
                         </tfoot>

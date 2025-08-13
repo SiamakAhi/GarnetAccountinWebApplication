@@ -58,8 +58,6 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
             ViewBag.InvoiceStatuse = _assistant.SelectList_MoadianInvoiceStatuses();
             return View(model);
         }
-
-
         [HttpGet]
         public IActionResult ImportMoadianReports()
         {
@@ -71,7 +69,6 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
 
             return PartialView("_ImportMoadianReports", model);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ImportMoadianReports(MoadianImporterDto dto)
@@ -90,13 +87,11 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
             }
             return Json(result.ToJsonResult());
         }
-
         [HttpGet]
         public IActionResult InsertMoadianReport()
         {
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> InsertMoadianReport(ExcelImportDto dto)
         {
@@ -162,7 +157,6 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
 
             return View(model);
         }
-
         [HttpGet]
         public async Task<IActionResult> ImportBankTransaction()
         {
@@ -200,6 +194,9 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
                         break;
                     case 30:
                         result = await _bankImporter.ImportMelatAsync(model);
+                        break;
+                    case 31:
+                        result = await _bankImporter.ImportMelat12Async(model);
                         break;
                     case 40:
                         result = await _bankImporter.ImportEghtesadNovinAsync(model);

@@ -1272,12 +1272,18 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 }
             }
 
+            if (!accSetting.InventoryMoeinId.HasValue)
+            {
+                result.Success = false;
+                result.Message = "حساب موجودی کالا در تنظیمات حسابداری مشخص نشده است";
+                return result;
+            }
             // بستن اول دوره
             var avalDoreh = await _db.Acc_Articles.Include(n => n.Moein)
                      .Where(n =>
                      n.Doc.SellerId == dto.SellerId
                      && n.Doc.PeriodId == dto.PeriodId
-                     && n.MoeinId == dto.MojoodiKalaAccount
+                     && n.MoeinId == accSetting.InventoryMoeinId
                      && (n.Doc.DocNumber == 1 || n.Doc.TypeId == 2)
                       ).FirstOrDefaultAsync();
 
@@ -1324,7 +1330,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
 
             if (dto.payanDore > 0)
             {
-                var payanDore = await _db.Acc_Coding_Moeins.FindAsync(dto.PayanDoreAccount.Value);
+                var payanDore = await _db.Acc_Coding_Moeins.FindAsync(accSetting.InventoryMoeinId);
                 long payanAmount = dto.payanDore;
                 if (payanDore != null)
                 {

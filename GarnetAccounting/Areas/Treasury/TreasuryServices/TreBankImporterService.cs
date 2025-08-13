@@ -25,6 +25,7 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
             items.Add(new SelectListItem { Value = "20", Text = "تجارت" });
             items.Add(new SelectListItem { Value = "21", Text = "تجارت - اینترنت بانک" });
             items.Add(new SelectListItem { Value = "30", Text = "ملت" });
+            items.Add(new SelectListItem { Value = "31", Text = "ملت 12" });
             items.Add(new SelectListItem { Value = "40", Text = "اقتصاد نوین" });
             items.Add(new SelectListItem { Value = "41", Text = "اقتصاد نوین (اینترنت بانک)" });
             items.Add(new SelectListItem { Value = "42", Text = "اقتصاد نوین (اینترنت بانک 2)" });
@@ -146,8 +147,6 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
             return transactions;
 
         }
-
-
         // BankReportType = 1?
         public async Task<clsResult> ImportSamanKotahModatAsync(BankImporterDto dto)
         {
@@ -344,7 +343,6 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
             }
             return result;
         }
-
         // Bank Saman Sadid = 11
         public async Task<clsResult> ImportBankSamanSadidAsync(BankImporterDto dto)
         {
@@ -512,7 +510,7 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
                                 OperationCode = row.Cell("L").GetValue<string>(),
                                 IBAN = iban,
                                 Operation = row.Cell("M").GetValue<string>(),
-                                BatchNumber=batchNum,
+                                BatchNumber = batchNum,
                             };
 
 
@@ -707,6 +705,95 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
                             transaction.Creditor = row.Cell("C").GetValue<long?>() ?? 0; // برداشت
                             transaction.Balance = row.Cell("A").GetValue<long?>() ?? 0;
                             transaction.Branch = row.Cell("G").GetValue<string?>();
+                            transaction.BatchNumber = batchNum;
+
+                            BankTransactionList.Add(transaction);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"خطا در ردیف {row.RowNumber()}: {ex.Message}");
+                            break; // خروج از حلقه در صورت بروز خطا
+                        }
+                    }
+                }
+
+            }
+            if (okTask)
+            {
+                var existingData = await _db.TreBankTransactions.AsNoTracking().Where(n => n.SellerId == dto.SellerId && n.BankAccountId == dto.BankAccountId).ToListAsync();
+
+                List<TreBankTransaction> finalList = new List<TreBankTransaction>();
+                foreach (var x in BankTransactionList)
+                {
+                    if (!existingData.Where(n => n.Date == x.Date && n.DocumentNumber == x.DocumentNumber).Any())
+                    { finalList.Add(x); }
+                }
+                await _db.TreBankTransactions.AddRangeAsync(finalList);
+                try
+                {
+                    await _db.SaveChangesAsync();
+                    result.Success = true;
+                    result.Message = $"تعداد {finalList.Count} از {BankTransactionList.Count} رکورد موجود در فایل بارگذاری شد";
+                }
+                catch (Exception)
+                {
+                    result.Message = "خطایی در ثبت اطلاعات گزارش بانک رخ داده است فایل را بررسی کنید مجدد تلاش کنید";
+                }
+            }
+            return result;
+        }
+        // BankReportType = 31
+        public async Task<clsResult> ImportMelat12Async(BankImporterDto dto)
+        {
+            clsResult result = new clsResult();
+            result.Success = false;
+
+            if (dto.SellerId == 0)
+            {
+                result.Message = "لایسنس شناسایی نشد";
+                return result;
+            }
+            if (dto.File == null || dto.File.Length <= 0)
+            {
+                result.Message = "فایل معتبر نیست";
+                return result;
+            }
+            bool okTask = true;
+            var BankTransactionList = new List<TreBankTransaction>();
+
+            using (var stream = new MemoryStream())
+            {
+                await dto.File.CopyToAsync(stream);
+                using (var workbook = new XLWorkbook(stream))
+                {
+                    var worksheet = workbook.Worksheet(1);
+                    var rows = worksheet.RowsUsed();
+                    int startRow = 1;
+                    string batchNum = DateTime.Now.ToLong().ToString();
+                    foreach (var row in rows.Skip(startRow - 1))
+                    {
+                        try
+                        {
+                            var transaction = new TreBankTransaction();
+
+                            transaction.SellerId = dto.SellerId;
+                            transaction.BankAccountId = dto.BankAccountId;
+
+                            string strRow = row.Cell("L").GetValue<string?>();
+                            transaction.Row = int.TryParse(strRow, out int rownumber) ? rownumber : 0;
+                            if (transaction.Row == 0) continue;
+
+                            string dateValue = row.Cell("K").GetValue<string>().Trim();
+                            string timeValue = row.Cell("J").GetValue<string>().Trim();
+                            transaction.Date = dateValue.PersianToLatin();
+                            transaction.Time = TimeSpan.TryParse(timeValue, out var parsedTime) ? parsedTime : TimeSpan.Zero;
+
+                            transaction.Description = row.Cell("D").GetValue<string?>() + " " + row.Cell("E").GetValue<string?>();
+                            transaction.DocumentNumber = row.Cell("F").GetValue<string?>();
+                            transaction.Debtor = row.Cell("B").GetValue<long?>() ?? 0; // واریز
+                            transaction.Creditor = row.Cell("C").GetValue<long?>() ?? 0; // برداشت
+                            transaction.Balance = row.Cell("A").GetValue<long?>() ?? 0;
+                            transaction.Branch = row.Cell("I").GetValue<string?>();
                             transaction.BatchNumber = batchNum;
 
                             BankTransactionList.Add(transaction);
@@ -951,7 +1038,6 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
             }
             return result;
         }
-
         // Eqtesad Internet Bank = 42
         public async Task<clsResult> ImportEghtesadInternetBank2Async(BankImporterDto dto)
         {
@@ -1109,7 +1195,7 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
                                 Description = row.Cell("A").GetValue<string>(),
                                 ReferenceId = row.Cell("B").GetValue<string>(),
                                 Operation = row.Cell("D").GetValue<string>(),
-                                BatchNumber= batchNum,
+                                BatchNumber = batchNum,
                             };
 
 
@@ -1494,7 +1580,6 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
                     {
                         try
                         {
-
                             var transaction = new TreBankTransaction();
 
                             transaction.SellerId = dto.SellerId;
@@ -1514,8 +1599,10 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
                             transaction.Operation = row.Cell("E").GetValue<string?>(); // عملیات
                             transaction.DocumentNumber = row.Cell("F").GetValue<string?>(); // شماره سند
                             transaction.Description = row.Cell("G").GetValue<string?>(); // شرح
+
                             transaction.Debtor = row.Cell("H").GetValue<long?>() ?? 0; // واریز
                             transaction.Creditor = row.Cell("I").GetValue<long?>() ?? 0; // برداشت
+
                             transaction.Balance = row.Cell("J").GetValue<long?>() ?? 0; // مانده
                             transaction.Note = row.Cell("K").GetValue<string?>(); // یادداشت
                             transaction.BatchNumber = batchNum;
@@ -1778,7 +1865,6 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
             }
             return result;
         }
-
         // Bank Sepah = 102
         public async Task<clsResult> ImportSepahJariAsync(BankImporterDto dto)
         {
@@ -1989,7 +2075,6 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
             }
             return result;
         }
-
         // Bank Melli = 300
         public async Task<clsResult> ImportPasargadAsync(BankImporterDto dto)
         {
@@ -2095,5 +2180,8 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
             }
             return result;
         }
+        //
+        //
+
     }
 }
