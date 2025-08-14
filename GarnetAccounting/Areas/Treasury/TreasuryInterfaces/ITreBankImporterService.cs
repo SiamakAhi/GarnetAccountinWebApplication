@@ -27,6 +27,7 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryInterfaces
         Task<clsResult> ImportSepahAsync(BankImporterDto dto);
         Task<clsResult> ImportSepahJariAsync(BankImporterDto dto);
         Task<clsResult> ImportBankMeliAsync(BankImporterDto dto);
+        Task<clsResult> ImportSepah_InternetBankAsync(BankImporterDto dto);
         Task<clsResult> ImportPasargadAsync(BankImporterDto dto);
     }
 }

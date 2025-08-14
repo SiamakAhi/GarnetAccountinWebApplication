@@ -271,10 +271,10 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                             continue;
                         report.VAT = row.Cell(7).GetValue<long?>() ?? 0;
                         report.InvoiceStatus = row.Cell(8).GetString();
-                        if (report.InvoiceType.Trim() == "اول" && report.InvoiceStatus.Trim() != "تایید شده" && report.InvoiceStatus.Trim() != "تایید سیستمی")
-                            continue;
-                        if (report.InvoiceType.Trim() == "دوم" && report.InvoiceStatus.Trim() != "عدم نیاز به واکنش")
-                            continue;
+                        //if (report.InvoiceType.Trim() == "اول" && report.InvoiceStatus.Trim() != "تایید شده" && report.InvoiceStatus.Trim() != "تایید سیستمی")
+                        //    continue;
+                        //if (report.InvoiceType.Trim() == "دوم" && report.InvoiceStatus.Trim() != "عدم نیاز به واکنش")
+                        //    continue;
                         string strDate = row.Cell(9).GetString().Substring(0, 10);
                         report.IssueDate = strDate.mdToMiladiDate();
                         string strFolderInsertDate = row.Cell(10).GetString().Substring(0, 10);

@@ -231,6 +231,9 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
                     case 102:
                         result = await _bankImporter.ImportSepahJariAsync(model);
                         break;
+                    case 103:
+                        result = await _bankImporter.ImportSepah_InternetBankAsync(model);
+                        break;
                     case 200:
                         result = await _bankImporter.ImportBankMeliAsync(model);
                         break;
