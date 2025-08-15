@@ -630,7 +630,7 @@ namespace GarnetAccounting.Areas.Commercial.ComercialServices
             return result;
         }
         //Create Invoice In Bulk
-        public async Task<List<CreateIncoiceDto>> PrepareInvoiceToCreate_AtiranAsync(InvoiceImportDto_Atiran rawData)
+        public async Task<List<CreateIncoiceDto>> PrepareInvoiceToCreate_AtiranAsync(InvoiceImportDto_Atiran rawData, short Invoicetype)
         {
             List<CreateIncoiceDto> invoices = new List<CreateIncoiceDto>();
 
@@ -667,7 +667,7 @@ namespace GarnetAccounting.Areas.Commercial.ComercialServices
                     header.SellerId = sellerId;
                     header.InvoiceSubject = 1;
                     header.FinancePeriodId = periodId;
-                    header.InvoiceType = 2;
+                    header.InvoiceType = Invoicetype;
                     header.InvoiceDate = x.invcDate;
                     header.ArchiveRef = x.InvoiceNumber;
                     header.InvoiceNumber = x.InvoiceNumber;
@@ -738,7 +738,7 @@ namespace GarnetAccounting.Areas.Commercial.ComercialServices
             foreach (var i in invoices)
             {
 
-                if (await _db.Invoices.AnyAsync(n => n.SellerId == i.Header.SellerId.Value && n.InvoiceNumber == i.Header.InvoiceNumber && n.FinancePeriodId == i.Header.FinancePeriodId))
+                if (await _db.Invoices.AnyAsync(n => n.InvoiceType == i.Header.InvoiceType && n.SellerId == i.Header.SellerId.Value && n.InvoiceNumber == i.Header.InvoiceNumber && n.FinancePeriodId == i.Header.FinancePeriodId))
                     continue;
 
                 var invoice = new com_Invoice();

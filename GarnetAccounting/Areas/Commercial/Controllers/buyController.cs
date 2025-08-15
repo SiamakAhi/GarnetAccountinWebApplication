@@ -2,6 +2,7 @@
 using GarnetAccounting.Areas.Commercial.Dtos;
 using GarnetAccounting.Areas.Warehouse.Dto;
 using GarnetAccounting.Areas.Warehouse.WarehouseInterfaces;
+using GarnetAccounting.Classes;
 using GarnetAccounting.Interfaces;
 using GarnetAccounting.Services;
 using GarnetAccounting.ViewModels;
@@ -177,6 +178,44 @@ namespace GarnetAccounting.Areas.Commercial.Controllers
 
             return View(invoice);
         }
+
+        //---------------------------------------------------
+        [HttpGet]
+        public IActionResult bulkCreateBuyInvoice()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> bulkCreateBuyInvoice(CreateBulkInvoiceDto dto)
+        {
+            clsResult result = new clsResult();
+            result.Success = false;
+            ExcelImporter importer = new ExcelImporter();
+            var data = importer.ReadInvoicesFromAtiranExcel(dto.ExcelFile);
+            if (data.Errors.Count > 0)
+            {
+                foreach (var er in data.Errors)
+                {
+                    result.Message += $"<br> {er.Code} - {er.Error}";
+                }
+                result.Success = false;
+                result.ShowMessage = true;
+                return Json(result.ToJsonResult());
+            }
+
+            var dataToAdd = await _invoice.PrepareInvoiceToCreate_AtiranAsync(data, 1);
+            result = await _invoice.CreateInvoiceInBulkAsync(dataToAdd);
+            if (result.Success)
+            {
+                result.returnUrl = Request.Headers["Referer"].ToString();
+                result.Success = true;
+            }
+
+            return Json(result.ToJsonResult());
+        }
+
+
 
     }
 }

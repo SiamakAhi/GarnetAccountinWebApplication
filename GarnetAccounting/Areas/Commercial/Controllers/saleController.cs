@@ -319,7 +319,7 @@ namespace GarnetAccounting.Areas.Commercial.Controllers
                 return Json(result.ToJsonResult());
             }
 
-            var dataToAdd = await _saleService.PrepareInvoiceToCreate_AtiranAsync(data);
+            var dataToAdd = await _saleService.PrepareInvoiceToCreate_AtiranAsync(data, 2);
             result = await _saleService.CreateInvoiceInBulkAsync(dataToAdd);
             if (result.Success)
             {

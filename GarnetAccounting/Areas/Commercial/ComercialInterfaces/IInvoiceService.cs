@@ -19,7 +19,7 @@ namespace GarnetAccounting.Areas.Commercial.ComercialInterfaces
         Task<clsResult> updateInvoiceItemAsync(InvoiceItemDto dto);
         Task<clsResult> DeleteInvoiceItemAsync(Guid Id);
         Task<clsResult> DeleteInvoiceAsync(Guid Id);
-        Task<List<CreateIncoiceDto>> PrepareInvoiceToCreate_AtiranAsync(InvoiceImportDto_Atiran rawData);
+        Task<List<CreateIncoiceDto>> PrepareInvoiceToCreate_AtiranAsync(InvoiceImportDto_Atiran rawData, short Invoicetype);
         Task<clsResult> CreateInvoiceInBulkAsync(List<CreateIncoiceDto> invoices);
         Task<List<InvoiceDto>> GetInvoicesFuulDataAsync(Guid[] ids);
         Task<clsResult> TagInvoicesAsync(Guid[] ids);
