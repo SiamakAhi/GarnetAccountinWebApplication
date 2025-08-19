@@ -69,6 +69,8 @@ namespace GarnetAccounting.Areas.Accounting.Models.Entities
         public int? BuyVatMoeinId { get; set; }
         public bool SetTafsilForBuyVat { get; set; } = true;
 
+        [Display(Name = "حساب مالیات پرداختنی")]
+        public int? TaxDebit { get; set; }
 
         [Display(Name = "حساب معین اسناد انبار")]
         public int? WarehouseMoeinId { get; set; }

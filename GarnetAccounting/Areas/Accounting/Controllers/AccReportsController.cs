@@ -48,12 +48,22 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
                 model.filter = new DocFilterDto();
             }
 
+            var minMax = await _ser.GetMinMaxDocNumberAsync(_userContext.SellerId.Value, _userContext.PeriodId.Value);
             model.filter.SellerId = _userContext.SellerId.Value;
             model.filter.PeriodId = 0;
             if (_userContext.PeriodId.HasValue)
                 model.filter.PeriodId = _userContext.PeriodId.Value;
             model.Kols = await _ser.Report_KolAsync(model.filter);
             ViewBag.docType = _base.SelectList_DocTypes();
+
+            if (!model.filter.FromDocNumer.HasValue)
+                model.filter.FromDocNumer = minMax.MinNumber;
+            if (!model.filter.ToDocNumer.HasValue)
+                model.filter.ToDocNumer = minMax.MaxNumber;
+            if (string.IsNullOrEmpty(model.filter.strStartDate))
+                model.filter.strStartDate = minMax.MinDate.LatinToPersian();
+            if (string.IsNullOrEmpty(model.filter.strEndDate))
+                model.filter.strEndDate = minMax.MaxDate.LatinToPersian();
 
             return View(model);
         }

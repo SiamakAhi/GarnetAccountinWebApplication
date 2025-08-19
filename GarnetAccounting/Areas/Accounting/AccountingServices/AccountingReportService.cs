@@ -21,6 +21,21 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             _baseData = baseData;
         }
 
+        public async Task<MinMaxDocNumberDto> GetMinMaxDocNumberAsync(long SellerId, int PeriodId)
+        {
+            var data = _db.Acc_Documents.AsNoTracking().Include(n => n.DocPeriod)
+                .Where(n => n.SellerId == SellerId && n.PeriodId == PeriodId && !n.IsDeleted)
+                .AsQueryable();
+            MinMaxDocNumberDto dto = new MinMaxDocNumberDto();
+            dto.MinNumber = await data.MinAsync(n => n.DocNumber);
+            dto.MaxNumber = await data.MaxAsync(n => n.DocNumber);
+            dto.MinDate = await data.MinAsync(n => n.DocDate);
+            dto.MaxDate = await data.MaxAsync(n => n.DocDate);
+
+            return dto;
+
+        }
+
         // معین های دارای گردش در دوره مالی جاری
         public async Task<bool> HasAccountInLevelAsync(long sellerId, int periodId, int moeinId, int tafsilLevel, long? tafsilId = null)
         {

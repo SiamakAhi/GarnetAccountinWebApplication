@@ -1161,6 +1161,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 return result;
             }
 
+            // کنترل کردیم که معین مورد نیاز بستن حساب ها در تنظیمات حسابداری انحام شده باشد
             var accSetting = await _db.Acc_Settings.Where(n => n.SellerId == dto.SellerId).FirstOrDefaultAsync();
             if (accSetting == null
                 || !accSetting.InventoryMoeinId.HasValue
@@ -1225,19 +1226,19 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                     {
                         if (x.MandehNature == 1)
                         {
-                            a.Bed = x.Mandeh;
+                            a.Bes = x.Mandeh;
                             a.strBes = x.Mandeh.ToPrice();
-                            a.Bes = 0;
+                            a.Bed = 0;
                         }
                         else
                         {
-                            a.Bes = x.Mandeh;
+                            a.Bed = x.Mandeh;
                             a.strBed = x.Mandeh.ToPrice();
-                            a.Bed = 0;
+                            a.Bes = 0;
                         }
                     }
                     a.Amount = x.Mandeh;
-                    a.Comment = $"بابت بستن حساب  {x.MoeinName} با " + SummaryAccount.MoeinName;
+                    a.Comment = "بابت بستن حساب ها";
                     a.KolId = x.KolId;
                     a.MoeinCode = x.MoeinCode;
                     a.MoeinId = x.MoeinId;
@@ -1249,283 +1250,208 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                     articles.Add(a);
                     rownumber++;
 
-                    // طرف سود و زیان
-                    DocArticleDto summaryRow = new DocArticleDto();
-                    summaryRow.Id = Guid.NewGuid();
-                    summaryRow.DocId = docId;
-                    summaryRow.RowNumber = rownumber;
-                    summaryRow.SellerId = dto.SellerId;
-                    summaryRow.PeriodId = dto.PeriodId.Value;
-                    summaryRow.KolId = SummaryAccount.KolId;
-                    summaryRow.MoeinId = SummaryAccount.Id;
-                    summaryRow.MoeinCode = SummaryAccount.MoeinCode;
-                    summaryRow.MoeinName = SummaryAccount.MoeinName;
-                    summaryRow.Bed = a.Bes > 0 ? a.Bes : 0;
-                    summaryRow.Bes = a.Bed > 0 ? a.Bed : 0;
-                    summaryRow.Amount = a.Bed > 0 ? a.Bed : a.Bes;
-                    summaryRow.IsDeleted = false;
-                    summaryRow.Comment = $"بابت بستن حساب   {x.MoeinName} ";
-                    summaryRow.CreatorUserName = username;
-                    articles.Add(summaryRow);
-                    rownumber++;
-
                 }
             }
 
-            if (!accSetting.InventoryMoeinId.HasValue)
-            {
-                result.Success = false;
-                result.Message = "حساب موجودی کالا در تنظیمات حسابداری مشخص نشده است";
-                return result;
-            }
+            //if (!accSetting.InventoryMoeinId.HasValue)
+            //{
+            //    result.Success = false;
+            //    result.Message = "حساب موجودی کالا در تنظیمات حسابداری مشخص نشده است";
+            //    return result;
+            //}
             // بستن اول دوره
-            var avalDoreh = await _db.Acc_Articles.Include(n => n.Moein)
-                     .Where(n =>
-                     n.Doc.SellerId == dto.SellerId
-                     && n.Doc.PeriodId == dto.PeriodId
-                     && n.MoeinId == accSetting.InventoryMoeinId
-                     && (n.Doc.DocNumber == 1 || n.Doc.TypeId == 2)
-                      ).FirstOrDefaultAsync();
+            //var avalDoreh = await _db.Acc_Articles.AsNoTracking().Include(n => n.Moein)
+            //         .Where(n =>
+            //         n.Doc.SellerId == dto.SellerId
+            //         && n.Doc.PeriodId == dto.PeriodId
+            //         && n.MoeinId == accSetting.InventoryMoeinId
+            //         && (n.Doc.DocNumber == 1 || n.Doc.TypeId == 2)
+            //          ).FirstOrDefaultAsync();
 
-            if (avalDoreh != null)
-            {
-                DocArticleDto SummaryAvalDore = new DocArticleDto();
-                SummaryAvalDore.Id = Guid.NewGuid();
-                SummaryAvalDore.DocId = docId;
-                SummaryAvalDore.RowNumber = rownumber;
-                SummaryAvalDore.SellerId = dto.SellerId;
-                SummaryAvalDore.PeriodId = dto.PeriodId.Value;
-                SummaryAvalDore.KolId = SummaryAccount.KolId;
-                SummaryAvalDore.MoeinId = SummaryAccount.Id;
-                SummaryAvalDore.MoeinCode = SummaryAccount.MoeinCode;
-                SummaryAvalDore.MoeinName = SummaryAccount.MoeinName;
-                SummaryAvalDore.Bed = avalDoreh != null ? avalDoreh.Amount : 0;
-                SummaryAvalDore.Bes = 0;
-                SummaryAvalDore.Amount = avalDoreh != null ? avalDoreh.Amount : 0;
-                SummaryAvalDore.IsDeleted = false;
-                SummaryAvalDore.Comment = $"بابت بستن حساب موجودی اول دوره ";
-                SummaryAvalDore.CreatorUserName = username;
-                articles.Add(SummaryAvalDore);
-                rownumber++;
+            //if (avalDoreh != null)
+            //{
+            //    DocArticleDto avadoreArt = new DocArticleDto();
+            //    avadoreArt.Id = Guid.NewGuid();
+            //    avadoreArt.DocId = docId;
+            //    avadoreArt.RowNumber = rownumber;
+            //    avadoreArt.SellerId = dto.SellerId;
+            //    avadoreArt.PeriodId = dto.PeriodId.Value;
+            //    avadoreArt.KolId = avalDoreh.Moein.KolId;
+            //    avadoreArt.MoeinId = avalDoreh.MoeinId;
+            //    avadoreArt.MoeinCode = avalDoreh.Moein.MoeinCode;
+            //    avadoreArt.MoeinName = avalDoreh.Moein.MoeinName;
+            //    avadoreArt.Bed = 0;
+            //    avadoreArt.Bes = avalDoreh != null ? avalDoreh.Amount : 0;
+            //    avadoreArt.Amount = avalDoreh != null ? avalDoreh.Amount : 0;
+            //    avadoreArt.IsDeleted = false;
+            //    avadoreArt.Comment = $"بابت بستن حساب موجودی اول دوره با خلاصه سودوزیان ";
+            //    avadoreArt.CreatorUserName = username;
+            //    articles.Add(avadoreArt);
+            //    rownumber++;
+            //}
 
-                DocArticleDto avadoreArt = new DocArticleDto();
-                avadoreArt.Id = Guid.NewGuid();
-                avadoreArt.DocId = docId;
-                avadoreArt.RowNumber = rownumber;
-                avadoreArt.SellerId = dto.SellerId;
-                avadoreArt.PeriodId = dto.PeriodId.Value;
-                avadoreArt.KolId = avalDoreh.Moein.KolId;
-                avadoreArt.MoeinId = avalDoreh.MoeinId;
-                avadoreArt.MoeinCode = avalDoreh.Moein.MoeinCode;
-                avadoreArt.MoeinName = avalDoreh.Moein.MoeinName;
-                avadoreArt.Bed = 0;
-                avadoreArt.Bes = avalDoreh != null ? avalDoreh.Amount : 0;
-                avadoreArt.Amount = avalDoreh != null ? avalDoreh.Amount : 0;
-                avadoreArt.IsDeleted = false;
-                avadoreArt.Comment = $"بابت بستن حساب موجودی اول دوره با خلاصه سودوزیان ";
-                avadoreArt.CreatorUserName = username;
-                articles.Add(avadoreArt);
-                rownumber++;
-            }
+            //if (dto.payanDore > 0)
+            //{
+            //    var payanDore = await _db.Acc_Coding_Moeins.FindAsync(accSetting.InventoryMoeinId);
+            //    long payanAmount = dto.payanDore;
+            //    if (payanDore != null)
+            //    {
+            //        var getPayanDore = await _db.Acc_Articles
+            //         .Where(n =>
+            //         n.Doc.SellerId == dto.SellerId
+            //         && n.Doc.PeriodId == dto.PeriodId
+            //         && n.MoeinId == payanDore.Id
+            //         && n.IsDeleted == false)
+            //         .FirstOrDefaultAsync();
 
-            if (dto.payanDore > 0)
-            {
-                var payanDore = await _db.Acc_Coding_Moeins.FindAsync(accSetting.InventoryMoeinId);
-                long payanAmount = dto.payanDore;
-                if (payanDore != null)
-                {
-                    var getPayanDore = await _db.Acc_Articles
-                     .Where(n =>
-                     n.Doc.SellerId == dto.SellerId
-                     && n.Doc.PeriodId == dto.PeriodId
-                     && n.MoeinId == payanDore.Id
-                     && n.IsDeleted == false)
-                     .FirstOrDefaultAsync();
-
-                    if (getPayanDore != null)
-                    {
-                        getPayanDore.Bed = payanAmount;
-                        getPayanDore.Bes = 0;
-                        getPayanDore.Amount = payanAmount;
-                        getPayanDore.EditorUserName = username;
-                        getPayanDore.LastUpdateDate = DateTime.Now;
-                        _db.Acc_Articles.Update(getPayanDore);
-                        await _db.SaveChangesAsync();
-                    }
-                    else
-                    {
-                        DocArticleDto payanArt = new DocArticleDto();
-                        payanArt.Id = Guid.NewGuid();
-                        payanArt.DocId = docId;
-                        payanArt.RowNumber = rownumber;
-                        payanArt.SellerId = dto.SellerId;
-                        payanArt.PeriodId = dto.PeriodId.Value;
-                        payanArt.KolId = payanDore.KolId;
-                        payanArt.MoeinId = payanDore.Id;
-                        payanArt.MoeinCode = payanDore.MoeinCode;
-                        payanArt.MoeinName = payanDore.MoeinName;
-                        payanArt.Bed = payanAmount;
-                        payanArt.Bes = 0;
-                        payanArt.Amount = avalDoreh != null ? avalDoreh.Amount : 0;
-                        payanArt.IsDeleted = false;
-                        payanArt.Comment = $"بابت ایجاد حساب موجودی پایان دوره  ";
-                        payanArt.CreatorUserName = username;
-                        articles.Add(payanArt);
-                        rownumber++;
-
-                        DocArticleDto SummaryPayanDore = new DocArticleDto();
-                        SummaryPayanDore.Id = Guid.NewGuid();
-                        SummaryPayanDore.DocId = docId;
-                        SummaryPayanDore.RowNumber = rownumber;
-                        SummaryPayanDore.SellerId = dto.SellerId;
-                        SummaryPayanDore.PeriodId = dto.PeriodId.Value;
-                        SummaryPayanDore.KolId = SummaryAccount.KolId;
-                        SummaryPayanDore.MoeinId = SummaryAccount.Id;
-                        SummaryPayanDore.MoeinCode = SummaryAccount.MoeinCode;
-                        SummaryPayanDore.MoeinName = SummaryAccount.MoeinName;
-                        SummaryPayanDore.Bed = 0;
-                        SummaryPayanDore.Bes = payanAmount;
-                        SummaryPayanDore.Amount = payanAmount;
-                        SummaryPayanDore.IsDeleted = false;
-                        SummaryPayanDore.Comment = $"بابت تشکیل حساب موجودی پایان دوره ";
-                        SummaryPayanDore.CreatorUserName = username;
-                        articles.Add(SummaryPayanDore);
-                        rownumber++;
-                    }
-                }
-
-            }
-
+            //        if (getPayanDore != null)
+            //        {
+            //            getPayanDore.Bed = payanAmount;
+            //            getPayanDore.Bes = 0;
+            //            getPayanDore.Amount = payanAmount;
+            //            getPayanDore.EditorUserName = username;
+            //            getPayanDore.LastUpdateDate = DateTime.Now;
+            //            _db.Acc_Articles.Update(getPayanDore);
+            //            await _db.SaveChangesAsync();
+            //        }
+            //        else
+            //        {
+            //            DocArticleDto payanArt = new DocArticleDto();
+            //            payanArt.Id = Guid.NewGuid();
+            //            payanArt.DocId = docId;
+            //            payanArt.RowNumber = rownumber;
+            //            payanArt.SellerId = dto.SellerId;
+            //            payanArt.PeriodId = dto.PeriodId.Value;
+            //            payanArt.KolId = payanDore.KolId;
+            //            payanArt.MoeinId = payanDore.Id;
+            //            payanArt.MoeinCode = payanDore.MoeinCode;
+            //            payanArt.MoeinName = payanDore.MoeinName;
+            //            payanArt.Bed = payanAmount;
+            //            payanArt.Bes = 0;
+            //            payanArt.Amount = avalDoreh != null ? avalDoreh.Amount : 0;
+            //            payanArt.IsDeleted = false;
+            //            payanArt.Comment = $"بابت ایجاد حساب موجودی پایان دوره  ";
+            //            payanArt.CreatorUserName = username;
+            //            articles.Add(payanArt);
+            //            rownumber++;
+            //        }
+            //    }
+            //}
 
             //---------------------------------------------------------------------
-            // بستن حساب خلاصه سود و زیان با سود و زیان انباشته
-            if (dto.RetainedEarningsAccountId != null)
+            long totalBed = articles.Sum(x => x.Bed);
+            long totalBes = articles.Sum(x => x.Bes);
+
+            var sanavati = await _db.Acc_Coding_Moeins.FindAsync(accSetting.SoodVaZianAnbashtehMoeinId);
+            if (sanavati == null)
             {
-                var RetainedEarningsAccount = await _db.Acc_Coding_Moeins.FindAsync(dto.RetainedEarningsAccountId.Value);
-
-                long SummaryBed = articles.Where(n => n.MoeinId == SummaryAccount.Id).Sum(x => x.Bed);
-                long SummaryBes = articles.Where(n => n.MoeinId == SummaryAccount.Id).Sum(x => x.Bes);
-                long netIncome = SummaryBed > SummaryBes ? SummaryBed - SummaryBes : SummaryBes - SummaryBed;
-                int SummaryNature = SummaryBed > SummaryBes ? 1 : (SummaryBed < SummaryBes ? 2 : 3);
-                if (netIncome == 0)
-                    return result;
-
-                DocArticleDto summaryArt = new DocArticleDto();
-                summaryArt.Id = Guid.NewGuid();
-                summaryArt.DocId = docId;
-                summaryArt.RowNumber = rownumber;
-                summaryArt.SellerId = dto.SellerId;
-                summaryArt.PeriodId = dto.PeriodId.Value;
-                summaryArt.KolId = SummaryAccount.KolId;
-                summaryArt.MoeinId = SummaryAccount.Id;
-                summaryArt.MoeinCode = SummaryAccount.MoeinCode;
-                summaryArt.MoeinName = SummaryAccount.MoeinName;
-                if (SummaryNature == 2)
-                {
-                    summaryArt.Bed = netIncome;
-                    summaryArt.strBed = netIncome.ToPrice();
-                    summaryArt.Bes = 0;
-                }
-                else
-                {
-                    summaryArt.Bes = netIncome;
-                    summaryArt.strBes = netIncome.ToPrice();
-                    summaryArt.Bed = 0;
-                }
-                summaryArt.IsDeleted = false;
-                summaryArt.Comment = "بابت بستن حساب خلاصه سود و زیان با  " + RetainedEarningsAccount.MoeinName;
-                summaryArt.CreatorUserName = username;
-                //
-                DocArticleDto RetainedArt = new DocArticleDto();
-                RetainedArt.Id = Guid.NewGuid();
-                RetainedArt.DocId = docId;
-                RetainedArt.RowNumber = rownumber;
-                RetainedArt.SellerId = dto.SellerId;
-                RetainedArt.PeriodId = dto.PeriodId.Value;
-                RetainedArt.KolId = RetainedEarningsAccount.KolId;
-                RetainedArt.MoeinId = RetainedEarningsAccount.Id;
-                RetainedArt.MoeinCode = RetainedEarningsAccount.MoeinCode;
-                RetainedArt.MoeinName = RetainedEarningsAccount.MoeinName;
-                RetainedArt.CreatorUserName = username;
-                if (SummaryNature == 2)
-                {
-                    RetainedArt.Bes = netIncome;
-                    RetainedArt.strBes = netIncome.ToPrice();
-                    RetainedArt.Bed = 0;
-                }
-                else
-                {
-                    RetainedArt.Bed = netIncome;
-                    RetainedArt.strBed = netIncome.ToPrice();
-                    RetainedArt.Bes = 0;
-                }
-                RetainedArt.Amount = netIncome;
-                RetainedArt.IsDeleted = false;
-                RetainedArt.Comment = "بابت بستن حساب خلاصه سود و زیان   ";
-
-
-                // Add to articles
-                if (SummaryNature == 2)
-                {
-                    articles.Add(summaryArt);
-                    articles.Add(RetainedArt);
-                }
-                else
-                {
-                    articles.Add(RetainedArt);
-                    articles.Add(summaryArt);
-                }
-
+                result.Success = false;
+                result.Message = "از بخش تنظیمات حسابداری، حساب سود و زیان سنواتی / انباشته را مشخص کنید";
+                return result;
             }
 
-            //....
-            List<DocArticleDto> finalList = new List<DocArticleDto>();
-
-            var BedGrouped = articles.Where(n => n.Bed > 0).GroupBy(n => n.MoeinId)
-                .Select(n => new DocArticleDto
+            long soodVizheh = 0;
+            if (totalBed > totalBes)
+            {
+                var TaxPayAccount = await _db.Acc_Coding_Moeins.FindAsync(accSetting.TaxDebit);
+                if (TaxPayAccount == null)
                 {
-                    MoeinId = n.Key,
-                    SellerId = n.FirstOrDefault().SellerId,
-                    PeriodId = n.FirstOrDefault().PeriodId,
-                    MoeinCode = n.FirstOrDefault().MoeinCode,
-                    MoeinName = n.FirstOrDefault().MoeinName,
-                    KolId = n.FirstOrDefault().KolId,
-                    KolCode = n.FirstOrDefault().KolCode,
-                    KolName = n.FirstOrDefault().KolName,
-                    Tafsil4Id = n.FirstOrDefault().Tafsil4Id,
-                    Tafsil4Name = n.FirstOrDefault().Tafsil4Name,
-                    Bed = n.Sum(s => s.Bed),
-                    Bes = n.Sum(s => s.Bes),
-                    CreatorUserName = dto.CurrentUser,
-                    CreateDate = DateTime.Now,
+                    result.Success = false;
+                    result.Message = "از بخش تنظیمات حسابداری، حساب مالیات پرداختنی را مشخص کنید";
+                    return result;
+                }
 
-                }).OrderByDescending(n => n.Bed).ToList();
-            var BesGrouped = articles.Where(n => n.Bes > 0).GroupBy(n => n.MoeinId)
-               .Select(n => new DocArticleDto
-               {
-                   MoeinId = n.Key,
-                   SellerId = n.FirstOrDefault().SellerId,
-                   PeriodId = n.FirstOrDefault().PeriodId,
-                   MoeinCode = n.FirstOrDefault().MoeinCode,
-                   MoeinName = n.FirstOrDefault().MoeinName,
-                   KolId = n.FirstOrDefault().KolId,
-                   KolCode = n.FirstOrDefault().KolCode,
-                   KolName = n.FirstOrDefault().KolName,
-                   Tafsil4Id = n.FirstOrDefault().Tafsil4Id,
-                   Tafsil4Name = n.FirstOrDefault().Tafsil4Name,
-                   Bed = n.Sum(s => s.Bed),
-                   Bes = n.Sum(s => s.Bes),
-                   CreatorUserName = dto.CurrentUser,
-                   CreateDate = DateTime.Now,
+                soodVizheh = totalBed - totalBes;
+                long taxDebitAmount = soodVizheh * 25 / 100; //مالیات پرداختنی
+                long soodSanavati = soodVizheh - taxDebitAmount; // سود ناویژه سال
 
-               }).OrderByDescending(n => n.Bed).ToList();
+                //// سود سال جاری
+                //DocArticleDto summaryArt = new DocArticleDto();
+                //summaryArt.Id = Guid.NewGuid();
+                //summaryArt.DocId = docId;
+                //summaryArt.RowNumber = rownumber;
+                //summaryArt.SellerId = dto.SellerId;
+                //summaryArt.PeriodId = dto.PeriodId.Value;
+                //summaryArt.KolId = SummaryAccount.KolId;
+                //summaryArt.MoeinId = SummaryAccount.Id;
+                //summaryArt.MoeinCode = SummaryAccount.MoeinCode;
+                //summaryArt.MoeinName = SummaryAccount.MoeinName;
+                //summaryArt.Bed = soodVizheh;
+                //summaryArt.strBed = soodVizheh.ToPrice();
+                //summaryArt.Bes = 0;
+                //summaryArt.IsDeleted = false;
+                //summaryArt.Comment = "انتقال سود و زیان جاری به انباشته";
+                //summaryArt.CreatorUserName = username;
+                //articles.Add(summaryArt);
+                //rownumber++;
 
+                // ذخیره مالیات عملکرد معادل 25% سود سال جاری
+                DocArticleDto taxPayble = new DocArticleDto();
+                taxPayble.Id = Guid.NewGuid();
+                taxPayble.DocId = docId;
+                taxPayble.RowNumber = rownumber;
+                taxPayble.SellerId = dto.SellerId;
+                taxPayble.PeriodId = dto.PeriodId.Value;
+                taxPayble.KolId = TaxPayAccount.KolId;
+                taxPayble.MoeinId = TaxPayAccount.Id;
+                taxPayble.MoeinCode = TaxPayAccount.MoeinCode;
+                taxPayble.MoeinName = TaxPayAccount.MoeinName;
+                taxPayble.Bed = 0;
+                taxPayble.strBes = taxDebitAmount.ToPrice();
+                taxPayble.Bes = taxDebitAmount;
+                taxPayble.IsDeleted = false;
+                taxPayble.Comment = "ذخیره مالیات عملکرد معادل 25% سود سال جاری";
+                taxPayble.CreatorUserName = username;
+                articles.Add(taxPayble);
+                rownumber++;
 
+                // ثبت سود سنواتی سال
+                DocArticleDto SanevatiArt = new DocArticleDto();
+                SanevatiArt.Id = Guid.NewGuid();
+                SanevatiArt.DocId = docId;
+                SanevatiArt.RowNumber = rownumber;
+                SanevatiArt.SellerId = dto.SellerId;
+                SanevatiArt.PeriodId = dto.PeriodId.Value;
+                SanevatiArt.KolId = sanavati.KolId;
+                SanevatiArt.MoeinId = sanavati.Id;
+                SanevatiArt.MoeinCode = sanavati.MoeinCode;
+                SanevatiArt.MoeinName = sanavati.MoeinName;
+                SanevatiArt.Bed = 0;
+                SanevatiArt.strBes = soodSanavati.ToPrice();
+                SanevatiArt.Bes = soodSanavati;
+                SanevatiArt.IsDeleted = false;
+                SanevatiArt.Comment = "سود عملکرد سال ";
+                SanevatiArt.CreatorUserName = username;
+                articles.Add(SanevatiArt);
+                rownumber++;
 
-            finalList.AddRange(BedGrouped);
-            finalList.AddRange(BesGrouped);
+            }
+            else
+            {
+                soodVizheh = totalBes - totalBed;
 
-            result.DataObject = finalList;
+                // ثبت سود سنواتی سال
+                DocArticleDto SanevatiArt = new DocArticleDto();
+                SanevatiArt.Id = Guid.NewGuid();
+                SanevatiArt.DocId = docId;
+                SanevatiArt.RowNumber = rownumber;
+                SanevatiArt.SellerId = dto.SellerId;
+                SanevatiArt.PeriodId = dto.PeriodId.Value;
+                SanevatiArt.KolId = sanavati.KolId;
+                SanevatiArt.MoeinId = sanavati.Id;
+                SanevatiArt.MoeinCode = sanavati.MoeinCode;
+                SanevatiArt.MoeinName = sanavati.MoeinName;
+                SanevatiArt.Bed = soodVizheh;
+                SanevatiArt.strBed = soodVizheh.ToPrice();
+                SanevatiArt.Bes = 0;
+                SanevatiArt.IsDeleted = false;
+                SanevatiArt.Comment = "زیان سال جاری";
+                SanevatiArt.CreatorUserName = username;
+                articles.Add(SanevatiArt);
+                rownumber++;
+            }
+
+            result.DataObject = articles;
             result.Success = true;
             return result;
         }

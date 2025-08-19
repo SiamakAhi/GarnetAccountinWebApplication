@@ -110,7 +110,6 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
                     }
                 }
             }
-
             return Json(result.ToJsonResult());
         }
 
@@ -225,7 +224,6 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
             ViewBag.ReportTitle = reportTitle + reportDate;
             return View(model);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]

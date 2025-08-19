@@ -36,6 +36,8 @@ namespace GarnetAccounting.Areas.Accounting.Dto
         [Display(Name = "نام تأییدکننده دوم")]
         public string? Approver2Name { get; set; }
 
+        [Display(Name = "حساب معین مالیات پرداختنی")]
+        public int? TaxDebit { get; set; }
 
         [Display(Name = "حساب معین اسناد فروش")]
         public int? saleMoeinId { get; set; }

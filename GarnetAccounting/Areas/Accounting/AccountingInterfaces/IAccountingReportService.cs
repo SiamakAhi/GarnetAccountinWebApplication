@@ -6,6 +6,8 @@ namespace GarnetAccounting.Areas.Accounting.AccountingInterfaces
 {
     public interface IAccountingReportService
     {
+
+        Task<MinMaxDocNumberDto> GetMinMaxDocNumberAsync(long SellerId, int PeriodId);
         Task<ArticleAccountInfo> GetArticleAccountInfoAsync(DocArticleDto article);
         Task<bool> HasAccountInLevelAsync(long sellerId, int periodId, int moeinId, int tafsilLevel, long? tafsilId = null);
         Task<List<Report_BrowserDto>> Report_KolAsync(DocFilterDto filter);

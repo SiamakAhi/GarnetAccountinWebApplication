@@ -46,6 +46,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                     Approver1Name = settingDto.Approver1Name,
                     Approver2Title = settingDto.Approver2Title,
                     Approver2Name = settingDto.Approver2Name,
+                    TaxDebit = settingDto.TaxDebit,
 
                     saleMoeinId = settingDto.saleMoeinId,
                     salePartyMoeinId = settingDto.salePartyMoeinId,
@@ -94,6 +95,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             existingSetting.Approver1Name = settingDto.Approver1Name;
             existingSetting.Approver2Title = settingDto.Approver2Title;
             existingSetting.Approver2Name = settingDto.Approver2Name;
+            existingSetting.TaxDebit = settingDto.TaxDebit;
 
             existingSetting.saleMoeinId = settingDto.saleMoeinId;
             existingSetting.salePartyMoeinId = settingDto.salePartyMoeinId;
@@ -143,6 +145,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 Approver1Name = settingDto.Approver1Name,
                 Approver2Title = settingDto.Approver2Title,
                 Approver2Name = settingDto.Approver2Name,
+                TaxDebit = settingDto.TaxDebit,
 
                 saleMoeinId = settingDto.saleMoeinId,
                 salePartyMoeinId = settingDto.salePartyMoeinId,
