@@ -240,6 +240,9 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
                     case 300:
                         result = await _bankImporter.ImportPasargadAsync(model);
                         break;
+                    case 400:
+                        result = await _bankImporter.ImportParsianAsync(model);
+                        break;
                     default:
                         break;
                 }
