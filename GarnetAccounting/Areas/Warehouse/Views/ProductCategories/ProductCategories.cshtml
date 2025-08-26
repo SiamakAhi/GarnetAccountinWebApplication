@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="row">
-    <div class="col-md-4 card-panel">
+    <div class="col-md-6 card-panel ">
         <div class="card-panel-header">
             <div><span class="card-panel-title">دسته بندی کالا و خدمات</span></div>
             <div class="card-panel-navbar-container">
@@ -18,7 +18,7 @@
                 </ul>
             </div>
         </div>
-        <div class="card-panel-section">
+        <div class="card-panel-section stuffcategory-container">
             <div class="card-panel-section-body">
                 <ul class="treeview">
                     @if (Model.Count > 0)
@@ -29,16 +29,6 @@
                         }
                     }
                 </ul>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-8 card-panel">
-        <div class="card-panel-header">
-            <div><span class="card-panel-title">لیست کالا و خدمات</span></div>
-        </div>
-        <div class="card-panel-section">
-            <div class="card-panel-section-body">
-                <!-- این بخش برای نمایش کالاها یا خدمات است -->
             </div>
         </div>
     </div>

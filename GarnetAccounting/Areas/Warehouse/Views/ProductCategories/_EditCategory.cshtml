@@ -1,0 +1,36 @@
+﻿@model Wh_ProductCategoryDto
+
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning">ایجاد دسته‌بندی جدید</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <form asp-action="EditCategory" asp-controller="ProductCategories" asp-area="Warehouse" method="post" class="mt-2">
+                <input type="hidden" asp-for="ParentCategoryId" value="@Model.ParentCategoryId" />
+                <input type="hidden" asp-for="CategoryId" value="@Model.CategoryId" />
+                <div class="garnet-section garnet-section-info">
+                    <div class="row gy-3">
+                        <div class="col-md-12">
+                            <label class="form-label" asp-for="CategoryName"></label>
+                            <input type="text" asp-for="CategoryName" class="form-control gonext" placeholder="نام دسته‌بندی" />
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label" asp-for="Description"></label>
+                            <textarea asp-for="Description" class="form-control gonext" placeholder="توضیحات"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="garnet-section-footer">
+                    <button type="button" class="btn btn-warning me-sm-3 me-1 accAjaxSubmit">ثبت تغییرات</button>
+                    <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">
+                        انصراف
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

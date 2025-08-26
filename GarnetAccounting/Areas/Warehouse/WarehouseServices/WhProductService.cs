@@ -210,8 +210,23 @@ namespace GarnetAccounting.Areas.Warehouse.WarehouseServices
                 result.Message = "دسته‌بندی یافت نشد";
                 return result;
             }
+            int childCount = await _db.Wh_ProductCategories.Where(c => c.SellerId == sellerId && c.ParentCategoryId == categoryId).CountAsync();
+            if (childCount > 0)
+            {
+                result.Success = false;
+                result.Message = $" دسته {category.CategoryName} دارای {childCount} زیرگروه است بنابراین امکان حذف آن وجود ندارد";
+                return result;
+            }
+            int productCount = await _db.Wh_Products.Where(c => c.SellerId == sellerId && c.CategoryId == categoryId).CountAsync();
+            if (childCount > 0)
+            {
+                result.Success = false;
+                result.Message = $" دسته {category.CategoryName} دارای {productCount} کالا و محصول می باشد. برای حذف آن ابتدا باید محصولات مرتبط با این دسته را حذف یا تغییر دهید.";
+                return result;
+            }
 
             _db.Wh_ProductCategories.Remove(category);
+
             try
             {
                 await _db.SaveChangesAsync();
@@ -404,6 +419,14 @@ namespace GarnetAccounting.Areas.Warehouse.WarehouseServices
         //----------
         //---------
         // Product and services
+        public async Task<string> StuffCodeGenerator(long sellerId)
+        {
+            int productQty = await _db.Wh_Products.Where(n => n.SellerId == sellerId).CountAsync();
+            int seq = productQty + 1;
+            return (sellerId + seq.ToString("00000"));
+
+        }
+
         // لیست کالاها با فیلتر
         public async Task<List<ProductBaseDto>> GetAllProductsAsync(ProductFilter filter)
         {
@@ -465,6 +488,9 @@ namespace GarnetAccounting.Areas.Warehouse.WarehouseServices
                 result.Message = $"پیش از این کالایی با کد {checkDuplicate.ProductCode} در سیستم تعریف شده است.";
                 return result;
             }
+
+            if (await _db.Wh_Products.AnyAsync(n => n.SellerId == productDto.SellerId && n.ProductCode == productDto.ProductCode))
+                productDto.ProductCode = await StuffCodeGenerator(productDto.SellerId);
 
             var product = new Wh_Product
             {

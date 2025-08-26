@@ -26,13 +26,13 @@
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)" title="ویرایش" class="callformwhithItemid" data-itemid="@Model.CategoryId" data-url="@Url.Action("EditCategory", "ProductCategories", new { Area = "Warehouse" })">
+                    <a href="javascript:void(0)" title="ویرایش" class="callform"  data-url="@Url.Action("EditCategory", "ProductCategories", new { Area = "Warehouse", categoryId=Model.CategoryId })">
                         <i class="bx bx-edit-alt"></i>
                         ویرایش
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:void(0)" title="حذف" class="callformwhithItemid" data-itemid="@Model.CategoryId" data-url="@Url.Action("DeleteCategory", "ProductCategories", new { Area = "Warehouse" })">
+                    <a href="javascript:void(0)" title="حذف دسته بندی @Model.CategoryName انجام شود ؟" class="removeById" data-target="@Model.CategoryId" data-url="@Url.Action("DeleteCategory", "ProductCategories", new { Area = "Warehouse" })">
                         <i class="bx bx-x"></i>
                         حذف
                     </a>

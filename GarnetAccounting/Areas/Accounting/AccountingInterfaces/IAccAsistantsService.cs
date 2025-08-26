@@ -26,6 +26,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingInterfaces
         Task<clsResult> BankTransactionCheckTogleAsync(long Id);
         Task<List<MoadianExportDto>> CreateMoadianReport(DocFilterDto filter);
         Task<clsResult> ConvertAccountsAsync(ConvertAccountsDto dto);
+        Task<clsResult> MergeDocDaytodayAsync(long sellerId, int periodId);
 
     }
 }

@@ -1737,9 +1737,9 @@ $(document).on('click', '.printArticles', function () {
     let tafsils = $('#selectTafsil').val();
     let tafsils5 = $('#selectTafsil5').val();
     let moeins = $('#selectMoein').val();
-    //let project = $('#selectProject').val();
-    let fromDate = $('#tafsil_fromDate').val();
-    let toDate = $('#tafsil_toDate').val();
+
+    let fromDate = $('input[name="filter.strStartDate"]').val();
+    let toDate = $('input[name="filter.strEndDate"]').val();
 
     $.ajax({
         url: actionUrl,

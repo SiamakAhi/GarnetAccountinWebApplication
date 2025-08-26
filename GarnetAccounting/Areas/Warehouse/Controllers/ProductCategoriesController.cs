@@ -102,11 +102,12 @@ namespace GarnetAccounting.Areas.Warehouse.Controllers
         {
             clsResult result = new clsResult();
             result.Success = false;
+            result.ShowMessage = true;
 
             if (_userContext.SellerId == null)
             {
                 result.Message = "شرکت فعال نمی‌باشد.";
-                return Json(result);
+                return Json(result.ToJsonResult());
             }
 
             if (ModelState.IsValid)
@@ -117,7 +118,7 @@ namespace GarnetAccounting.Areas.Warehouse.Controllers
                 {
                     result.returnUrl = Request.Headers["Referer"].ToString();
                     result.updateType = 1;
-                    return Json(result);
+                    return Json(result.ToJsonResult());
                 }
             }
 
@@ -131,20 +132,24 @@ namespace GarnetAccounting.Areas.Warehouse.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteCategory(long categoryId)
+        public async Task<IActionResult> DeleteCategory(long itemId)
         {
             clsResult result = new clsResult();
-
+            result.ShowMessage = true;
             if (_userContext.SellerId == null)
             {
                 result.Success = false;
                 result.Message = "شرکت فعال نمی‌باشد.";
-                return Json(result);
+                return Json(result.ToJsonResult());
             }
 
-            result = await _productService.DeleteCategoryAsync(_userContext.SellerId.Value, categoryId);
-            return Json(result);
+            result = await _productService.DeleteCategoryAsync(_userContext.SellerId.Value, itemId);
+            if (result.Success)
+            {
+                result.updateType = 1;
+                result.returnUrl = Request.Headers["Referer"].ToString();
+            }
+            return Json(result.ToJsonResult());
         }
 
         [HttpPost]
@@ -152,6 +157,7 @@ namespace GarnetAccounting.Areas.Warehouse.Controllers
         public async Task<IActionResult> ActivateCategory(long categoryId)
         {
             clsResult result = new clsResult();
+            result.ShowMessage = true;
 
             if (_userContext.SellerId == null)
             {
@@ -161,6 +167,11 @@ namespace GarnetAccounting.Areas.Warehouse.Controllers
             }
 
             result = await _productService.ActivateCategoryAsync(_userContext.SellerId.Value, categoryId);
+            if (result.Success)
+            {
+                result.updateType = 1;
+                result.returnUrl = Request.Headers["Referer"].ToString();
+            }
             return Json(result);
         }
 

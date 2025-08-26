@@ -2894,5 +2894,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
 
             return checkList;
         }
+
+        
     }
 }

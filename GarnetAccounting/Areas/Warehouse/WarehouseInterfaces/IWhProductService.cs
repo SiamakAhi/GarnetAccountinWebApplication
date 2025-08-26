@@ -26,6 +26,7 @@ namespace GarnetAccounting.Areas.Warehouse.WarehouseInterfaces
         Task<SelectList> SelectList_UnitCountAsync(long sellerId);
 
         // Product and Services
+        Task<string> StuffCodeGenerator(long sellerId);
         Task<List<ProductBaseDto>> GetAllProductsAsync(ProductFilter filter);
         Task<clsResult> CreateProductAsync(ProductBaseDto productDto);
         Task<clsResult> UpdateProductAsync(ProductBaseDto productDto);

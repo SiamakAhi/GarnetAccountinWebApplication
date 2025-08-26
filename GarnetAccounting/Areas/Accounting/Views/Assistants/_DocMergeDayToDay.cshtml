@@ -1,0 +1,29 @@
+﻿
+<div class="modal-dialog garnet-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title text-warning">ادغام اسناد حسابداری بصورت روزانه</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <div class="alert alert-primary alert-dismissible" role="alert">
+                <h4 class="alert-heading mb-1">
+                    <i class="bx bx-xs bx-command me-2"></i>
+                    ادغام اسناد به صورت روزانه
+                </h4>
+                <h6>
+                    - با فعال‌سازی این قابلیت، سیستم کلیه‌ی اسناد روزانه (به‌جز سند افتتاحیه و اسناد مربوط به عملیات پایان‌دوره و بستن حساب‌ها) را بر اساس تاریخ، در قالب یک سند واحد ادغام می‌کند. به این ترتیب برای هر روز تنها یک سند جامع ایجاد خواهد شد.
+                    <br> - توجه: این عملیات غیرقابل بازگشت است. لطفاً پیش از اجرا، از صحت اطلاعات و انجام آن اطمینان حاصل فرمایید.
+                </h6>
+            </div>
+
+            <form asp-action="DoDocMergeDayToDay" asp-controller="Assistants" asp-area="Accounting" method="post">
+                <div class="p-3 d-grid">
+                    <button type="button" class="btn btn-warning my-4 text-black accAjaxSubmit">شروع عملیات ادغام اسناد </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

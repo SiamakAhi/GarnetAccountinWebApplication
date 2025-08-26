@@ -533,6 +533,31 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
                         fileName);
         }
 
+        //---- MergeDocs Day To Day
+
+        [HttpGet]
+        public IActionResult DocMergeDayToDay()
+        {
+            return PartialView("_DocMergeDayToDay");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DoDocMergeDayToDay()
+        {
+            clsResult result = new clsResult();
+            result.Success = false;
+            result.ShowMessage = true;
+
+            if (!_user.SellerId.HasValue || !_user.PeriodId.HasValue)
+            {
+                result.Message = "شرکت/سال مالی فعال شناسایی نشد";
+                return Json(result.ToJsonResult());
+            }
+
+            result = await _assistant.MergeDocDaytodayAsync(_user.SellerId.Value, _user.PeriodId.Value);
+            return Json(result.ToJsonResult());
+        }
+
     }
 }
 

@@ -122,7 +122,7 @@ namespace GarnetAccounting.Areas.Commercial.Controllers
         {
             if (!_userContext.SellerId.HasValue)
                 return NoContent();
-            ViewBag.vendors = await _person.SelectList_PersenListAsync(_userContext.SellerId.Value, true, null);
+            ViewBag.vendors = await _person.SelectList_PersenListAsync(_userContext.SellerId.Value);
             ViewBag.SettelmentType = _invoice.SelectList_SettelmentType();
             return PartialView("_CreatebuyInvoice");
         }

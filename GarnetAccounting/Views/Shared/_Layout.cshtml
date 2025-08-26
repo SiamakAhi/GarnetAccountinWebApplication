@@ -276,11 +276,11 @@
                                                 <div data-i18n="Bank Accounting Transactions">استخراج اطلاعات فروش برای سامانه مودیان</div>
                                             </a>
                                         </li>
-                                            <li class="menu-item">
-                                                <a asp-action="MovingAccountsList" asp-controller="Assistants" asp-area="Accounting" class="menu-link">
-                                                    <div data-i18n="Bank Accounting Transactions">تبدیل حساب ها</div>
-                                                </a>
-                                            </li>
+                                        <li class="menu-item">
+                                            <a asp-action="MovingAccountsList" asp-controller="Assistants" asp-area="Accounting" class="menu-link">
+                                                <div data-i18n="Bank Accounting Transactions">تبدیل حساب ها</div>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                                 @if (User.IsInRole("AccountingManager") || User.IsInRole("AccountingBoss"))
@@ -320,6 +320,11 @@
                                             <li class="menu-item">
                                                 <a asp-action="DocSorting" asp-controller="AccFunc" asp-area="Accounting" class="menu-link">
                                                     <div data-i18n="Sorting Documents">مرتب سازی اسناد</div>
+                                                </a>
+                                            </li>
+                                            <li class="menu-item">
+                                                <a href="javascript:void(0)" data-url="@Url.Action("DocMergeDayToDay", "Assistants", new { Area = "Accounting" })" class="menu-link callform">
+                                                    <div data-i18n="Sorting Documents">ادغام کلی اسناد (روزانه)</div>
                                                 </a>
                                             </li>
                                             <li class="menu-item">
@@ -832,15 +837,15 @@
                                                 </div>
                                             </div>
                                             <div class="row row-bordered overflow-visible g-0">
-                                                @if(User.IsInRole("Manager"))
+                                                @if (User.IsInRole("Manager"))
                                                 {
-                                                <div class="dropdown-shortcuts-item col">
-                                                    <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
-                                                        <i class="bx bx-package fs-4"></i>
-                                                    </span>
-                                                    <a href="javascript:void(0)" class="callform" data-url="@Url.Action("TaxPayerDataList", "Persen", new { Area = "" })"> اطلاعات مودیان </a>
-                                                    <small class="text-muted mb-0">اطلاعات کاربردی مودیان</small>
-                                                </div>
+                                                    <div class="dropdown-shortcuts-item col">
+                                                        <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
+                                                            <i class="bx bx-package fs-4"></i>
+                                                        </span>
+                                                        <a href="javascript:void(0)" class="callform" data-url="@Url.Action("TaxPayerDataList", "Persen", new { Area = "" })"> اطلاعات مودیان </a>
+                                                        <small class="text-muted mb-0">اطلاعات کاربردی مودیان</small>
+                                                    </div>
                                                 }
 
                                                 <div class="dropdown-shortcuts-item col">
@@ -948,7 +953,7 @@
                             </div>
                             <div>
                                 <a href="https://garnetapp.ir/" target="_blank" class="footer-link me-3">
-                                    Version 1.9.02 1404-05-29 <span class="footer-developername"> Garnet Developers Group</span>
+                                    Version 1.9.04 1404-06-05 <span class="footer-developername"> Garnet Developers Group</span>
                                 </a>
                             </div>
                         </div>

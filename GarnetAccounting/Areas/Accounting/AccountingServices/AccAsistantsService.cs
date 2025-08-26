@@ -1467,5 +1467,47 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             }
             return result;
         }
+
+        public async Task<clsResult> MergeDocDaytodayAsync(long sellerId, int periodId)
+        {
+            clsResult result = new clsResult();
+            var articles = await _db.Acc_Articles.AsNoTracking().Where(n =>
+            n.Doc.SellerId == sellerId
+            && n.Doc.PeriodId == periodId
+            && n.Doc.TypeId == 1
+            && !n.IsDeleted && !n.Doc.IsDeleted).Include(n => n.Doc).ToListAsync();
+
+            var grouped = articles.GroupBy(n => n.Doc.DocDate).Select(n => new
+            {
+                date = n.Key,
+                doc = n.FirstOrDefault().Doc,
+                articlesId = n.Select(s => s.Id).ToList()
+            }).ToList();
+            foreach (var data in grouped)
+            {
+
+                var ArtsInDay = await _db.Acc_Articles.Where(n => data.articlesId.Contains(n.Id))
+                    .ExecuteUpdateAsync(n => n.SetProperty(p => p.DocId, data.doc.Id));
+
+                var deleteDocs = await _db.Acc_Documents
+                    .Where(n => n.DocDate == data.date && n.SellerId == sellerId && n.PeriodId == periodId && n.TypeId == 1 && n.Id != data.doc.Id)
+                    .ExecuteUpdateAsync(n => n.SetProperty(s => s.IsDeleted, true));
+            }
+            try
+            {
+                await _db.SaveChangesAsync();
+                result.Success = true;
+                result.Message = "ادغام اسناد با موفقیت انجام شد";
+
+            }
+            catch
+            {
+                result.Success = false;
+                result.Message = "خطایی در عملیات ادغام اسناد ره داده است";
+            }
+
+            return result;
+        }
+
     }
 }

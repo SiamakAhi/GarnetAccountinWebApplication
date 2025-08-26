@@ -49,7 +49,7 @@ namespace GarnetAccounting.Areas.Warehouse.Controllers
             if (!_sellerId.HasValue) return Ok();
             ViewBag.Categories = await _productService.SelectList_CategoriesFullnameAsync(_sellerId.Value);
             ViewBag.UnitOfMeasures = await _productService.SelectList_UnitCountAsync(_sellerId.Value);
-
+            ViewBag.code = await _productService.StuffCodeGenerator(_sellerId.Value);
             return View();
         }
         // افزودن کالا
