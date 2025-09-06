@@ -6,6 +6,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingInterfaces
 {
     public interface IAccEndOfPeriodService
     {
+        Task<FinancePeriodsDto> FinancePeriodDto(int id);
         Task<SelectList> SelectList_GroupAccountsAsync(long sellerId, Int16 typeid);
         Task<SelectList> SelectList_TemporaryAccounts_KolAsync(long sellerId);
         Task<SelectList> SelectList_TemporaryAccounts_MoeinAsync(long sellerId);

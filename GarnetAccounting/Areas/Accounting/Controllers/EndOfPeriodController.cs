@@ -1,5 +1,6 @@
 ﻿using GarnetAccounting.Areas.Accounting.AccountingInterfaces;
 using GarnetAccounting.Areas.Accounting.Dto;
+using GarnetAccounting.Areas.Accounting.Dto.AccountingReportDtos;
 using GarnetAccounting.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
         private readonly IAccProfitMasterService _profit;
         private readonly IGeneralService _gs;
         private readonly IAccOperationService _op;
+
 
         public EndOfPeriodController(IAccEndOfPeriodService endOfPeriodService
             , IGeneralService generalService
@@ -62,11 +64,12 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
                 dto.AccountsSetting.payanDore = string.IsNullOrEmpty(dto.AccountsSetting.strPayanDore) ? 0 : Convert.ToInt64(dto.AccountsSetting.strPayanDore?.Replace(",", ""));
                 var result = await _serv.ClosingTemproryAccountsAsync(dto.AccountsSetting);
                 dto.Articles = (List<DocArticleDto>)result.DataObject;
+                dto.Message = result.Message;
+
             }
 
             ViewBag.TemporaryAccounts = await _serv.SelectList_GroupAccountsAsync(dto.AccountsSetting.SellerId, 2);
             ViewBag.PermanentAccounts = await _serv.SelectList_PermanentAccounts_MoeinAsync(dto.AccountsSetting.SellerId);
-
             return View(dto);
         }
 
@@ -316,6 +319,29 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
             }
 
             return Json(result.ToJsonResult());
+        }
+
+
+        //========================= Generate income statement ==============================
+
+        public async Task<IActionResult> GenerateIncomeStatement()
+        {
+            var userSett = await _gs.GetUserSettingAsync(User.Identity.Name);
+            if (userSett == null || userSett.ActiveSellerId == null || userSett.ActiveSellerPeriod == null)
+                ViewBag.Allert = "شرکت یا سال مالی فعال شناسایی نشد";
+            long sellerId = userSett.ActiveSellerId.Value;
+
+            var PerioData = await _serv.FinancePeriodDto(userSett.ActiveSellerPeriod.Value);
+            IncomeStatementFilterDto model = new();
+            model.SellerId = sellerId;
+            model.PeriodId = userSett.ActiveSellerPeriod.Value;
+            model.strStartDate = PerioData.StartDate.LatinToPersianForDatepicker();
+            if (PerioData.EndDate < DateTime.Now.Date)
+                model.strEndDate = PerioData.EndDate.LatinToPersianForDatepicker();
+            else
+                model.strEndDate = DateTime.Now.Date.LatinToPersianForDatepicker();
+
+            return View(model);
         }
 
     }

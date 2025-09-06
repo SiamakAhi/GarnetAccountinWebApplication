@@ -31,6 +31,11 @@
                             انبار
                         </button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-sz" aria-controls="navs-top-sz" aria-selected="false" tabindex="-1">
+                            سود / زیان
+                        </button>
+                    </li>
 
                 </ul>
                 <div class="tab-content">
@@ -287,6 +292,73 @@
                     <div class="tab-pane fade p-2" id="navs-top-warehouse" role="tabpanel">
                         <div class="inner-container bg-light">
                             <h5>تنطیمات سیستم انبار</h5>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade p-2" id="navs-top-sz" role="tabpanel">
+                        <div class="inner-container bg-light">
+                            <h5>تنطیمات گزارش سود و زیان</h5>
+                            <div class="row">
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="sz_Sale"></label>
+                                    <select type="text" multiple asp-for="sz_Sale" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="sz_ReturnToSale"></label>
+                                    <select type="text" multiple asp-for="sz_ReturnToSale" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="sz_Incomm"></label>
+                                    <select type="text" multiple asp-for="sz_Incomm" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="sz_Buy"></label>
+                                    <select type="text" multiple asp-for="sz_Buy" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="sz_ReturnToBuy"></label>
+                                    <select type="text" multiple asp-for="sz_ReturnToBuy" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="sz_Inventory"></label>
+                                    <select type="text" asp-for="sz_Inventory" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <label class="form-label" asp-for="sz_Costs"></label>
+                                    <select type="text" multiple asp-for="sz_Costs" class="select2 form-control" asp-items="ViewBag.Moeins">
+                                        <option value="mull">انتخاب</option>
+                                    </select>
+                                </div>
+                               
+                                <div class="col-md-6 mb-2 mt-2">
+                                    <div class="garnet-checkbox-group">
+                                        <label asp-for="sz_CalcSystemicPayanDoreh"></label>
+                                        <input type="checkbox" asp-for="sz_CalcSystemicPayanDoreh" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2 mt-2">
+                                    <div class="garnet-checkbox-group">
+                                        <label asp-for="sz_CalcSystemicPayanDoreh"></label>
+                                        <input type="checkbox" asp-for="sz_CalcSystemicPayanDoreh" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-2 mt-4">
+                                    <div class="dataentry-buttons">
+                                        <a href="javascript:void(0)" class="btn btn-primary mb-2 accAjaxSubmit"> ذخیـره تنظیمات</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

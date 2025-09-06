@@ -91,6 +91,17 @@ namespace GarnetAccounting.Areas.Accounting.Models.Entities
         public int? ClosingAccountMoeinId { get; set; }
         public int? OpeningccountMoeinId { get; set; }
 
+        // Sood/Zian Settings
+        public string[]? sz_Sale { get; set; }
+        public string[]? sz_ReturnToSale { get; set; }
+        public string[]? sz_Incomm { get; set; }
+        public string[]? sz_Buy { get; set; }
+        public string[]? sz_ReturnToBuy { get; set; }
+        public string[]? sz_Inventory { get; set; }
+        public string[]? sz_Costs { get; set; }
+        public bool sz_ShowCostByKol { get; set; } = false;
+        public bool sz_CalcSystemicPayanDoreh { get; set; }
+
     }
 
 }

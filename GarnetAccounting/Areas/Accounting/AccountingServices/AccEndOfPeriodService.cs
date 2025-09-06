@@ -17,6 +17,17 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             _op = op;
         }
 
+        public async Task<FinancePeriodsDto> FinancePeriodDto(int id)
+        {
+            var p = await _db.Acc_FinancialPeriods.FindAsync(id);
+            FinancePeriodsDto dto = new FinancePeriodsDto();
+            dto.Id = p.Id;
+            dto.StartDate = p.StartDate;
+            dto.EndDate = p.EndDate;
+            dto.DefualtVatRate = p.DefualtVatRate;
+
+            return dto;
+        }
         //لیست گروه های حساب
         public async Task<SelectList> SelectList_GroupAccountsAsync(long sellerId, Int16 typeid)
         {

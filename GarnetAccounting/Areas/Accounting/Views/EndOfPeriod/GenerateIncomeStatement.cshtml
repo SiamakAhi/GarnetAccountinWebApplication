@@ -1,0 +1,156 @@
+﻿@model VmProfit
+@{
+    ViewData["Title"] = "گزارش سود و زیان";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card card-primary">
+    <div class="card-body">
+        <dov class="row">
+            <div class="col-md-3 p-3 alert-secondary box-radius pb-5">
+                <div class="divider text-start divider-danger">
+                    <div class="divider-text">
+                        <span class="text-primary">تنظیم حساب ها</span>
+                    </div>
+                </div>
+                <div>
+                    <form asp-action="CalcProfit" asp-controller="EndOfPeriod" asp-area="Accounting" method="post" id="frmProfit">
+                        <div>
+                            <div class="row">
+                                <div class="col-md-12 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="AccountsSetting.startDate">از تاریخ‌</label>
+                                        <input type="text" asp-for="AccountsSetting.startDate" class="flatpickr-input" placeholder="YYYY/MM/DD">
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-2">
+                                    <div class="garnet-input-group1 garnet-input-group-light">
+                                        <label asp-for="AccountsSetting.endDate">تا تاریخ‌</label>
+                                        <input type="text" asp-for="AccountsSetting.endDate" class="flatpickr-input" placeholder="YYYY/MM/DD">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label>سرفصل(های) فروش</label>
+                                <div class="select2-dark">
+                                    <select asp-for="AccountsSetting.SaleKolAccounts" class="select2 form-select gonext firstselect" multiple asp-items="@ViewBag.TemporaryKolAccounts">
+                                        <option>انتخاب کنید</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label>سرفصل های تخفیفات و برگشت از فروش</label>
+                                <div class="select2-dark">
+                                    <select asp-for="AccountsSetting.SaleDiscountKolAccounts" class="select2 form-select gonext firstselect" multiple asp-items="@ViewBag.TemporaryKolAccounts">
+                                        <option>انتخاب کنید</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label>سرفصل(های) درآمدها</label>
+                                <div class="select2-dark">
+                                    <select asp-for="AccountsSetting.IncomeKolAccounts" class="select2 form-select gonext" multiple asp-items="@ViewBag.TemporaryKolAccounts">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label>گروه خرید</label>
+                                <div class="select2-dark">
+                                    <select asp-for="AccountsSetting.BuyGroups" class="select2 form-select gonext" multiple asp-items="@ViewBag.TemporaryGroups">
+                                        <option>انتخاب کنید</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-4">
+                                <label>حساب موجودی کالا</label>
+                                <select asp-for="AccountsSetting.MojoodiKalaMoeinId" class="select2 form-select gonext" asp-items="@ViewBag.PermanentAccountsMoein">
+                                    <option>انتخاب کنید</option>
+                                </select>
+                            </div>
+                            <hr />
+
+                            <div class="col-md-12 mb-2">
+                                <label>هزینه ها</label>
+                                <select asp-for="AccountsSetting.CostGroup" class="select2 form-select gonext" multiple asp-items="@ViewBag.TemporaryGroups">
+                                    <option>انتخاب کنید</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mb-2">
+                                <div class="alert alert-primary" role="alert">
+                                    <h6 class="alert-heading mb-1"><i class="bx bx-xs bx-command me-2 text-danger"></i>موجودی پایان دوره : </h6>
+                                    <input type="text" asp-for="AccountsSetting.strPayanDore" class="form-control text-center numberInput gonext" value="0" />
+                                    <div class="form-check form-switch my-2">
+                                        <input class="form-check-input" type="checkbox" asp-for="AccountsSetting.payanDore_calcSystemic">
+                                        <label class="form-check-label" asp-for="AccountsSetting.payanDore_calcSystemic">محاسبه سیستمی پایان دوره</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12 d-grid mt-2 mb-3 px-4">
+                                <input type="submit" class="btn btn-primary mb-2" value="محاسبه سود و زیان" />
+                                <a class="btn btn-warning mx-2 submitCustomForm" data-formid="frmProfit" data-url="@Url.Action("PrintProfit", "EndOfPeriod", new { Area = "Accounting" })">چاپ سود و زیان</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="col-md-9 p-3">
+                <div class="divider text-start divider-danger">
+                    <div class="divider-text">
+                        <span class="text-primary">@ViewBag.ReportTitle</span>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table profit-table">
+                        <tbody>
+                            @if (Model.ProfitReport?.Count > 0)
+                            {
+                                int rownumber = 1;
+                                foreach (var x in Model.ProfitReport)
+                                {
+                                    <tr>
+                                        <td>
+                                            <label class="me-2 @(x.Amount!=null ?"text-secondary" :"") @x.cssClassName ">@x.Title</label>
+                                        </td>
+                                        <td>
+                                            @if (x.Amount != null)
+                                            {
+                                                <span class="text-center  @x.cssClassName @(x.IsAdd==true?"isAdd":"isNoAdd")">@(x.Amount != 0 ? x.Amount.ToPrice() : "0")</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (x.SumAmounts != null)
+                                            {
+                                                <span class="text-center @x.cssClassName">@(x.SumAmounts != 0 ? x.SumAmounts.ToPrice() : "0")</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (x.TotalSection != null)
+                                            {
+                                                <strong class="text-center @x.cssClassName">@(x.TotalSection != 0 ? x.TotalSection.ToPrice() : "0")</strong>
+                                            }
+                                        </td>
+
+                                    </tr>
+                                    rownumber++;
+                                }
+                            }
+
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </dov>
+    </div>
+</div>
+    
+
+
+

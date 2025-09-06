@@ -2291,7 +2291,6 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
             return result;
         }
         //
-
         // Bank Melli = 400
         public async Task<clsResult> ImportParsianAsync(BankImporterDto dto)
         {

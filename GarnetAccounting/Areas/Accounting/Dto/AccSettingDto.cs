@@ -96,5 +96,35 @@ namespace GarnetAccounting.Areas.Accounting.Dto
         [Display(Name = "حساب معین تراز افتتاحیه ")]
         public int? OpeningccountMoeinId { get; set; }
 
+
+        // Sood/Zian Settings
+
+        [Display(Name = "سرفصل های فروش")]
+        public string[]? sz_Sale { get; set; }
+
+        [Display(Name = "سرفصل های تخفیفات و برگشت از فروش")]
+        public string[]? sz_ReturnToSale { get; set; }
+
+        [Display(Name = "سرفصل های درآمدها")]
+        public string[]? sz_Incomm { get; set; }
+
+        [Display(Name = "سرفصل های خرید")]
+        public string[]? sz_Buy { get; set; }
+
+        [Display(Name = "سرفصل های تخفیفات و برگشت از خرید")]
+        public string[]? sz_ReturnToBuy { get; set; }
+
+        [Display(Name = "سرفصل موجودی کالا و مواد")]
+        public int? sz_Inventory { get; set; }
+
+        [Display(Name = "سرفصل های هزینه")]
+        public string[]? sz_Costs { get; set; }
+
+        [Display(Name = "نمایش هزینه ها بر اساس حساب های کل دسته بندی شوند")]
+        public bool sz_ShowCostByKol { get; set; } = false;
+
+        [Display(Name = "پایان دوره بصورت سیستمی محاسبه شود")]
+        public bool sz_CalcSystemicPayanDoreh { get; set; }
+
     }
 }

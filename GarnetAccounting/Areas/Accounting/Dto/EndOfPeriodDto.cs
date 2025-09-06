@@ -4,5 +4,6 @@
     {
         public EndOfPeriodSettings? AccountsSetting { get; set; }
         public List<DocArticleDto>? Articles { get; set; }
+        public string? Message { get; set; }
     }
 }

@@ -157,7 +157,7 @@
           <ClientRectangle>0,1.4,7.87,0.5</ClientRectangle>
           <Components isList="true" count="8">
             <Text3 Ref="11" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
               <ClientRectangle>7.5,0,0.4,0.5</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -173,7 +173,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text3>
             <Text11 Ref="12" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
               <ClientRectangle>5,0,2.5,0.5</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -189,7 +189,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text11>
             <Text13 Ref="13" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
               <ClientRectangle>2.4,0,2.6,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -205,7 +205,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text13>
             <Text9 Ref="14" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
               <ClientRectangle>2.4,0.3,1.3,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -221,7 +221,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text9>
             <Text10 Ref="15" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
               <ClientRectangle>3.7,0.3,1.3,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -237,7 +237,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text10>
             <Text21 Ref="16" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
               <ClientRectangle>0,0.3,1.2,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -253,7 +253,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text21>
             <Text23 Ref="17" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
               <ClientRectangle>1.2,0.3,1.2,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -269,7 +269,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text23>
             <Text4 Ref="18" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
               <ClientRectangle>0,0,2.4,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -297,7 +297,7 @@
           <ClientRectangle>0,2.3,7.87,0.3</ClientRectangle>
           <Components isList="true" count="6">
             <Text6 Ref="20" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
               <ClientRectangle>7.5,0,0.4,0.3</ClientRectangle>
@@ -317,7 +317,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text6>
             <Text12 Ref="21" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
               <ClientRectangle>5,0,2.5,0.3</ClientRectangle>
@@ -337,7 +337,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text12>
             <Text15 Ref="22" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
               <ClientRectangle>2.4,0,1.3,0.3</ClientRectangle>
@@ -362,7 +362,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text15>
             <Text16 Ref="24" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
               <ClientRectangle>3.7,0,1.3,0.3</ClientRectangle>
@@ -387,7 +387,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text16>
             <Text8 Ref="26" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
               <ClientRectangle>1.2,0,1.2,0.3</ClientRectangle>
@@ -412,7 +412,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text8>
             <Text5 Ref="28" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
               <ClientRectangle>0,0,1.2,0.3</ClientRectangle>
@@ -451,7 +451,7 @@
           <ClientRectangle>0,3,7.87,0.3</ClientRectangle>
           <Components isList="true" count="5">
             <Text17 Ref="31" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
               <ClientRectangle>2.4,0,1.3,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -473,7 +473,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text17>
             <Text18 Ref="33" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
               <ClientRectangle>3.7,0,1.3,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -495,7 +495,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text18>
             <Text1 Ref="35" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
               <ClientRectangle>5,0,2.9,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -517,7 +517,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text1>
             <Text2 Ref="37" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
               <ClientRectangle>1.2,0,1.2,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -539,7 +539,7 @@
               <VertAlignment>Center</VertAlignment>
             </Text2>
             <Text7 Ref="39" type="Text" isKey="true">
-              <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
+              <Border>All;[127:127:127];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
               <ClientRectangle>0,0,1.2,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
@@ -591,10 +591,10 @@
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>8/1/2025 7:48:06 PM</ReportChanged>
+  <ReportChanged>9/5/2025 11:33:46 AM</ReportChanged>
   <ReportCreated>5/22/2025 3:24:26 PM</ReportCreated>
-  <ReportFile>F:\01-Garnet Software projects\garnetaccounting\GarnetAccounting\wwwroot\Reports\acc\Acc_AccountBrowser_Kol.mrt</ReportFile>
-  <ReportGuid>48ac885506154431ba8689e58af7d92c</ReportGuid>
+  <ReportFile>F:\01-Garnet Software projects\Garnet Accounting WebApplication\GarnetAccounting\wwwroot\Reports\acc\Acc_AccountBrowser_Kol.mrt</ReportFile>
+  <ReportGuid>05fcb069e677455e8e4fbdc541f8e79e</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Inches</ReportUnit>
   <ReportVersion>2023.1.1.0</ReportVersion>

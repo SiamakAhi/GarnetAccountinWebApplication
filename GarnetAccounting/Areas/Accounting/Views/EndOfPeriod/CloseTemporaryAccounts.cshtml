@@ -1,6 +1,6 @@
 ﻿@model EndOfPeriodDto
 @{
-    ViewData["Title"] = "CloseTemporaryAccounts";
+    ViewData["Title"] = "بستن حساب های موقت";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -25,10 +25,10 @@
                                 </div>
                             </div>
                             <hr />
-                             <div class="col-md-12 d-grid mt-2 mb-3 px-4">
-                                 <input type="submit" class="btn btn-primary mb-2" value="پیش نمایش سند بستن حساب ها" />
+                            <div class="col-md-12 d-grid mt-2 mb-3 px-4">
+                                <input type="submit" class="btn btn-primary mb-2" value="پیش نمایش سند بستن حساب ها" />
                                 <input type="button" class="btn btn-success mb-2 submitCustomAction" data-url="@Url.Action("AddDocCloseTemporaryAccounts","EndOfPeriod",new{Area="Accounting"})" value="ثبت سند بستن حساب های موقت" />
-                             </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -71,7 +71,7 @@
                                             <span class="me-2">@x.MoeinName</span>
                                         </td>
                                         <td class="limit-text" title="@x.Comment">
-                                           
+
                                             @x.Comment
                                         </td>
                                         <td>
@@ -80,14 +80,14 @@
                                         <td>
                                             <span>@(x.Bes > 0 ? x.Bes.ToPrice() : "0")</span>
                                         </td>
-                                        
+
                                     </tr>
                                     rownumber++;
                                 }
                             }
-                            
+
                         </tbody>
-                           <tfoot>
+                        <tfoot>
                             @if(Model.Articles?.Count > 0)
                             {
                                 <tr>
@@ -100,6 +100,14 @@
                     </table>
                 </div>
 
+                @if (!string.IsNullOrEmpty(Model.Message))
+                {
+                    <div class="alert alert-solid-warning alert-dismissible d-flex align-items-center mt-3" role="alert">
+                        <i class="bx bx-xs bx-wallet me-2"></i>
+                       @Html.Raw(Model.Message?.Replace("\n","<br>"))
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
             </div>
         </dov>
     </div>

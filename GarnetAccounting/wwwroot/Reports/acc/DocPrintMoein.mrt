@@ -74,11 +74,11 @@
           <Border>Bottom;Black;1;Solid;False;4;Black</Border>
           <Brush>Transparent</Brush>
           <CanShrink>True</CanShrink>
-          <ClientRectangle>0,0.2,7.87,0.8</ClientRectangle>
+          <ClientRectangle>0,0.2,8.07,0.8</ClientRectangle>
           <Components isList="true" count="12">
             <Text1 Ref="6" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <ClientRectangle>3.08,0,1.7,0.3</ClientRectangle>
+              <ClientRectangle>3.1,0,1.7,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,11,Bold</Font>
@@ -93,7 +93,7 @@
             </Text1>
             <Text2 Ref="7" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <ClientRectangle>2.64,0.3,2.6,0.2</ClientRectangle>
+              <ClientRectangle>2.6,0.3,2.6,0.2</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -222,7 +222,7 @@
             </Text9>
             <Text10 Ref="15" type="Text" isKey="true">
               <Brush>Transparent</Brush>
-              <ClientRectangle>2.64,0.5,2.6,0.3</ClientRectangle>
+              <ClientRectangle>2.6,0.5,2.6,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9</Font>
@@ -279,12 +279,12 @@
         <PageFooterBand1 Ref="18" type="PageFooterBand" isKey="true">
           <Border>None;[216:216:216];1;Solid;False;4;Black</Border>
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,10.89,7.87,0.4</ClientRectangle>
+          <ClientRectangle>0,11.09,8.07,0.4</ClientRectangle>
           <Components isList="true" count="1">
             <Text32 Ref="19" type="Text" isKey="true">
               <Border>None;[191:191:191];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
-              <ClientRectangle>6.5,0.01,1.3,0.4</ClientRectangle>
+              <ClientRectangle>6.5,0,1.3,0.4</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Black,9</Font>
@@ -308,14 +308,14 @@ https://garnetapp.ir</Text>
         </PageFooterBand1>
         <ColumnHeaderBand1 Ref="20" type="Stimulsoft.Report.Components.StiColumnHeaderBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,1.4,7.87,0.3</ClientRectangle>
+          <ClientRectangle>0,1.4,8.07,0.3</ClientRectangle>
           <Components isList="true" count="6">
             <Text15 Ref="21" type="Text" isKey="true">
               <Border>All;[191:191:191];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
               <CanGrow>True</CanGrow>
               <CanShrink>True</CanShrink>
-              <ClientRectangle>3.6,0,3.23,0.3</ClientRectangle>
+              <ClientRectangle>3.6,0,3.4,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -335,7 +335,7 @@ https://garnetapp.ir</Text>
               <Brush>[242:242:242]</Brush>
               <CanGrow>True</CanGrow>
               <CanShrink>True</CanShrink>
-              <ClientRectangle>1.2,0,1.2,0.3</ClientRectangle>
+              <ClientRectangle>1.3,0,1.3,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -355,7 +355,7 @@ https://garnetapp.ir</Text>
               <Brush>[242:242:242]</Brush>
               <CanGrow>True</CanGrow>
               <CanShrink>True</CanShrink>
-              <ClientRectangle>0,0,1.2,0.3</ClientRectangle>
+              <ClientRectangle>0,0,1.3,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -375,7 +375,7 @@ https://garnetapp.ir</Text>
               <Brush>[242:242:242]</Brush>
               <CanGrow>True</CanGrow>
               <CanShrink>True</CanShrink>
-              <ClientRectangle>2.4,0,1.2,0.3</ClientRectangle>
+              <ClientRectangle>2.6,0,1,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -393,7 +393,7 @@ https://garnetapp.ir</Text>
             <Text13 Ref="25" type="Text" isKey="true">
               <Border>All;[216:216:216];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
-              <ClientRectangle>7.5,0,0.4,0.3</ClientRectangle>
+              <ClientRectangle>7.7,0,0.4,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -409,7 +409,7 @@ https://garnetapp.ir</Text>
             <Text24 Ref="26" type="Text" isKey="true">
               <Border>All;[216:216:216];1;Solid;False;4;Black</Border>
               <Brush>[242:242:242]</Brush>
-              <ClientRectangle>6.8,0,0.7,0.3</ClientRectangle>
+              <ClientRectangle>7,0,0.7,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -431,7 +431,7 @@ https://garnetapp.ir</Text>
         </ColumnHeaderBand1>
         <GroupHeaderBand1 Ref="27" type="GroupHeaderBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,2.1,7.87,0.3</ClientRectangle>
+          <ClientRectangle>0,2.1,8.07,0.3</ClientRectangle>
           <Components isList="true" count="6">
             <Text20 Ref="28" type="Text" isKey="true">
               <BeforePrintEvent>if(articles.Bes &gt; 0){
@@ -440,7 +440,7 @@ https://garnetapp.ir</Text>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
               <CanShrink>True</CanShrink>
-              <ClientRectangle>3.6,0,3.2,0.3</ClientRectangle>
+              <ClientRectangle>3.6,0,3.4,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -456,39 +456,11 @@ https://garnetapp.ir</Text>
               <Type>DataColumn</Type>
               <VertAlignment>Bottom</VertAlignment>
             </Text20>
-            <Text21 Ref="29" type="Text" isKey="true">
+            <Text22 Ref="29" type="Text" isKey="true">
               <Border>Left, Right;[216:216:216];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
-              <CanShrink>True</CanShrink>
-              <ClientRectangle>1.2,0,1.2,0.3</ClientRectangle>
-              <Conditions isList="true" count="0" />
-              <Expressions isList="true" count="0" />
-              <Font>Yekan Bakh FaNum Light,9,Bold</Font>
-              <GrowToHeight>True</GrowToHeight>
-              <HorAlignment>Right</HorAlignment>
-              <Margins>8,8,10,0</Margins>
-              <Name>Text21</Name>
-              <Page isRef="4" />
-              <Parent isRef="27" />
-              <Text>{Sum(articles.Bed)}</Text>
-              <TextBrush>Black</TextBrush>
-              <TextFormat Ref="30" type="NumberFormat" isKey="true">
-                <DecimalDigits>0</DecimalDigits>
-                <GroupSeparator>,</GroupSeparator>
-                <NegativePattern>1</NegativePattern>
-                <UseLocalSetting>False</UseLocalSetting>
-              </TextFormat>
-              <TextOptions>,,RightToLeft=True,,WordWrap=True,A=0</TextOptions>
-              <Type>Expression</Type>
-              <VertAlignment>Bottom</VertAlignment>
-            </Text21>
-            <Text22 Ref="31" type="Text" isKey="true">
-              <Border>Left, Right;[216:216:216];1;Solid;False;4;Black</Border>
-              <Brush>Transparent</Brush>
-              <CanGrow>True</CanGrow>
-              <CanShrink>True</CanShrink>
-              <ClientRectangle>0,0,1.2,0.3</ClientRectangle>
+              <ClientRectangle>0,0,1.3,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -500,7 +472,7 @@ https://garnetapp.ir</Text>
               <Parent isRef="27" />
               <Text>{Sum(articles.Bes)}</Text>
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="32" type="NumberFormat" isKey="true">
+              <TextFormat Ref="30" type="NumberFormat" isKey="true">
                 <DecimalDigits>0</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>1</NegativePattern>
@@ -510,12 +482,12 @@ https://garnetapp.ir</Text>
               <Type>Expression</Type>
               <VertAlignment>Bottom</VertAlignment>
             </Text22>
-            <Text30 Ref="33" type="Text" isKey="true">
+            <Text30 Ref="31" type="Text" isKey="true">
               <Border>Left, Right;[216:216:216];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
               <CanShrink>True</CanShrink>
-              <ClientRectangle>2.4,0,1.2,0.3</ClientRectangle>
+              <ClientRectangle>2.6,0,1,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -526,7 +498,7 @@ https://garnetapp.ir</Text>
               <Page isRef="4" />
               <Parent isRef="27" />
               <TextBrush>Black</TextBrush>
-              <TextFormat Ref="34" type="NumberFormat" isKey="true">
+              <TextFormat Ref="32" type="NumberFormat" isKey="true">
                 <DecimalDigits>0</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
                 <NegativePattern>1</NegativePattern>
@@ -536,10 +508,10 @@ https://garnetapp.ir</Text>
               <Type>DataColumn</Type>
               <VertAlignment>Bottom</VertAlignment>
             </Text30>
-            <Text33 Ref="35" type="Text" isKey="true">
+            <Text33 Ref="33" type="Text" isKey="true">
               <Border>Left, Right;[216:216:216];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
-              <ClientRectangle>7.5,0,0.4,0.3</ClientRectangle>
+              <ClientRectangle>7.7,0,0.4,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -553,10 +525,10 @@ https://garnetapp.ir</Text>
               <Type>Expression</Type>
               <VertAlignment>Bottom</VertAlignment>
             </Text33>
-            <Text34 Ref="36" type="Text" isKey="true">
+            <Text34 Ref="34" type="Text" isKey="true">
               <Border>Left;[216:216:216];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
-              <ClientRectangle>6.8,0,0.7,0.3</ClientRectangle>
+              <ClientRectangle>7,0,0.7,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -568,6 +540,32 @@ https://garnetapp.ir</Text>
               <TextBrush>Black</TextBrush>
               <VertAlignment>Bottom</VertAlignment>
             </Text34>
+            <Text19 Ref="35" type="Text" isKey="true">
+              <Border>Left, Right;[216:216:216];1;Solid;False;4;Black</Border>
+              <Brush>Transparent</Brush>
+              <CanGrow>True</CanGrow>
+              <ClientRectangle>1.3,0,1.3,0.3</ClientRectangle>
+              <Conditions isList="true" count="0" />
+              <Expressions isList="true" count="0" />
+              <Font>Yekan Bakh FaNum Light,9,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
+              <HorAlignment>Right</HorAlignment>
+              <Margins>8,8,10,0</Margins>
+              <Name>Text19</Name>
+              <Page isRef="4" />
+              <Parent isRef="27" />
+              <Text>{Sum(articles.Bed)}</Text>
+              <TextBrush>Black</TextBrush>
+              <TextFormat Ref="36" type="NumberFormat" isKey="true">
+                <DecimalDigits>0</DecimalDigits>
+                <GroupSeparator>,</GroupSeparator>
+                <NegativePattern>1</NegativePattern>
+                <UseLocalSetting>False</UseLocalSetting>
+              </TextFormat>
+              <TextOptions>,,RightToLeft=True,,WordWrap=True,A=0</TextOptions>
+              <Type>Expression</Type>
+              <VertAlignment>Bottom</VertAlignment>
+            </Text19>
           </Components>
           <Condition>{articles.Nature}{articles.KolCode}</Condition>
           <Conditions isList="true" count="0" />
@@ -579,8 +577,7 @@ https://garnetapp.ir</Text>
         <DataBand1 Ref="37" type="DataBand" isKey="true">
           <Brush>Transparent</Brush>
           <BusinessObjectGuid isNull="true" />
-          <CanShrink>True</CanShrink>
-          <ClientRectangle>0,2.8,7.87,0.3</ClientRectangle>
+          <ClientRectangle>0,2.8,8.07,0.3</ClientRectangle>
           <Components isList="true" count="6">
             <Text23 Ref="38" type="Text" isKey="true">
               <BeforePrintEvent>if(articles.Bes &gt; 0){
@@ -588,8 +585,7 @@ https://garnetapp.ir</Text>
 }</BeforePrintEvent>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
-              <CanShrink>True</CanShrink>
-              <ClientRectangle>3.6,0,3.2,0.3</ClientRectangle>
+              <ClientRectangle>3.6,0,3.4,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9</Font>
@@ -609,11 +605,10 @@ https://garnetapp.ir</Text>
               <Border>Left, Right;[216:216:216];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
-              <CanShrink>True</CanShrink>
-              <ClientRectangle>1.2,0,1.2,0.3</ClientRectangle>
+              <ClientRectangle>1.3,0,1.3,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
-              <Font>Yekan Bakh FaNum Light,9,Bold</Font>
+              <Font>Yekan Bakh FaNum Light,8,Bold</Font>
               <GrowToHeight>True</GrowToHeight>
               <HorAlignment>Right</HorAlignment>
               <Margins>8,8,0,0</Margins>
@@ -635,11 +630,10 @@ https://garnetapp.ir</Text>
               <Border>Left, Right;[216:216:216];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
-              <CanShrink>True</CanShrink>
-              <ClientRectangle>0,0,1.2,0.3</ClientRectangle>
+              <ClientRectangle>0,0,1.3,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
-              <Font>Yekan Bakh FaNum Light,9,Bold</Font>
+              <Font>Yekan Bakh FaNum Light,8,Bold</Font>
               <GrowToHeight>True</GrowToHeight>
               <HorAlignment>Right</HorAlignment>
               <Margins>8,8,0,0</Margins>
@@ -661,11 +655,10 @@ https://garnetapp.ir</Text>
               <Border>Left, Right;[216:216:216];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
-              <CanShrink>True</CanShrink>
-              <ClientRectangle>2.4,0,1.2,0.3</ClientRectangle>
+              <ClientRectangle>2.6,0,1,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
-              <Font>Yekan Bakh FaNum Light,9</Font>
+              <Font>Yekan Bakh FaNum Light,7,Bold</Font>
               <GrowToHeight>True</GrowToHeight>
               <HorAlignment>Right</HorAlignment>
               <Margins>8,8,0,0</Margins>
@@ -673,7 +666,7 @@ https://garnetapp.ir</Text>
               <Page isRef="4" />
               <Parent isRef="37" />
               <Text>{articles.Amount}</Text>
-              <TextBrush>Black</TextBrush>
+              <TextBrush>[0:0:0]</TextBrush>
               <TextFormat Ref="44" type="NumberFormat" isKey="true">
                 <DecimalDigits>0</DecimalDigits>
                 <GroupSeparator>,</GroupSeparator>
@@ -687,11 +680,11 @@ https://garnetapp.ir</Text>
             <Text18 Ref="45" type="Text" isKey="true">
               <Border>Left, Right;[216:216:216];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
-              <CanShrink>True</CanShrink>
-              <ClientRectangle>7.5,0,0.4,0.3</ClientRectangle>
+              <ClientRectangle>7.7,0,0.4,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
+              <GrowToHeight>True</GrowToHeight>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text18</Name>
@@ -703,11 +696,11 @@ https://garnetapp.ir</Text>
             <Text37 Ref="46" type="Text" isKey="true">
               <Border>Left;[216:216:216];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
-              <CanShrink>True</CanShrink>
-              <ClientRectangle>6.8,0,0.7,0.3</ClientRectangle>
+              <ClientRectangle>7,0,0.7,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9</Font>
+              <GrowToHeight>True</GrowToHeight>
               <HorAlignment>Center</HorAlignment>
               <Margins>0,0,0,0</Margins>
               <Name>Text37</Name>
@@ -731,7 +724,7 @@ https://garnetapp.ir</Text>
         </DataBand1>
         <ColumnFooterBand1 Ref="47" type="Stimulsoft.Report.Components.StiColumnFooterBand" isKey="true">
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,3.5,7.87,0.4</ClientRectangle>
+          <ClientRectangle>0,3.5,8.07,0.3</ClientRectangle>
           <Components isList="true" count="3">
             <Text25 Ref="48" type="Text" isKey="true">
               <Border>All;[216:216:216];1;Solid;False;4;Black</Border>
@@ -739,7 +732,7 @@ https://garnetapp.ir</Text>
               <CanBreak>True</CanBreak>
               <CanGrow>True</CanGrow>
               <CanShrink>True</CanShrink>
-              <ClientRectangle>1.2,0,1.2,0.3</ClientRectangle>
+              <ClientRectangle>1.3,0,1.3,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -767,7 +760,7 @@ https://garnetapp.ir</Text>
               <CanBreak>True</CanBreak>
               <CanGrow>True</CanGrow>
               <CanShrink>True</CanShrink>
-              <ClientRectangle>0,0,1.2,0.3</ClientRectangle>
+              <ClientRectangle>0,0,1.3,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -795,7 +788,7 @@ https://garnetapp.ir</Text>
               <CanBreak>True</CanBreak>
               <CanGrow>True</CanGrow>
               <CanShrink>True</CanShrink>
-              <ClientRectangle>2.4,0,5.47,0.3</ClientRectangle>
+              <ClientRectangle>2.6,0,5.5,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,8,Bold</Font>
@@ -821,14 +814,15 @@ https://garnetapp.ir</Text>
         <DataBand2 Ref="53" type="DataBand" isKey="true">
           <Border>All;[216:216:216];1;Solid;False;4;Black</Border>
           <Brush>Transparent</Brush>
-          <ClientRectangle>0,4.3,7.87,0.8</ClientRectangle>
+          <CanShrink>True</CanShrink>
+          <ClientRectangle>0,4.2,8.07,0.8</ClientRectangle>
           <Components isList="true" count="5">
             <Text11 Ref="54" type="Text" isKey="true">
               <Border>None;[191:191:191];1;Solid;False;4;Black</Border>
               <Brush>Transparent</Brush>
               <CanGrow>True</CanGrow>
               <CanShrink>True</CanShrink>
-              <ClientRectangle>7.1,0.1,0.7,0.3</ClientRectangle>
+              <ClientRectangle>7.1,0.1,0.8,0.3</ClientRectangle>
               <Conditions isList="true" count="0" />
               <Expressions isList="true" count="0" />
               <Font>Yekan Bakh FaNum Light,9,Bold</Font>
@@ -928,13 +922,14 @@ https://garnetapp.ir</Text>
       <Conditions isList="true" count="0" />
       <Expressions isList="true" count="0" />
       <Guid>15284e619ca24b18a92c70f830c7141f</Guid>
-      <Margins>0.2,0.2,0.2,0.2</Margins>
+      <Margins>0.1,0.1,0.1,0.1</Margins>
       <Name>Page1</Name>
       <PageHeight>11.69</PageHeight>
       <PageWidth>8.27</PageWidth>
       <PaperSize>A4</PaperSize>
       <Report isRef="0" />
       <RightToLeft>True</RightToLeft>
+      <StretchToPrintArea>True</StretchToPrintArea>
     </Page1>
   </Pages>
   <PreviewMode>StandardAndDotMatrix</PreviewMode>
@@ -949,10 +944,10 @@ https://garnetapp.ir</Text>
     <value>Stimulsoft.Report.Dll</value>
   </ReferencedAssemblies>
   <ReportAlias>Report</ReportAlias>
-  <ReportChanged>11/30/2024 2:49:22 PM</ReportChanged>
+  <ReportChanged>9/5/2025 12:52:54 PM</ReportChanged>
   <ReportCreated>8/16/2024 7:47:22 PM</ReportCreated>
-  <ReportFile>F:\0 Work Space\garnetaccounting\GarnetAccounting\wwwroot\Reports\acc\DocPrintMoein.mrt</ReportFile>
-  <ReportGuid>ae868b6d19fd4b27b5d1da3bffcf0596</ReportGuid>
+  <ReportFile>F:\01-Garnet Software projects\Garnet Accounting WebApplication\GarnetAccounting\wwwroot\Reports\acc\DocPrintMoein.mrt</ReportFile>
+  <ReportGuid>1a7ee94d44f44770bc8508dde471161e</ReportGuid>
   <ReportName>Report</ReportName>
   <ReportUnit>Inches</ReportUnit>
   <ReportVersion>2023.1.1.0</ReportVersion>

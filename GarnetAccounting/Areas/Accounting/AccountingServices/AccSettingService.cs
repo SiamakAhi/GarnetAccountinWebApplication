@@ -65,6 +65,8 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                     WarehouseIsAutoGenerate = settingDto.WarehouseIsAutoGenerate,
                     WarehouseMoeinId = settingDto.WarehouseMoeinId,
 
+
+
                 };
 
                 // ذخیره در حافظه برای درخواست‌های بعدی

@@ -576,6 +576,223 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             return docs;
         }
 
+        public async Task<BulkDocDto> PreparingToCreateSaleMoadianDoc2Async(List<Acc_MoadianReport> report, bool appendToDoc, long sellerId, int periodId, string currentUser)
+        {
+            BulkDocDto docs = new BulkDocDto();
+
+            var AccSetting = await _db.Acc_Settings.Where(n => n.SellerId == sellerId).FirstOrDefaultAsync();
+            if (AccSetting == null)
+            {
+                docs.Headers = new List<Acc_Document>();
+                docs.Articles = new List<Acc_Article>();
+                docs.Message = "ابتدا از منوی تنظیمات حسابداری، سرفصل های مربوط به فروش را مشخص کنید.";
+                return docs;
+            }
+
+            int saleMoeinId = AccSetting.saleMoeinId ?? 0;
+            int DebtorMoeinId = AccSetting.salePartyMoeinId ?? 0;
+            int SaleVatMoeinId = AccSetting.SaleVatMoeinId ?? 0;
+            if (saleMoeinId == 0 || DebtorMoeinId == 0)
+            {
+                docs.Headers = new List<Acc_Document>();
+                docs.Articles = new List<Acc_Article>();
+                docs.Message = "ابتدا از منوی تنظیمات حسابداری، سرفصل های مربوط به فروش را تنظیم کنید.";
+                return docs;
+            }
+            if (report.Where(n => n.VAT > 0).Any() && SaleVatMoeinId == 0)
+            {
+                docs.Headers = new List<Acc_Document>();
+                docs.Articles = new List<Acc_Article>();
+                docs.Message = "ابتدا از منوی تنظیمات حسابداری، سرفصل مربوط به ارزش افزوده فروش را تنظیم کنید.";
+                return docs;
+            }
+
+            var DebtorMoein = await _db.Acc_Coding_Moeins.SingleOrDefaultAsync(n => n.Id == DebtorMoeinId);
+            if (DebtorMoein == null)
+            {
+                docs.Headers = new List<Acc_Document>();
+                docs.Articles = new List<Acc_Article>();
+                docs.Message = "حساب معین بدهکاران تجاری (دریافتنی های تجاری) یافت نشد";
+                return docs;
+            }
+            var saleMoein = await _db.Acc_Coding_Moeins.SingleOrDefaultAsync(n => n.Id == saleMoeinId);
+            if (saleMoein == null)
+            {
+                docs.Headers = new List<Acc_Document>();
+                docs.Articles = new List<Acc_Article>();
+                docs.Message = "حساب معین فروش/درآمد یافت نشد";
+                return docs;
+            }
+            var VatMoein = await _db.Acc_Coding_Moeins.SingleOrDefaultAsync(n => n.Id == SaleVatMoeinId);
+            if (VatMoein == null)
+            {
+                docs.Headers = new List<Acc_Document>();
+                docs.Articles = new List<Acc_Article>();
+                docs.Message = "حساب معین ارزش افزوده فروش یافت نشد";
+                return docs;
+            }
+
+            int atf = await _accService.DocAutoNumberGeneratorAsync(sellerId, periodId);
+            int docNo = await _accService.DocNumberGeneratorAsync(sellerId, periodId);
+            foreach (var x in report.OrderBy(d => d.IssueDate).ToList())
+            {
+
+                long? tafsilId = null;
+                string? tafsilName = null;
+                if (!string.IsNullOrEmpty(x.BuyerName))
+                {
+                    tafsilId = await _coding.CheckAddTafsilAsync(x.BuyerName, sellerId);
+                    tafsilName = x.BuyerName;
+                }
+                Acc_Document header = new Acc_Document();
+                int row = 1;
+                if (appendToDoc)
+                {
+                    var DocInDate = await _db.Acc_Documents.Include(b => b.DocArticles)
+                        .Where(n =>
+                    n.SellerId == sellerId
+                    && n.PeriodId == periodId
+                    && !n.IsDeleted
+                    && n.DocDate.Date == x.IssueDate.Date)
+                        .FirstOrDefaultAsync();
+
+                    if (DocInDate != null)
+                    {
+                        header = DocInDate;
+                        row = DocInDate.DocArticles.Count + 1;
+                    }
+                    else
+                    {
+                        var newDoc = docs.Headers.Where(n => n.DocDate == x.IssueDate).FirstOrDefault();
+                        if (newDoc != null)
+                        {
+                            header = newDoc;
+                            row = docs.Articles.Where(n => n.DocId == newDoc.Id).Count() + 1;
+                        }
+                        else
+                        {
+                            header.Id = Guid.NewGuid();
+                            header.SellerId = sellerId;
+                            header.PeriodId = periodId;
+                            header.AtfNumber = atf;
+                            header.AutoDocNumber = atf;
+                            header.DocNumber = docNo;
+                            header.DocDate = x.IssueDate;
+                            header.Description = "بابت منظور نمودن مدارک مثبته ضمیمه سند حسابداری";
+                            header.IsDeleted = false;
+                            header.CreatorUserName = currentUser;
+                            header.CreateDate = DateTime.Now;
+                            atf++;
+                            docNo++;
+
+                            docs.Headers.Add(header);
+                        }
+
+                    }
+                }
+                else
+                {
+                    header.Id = Guid.NewGuid();
+                    header.SellerId = sellerId;
+                    header.PeriodId = periodId;
+                    header.AtfNumber = atf;
+                    header.AutoDocNumber = atf;
+                    header.DocNumber = docNo;
+                    header.DocDate = x.IssueDate;
+                    header.Description = "بابت منظور نمودن مدارک مثبته ضمیمه سند حسابداری";
+                    header.IsDeleted = false;
+                    header.CreatorUserName = currentUser;
+                    header.CreateDate = DateTime.Now;
+
+                    atf++;
+                    docNo++;
+
+                    docs.Headers.Add(header);
+                }
+
+
+                //Articles
+
+                //بدهکاران تجاری
+                Acc_Article debtor = new Acc_Article();
+                debtor.Id = Guid.NewGuid();
+                debtor.SellerId = sellerId;
+                debtor.PeriodId = periodId;
+                debtor.DocId = header.Id;
+                debtor.KolId = DebtorMoein.KolId;
+                debtor.MoeinId = DebtorMoeinId;
+                debtor.Amount = x.TotalInvoiceAmount;
+                debtor.Bed = x.TotalInvoiceAmount;
+                debtor.Bes = 0;
+                debtor.Tafsil4Id = tafsilId;
+                debtor.Tafsil4Name = tafsilName;
+                debtor.ArchiveCode = x.TaxNumber;
+                debtor.RowNumber = row;
+                debtor.IsDeleted = false;
+                debtor.CreatorUserName = currentUser;
+                debtor.CreateDate = DateTime.Now;
+                debtor.Comment = $"بابت صورتحساب فروش شماره {x.TaxNumber}";
+                debtor.AccountantRemark = DateTime.Now.LatinToPersian();
+                row++;
+                docs.Articles.Add(debtor);
+
+                // فروش
+                Acc_Article sale = new Acc_Article();
+                sale.Id = Guid.NewGuid();
+                sale.SellerId = sellerId;
+                sale.PeriodId = periodId;
+                sale.DocId = header.Id;
+                sale.KolId = saleMoein.KolId;
+                sale.MoeinId = saleMoein.Id;
+                sale.Amount = x.InvoiceAmountWithoutVAT;
+                sale.Bed = 0;
+                sale.Bes = x.InvoiceAmountWithoutVAT;
+                sale.Tafsil4Id = tafsilId;
+                sale.Tafsil4Name = tafsilName;
+                sale.ArchiveCode = x.TaxNumber;
+                sale.RowNumber = row;
+                sale.IsDeleted = false;
+                sale.CreatorUserName = currentUser;
+                sale.CreateDate = DateTime.Now;
+                sale.Comment = $"بابت صورتحساب فروش تاریخ : {header.DocDate.LatinToPersian()} خریدار : {x.BuyerName}";
+                sale.AccountantRemark = DateTime.Now.LatinToPersian();
+                row++;
+                docs.Articles.Add(sale);
+
+                if (x.VAT > 0)
+                {
+                    // ارزش افزوده فروش 
+                    Acc_Article Vat = new Acc_Article();
+                    Vat.Id = Guid.NewGuid();
+                    Vat.SellerId = sellerId;
+                    Vat.PeriodId = periodId;
+                    Vat.DocId = header.Id;
+                    Vat.KolId = VatMoein.KolId;
+                    Vat.MoeinId = VatMoein.Id;
+                    Vat.Amount = x.VAT;
+                    Vat.Bed = 0;
+                    Vat.Bes = x.VAT;
+                    Vat.ArchiveCode = x.TaxNumber;
+                    Vat.RowNumber = row;
+                    Vat.ArchiveCode = x.TaxNumber;
+                    Vat.IsDeleted = false;
+                    Vat.CreatorUserName = currentUser;
+                    Vat.CreateDate = DateTime.Now;
+                    Vat.AccountantRemark = DateTime.Now.LatinToPersian();
+                    if (AccSetting.SetTafsilForSaleVat)
+                    {
+                        Vat.Tafsil4Name = tafsilName;
+                        Vat.Tafsil4Id = tafsilId;
+                    }
+                    row++;
+                    docs.Articles.Add(Vat);
+                }
+            }
+
+            docs.Success = true;
+            return docs;
+        }
+
         public async Task<BulkDocDto> PreparingToCreateBuyMoadianDocAsync(List<Acc_MoadianReport> report, bool appendToDoc, long sellerId, int periodId, string currentUser)
         {
             BulkDocDto docs = new BulkDocDto();
@@ -1468,6 +1685,8 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             return result;
         }
 
+        //5859-8310-4233-0273
+
         public async Task<clsResult> MergeDocDaytodayAsync(long sellerId, int periodId)
         {
             clsResult result = new clsResult();
@@ -1477,24 +1696,38 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             && n.Doc.TypeId == 1
             && !n.IsDeleted && !n.Doc.IsDeleted).Include(n => n.Doc).ToListAsync();
 
-            var grouped = articles.GroupBy(n => n.Doc.DocDate).Select(n => new
+            var grouped = articles.GroupBy(n => n.Doc.DocDate.Date).Select(n => new
             {
                 date = n.Key,
                 doc = n.FirstOrDefault().Doc,
                 articlesId = n.Select(s => s.Id).ToList()
             }).ToList();
-            foreach (var data in grouped)
-            {
 
+            List<Acc_Article> UpdateList = new List<Acc_Article>();
+            foreach (var data in grouped.OrderBy(n => n.date).ToList())
+            {
                 var ArtsInDay = await _db.Acc_Articles.Where(n => data.articlesId.Contains(n.Id))
-                    .ExecuteUpdateAsync(n => n.SetProperty(p => p.DocId, data.doc.Id));
+                    .OrderBy(n => n.Doc.DocNumber).ThenBy(n => n.RowNumber).ToListAsync();
+                //.ExecuteUpdateAsync(n => n.SetProperty(p => p.DocId, data.doc.Id).SetProperty(p => p.RowNumber, 0));
+
+                int row = 1;
+                foreach (var a in ArtsInDay)
+                {
+                    a.RowNumber = row;
+                    a.DocId = data.doc.Id;
+                    a.LastUpdateDate = DateTime.Now;
+                    a.EditorUserName = "MegeDoc";
+                    UpdateList.Add(a);
+                    row++;
+                }
 
                 var deleteDocs = await _db.Acc_Documents
-                    .Where(n => n.DocDate == data.date && n.SellerId == sellerId && n.PeriodId == periodId && n.TypeId == 1 && n.Id != data.doc.Id)
+                    .Where(n => n.DocDate.Date == data.date.Date && n.SellerId == sellerId && n.PeriodId == periodId && n.TypeId == 1 && n.Id != data.doc.Id)
                     .ExecuteUpdateAsync(n => n.SetProperty(s => s.IsDeleted, true));
             }
             try
             {
+                _db.Acc_Articles.UpdateRange(UpdateList);
                 await _db.SaveChangesAsync();
                 result.Success = true;
                 result.Message = "ادغام اسناد با موفقیت انجام شد";
