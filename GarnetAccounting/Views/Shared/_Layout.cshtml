@@ -1060,6 +1060,7 @@
 
 
                     $(document).find('#tblDocs').DataTable();
+                   
                     $(document).find('.select2').select2();
                     $(document).find('#tblPerson').DataTable();
 
@@ -1102,6 +1103,7 @@
                 $(document).find('#docArticles').DataTable({
                         "paging": false,
                         "searching": true,
+                        "ordering":false,
                         "dom": '<"top">rt<"bottom"f><"clear">',
                 });
 
