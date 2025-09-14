@@ -237,6 +237,9 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
                     case 200:
                         result = await _bankImporter.ImportBankMeliAsync(model);
                         break;
+                    case 201:
+                        result = await _bankImporter.ImportBankMeli_InternetBankAsync(model);
+                        break;
                     case 300:
                         result = await _bankImporter.ImportPasargadAsync(model);
                         break;
@@ -252,8 +255,8 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
 
                 if (result.Success)
                 {
-                    result.updateType = 1;
-                    result.returnUrl = Request.Headers["Referer"].ToString();
+                    result.updateType = 2;
+                    result.returnUrl = "";// Request.Headers["Referer"].ToString();
                     return Json(result.ToJsonResult());
                 }
             }
