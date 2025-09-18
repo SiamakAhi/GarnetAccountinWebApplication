@@ -145,7 +145,93 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
 
             return info;
         }
+
         public async Task<List<Report_BrowserDto>> Report_KolAsync(DocFilterDto filter)
+        {
+            // پیش‌پردازش تاریخ‌ها خارج از کوئری
+            DateTime? startDate = null;
+            if (!string.IsNullOrEmpty(filter.strStartDate))
+            {
+                startDate = filter.strStartDate.PersianToLatin().Date;
+            }
+
+            DateTime? endDate = null;
+            if (!string.IsNullOrEmpty(filter.strEndDate))
+            {
+                endDate = filter.strEndDate.PersianToLatin().Date;
+            }
+
+            var baseQuery = _db.Acc_Articles.AsNoTracking()
+                .Where(a => a.IsDeleted == false
+                           && a.Doc.IsDeleted == false
+                           && a.Doc.SellerId == filter.SellerId
+                           && a.Doc.PeriodId == filter.PeriodId);
+
+            // اعمال فیلترها
+            if (filter.docType != null)
+                baseQuery = baseQuery.Where(n => n.Doc.StatusId == filter.docType.Value);
+
+            if (startDate.HasValue)
+                baseQuery = baseQuery.Where(n => n.Doc.DocDate >= startDate.Value);
+
+            if (endDate.HasValue)
+                baseQuery = baseQuery.Where(n => n.Doc.DocDate <= endDate.Value);
+
+            if (filter.FromDocNumer > 0)
+                baseQuery = baseQuery.Where(n => n.Doc.DocNumber >= filter.FromDocNumer);
+
+            if (filter.ToDocNumer > 0)
+                baseQuery = baseQuery.Where(n => n.Doc.DocNumber <= filter.ToDocNumer);
+
+            if (!string.IsNullOrEmpty(filter.Description))
+                baseQuery = baseQuery.Where(n => n.Doc.Description.Contains(filter.Description));
+
+            // کوئری اصلی با projection بهینه
+            var result = await baseQuery
+                .GroupBy(n => n.Moein.KolId)
+                .Select(g => new
+                {
+                    KolId = g.Key,
+                    KolCode = g.Max(x => x.Moein.MoeinKol.KolCode),
+                    KolName = g.Max(x => x.Moein.MoeinKol.KolName),
+                    Description = g.Max(x => x.Moein.MoeinKol.Description),
+                    Nature = g.Max(x => x.Moein.MoeinKol.Nature),
+                    TypeId = g.Max(x => x.Moein.MoeinKol.TypeId),
+                    SellerId = g.Max(s => s.SellerId),
+                    GroupPeriority = g.Min(x => x.Moein.MoeinKol.KolGroup.Order),
+                    TotalBed = g.Sum(s => s.Bed),
+                    TotalBes = g.Sum(s => s.Bes)
+                })
+                .OrderBy(x => x.GroupPeriority)
+                .ThenBy(x => x.KolCode)
+                .ToListAsync();
+
+            // تبدیل به DTO در حافظه
+            return result.Select(x =>
+            {
+                var mandeh = Math.Abs(x.TotalBed - x.TotalBes);
+                return new Report_BrowserDto
+                {
+                    Id = x.KolId,
+                    KolId = x.KolId,
+                    KolCode = x.KolCode,
+                    KolName = x.KolName,
+                    Description = x.Description,
+                    Nature = x.Nature,
+                    TypeId = x.TypeId,
+                    SellerId = x.SellerId,
+                    GroupPeriority = x.GroupPeriority,
+                    Bed = x.TotalBed,
+                    Bes = x.TotalBes,
+                    Mandeh = mandeh,
+                    MandehNature = x.TotalBed > x.TotalBes ? (short)1 :
+                                  (x.TotalBed < x.TotalBes ? (short)2 : (short)3),
+                    MandehBed = x.TotalBed > x.TotalBes ? x.TotalBed - x.TotalBes : 0,
+                    MandehBes = x.TotalBes > x.TotalBed ? x.TotalBes - x.TotalBed : 0
+                };
+            }).ToList();
+        }
+        public async Task<List<Report_BrowserDto>> Report_KolAsync_Old(DocFilterDto filter)
         {
             List<Report_BrowserDto> accounts = new List<Report_BrowserDto>();
 
@@ -198,6 +284,8 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
 
             return accounts;
         }
+
+
         public async Task<List<Report_BrowserDto>> Report_MoeinAsync(DocFilterDto filter)
         {
             List<Report_BrowserDto> accounts = new List<Report_BrowserDto>();

@@ -524,7 +524,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             n.Doc.SellerId == sellerId
             && n.Doc.PeriodId == periodId
             && n.IsDeleted == false
-            && (n.Doc.TypeId == 2 || n.Doc.DocNumber == 1)
+            && (n.Doc.TypeId == 2)
             && n.MoeinId == MojoodiKalaMoeinId).FirstOrDefaultAsync();
             if (efteth == null)
                 return 0;

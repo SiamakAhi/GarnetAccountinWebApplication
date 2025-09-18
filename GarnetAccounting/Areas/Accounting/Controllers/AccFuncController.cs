@@ -27,6 +27,8 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
             _base = baseInfoService;
             _endPeriodService = endPeriodService;
         }
+
+        [HttpGet]
         public async Task<IActionResult> DocSorting(DocFilterDto filter)
         {
             var userSett = await _gs.GetUserSettingAsync(User.Identity.Name);
