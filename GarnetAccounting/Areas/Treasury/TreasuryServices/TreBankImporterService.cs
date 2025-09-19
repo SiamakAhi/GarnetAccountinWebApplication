@@ -41,6 +41,7 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
             items.Add(new SelectListItem { Value = "103", Text = "بانک سپه - اینترنت بانک" });
             items.Add(new SelectListItem { Value = "200", Text = "بانک ملی" });
             items.Add(new SelectListItem { Value = "201", Text = "بانک ملی - اینترنت بانک" });
+            items.Add(new SelectListItem { Value = "202", Text = "بانک ملی 2" });
             items.Add(new SelectListItem { Value = "300", Text = "پاسارگاد" });
             items.Add(new SelectListItem { Value = "400", Text = "پارسیان - اینترنت بانک (سپرده کوتاه مدت)" });
             items.Add(new SelectListItem { Value = "410", Text = "سینـا" });
@@ -2193,7 +2194,7 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
             return result;
         }
 
-        // Bank Melli = 201
+        // Bank Melli = 200
         public async Task<clsResult> ImportBankMeliAsync(BankImporterDto dto)
         {
             clsResult result = new clsResult();
@@ -2300,7 +2301,7 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
             }
             return result;
         }
-        // Bank Melli = 202
+        // Bank Melli = 201
         public async Task<clsResult> ImportBankMeli_InternetBankAsync(BankImporterDto dto)
         {
             clsResult result = new clsResult();
@@ -2362,6 +2363,114 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
                             transaction.BatchNumber = batchNum;
                             transaction.BatchNumber = batchNum;
                             transaction.IsChecked = false;
+                            BankTransactionList.Add(transaction);
+                        }
+                        catch (Exception ex)
+                        {
+                            result.Message += $"خطا در ردیف {row.RowNumber()}: {ex.Message}";
+                            okTask = false;
+                            continue;
+                        }
+                    }
+                }
+            }
+            if (okTask)
+            {
+                var existingData = await _db.TreBankTransactions.AsNoTracking().Where(n => n.SellerId == dto.SellerId && n.BankAccountId == dto.BankAccountId).ToListAsync();
+
+                List<TreBankTransaction> finalList = new List<TreBankTransaction>();
+                foreach (var x in BankTransactionList)
+                {
+                    if (!existingData.Where(n => n.Date == x.Date && n.DocumentNumber == x.DocumentNumber).Any())
+                    { finalList.Add(x); }
+                }
+
+
+                try
+                {
+                    if (finalList.Count > 0)
+                    {
+                        await _db.TreBankTransactions.AddRangeAsync(finalList);
+                        await _db.SaveChangesAsync();
+                        result.Message = $"تعداد {finalList.Count} از {BankTransactionList.Count} رکورد موجود در فایل بارگذاری شد";
+                    }
+                    else
+                    {
+                        result.Message = $"رکورد جدیدی برای افزودن یافت نشد";
+                    }
+
+                    result.Success = true;
+
+                }
+                catch (Exception)
+                {
+                    result.Message = "خطایی در ثبت اطلاعات گزارش بانک رخ داده است فایل را بررسی کنید مجدد تلاش کنید";
+                }
+            }
+            return result;
+        }
+
+        // Bank Melli = 202
+        public async Task<clsResult> ImportBankMeli3Async(BankImporterDto dto)
+        {
+            clsResult result = new clsResult();
+            result.Success = false;
+
+            if (dto.SellerId == 0)
+            {
+                result.Message = "لایسنس شناسایی نشد";
+                return result;
+            }
+            if (dto.File == null || dto.File.Length <= 0)
+            {
+                result.Message = "فایل معتبر نیست";
+                return result;
+            }
+            bool okTask = true;
+            var BankTransactionList = new List<TreBankTransaction>();
+
+            using (var stream = new MemoryStream())
+            {
+                await dto.File.CopyToAsync(stream);
+                using (var workbook = new XLWorkbook(stream))
+                {
+                    var worksheet = workbook.Worksheet(1);
+                    var rows = worksheet.RowsUsed();
+
+                    int startRow = 2;
+                    string batchNum = DateTime.Now.ToLong().ToString();
+                    foreach (var row in rows.Skip(startRow - 1))
+                    {
+                        try
+                        {
+
+                            var transaction = new TreBankTransaction();
+
+                            transaction.SellerId = dto.SellerId;
+                            transaction.BankAccountId = dto.BankAccountId;
+
+                            string strRow = row.Cell("A").GetValue<string?>();
+                            transaction.Row = int.TryParse(strRow, out int rownumber) ? rownumber : 0;
+                            if (transaction.Row == 0) continue;
+
+                            string dateValue = row.Cell("B").GetValue<string>().Trim();
+                            transaction.Date = dateValue.PersianToLatin();
+                            string timeValue = row.Cell("C").GetValue<string?>();
+                            transaction.Time = TimeSpan.TryParse(timeValue.Trim(), out var parsedTime) ? parsedTime : TimeSpan.Zero;
+
+                            transaction.Branch = row.Cell("D").GetValue<string?>(); // شعبه
+                            transaction.Operation = row.Cell("E").GetValue<string?>()?.Trim(); // عملیات
+                            transaction.DocumentNumber = row.Cell("H").GetValue<string?>(); // شماره سند
+                            transaction.Description = row.Cell("N").GetValue<string?>() + " " + row.Cell("H").GetValue<string?>() + " / " + row.Cell("J").GetValue<string?>(); // شرح
+                            long? value = row.Cell("F").GetValue<long?>();
+                            long amount = value.HasValue ? Math.Abs(value.Value) : 0;
+
+                            transaction.Debtor = transaction.Operation == "واریز" ? amount : 0; // واریز
+                            transaction.Creditor = transaction.Operation == "برداشت" ? amount : 0;  // برداشت
+                            transaction.Balance = row.Cell("K").GetValue<long?>() ?? 0; // مانده
+                            transaction.Note = row.Cell("N").GetValue<string?>(); // یادداشت
+                            transaction.BatchNumber = batchNum;
+                            transaction.BatchNumber = batchNum;
                             BankTransactionList.Add(transaction);
                         }
                         catch (Exception ex)
