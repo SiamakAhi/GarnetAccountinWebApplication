@@ -46,17 +46,22 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
                 ViewBag.Allert = "تنظیمات کاربری شما بدرستی انجام نشده است بنابراین مشاهده لیست اسناد امکان پذیر نیست";
             }
             VmAccountingDocs model = new VmAccountingDocs();
+            if (!string.IsNullOrEmpty(filter.strStartDate))
+                filter.StartDate = filter.strStartDate.PersianToLatin();
+            if (!string.IsNullOrEmpty(filter.strEndDate))
+                filter.EndDate = filter.strEndDate.PersianToLatin();
+
             model.Docs = await _serv.GetDocsAsync(filter);
             model.filter = filter;
 
             ViewBag.docType = _base.SelectList_DocTypes();
 
-            return View(model);
+            return View("DocSorting", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DocSorting(int startNumber, Guid[] docIds, DocFilterDto filter)
+        public async Task<IActionResult> DocSortingOp(int startNumber, Guid[] docIds, DocFilterDto filter)
         {
             VmAccountingDocs model = new VmAccountingDocs();
 
@@ -81,7 +86,7 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
 
             ViewBag.docType = _base.SelectList_DocTypes();
 
-            return View(model);
+            return View("DocSorting", model);
         }
 
         [HttpPost]

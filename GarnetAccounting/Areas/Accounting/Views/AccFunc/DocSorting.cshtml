@@ -30,7 +30,7 @@
                             </div>
                             <div class="col-md-6 mb-2">
                                 <label asp-for="filter.EndDate" class="form-label">‌تا تاریخ </label>
-                                <input type="text" class="form-control form-control-sm flatpickr-input" asp-for="filter.EndDate" placeholder="YYYY/MM/DD" id="flatpickr-Enddate">
+                                <input type="text" class="form-control form-control-sm flatpickr-input" asp-for="filter.strEndDate" placeholder="YYYY/MM/DD" id="flatpickr-Enddate">
                             </div>
                             <div class="col-md-12 mb-1">
                                 <label class="form-label">وضعیت سند</label>
@@ -57,7 +57,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive text-nowrap static-height-600">
-                    <form asp-action="DocSorting" asp-controller="AccFunc" asp-area="Accounting" method="post">
+                    <form asp-action="DocSortingOp" asp-controller="AccFunc" asp-area="Accounting" method="post">
                         <div class="row px-4">
                             <div class="col-md-2">
                                 <label class="form-label ms-2"> مرتب سازی از شماره : </label>

@@ -157,14 +157,12 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
 
             if (filter.StartDate != null)
             {
-                var startDate = filter.StartDate.Value.ToMiladiDate().Date;
-                query = query.Where(n => n.DocDate >= startDate);
+                query = query.Where(n => n.DocDate.Date >= filter.StartDate.Value.Date);
             }
 
             if (filter.EndDate != null)
             {
-                var endDate = filter.EndDate.Value.ToMiladiDate().Date;
-                query = query.Where(n => n.DocDate <= endDate);
+                query = query.Where(n => n.DocDate <= filter.EndDate.Value.Date);
             }
 
             if (filter.FromDocNumer > 0)
@@ -2895,6 +2893,6 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             return checkList;
         }
 
-        
+
     }
 }
