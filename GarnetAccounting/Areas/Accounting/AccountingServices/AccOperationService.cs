@@ -1662,7 +1662,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             var allDocs = _db.Acc_Documents.Where(n => n.SellerId == sellerId && n.PeriodId == periodId).AsQueryable();
 
             int docnumber = startNumber;
-            docnumber = 1;
+            //docnumber = 1;
             for (int i = 0; i < DocsId.Length; i++)
             {
                 var doc = await allDocs.SingleOrDefaultAsync(n => n.Id == DocsId[i]);
