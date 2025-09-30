@@ -731,7 +731,17 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
 
             //حساب خلاصه سود و زیان
             // سود و زیاد انباشته
-            var SummaryAccount = await _db.Acc_Coding_Moeins.FindAsync(dto.SummaryAccountId.Value);
+            var accSetting = await _db.Acc_Settings.Where(n => n.SellerId == dto.SellerId).FirstOrDefaultAsync();
+            if (accSetting == null
+                || !accSetting.InventoryMoeinId.HasValue
+                || !accSetting.KholaseSoodVaZianMoeinId.HasValue
+                || !accSetting.SoodVaZianAnbashtehMoeinId.HasValue)
+            {
+                return new List<DocArticleDto>();
+            }
+
+            //حساب خلاصه سود و زیان
+            var SummaryAccount = await _db.Acc_Coding_Moeins.FindAsync(accSetting.KholaseSoodVaZianMoeinId.Value);
 
             //حساب های درآمد
             var IncomeArts = await _db.Acc_Articles
@@ -1114,6 +1124,128 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             finalList.AddRange(BesGrouped);
             return finalList;
         }
+        public async Task<List<DocArticleDto>> ClosePermanentAccountsByMoeinPreviewAsync(EndOfPeriodSettings dto)
+        {
+            List<DocArticleDto> articles = new List<DocArticleDto>();
+            var ekhtetamiyeAccount = await _db.Acc_Coding_Moeins.FindAsync(dto.EkhtetamiyeAccountId.Value);
+            List<int> permanentAccouts = await _db.Acc_Coding_Moeins.Where(n => n.SellerId == dto.SellerId && n.MoeinKol.KolGroup.TypeId == 1).Select(n => n.Id).ToListAsync();
+            var balancedAccounts = await AccountsBanaceAsync(dto.SellerId, dto.PeriodId.Value, permanentAccouts);
+            int rownumber = 1;
+            Guid docId = Guid.NewGuid();
+            foreach (var x in balancedAccounts)
+            {
+                if (x.Mandeh <= 0)
+                    continue;
+                DocArticleDto a = new DocArticleDto();
+                a.Id = Guid.NewGuid();
+                a.DocId = docId;
+                a.RowNumber = rownumber;
+                a.SellerId = x.SellerId;
+                a.PeriodId = x.PeriodId.Value;
+                if (x.MandehNature == 1)
+                {
+                    a.Bes = x.Mandeh;
+                    a.strBes = x.Mandeh.ToPrice();
+                    a.Bed = 0;
+                }
+                else
+                {
+                    a.Bed = x.Mandeh;
+                    a.strBed = x.Mandeh.ToPrice();
+                    a.Bes = 0;
+                }
+                a.Amount = x.Mandeh;
+                a.Comment = "بابت بستن حساب با  " + ekhtetamiyeAccount.MoeinName;
+                a.KolId = x.KolId;
+                a.MoeinCode = x.MoeinCode;
+                a.MoeinId = x.MoeinId;
+                a.MoeinName = x.MoeinName;
+                a.IsMatch = true;
+                if (x.Nature != x.MandehNature && x.Nature != 3)
+                {
+                    a.Comment += "( مانده خلاف ماهیت است )";
+                    a.IsMatch = false;
+                }
+                a.CreatorUserName = dto.CurrentUser;
+                a.IsDeleted = false;
+                articles.Add(a);
+                rownumber++;
+
+                // آرتیکل اختتامیه
+                DocArticleDto art = new DocArticleDto();
+                art.Id = Guid.NewGuid();
+                art.DocId = docId;
+                art.RowNumber = rownumber;
+                art.SellerId = x.SellerId;
+                art.PeriodId = x.PeriodId.Value;
+                if (x.MandehNature == 2)
+                {
+                    art.Bes = x.Mandeh;
+                    art.strBes = x.Mandeh.ToPrice();
+                    art.Bed = 0;
+                }
+                else
+                {
+                    art.Bed = x.Mandeh;
+                    art.strBed = x.Mandeh.ToPrice();
+                    art.Bes = 0;
+                }
+                art.Amount = x.Mandeh;
+                art.Comment = "  بابت بستن حساب " + x.MoeinName;
+                art.KolId = ekhtetamiyeAccount.KolId;
+                art.MoeinCode = ekhtetamiyeAccount.MoeinCode;
+                art.MoeinId = ekhtetamiyeAccount.Id;
+                art.MoeinName = ekhtetamiyeAccount.MoeinName;
+                art.IsDeleted = false;
+                art.CreatorUserName = dto.CurrentUser;
+                art.IsMatch = true;
+                articles.Add(art);
+                rownumber++;
+            }
+            //....
+            List<DocArticleDto> finalList = new List<DocArticleDto>();
+
+            var BedGrouped = articles.Where(n => n.Bed > 0).GroupBy(n => n.MoeinId)
+                .Select(n => new DocArticleDto
+                {
+                    MoeinId = n.Key,
+                    SellerId = n.FirstOrDefault().SellerId,
+                    PeriodId = n.FirstOrDefault().PeriodId,
+                    MoeinCode = n.FirstOrDefault().MoeinCode,
+                    MoeinName = n.FirstOrDefault().MoeinName,
+                    KolId = n.FirstOrDefault().KolId,
+                    KolCode = n.FirstOrDefault().KolCode,
+                    KolName = n.FirstOrDefault().KolName,
+                    Bed = n.Sum(s => s.Bed),
+                    Bes = n.Sum(s => s.Bes),
+                    CreatorUserName = dto.CurrentUser,
+                    CreateDate = DateTime.Now,
+
+                }).OrderByDescending(n => n.Bed).ToList();
+            var BesGrouped = articles.Where(n => n.Bes > 0).GroupBy(n => n.MoeinId)
+               .Select(n => new DocArticleDto
+               {
+                   MoeinId = n.Key,
+                   SellerId = n.FirstOrDefault().SellerId,
+                   PeriodId = n.FirstOrDefault().PeriodId,
+                   MoeinCode = n.FirstOrDefault().MoeinCode,
+                   MoeinName = n.FirstOrDefault().MoeinName,
+                   KolId = n.FirstOrDefault().KolId,
+                   KolCode = n.FirstOrDefault().KolCode,
+                   KolName = n.FirstOrDefault().KolName,
+                   Bed = n.Sum(s => s.Bed),
+                   Bes = n.Sum(s => s.Bes),
+                   CreatorUserName = dto.CurrentUser,
+                   CreateDate = DateTime.Now,
+
+               }).OrderByDescending(n => n.Bed).ToList();
+
+
+
+            finalList.AddRange(BedGrouped);
+            finalList.AddRange(BesGrouped);
+            return finalList;
+        }
         public async Task<clsResult> ClosePermanentAccountsAsync(EndOfPeriodSettings dto)
         {
             clsResult result = new clsResult();
@@ -1156,6 +1288,47 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             return result;
         }
 
+        public async Task<clsResult> ClosePermanentAccountsByMoeinAsync(EndOfPeriodSettings dto)
+        {
+            clsResult result = new clsResult();
+            result.Success = false;
+            result.ShowMessage = true;
+
+            long sellerId = dto.SellerId;
+            int periodId = dto.PeriodId.Value;
+
+            // Check if all documents are balanced
+            if (!await AreDocumentsBalancedAsync(sellerId, periodId))
+            {
+                result.Message = "همه اسناد تراز نیستند";
+                return result;
+            }
+
+            // Check if document dates are in correct order
+            if (!await AreDocumentDatesInOrderAsync(sellerId, periodId))
+            {
+                result.Message = "ترتیب تاریخ اسناد صحیح نیست";
+                return result;
+            }
+            if (await HasEndingDocAsync(sellerId, periodId))
+            {
+                result.Message = "سند اختتامیه پیش از این ثبت شده است.";
+                return result;
+            }
+
+            // Check if all documents are approved
+            var approvalResult = await AreAllDocumentsApprovedAsync(sellerId, periodId);
+            if (!approvalResult.Success)
+            {
+                result.Message = approvalResult.Message;
+                return result;
+            }
+
+            var articles = await ClosePermanentAccountsByMoeinPreviewAsync(dto);
+            result = await _op.InsertSystemicDocAsync(articles, " بستن حساب های دائم (سند اختتامیه)", 3, periodId);
+
+            return result;
+        }
 
         //==================================================================================================================================================
         //======= Closing Accountnt With Mr Rabi ===========================================================================================================

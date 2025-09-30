@@ -16,6 +16,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
         public readonly IAccOperationService _accService;
         private readonly IAccCodingService _coding;
 
+
         public AccAsistantsService(AppDbContext appDbContext, IAccOperationService accService, IAccCodingService codingService)
         {
             _db = appDbContext;
@@ -1685,7 +1686,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             return result;
         }
 
-        //5859-8310-4233-0273
+
 
         public async Task<clsResult> MergeDocDaytodayAsync(long sellerId, int periodId)
         {

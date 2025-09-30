@@ -286,6 +286,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
         }
 
 
+
         public async Task<List<Report_BrowserDto>> Report_MoeinAsync(DocFilterDto filter)
         {
             List<Report_BrowserDto> accounts = new List<Report_BrowserDto>();
@@ -3289,5 +3290,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
 
             return accounts;
         }
+
+
     }
 }

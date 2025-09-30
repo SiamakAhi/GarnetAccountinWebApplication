@@ -25,7 +25,9 @@ namespace GarnetAccounting.Areas.Accounting.AccountingInterfaces
         Task<List<DocArticleDto>> CloseTemporaryPreviewAsync(EndOfPeriodSettings dto);
         Task<List<DocArticleDto>> CloseTemporaryPreviewOldAsync(EndOfPeriodSettings dto);
         Task<List<DocArticleDto>> ClosePermanentAccountsPreviewAsync(EndOfPeriodSettings dto);
+        Task<List<DocArticleDto>> ClosePermanentAccountsByMoeinPreviewAsync(EndOfPeriodSettings dto);
         Task<clsResult> ClosePermanentAccountsAsync(EndOfPeriodSettings dto);
+        Task<clsResult> ClosePermanentAccountsByMoeinAsync(EndOfPeriodSettings dto);
 
         //-----------------------------
         Task<clsResult> ClosingTemproryAccountsAsync(EndOfPeriodSettings dto);

@@ -24,11 +24,19 @@
                                     <input type="text" asp-for="AccountsSetting.strPayanDore" class="form-control text-center numberInput gonext" />
                                 </div>
                             </div>
+                              <p>محاسبه پایان دوره اعلامی</p>
+                            <div class="col-md-12 d-grid mt-2 mb-3 px-4">
+                                <input type="button" class="btn btn-secondary mb-2 submitCustomAction" data-url="@Url.Action("CloseTemporaryAccounts1", "EndOfPeriod", new { Area = "Accounting" })" value="پیش نمایش سند بستن حساب ها" />
+                                <input type="button" class="btn btn-warning mb-2 submitCustomAction" data-url="@Url.Action("AddDocCloseTemporaryAccounts1", "EndOfPeriod", new { Area = "Accounting" })" value="ثبت سند بستن حساب های موقت" />
+                            </div>
+
                             <hr />
                             <div class="col-md-12 d-grid mt-2 mb-3 px-4">
                                 <input type="submit" class="btn btn-primary mb-2" value="پیش نمایش سند بستن حساب ها" />
                                 <input type="button" class="btn btn-success mb-2 submitCustomAction" data-url="@Url.Action("AddDocCloseTemporaryAccounts","EndOfPeriod",new{Area="Accounting"})" value="ثبت سند بستن حساب های موقت" />
                             </div>
+
+                          
                         </div>
                     </form>
                 </div>

@@ -73,6 +73,8 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
             return View(dto);
         }
 
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddDocCloseTemporaryAccounts(EndOfPeriodDto dto)
@@ -116,6 +118,78 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
             return Json(result.ToJsonResult());
         }
 
+
+        //---
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CloseTemporaryAccounts1(EndOfPeriodDto dto)
+        {
+            var userSett = await _gs.GetUserSettingAsync(User.Identity.Name);
+            if (userSett == null || userSett.ActiveSellerId == null || userSett.ActiveSellerPeriod == null)
+                return BadRequest(ModelState);
+
+            if (ModelState.IsValid)
+            {
+                dto.AccountsSetting.SellerId = userSett.ActiveSellerId.Value;
+                dto.AccountsSetting.PeriodId = userSett.ActiveSellerPeriod.Value;
+                dto.AccountsSetting.CurrentUser = userSett.UserName;
+                dto.AccountsSetting.payanDore = string.IsNullOrEmpty(dto.AccountsSetting.strPayanDore) ? 0 : Convert.ToInt64(dto.AccountsSetting.strPayanDore?.Replace(",", ""));
+                // var result = await _serv.CloseTemporaryPreviewOldAsync(dto.AccountsSetting);
+                dto.Articles = await _serv.CloseTemporaryPreviewOldAsync(dto.AccountsSetting);
+                dto.Message = "";
+
+            }
+
+            ViewBag.TemporaryAccounts = await _serv.SelectList_GroupAccountsAsync(dto.AccountsSetting.SellerId, 2);
+            ViewBag.PermanentAccounts = await _serv.SelectList_PermanentAccounts_MoeinAsync(dto.AccountsSetting.SellerId);
+            return View("CloseTemporaryAccounts", dto);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddDocCloseTemporaryAccounts1(EndOfPeriodDto dto)
+        {
+            clsResult result = new clsResult();
+            result.Success = false;
+            result.ShowMessage = true;
+
+            var userSett = await _gs.GetUserSettingAsync(User.Identity.Name);
+            if (userSett == null || userSett.ActiveSellerId == null || userSett.ActiveSellerPeriod == null)
+            {
+                result.Message = "شرکت یا سال مالی فعال شناسایی نشد";
+                return Json(result.ToJsonResult());
+            }
+
+            if (ModelState.IsValid)
+            {
+                dto.AccountsSetting.SellerId = userSett.ActiveSellerId.Value;
+                dto.AccountsSetting.PeriodId = userSett.ActiveSellerPeriod.Value;
+                dto.AccountsSetting.CurrentUser = userSett.UserName;
+                try { dto.AccountsSetting.payanDore = Convert.ToInt64(dto.AccountsSetting.strPayanDore.Replace(",", "")); }
+                catch { dto.AccountsSetting.payanDore = 0; }
+
+                var getdata = await _serv.CloseTemporaryPreviewOldAsync(dto.AccountsSetting);
+                if (getdata == null || getdata?.Count == 0)
+                {
+                    result.Message = "خطایی در آماده سازی سند بستن حساب ها رخ داده است";
+                    return Json(result.ToJsonResult());
+                }
+                var Articles = getdata;
+                if (Articles.Count > 0)
+                {
+                    result = await _op.InsertSystemicDocAsync(Articles, " بستن حساب های موقت", 4, userSett.ActiveSellerPeriod.Value);
+                    if (result.Success)
+                    {
+                        result.returnUrl = Url.Action("Doc", "OpAccoucnting", new { Area = "", id = Articles.FirstOrDefault().DocId });
+                        return Json(result.ToJsonResult());
+                    }
+                }
+            }
+            return Json(result.ToJsonResult());
+        }
+
+        //==
+
         [HttpGet]
         public async Task<IActionResult> ClosePermanentAccounts()
         {
@@ -129,6 +203,7 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
             dto.Articles = new List<DocArticleDto>();
             return View(dto);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ClosePermanentAccountsPreview(EndOfPeriodDto dto)
@@ -150,6 +225,29 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
 
             return View("ClosePermanentAccounts", dto);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ClosePermanentAccountsByMoeinPreview(EndOfPeriodDto dto)
+        {
+            var userSett = await _gs.GetUserSettingAsync(User.Identity.Name);
+            if (userSett == null || userSett.ActiveSellerId == null || userSett.ActiveSellerPeriod == null)
+                return BadRequest(ModelState);
+
+            if (ModelState.IsValid)
+            {
+                dto.AccountsSetting.SellerId = userSett.ActiveSellerId.Value;
+                dto.AccountsSetting.PeriodId = userSett.ActiveSellerPeriod.Value;
+                dto.AccountsSetting.CurrentUser = userSett.UserName;
+
+                dto.Articles = await _serv.ClosePermanentAccountsPreviewAsync(dto.AccountsSetting);
+            }
+
+            ViewBag.AllAccounts = await _serv.SelectList_AllAccounts_MoeinAsync(dto.AccountsSetting.SellerId);
+
+            return View("ClosePermanentAccounts", dto);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddDocClosePermanentAccounts(EndOfPeriodDto dto)
@@ -170,6 +268,37 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
             dto.AccountsSetting.PeriodId = userSett.ActiveSellerPeriod.Value;
             dto.AccountsSetting.CurrentUser = userSett.UserName;
             result = await _serv.ClosePermanentAccountsAsync(dto.AccountsSetting);
+            if (result.Success)
+            {
+                result.ShowMessage = true;
+                result.returnUrl = Url.Action("AccountingDocs", "OpAccoucnting", new { Area = "" });
+                result.ShowMessage = true;
+                result.updateType = 1;
+                return Json(result.ToJsonResult());
+            }
+
+            return Json(result.ToJsonResult());
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddDocClosePermanentByMoein(EndOfPeriodDto dto)
+        {
+            clsResult result = new clsResult();
+            result.Success = false;
+            result.ShowMessage = true;
+            result.updateType = 1;
+
+            var userSett = await _gs.GetUserSettingAsync(User.Identity.Name);
+            if (userSett == null || userSett.ActiveSellerId == null || userSett.ActiveSellerPeriod == null)
+            {
+                result.Message = "شرکت یا سال مالی فعال شناسایی نشد";
+                return Json(result.ToJsonResult());
+            }
+
+            dto.AccountsSetting.SellerId = userSett.ActiveSellerId.Value;
+            dto.AccountsSetting.PeriodId = userSett.ActiveSellerPeriod.Value;
+            dto.AccountsSetting.CurrentUser = userSett.UserName;
+            result = await _serv.ClosePermanentAccountsByMoeinAsync(dto.AccountsSetting);
             if (result.Success)
             {
                 result.ShowMessage = true;
