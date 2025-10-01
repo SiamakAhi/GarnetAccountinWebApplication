@@ -740,7 +740,7 @@ namespace GarnetAccounting.Controllers
                 return Ok();
 
             ViewBag.Groups = await _coding.SelectList_TafsilGroupsAsync(sellerId);
-
+            ViewBag.TafsilCode = _coding.TafsilCodeGenerator(sellerId.Value);
             return PartialView("_AddTafsil");
         }
 

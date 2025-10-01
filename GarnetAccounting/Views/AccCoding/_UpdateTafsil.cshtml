@@ -18,6 +18,12 @@
                 <form asp-action="UpdateTafsil" asp-controller="AccCoding" asp-area="" method="post" class="mt-4 appform1">
                       <input type="hidden" asp-for="Id" value="@Model.Id" />
                     <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="Code">کد حساب تفصیلی</label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="Code" class="form-control firstSelect gonext" />
+                        </div>
+                    </div>
+                    <div class="row mb-1">
                         <label class="col-sm-3 col-form-label" asp-for="Name"></label>
                         <div class="col-sm-9">
                             <input type="text" asp-for="Name" class="form-control" />

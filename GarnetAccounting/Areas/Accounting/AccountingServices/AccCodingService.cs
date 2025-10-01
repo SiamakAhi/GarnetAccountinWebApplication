@@ -1196,9 +1196,9 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             string code;
 
             if (sellerId == null)
-                code = "00000001";
+                code = "1";
             else
-                code = sellerId + "00000001";
+                code = sellerId + "1";
 
 
             string? lastCode = _db.Acc_Coding_Tafsils.Where(n => n.SellerId == sellerId)
@@ -1262,7 +1262,8 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             clsResult result = new clsResult();
             result.Success = false;
 
-            var isDuolicate = await _db.Acc_Coding_Tafsils.AnyAsync(n => n.SellerId == dto.SellerId && n.Name == dto.Name);
+            var isDuolicate = await _db.Acc_Coding_Tafsils
+                .AnyAsync(n => n.SellerId == dto.SellerId && n.Name == dto.Name);
             if (isDuolicate)
             {
                 result.Message = $"حساب تفصیلی با نام '  {dto.Name}   ' قبلا تعریف شده است.";
@@ -1270,8 +1271,19 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 return result;
             }
 
+            if (string.IsNullOrEmpty(dto.Code))
+                dto.Code = TafsilCodeGenerator(dto.SellerId.Value);
+            var isDuolicateCode = await _db.Acc_Coding_Tafsils
+              .AnyAsync(n => n.SellerId == dto.SellerId && n.Code == dto.Code);
+            if (isDuolicateCode)
+            {
+                result.Message = $"حساب تفصیلی با کد '  {dto.Code}   ' قبلا تعریف شده است.";
+                result.ShowMessage = true;
+                return result;
+            }
+
             Acc_Coding_Tafsil tafsil = new Acc_Coding_Tafsil();
-            tafsil.Code = TafsilCodeGenerator(dto.SellerId.Value);
+            tafsil.Code = dto.Code;
             tafsil.Name = dto.Name;
             tafsil.Description = dto.Description;
             tafsil.SellerId = dto.SellerId;
@@ -1428,9 +1440,27 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 return result;
             }
 
-            if (string.IsNullOrEmpty(tafsil.Code))
-                tafsil.Code = TafsilCodeGenerator(dto.SellerId);
+            var isDuolicate = await _db.Acc_Coding_Tafsils
+                .AnyAsync(n => n.Id != dto.Id && n.SellerId == dto.SellerId && n.Name == dto.Name);
+            if (isDuolicate)
+            {
+                result.Message = $"حساب تفصیلی با نام '  {dto.Name}   ' قبلا تعریف شده است.";
+                result.ShowMessage = true;
+                return result;
+            }
 
+            if (string.IsNullOrEmpty(dto.Code))
+                dto.Code = TafsilCodeGenerator(dto.SellerId.Value);
+            var isDuolicateCode = await _db.Acc_Coding_Tafsils
+              .AnyAsync(n => n.Id != dto.Id && n.SellerId == dto.SellerId && n.Code == dto.Code);
+            if (isDuolicateCode)
+            {
+                result.Message = $"حساب تفصیلی با کد '  {dto.Code}   ' قبلا تعریف شده است.";
+                result.ShowMessage = true;
+                return result;
+            }
+
+            tafsil.Code = dto.Code;
             tafsil.Name = dto.Name;
             tafsil.Description = dto.Description;
             tafsil.SellerId = dto.SellerId;

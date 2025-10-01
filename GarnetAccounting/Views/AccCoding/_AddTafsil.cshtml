@@ -16,11 +16,17 @@
         <div class="modal-body">
             <div class=" mb-4 mt-0 mt-md-n2">
                 <form asp-action="AddTafsil" asp-controller="AccCoding" asp-area="" method="post" class="mt-4 appform1">
-                   
+
+                    <div class="row mb-1">
+                        <label class="col-sm-3 col-form-label" asp-for="Code">کد حساب تفصیلی</label>
+                        <div class="col-sm-9">
+                            <input type="text" asp-for="Code" class="form-control firstSelect gonext" value="@ViewBag.TafsilCode" />
+                        </div>
+                    </div>
                     <div class="row mb-1">
                         <label class="col-sm-3 col-form-label" asp-for="Name"></label>
                         <div class="col-sm-9">
-                            <input type="text" asp-for="Name" class="form-control firstSelect gonext" />
+                            <input type="text" asp-for="Name" class="form-control gonext" />
                         </div>
                     </div>
                     <div class="row mb-2">
