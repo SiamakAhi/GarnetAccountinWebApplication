@@ -361,6 +361,11 @@
                                     </li>
 
                                     <li class="menu-item">
+                                        <a asp-action="ElectronicBookFiles" asp-controller="ElectronicBookManager" asp-area="Accounting" class="menu-link">
+                                            <div data-i18n="Electronc book files manager"> ارسال دفتر الکترونیک</div>
+                                        </a>
+                                    </li>
+                                    <li class="menu-item">
                                         <a asp-action="SellerAccSetting" asp-controller="accsettings" asp-area="Accounting" class="menu-link">
                                             <div data-i18n="Layouts">تنظیمات حسابداری</div>
                                         </a>
@@ -368,6 +373,8 @@
 
                                 }
                             </ul>
+
+
                         </li>
 
                         @if (User.IsInRole("AccountingManager"))

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GarnetAccounting.Areas.Accounting.Controllers
 {
     [Area("Accounting")]
-    [Authorize]
+    [Authorize(Roles = "AccountingManager,AccountingBoss,AccountingUser")]
     public class AccFuncController : Controller
     {
         private readonly IAccBaseInfoService _base;

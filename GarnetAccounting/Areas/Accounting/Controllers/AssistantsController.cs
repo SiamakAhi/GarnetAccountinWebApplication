@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GarnetAccounting.Areas.Accounting.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "AccountingManager,AccountingBoss,AccountingUser")]
     [Area("Accounting")]
     public class AssistantsController : Controller
     {

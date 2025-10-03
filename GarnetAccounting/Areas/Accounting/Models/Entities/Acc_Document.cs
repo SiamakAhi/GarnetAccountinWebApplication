@@ -27,5 +27,8 @@ namespace GarnetAccounting.Areas.Accounting.Models.Entities
 
         public virtual Acc_FinancialPeriod DocPeriod { get; set; }
         public virtual ICollection<Acc_Article> DocArticles { get; set; }
+
+        // Electronic book file
+        public int? eBookFileId { get; set; }
     }
 }

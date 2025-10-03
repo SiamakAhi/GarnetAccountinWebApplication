@@ -250,6 +250,7 @@ namespace GarnetAccounting.Models
         public DbSet<Acc_MoadianReport> Acc_ModianReports { get; set; }
         public DbSet<Con_Project> Con_Projects { get; set; }
         public DbSet<Acc_ArchiveNumber> Acc_ArchiveNumbers { get; set; }
+        public DbSet<Acc_ElectronicBookMetaData> Acc_ElectronicBookMetaData { get; set; }
 
 
 

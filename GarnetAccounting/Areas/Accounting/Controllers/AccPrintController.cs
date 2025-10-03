@@ -2,6 +2,7 @@
 using GarnetAccounting.Areas.Accounting.Dto;
 using GarnetAccounting.Interfaces;
 using GarnetAccounting.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stimulsoft.Base;
 using Stimulsoft.Report;
@@ -13,6 +14,7 @@ using Stimulsoft.Report.Mvc;
 namespace GarnetAccounting.Areas.Accounting.Controllers
 {
     [Area("Accounting")]
+    [Authorize]
     public class AccPrintController : Controller
     {
         private readonly IAccOperationService _acc;

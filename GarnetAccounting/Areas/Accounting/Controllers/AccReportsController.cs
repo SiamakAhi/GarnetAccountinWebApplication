@@ -4,13 +4,14 @@ using GarnetAccounting.Areas.Accounting.Dto.AccountingReportDtos;
 using GarnetAccounting.Interfaces;
 using GarnetAccounting.Services;
 using GarnetAccounting.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace GarnetAccounting.Areas.Accounting.Controllers
 {
     [Area("Accounting")]
-
+    [Authorize]
     public class AccReportsController : Controller
     {
         private readonly IAccBaseInfoService _base;

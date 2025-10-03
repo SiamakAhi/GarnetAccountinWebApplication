@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GarnetAccounting.Areas.Accounting.Controllers
 {
     [Area("Accounting")]
-    [Authorize]
+    [Authorize(Roles = "AccountingManager,AccountingBoss,AccountingUser")]
     public class DocCreatorController : Controller
     {
         private readonly IAccImportService _importService;

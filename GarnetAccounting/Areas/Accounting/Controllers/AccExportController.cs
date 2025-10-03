@@ -1,11 +1,13 @@
 ﻿using GarnetAccounting.Areas.Accounting.AccountingInterfaces;
 using GarnetAccounting.Areas.Accounting.Dto;
 using GarnetAccounting.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GarnetAccounting.Areas.Accounting.Controllers
 {
     [Area("Accounting")]
+    [Authorize(Roles = "AccountingManager,AccountingBoss")]
     public class AccExportController : Controller
     {
         private readonly IAccExportService _export;

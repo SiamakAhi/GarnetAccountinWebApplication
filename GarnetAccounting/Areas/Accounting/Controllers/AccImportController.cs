@@ -1,10 +1,12 @@
 ﻿using GarnetAccounting.Areas.Accounting.AccountingInterfaces;
 using GarnetAccounting.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GarnetAccounting.Areas.Accounting.Controllers
 {
     [Area("Accounting")]
+    [Authorize(Roles = "AccountingManager,AccountingBoss,AccountingUser")]
     public class AccImportController : Controller
     {
         private readonly IAccImportService _importService;

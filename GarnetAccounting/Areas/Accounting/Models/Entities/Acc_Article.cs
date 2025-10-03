@@ -51,5 +51,9 @@ namespace GarnetAccounting.Areas.Accounting.Models.Entities
         public string? BatchNumber { get; set; }
         public long? BankTransactionId { get; set; }
         public long? MoadianId { get; set; }
+
+        // Electronic book file
+        public int? eBookFileId { get; set; }
+
     }
 }
