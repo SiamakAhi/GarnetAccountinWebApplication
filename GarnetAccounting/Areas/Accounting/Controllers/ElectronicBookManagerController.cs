@@ -9,13 +9,18 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
     [Authorize(Roles = "AccountingManager,AccountingBoss")]
     public class ElectronicBookManagerController : Controller
     {
+        private readonly IAccEbookService _ebook;
         private readonly IAccExportService _export;
         private readonly IGeneralService _gs;
 
-        public ElectronicBookManagerController(IAccExportService export, IGeneralService gs)
+        public ElectronicBookManagerController(
+            IAccExportService export
+            , IGeneralService gs
+            , IAccEbookService ebook)
         {
             _export = export;
             _gs = gs;
+            _ebook = ebook;
         }
 
         public async Task<IActionResult> ElectronicBookFiles()
@@ -27,5 +32,7 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
             int PeriodId = userSett.ActiveSellerPeriod.Value;
             return View();
         }
+
+
     }
 }

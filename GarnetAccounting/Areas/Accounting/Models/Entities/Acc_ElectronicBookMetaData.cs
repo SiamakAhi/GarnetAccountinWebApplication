@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public long SellerId { get; set; }
+        public int PeriodId { get; set; }
         public bool IsSent { get; set; } = false;
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
