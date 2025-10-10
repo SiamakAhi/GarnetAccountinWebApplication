@@ -44,5 +44,10 @@ namespace GarnetAccounting.Areas.Accounting.Dto
         public DateTime? IsDeletedAt { get; set; }
 
         public List<ElectronicBookDto>? eBooks { get; set; }
+        public List<EBookManagerDto>? eBooksMetaData { get; set; }
+
+        //
+        public string? Message { get; set; }
+        public bool Successed { get; set; } = false;
     }
 }

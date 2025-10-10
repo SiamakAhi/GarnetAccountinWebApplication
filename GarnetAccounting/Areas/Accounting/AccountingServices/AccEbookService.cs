@@ -36,6 +36,27 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             }
             return true;
         }
+        public async Task<bool> IsDocumentsBalancedAsync(long sellerId, int periodId, DateTime mindate, DateTime maxdate)
+        {
+            var documents = await _db.Acc_Documents.Include(d => d.DocArticles)
+                .Where(d =>
+                d.StatusId == sellerId
+                && d.PeriodId == periodId
+                && d.IsDeleted == false
+                && (d.DocDate.Date >= mindate && d.DocDate.Date <= maxdate))
+                .ToListAsync();
+            foreach (var document in documents)
+            {
+                long totalBed = document.DocArticles.Sum(a => a.Bed);
+                long totalBes = document.DocArticles.Sum(a => a.Bes);
+
+                if (totalBed != totalBes)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
         public async Task<bool> AreDocumentsDateOrderValidAsync(long sellerId, int periodId, int minDocNumber, int maxDocNumber)
         {
             var documents = await _db.Acc_Documents
@@ -44,6 +65,32 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 && d.PeriodId == periodId
                 && d.IsDeleted == false
                 && (d.DocNumber >= minDocNumber && d.DocNumber <= maxDocNumber))
+                .Select(n => new { date = n.DocDate, number = n.DocNumber }).OrderBy(n => n.number)
+                .ToListAsync();
+
+            if (documents.Count <= 1)
+                return true;
+
+            for (int i = 1; i < documents.Count; i++)
+            {
+                var prev = documents[i - 1];
+                var current = documents[i];
+
+                if (current.date < prev.date)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public async Task<bool> AreDocumentsDateOrderValidAsync(long sellerId, int periodId, DateTime mindate, DateTime maxdate)
+        {
+            var documents = await _db.Acc_Documents
+                .Where(d =>
+                d.StatusId == sellerId
+                && d.PeriodId == periodId
+                && d.IsDeleted == false
+                && (d.DocDate.Date >= mindate && d.DocDate.Date <= maxdate))
                 .Select(n => new { date = n.DocDate, number = n.DocNumber }).OrderBy(n => n.number)
                 .ToListAsync();
 
@@ -88,6 +135,44 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
 
         public async Task<EBookManagerDto> GetEbookAsync(EBookManagerDto dto)
         {
+
+            if (dto.ByDate)
+            {
+                bool checkOrderedByDate = await AreDocumentsDateOrderValidAsync(dto.SellerId, dto.PeriodId, dto.FromDate, dto.ToDate);
+                if (!checkOrderedByDate)
+                {
+                    dto.Successed = false;
+                    dto.Message = "در بازه انتخابی، ترتیب اسناد نادرست است";
+                    return dto;
+                }
+
+                bool checkBalanced = await IsDocumentsBalancedAsync(dto.SellerId, dto.PeriodId, dto.FromDate, dto.ToDate);
+                if (!checkBalanced)
+                {
+                    dto.Successed = false;
+                    dto.Message = "در بازه انتخابی، برخی اسناد تراز نیستند";
+                    return dto;
+                }
+            }
+            else
+            {
+                bool checkOrderedByDate = await AreDocumentsDateOrderValidAsync(dto.SellerId, dto.PeriodId, dto.MinDocNumber, dto.MaxDocNumber);
+                if (!checkOrderedByDate)
+                {
+                    dto.Successed = false;
+                    dto.Message = "در بازه انتخابی، ترتیب اسناد نادرست است";
+                    return dto;
+                }
+
+                bool checkBalanced = await IsDocumentsBalancedAsync(dto.SellerId, dto.PeriodId, dto.MinDocNumber, dto.MaxDocNumber);
+                if (!checkBalanced)
+                {
+                    dto.Successed = false;
+                    dto.Message = "در بازه انتخابی، برخی اسناد تراز نیستند";
+                    return dto;
+                }
+            }
+
             var query = _db.Acc_Articles.AsNoTracking()
                 .Include(n => n.Doc)
                 .Include(n => n.Moein).ThenInclude(n => n.MoeinKol)
@@ -101,6 +186,8 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 query = query.Where(n => n.Doc.DocDate.Date <= dto.FromDate.Date && n.Doc.DocDate.Date >= dto.ToDate.Date);
             else
                 query = query.Where(n => n.Doc.DocNumber <= dto.MinDocNumber && n.Doc.DocNumber >= dto.MaxDocNumber);
+
+
 
             List<ElectronicBookDto> data = new List<ElectronicBookDto>();
             foreach (var x in await query.ToListAsync())
@@ -120,7 +207,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             }
 
             dto.eBooks = data;
-
+            dto.Successed = true;
             return dto;
 
         }

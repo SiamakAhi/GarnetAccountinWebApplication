@@ -117,6 +117,7 @@ builder.Services.AddScoped<IAccSettingService, AccSettingService>();
 builder.Services.AddScoped<IAccAsistantsService, AccAsistantsService>();
 builder.Services.AddScoped<IConProjectService, ConProjectService>();
 builder.Services.AddScoped<IAccDocCreatorService, AccDocCreatorService>();
+builder.Services.AddScoped<IAccEbookService, AccEbookService>();
 
 // Warehouse
 builder.Services.AddScoped<IWarehouseService, WarehouseService>();

@@ -1,4 +1,5 @@
 ﻿using GarnetAccounting.Areas.Accounting.AccountingInterfaces;
+using GarnetAccounting.Areas.Accounting.Dto;
 using GarnetAccounting.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,8 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
             if (userSett == null || userSett.ActiveSellerId == null || userSett.ActiveSellerPeriod == null) { return BadRequest("License not fine."); }
             long SellerId = userSett.ActiveSellerId.Value;
             int PeriodId = userSett.ActiveSellerPeriod.Value;
-            return View();
+            EBookManagerDto model = new EBookManagerDto();
+            return View(model);
         }
 
 

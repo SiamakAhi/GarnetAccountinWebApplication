@@ -1,10 +1,96 @@
-﻿@{
-    ViewData["Title"] = "ElectronicBookFiles";
+﻿@model EBookManagerDto
+
+@{
+    ViewData["Title"] = "دفاتر تجاری االکترونیک";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container">
-   <h4> بخش مدیریت ارسال دفاتر الکترونیکی در حال توسعه است</h4>
+    <h4>  مدیریت ارسال دفاتر الکترونیکی </h4>
 
+    <div class="row">
+        <div class="col-md-4">
+            <h3>جدید</h3>
+            <div class="p-2">
+                <form>
+                    <input type="hidden" asp-for="SellerId" value="@Model.SellerId" />
+                    <input type="hidden" asp-for="PeriodId" value="@Model.PeriodId" />
+                    <input type="hidden" asp-for="ByDate" value="@true" />
+
+                    <div class="form-group mb-2">
+                        <label asp-for="FromDate" class="form-label"></label>
+                        <input type="text" asp-for="FromDate" class="form-control flatpickr-input" />
+                    </div>
+                    <div class="form-group mb-2">
+                        <label asp-for="ToDate" class="form-label"></label>
+                        <input type="text" asp-for="ToDate" class="form-control flatpickr-input" />
+                    </div>
+                    <div class="col-md-12">
+                        <label class="switch">
+                            <input type="checkbox" class="switch-input" id="tst" checked="checked" data-val="true"  name="IsActive" value="true">
+                            <span class="switch-toggle-slider">
+                                <span class="switch-on"></span>
+                                <span class="switch-off"></span>
+                            </span>
+                            <span class="switch-label">کد حساب معین درج شود</span>
+                        </label>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="switch">
+                            <input type="checkbox" class="switch-input" id="tst" checked="checked" data-val="true"  name="IsActive" value="true">
+                            <span class="switch-toggle-slider">
+                                <span class="switch-on"></span>
+                                <span class="switch-off"></span>
+                            </span>
+                            <span class="switch-label">شرح ردیف درج گردد</span>
+                        </label>
+                    </div>
+                    <div class="d-grid mb-3 p-2">
+                        <input type="submit" class="btn btn-primary" value="آماده سازی و پیش نمایش" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h3>سوابق فایل های ارسال شده</h3>
+            <div class="table-responsive">
+                <table class="tavle table-striped">
+                    <thead>
+                        <tr>
+                            <th>ردیف</th>
+                            <th>تاریخ آماده سازی</th>
+                            <th>از تاریخ</th>
+                            <th>تا تاریخ</th>
+                            <th>از سند</th>
+                            <th>تا سند</th>
+                            <th>ارسال شده</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.eBooksMetaData != null && Model.eBooksMetaData.Any())
+                        {
+                            int rownumber = 1;
+                            foreach (var x in Model.eBooksMetaData)
+                            {
+                                <tr>
+                                    <td>@rownumber</td>
+                                    <td>@x.CreateAt.LatinToPersian()</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+
+                                rownumber++;
+                            }
+                        }
+                    </tbody>
+               </table>
+           </div>
+       </div>
+   </div>
 </div>
 
