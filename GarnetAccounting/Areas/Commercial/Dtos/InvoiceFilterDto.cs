@@ -36,6 +36,7 @@ namespace GarnetAccounting.Areas.Commercial.Dtos
         public int PageSize { get; set; } = 25;
         public Guid? DocId { get; set; }
         public int? DocNo { get; set; }
+        public bool FromBody { get; set; } = false;
 
     }
 }

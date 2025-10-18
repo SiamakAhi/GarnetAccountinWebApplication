@@ -81,6 +81,21 @@ namespace GarnetAccounting.Areas.Commercial.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> saleTotalReport(SaleTotalReportDto dto)
+        {
+            if (!_userContext.SellerId.HasValue)
+                return NotFound();
+            dto.filter.SellerId = _userContext.SellerId.Value;
+            dto.filter.PeriodId = _userContext.PeriodId;
+            dto.filter.Invoicetype = 2;
+
+            if (dto.filter.FromBody)
+                dto = await _saleService.GetTotalReportAsync(dto);
+            ViewBag.buyers = await _buyerService.SelectList_Buyers(_userContext.SellerId.Value);
+            dto.filter.FromBody = true;
+            return View(dto);
+        }
+
         [HttpGet]
         public IActionResult comSaleInvoices(InvoiceFilterDto filter)
         {

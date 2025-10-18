@@ -1048,6 +1048,71 @@ namespace GarnetAccounting.Areas.Commercial.ComercialServices
             return grouped;
         }
 
+        public async Task<SaleTotalReportDto> GetTotalReportAsync(SaleTotalReportDto dto)
+        {
+
+            var filter = dto.filter;
+
+            var query = _db.InvoiceItems
+                .AsNoTracking()
+                .Include(i => i.Invoice)
+                .Where(x =>
+                      x.Invoice.InvoiceType == filter.Invoicetype
+                   && x.Invoice.SellerId == filter.SellerId)
+                .AsQueryable();
+
+            // فیلترها
+            if (filter.PeriodId.HasValue)
+            {
+                query = query.Where(i => i.Invoice.FinancePeriodId == filter.PeriodId.Value);
+            }
+            if (!string.IsNullOrEmpty(filter.InvoiceNumber))
+            {
+                query = query.Where(i => i.Invoice.InvoiceNumber.Contains(filter.InvoiceNumber));
+            }
+
+            if (!string.IsNullOrEmpty(filter.srtFromDate))
+            {
+                DateTime startDate = filter.srtFromDate.PersianToLatin();
+                query = query.Where(i => i.Invoice.InvoiceDate >= startDate);
+            }
+
+            if (!string.IsNullOrEmpty(filter.srtToDate))
+            {
+                DateTime endDate = filter.srtToDate.PersianToLatin();
+                query = query.Where(i => i.Invoice.InvoiceDate <= endDate);
+            }
+
+            if (filter.Party.HasValue)
+            {
+                query = query.Where(i => i.Invoice.PartyId == filter.Party.Value);
+            }
+
+            if (!string.IsNullOrEmpty(filter.Remark))
+            {
+                query = query.Where(i => i.Invoice.Remarks.Contains(filter.Remark));
+            }
+
+            if (!string.IsNullOrEmpty(filter.Status))
+            {
+                query = query.Where(i => i.Invoice.status.ToString() == filter.Status);
+            }
+            if (filter.Taged)
+                query = query.Where(n => n.Invoice.flag == true);
+
+            dto.InvoiceQty = await query.GroupBy(n => n.Invoice.InvoiceNumber).CountAsync();
+            dto.PriceBeforDiscount = (long)await query.SumAsync(n => n.PriceBeForDescount);
+            dto.Discount = (long)await query.SumAsync(n => n.Discount);
+            dto.PriceAfterDiscount = (long)await query.SumAsync(n => n.PriceAfterDiscount);
+            dto.Taxable = (long)await query.Where(n => n.VatPrice > 0).SumAsync(n => n.PriceAfterDiscount);
+            dto.NoTaxable = (long)await query.Where(n => n.VatPrice <= 0).SumAsync(n => n.PriceAfterDiscount);
+            dto.VarPrice = (long)await query.SumAsync(n => n.VatPrice);
+            dto.TotalFinalPrice = (long)await query.SumAsync(n => n.FinalPrice);
+
+
+            return dto;
+        }
+
         //===================================== For Doc Creator
         public IQueryable<InvoiceHeaderDto> GetInvoicesForCreateDoc(DocCreatorFilterDto filter)
         {

@@ -130,11 +130,16 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                     IsDeletedBy = n.IsDeletedBy,
                     IsSent = n.IsSent
                 }).OrderBy(n => n.MinDocNumber).ToListAsync();
-            return new List<EBookManagerDto>();
+            return e;
         }
 
         public async Task<EBookManagerDto> GetEbookAsync(EBookManagerDto dto)
         {
+            if (!string.IsNullOrEmpty(dto.strFromDate))
+                dto.FromDate = dto.strFromDate.PersianToLatin();
+
+            if (!string.IsNullOrEmpty(dto.strToDate))
+                dto.ToDate = dto.strToDate.PersianToLatin();
 
             if (dto.ByDate)
             {
@@ -179,34 +184,40 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 .Where(n =>
                    n.Doc.SellerId == dto.SellerId
                 && n.Doc.PeriodId == dto.PeriodId
-                && (!n.IsDeleted || !n.Doc.IsDeleted))
+                && (!n.IsDeleted && !n.Doc.IsDeleted))
                 .AsQueryable();
 
             if (dto.ByDate)
-                query = query.Where(n => n.Doc.DocDate.Date <= dto.FromDate.Date && n.Doc.DocDate.Date >= dto.ToDate.Date);
+                query = query.Where(n => n.Doc.DocDate.Date >= dto.FromDate.Date && n.Doc.DocDate.Date <= dto.ToDate.Date);
             else
-                query = query.Where(n => n.Doc.DocNumber <= dto.MinDocNumber && n.Doc.DocNumber >= dto.MaxDocNumber);
+                query = query.Where(n => n.Doc.DocNumber >= dto.MinDocNumber && n.Doc.DocNumber <= dto.MaxDocNumber);
 
 
 
             List<ElectronicBookDto> data = new List<ElectronicBookDto>();
-            foreach (var x in await query.ToListAsync())
+            var queryData = await query.ToListAsync();
+            foreach (var x in queryData)
             {
                 ElectronicBookDto a = new ElectronicBookDto();
                 a.Row = x.Doc.DocNumber;
+                a.ArtRow = x.RowNumber;
                 a.docDate = x.Doc.DocDate.LatinToPersian();
                 a.KolCode = x.Moein.MoeinKol.KolCode;
                 a.KolName = x.Moein.MoeinKol.KolName;
-                a.MoeinCode = x.Moein.MoeinCode;
-                a.MoeinCode = x.Moein.MoeinName;
-                a.Description = x.Comment;
+                if (dto.InsertMoein)
+                {
+                    a.MoeinCode = x.Moein.MoeinCode;
+                    a.MoeinName = x.Moein.MoeinName;
+                }
+                if (dto.InsertDescription)
+                    a.Description = x.Comment;
                 a.Bed = x.Bed;
                 a.Bes = x.Bes;
 
                 data.Add(a);
             }
 
-            dto.eBooks = data;
+            dto.eBooks = data.OrderBy(n => n.Row).ThenBy(n => n.ArtRow).ToList();
             dto.Successed = true;
             return dto;
 

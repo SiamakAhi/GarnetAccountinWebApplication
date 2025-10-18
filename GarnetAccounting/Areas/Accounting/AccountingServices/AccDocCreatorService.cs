@@ -473,6 +473,12 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 result.Message = "نوع تراکنش (واریز-برداشت) مشخص نیست";
                 return result;
             }
+            if (dto.TransactionsType == 1 && (dto.MoeinId == bankAccount.MoeinId))
+            {
+                result.Message = "ثبت واریزی از حساب های داخلی از این طریق امکان پذیر نیست";
+                return result;
+            }
+
             //=============================================================
 
             var transactions = await _db.TreBankTransactions

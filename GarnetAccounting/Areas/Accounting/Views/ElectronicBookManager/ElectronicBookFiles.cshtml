@@ -5,29 +5,29 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
+<div class="container-fluid px-2">
     <h4>  مدیریت ارسال دفاتر الکترونیکی </h4>
 
     <div class="row">
         <div class="col-md-4">
-            <h3>جدید</h3>
+            <h5 class="text-primary">آماده سازی و استخراج</h5>
             <div class="p-2">
-                <form>
+                <form asp-action="ElectronicBookFiles" asp-controller="ElectronicBookManager" asp-area="Accounting" method="post">
                     <input type="hidden" asp-for="SellerId" value="@Model.SellerId" />
                     <input type="hidden" asp-for="PeriodId" value="@Model.PeriodId" />
                     <input type="hidden" asp-for="ByDate" value="@true" />
 
                     <div class="form-group mb-2">
-                        <label asp-for="FromDate" class="form-label"></label>
-                        <input type="text" asp-for="FromDate" class="form-control flatpickr-input" />
+                        <label asp-for="strFromDate" class="form-label"></label>
+                        <input type="text" asp-for="strFromDate" class="form-control flatpickr-input" />
                     </div>
                     <div class="form-group mb-2">
-                        <label asp-for="ToDate" class="form-label"></label>
-                        <input type="text" asp-for="ToDate" class="form-control flatpickr-input" />
+                        <label asp-for="strToDate" class="form-label"></label>
+                        <input type="text" asp-for="strToDate" class="form-control flatpickr-input" />
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-2">
                         <label class="switch">
-                            <input type="checkbox" class="switch-input" id="tst" checked="checked" data-val="true"  name="IsActive" value="true">
+                            <input type="checkbox" class="switch-input" asp-for="InsertMoein" checked="@Model.InsertMoein" data-val="@Model.InsertMoein" value="@Model.InsertMoein">
                             <span class="switch-toggle-slider">
                                 <span class="switch-on"></span>
                                 <span class="switch-off"></span>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="col-md-12">
                         <label class="switch">
-                            <input type="checkbox" class="switch-input" id="tst" checked="checked" data-val="true"  name="IsActive" value="true">
+                            <input type="checkbox" class="switch-input" asp-for="InsertDescription" checked="@Model.InsertDescription" data-val="@Model.InsertDescription" data-val="@Model.InsertDescription" value="@Model.InsertDescription">
                             <span class="switch-toggle-slider">
                                 <span class="switch-on"></span>
                                 <span class="switch-off"></span>
@@ -45,17 +45,28 @@
                             <span class="switch-label">شرح ردیف درج گردد</span>
                         </label>
                     </div>
-                    <div class="d-grid mb-3 p-2">
-                        <input type="submit" class="btn btn-primary" value="آماده سازی و پیش نمایش" />
-                    </div>
+                    @if (Model.eBooks != null && Model.eBooks.Any() && Model.Successed)
+                    {
+                        <div class="d-flex mb-3 mt-2 p-2 gap-1">
+                            <a class="btn btn-warning" asp-action="ElectronicBookFiles" asp-controller="ElectronicBookManager" asp-area="Accounting">بازگشت</a>
+                            <a class="btn btn-success flex-grow-1 submitCustomForm " data-url="@Url.Action("ExportEBook", "ElectronicBookManager", new { Area = "Accounting" })">استخراج فایل xlsx/CSV</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-grid mb-3 mt-2 p-2">
+                            <input type="submit" class="btn btn-primary" value="آماده سازی و پیش نمایش" />
+                        </div>
+                    }
+
                 </form>
             </div>
         </div>
         <div class="col-md-8">
-            <h3>سوابق فایل های ارسال شده</h3>
+            <h5 class="text-primary">سوابق فایل های ارسال شده</h5>
             <div class="table-responsive">
-                <table class="tavle table-striped">
-                    <thead>
+                <table class="table table-striped">
+                    <thead class="table-primary">
                         <tr>
                             <th>ردیف</th>
                             <th>تاریخ آماده سازی</th>
@@ -74,12 +85,13 @@
                             foreach (var x in Model.eBooksMetaData)
                             {
                                 <tr>
+
                                     <td>@rownumber</td>
                                     <td>@x.CreateAt.LatinToPersian()</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>@x.FromDate.LatinToPersian()</td>
+                                    <td>@x.ToDate.LatinToPersian()</td>
+                                    <td>@x.MinDocNumber</td>
+                                    <td>@x.MaxDocNumber</td>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -87,10 +99,81 @@
                                 rownumber++;
                             }
                         }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8">
+                                    <div class="alert alert-primary mt-4" role="alert">
+                                        <p>شما تاکنون فایلی جهت بارگذاری در سامانه تجارت الکتورنیک، استخراج نکرده اید.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
-               </table>
-           </div>
-       </div>
+                </table>
+            </div>
+
+            @if (!Model.Successed && Model.IsPosted)
+            {
+                <div class="alert alert-danger alert-dismissible mt-4" role="alert">
+                    <h6 class="alert-heading mb-1"><i class="bx bx-xs bx-command me-2"></i>توجـه!</h6>
+                    <span>@Html.Raw(Model.Message?.Replace("/n","<br>"))</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+           
+        </div>
+   </div>
+
+   <div class="">
+        @if (Model.eBooks != null && Model.eBooks.Any() && Model.Successed)
+        {
+            <hr />
+            <h5 class="text-success mt-1">پیش نمایش اطلاعات ارسالی</h5>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-success">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>سند</th>
+                            <th>تاریخ</th>
+                            <th>کد کل</th>
+                            <th>شرح کل</th>
+                            <th>کد معین</th>
+                            <th>شرح معین</th>
+                            <th>بدهکار</th>
+                            <th>بستانکار</th>
+                            <th>شرح ردیف</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.eBooks != null && Model.eBooks.Any())
+                        {
+                            int rownumber = 1;
+                            foreach (var x in Model.eBooks)
+                            {
+                                <tr>
+
+                                    <td>@rownumber</td>
+                                    <td>@x.Row</td>
+                                    <td>@x.docDate</td>
+                                    <td>@x.KolCode</td>
+                                    <td>@x.KolName</td>
+                                    <td>@x.MoeinCode</td>
+                                    <td>@x.MoeinName</td>
+                                    <td class="col-price">@x.Bed.ToPrice()</td>
+                                    <td class="col-price">@x.Bes.ToPrice()</td>
+                                    <td>@x.Description</td>
+                                </tr>
+
+                                rownumber++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
    </div>
 </div>
 

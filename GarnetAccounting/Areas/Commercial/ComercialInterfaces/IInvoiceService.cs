@@ -28,7 +28,7 @@ namespace GarnetAccounting.Areas.Commercial.ComercialInterfaces
         Task<clsResult> CopyInvoicesAsync(CoppyInvoiceSettingDto filter);
         //Report
         Task<List<InvoiceHeaderDto>> GetInvoicesGroupedByCustomer(InvoiceFilterDto filter);
-
+        Task<SaleTotalReportDto> GetTotalReportAsync(SaleTotalReportDto dto);
         //===================================== For Doc Creator
         IQueryable<InvoiceHeaderDto> GetInvoicesForCreateDoc(DocCreatorFilterDto filter);
         Task<List<InvoiceHeaderDto>> GetInvoicesToDtoByIdAsync(List<Guid> Ids);

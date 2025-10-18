@@ -3681,4 +3681,28 @@ tr[data-level="4"] td:nth-child(4) {
         color:#f79009;
         margin-left: 10px;
     }
+
+
+.listreport{
+}
+
+    .listreport > ul{
+        min-width:400px;
+    }
+
+    .listreport > ul > li {
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding: 8px 4px;
+        font-size:16px;
+        border-bottom:1px dotted #8ca6d5
+    }
+        .listreport > ul > li label{
+            color:#201e50;
+        }
+
+.dark-style .listreport > ul > li label {
+    color: #f79009;
+}
     

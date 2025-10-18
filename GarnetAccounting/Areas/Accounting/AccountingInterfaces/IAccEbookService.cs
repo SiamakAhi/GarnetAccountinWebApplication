@@ -10,6 +10,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingInterfaces
         Task<bool> AreDocumentsDateOrderValidAsync(long sellerId, int periodId, DateTime mindate, DateTime maxdate);
 
         Task<List<EBookManagerDto>> GetEbookMetadata(long sellerId, int periodId);
+        Task<EBookManagerDto> GetEbookAsync(EBookManagerDto dto);
 
     }
 }

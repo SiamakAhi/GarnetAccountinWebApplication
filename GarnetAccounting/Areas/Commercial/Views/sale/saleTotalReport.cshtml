@@ -1,0 +1,119 @@
+﻿@model SaleTotalReportDto
+@{
+    ViewData["Title"] = "گزارش جمع فروش";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="card-title p-3 text-primary">فیلتر</h5>
+                    <form asp-action="saleTotalReport" asp-controller="sale" asp-area="Commercial" method="get">
+                        <input type="hidden" asp-for="filter.Invoicetype" value="2" />
+                        <input type="hidden" asp-for="filter.FromBody" value="@true" />
+
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label" asp-for="filter.srtFromDate">از تاریخ‌</label>
+                                <input type="text" asp-for="filter.srtFromDate" class="form-control flatpickr-input" placeholder="YYYY/MM/DD" />
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label" asp-for="filter.srtToDate">تا تاریخ‌</label>
+                                <input type="text" asp-for="filter.srtToDate" class="form-control flatpickr-input" placeholder="YYYY/MM/DD" />
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">خریدار  </label>
+                                <select asp-for="filter.Party" class="form-select select2" asp-items="@ViewBag.buyers">
+                                    <option value="null" selected>همه</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">جستجو در شرح </label>
+                                <input type="text" class="form-control text-center" asp-for="filter.Remark">
+                            </div>
+                            <div class="col-md-12 mb-2">
+                                <div class="form-check form-check-inline">
+                                    <input asp-for="filter.Taged" class="form-check-input" type="checkbox" id="invcTaged">
+                                    <label class="form-check-label" for="invcTaged">
+                                        فقط فاکتورهای نشان شده
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <input type="submit" class="btn btn-primary btn-lg px-5" value="مشاهده" />
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="card-title p-3 text-primary">گزارش کلی فروش</h5>
+                    <div class="listreport">
+                        <ul>
+                            <li>
+                                <label>تعداد فاکتورها</label>
+                                <div>
+                                    <strong>@Model.InvoiceQty</strong>
+                                    <small class="ms-1">عدد</small>
+                                </div>
+                            </li>
+                            <li>
+                                <label>جمع فروش قبل از تخفیف</label>
+                                <div>
+                                    <strong>@Model.PriceBeforDiscount.ToPrice()</strong>
+                                    <small class="ms-1">ريال</small>
+                                </div>
+                            </li>
+                            <li>
+                                <label>جمع تخفیفات</label>
+                                <div>
+                                    <strong>@Model.Discount.ToPrice()</strong>
+                                    <small class="ms-1">ريال</small>
+                                </div>
+                            </li>
+                            <li>
+                                <label>جمع فروش بعداز تخفیف</label>
+                                <div>
+                                    <strong>@Model.PriceAfterDiscount.ToPrice()</strong>
+                                    <small class="ms-1">ريال</small>
+                                </div>
+                            </li>
+                            <li>
+                                <label>جمع فروش مشمول</label>
+                                <div>
+                                    <strong>@Model.Taxable.ToPrice()</strong>
+                                    <small class="ms-1">ريال</small>
+                                </div>
+                            </li>
+                            <li>
+                                <label>جمع فروش غیرمشمول</label>
+                                <div>
+                                    <strong>@Model.NoTaxable.ToPrice()</strong>
+                                    <small class="ms-1">ريال</small>
+                                </div>
+                            </li>
+                            <li>
+                                <label>جمع مبالغ ارزش افزوده</label>
+                                <div>
+                                    <strong>@Model.VarPrice.ToPrice()</strong>
+                                    <small class="ms-1">ريال</small>
+                                </div>
+                            </li>
+                            <li>
+                                <label>جمع نهایی فروش</label>
+                                <div>
+                                    <strong>@Model.TotalFinalPrice.ToPrice()</strong>
+                                    <small class="ms-1">ريال</small>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

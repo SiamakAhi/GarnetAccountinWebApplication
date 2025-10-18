@@ -16,16 +16,29 @@ namespace GarnetAccounting.Areas.Accounting.Dto
         public bool ByDate { get; set; } = false;
 
         [Display(Name = "از تاریخ")]
-        [Required(ErrorMessage = "تاریخ شروع را مشخص کنید")]
         public DateTime FromDate { get; set; }
+
+        [Display(Name = "از تاریخ")]
+        [Required(ErrorMessage = "تاریخ شروع را مشخص کنید")]
+        public string strFromDate { get; set; }
+
+        [Display(Name = "تا تاریخ")]
+        public DateTime ToDate { get; set; }
 
         [Display(Name = "تا تاریخ")]
         [Required(ErrorMessage = "تاریخ آخرین سند را مشخص کنید")]
-        public DateTime ToDate { get; set; }
+        public string strToDate { get; set; }
 
         [Display(Name = "از سند")]
         [Required(ErrorMessage = "شماره سند شروع را مشخص کنید")]
         public int MinDocNumber { get; set; }
+
+        [Display(Name = "درج حساب معین")]
+        public bool InsertMoein { get; set; } = true;
+
+        [Display(Name = "درج شرح آرتیکل")]
+        public bool InsertDescription { get; set; } = true;
+
 
         [Display(Name = "تا سند")]
         [Required(ErrorMessage = "شماره آخرین سند را مشخص کنید")]
@@ -47,7 +60,10 @@ namespace GarnetAccounting.Areas.Accounting.Dto
         public List<EBookManagerDto>? eBooksMetaData { get; set; }
 
         //
+
         public string? Message { get; set; }
         public bool Successed { get; set; } = false;
+        public bool FromBody { get; set; } = false;
+        public bool IsPosted { get; set; } = false;
     }
 }

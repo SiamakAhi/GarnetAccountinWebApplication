@@ -3,6 +3,7 @@
     public class ElectronicBookDto
     {
         public int Row { get; set; }
+        public int ArtRow { get; set; }
         public string docDate { get; set; }
         public string KolCode { get; set; }
         public string KolName { get; set; }
