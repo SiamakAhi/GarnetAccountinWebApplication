@@ -52,13 +52,6 @@ namespace GarnetAccounting.Areas.Commercial.Controllers
             var paginatedInvoices = Pagination<InvoiceHeaderDto>.Create(invoices, filter.CurrentPage, filter.PageSize);
             model.Invoices = paginatedInvoices;
             ViewBag.buyers = await _buyerService.SelectList_Buyers(_userContext.SellerId.Value);
-            ////Total
-            //ViewBag.totalTaxable = await invoices.SumAsync(n => n.TotalTaxable);
-            //ViewBag.totalNoTaxable = await invoices.SumAsync(n => n.TotalNoTaxable);
-            //ViewBag.totalDiscount = await invoices.SumAsync(n => n.TotalDiscount);
-            //ViewBag.totalAfterDiscount = await invoices.SumAsync(n => n.TotalPriceAfterDiscount);
-            //ViewBag.totalVat = await invoices.SumAsync(n => n.TotalVatPrice);
-            //ViewBag.totalFinalPrice = await invoices.SumAsync(n => n.TotalFinalPrice);
 
             return View(model);
         }
@@ -588,6 +581,142 @@ namespace GarnetAccounting.Areas.Commercial.Controllers
 
                 // تنظیم استایل جمع کل
                 var totalRange = worksheet.Range(row, 1, row, 11);
+                totalRange.Style.Font.Bold = true;
+                totalRange.Style.Fill.BackgroundColor = XLColor.LightGreen;
+                totalRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                totalRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                // تنظیم خودکار عرض ستون‌ها
+                worksheet.Columns().AdjustToContents();
+
+                // ذخیره فایل Excel به صورت بایت‌آرایه
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var excelData = stream.ToArray();
+
+                    // بازگشت فایل اکسل به صورت FileContentResult برای دانلود
+                    return new FileContentResult(excelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    {
+                        FileDownloadName = "Garnet Invoices list.xlsx"
+                    };
+                }
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SalesDetailsExcelReport(InvoiceFilterDto filter)
+        {
+            filter.SellerId = _userContext.SellerId.Value;
+            filter.PeriodId = _userContext.PeriodId;
+            // دریافت لیست فاکتورها
+            var invoices = await _saleService.GetSalesDetailsAsync(filter);
+
+            // ایجاد فایل Excel با ClosedXML
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Invoices");
+
+                // تنظیم جهت نوشتار به راست-به-چپ
+                worksheet.RightToLeft = true;
+
+                // افزودن سرستون‌ها
+                worksheet.Cell(1, 1).Value = "ردیف";
+                worksheet.Cell(1, 2).Value = "شماره فاکتور";
+                worksheet.Cell(1, 3).Value = "تاریخ";
+                worksheet.Cell(1, 4).Value = "مشتری";
+                worksheet.Cell(1, 5).Value = "محصول";
+                worksheet.Cell(1, 6).Value = "شناسه کالا";
+                worksheet.Cell(1, 7).Value = "فی";
+                worksheet.Cell(1, 8).Value = "مقدار";
+                worksheet.Cell(1, 9).Value = "جمع مبلغ";
+                worksheet.Cell(1, 10).Value = "تخفیف";
+                worksheet.Cell(1, 11).Value = "مبلغ پس از تخفیف";
+                worksheet.Cell(1, 12).Value = "نرخ ارزش افزوده";
+                worksheet.Cell(1, 13).Value = "مبلغ ارزش افزوده";
+                worksheet.Cell(1, 14).Value = "قابل پرداخت";
+
+                // تنظیم استایل سرستون‌ها
+                var headerRange = worksheet.Range(1, 1, 1, 14);
+                headerRange.Style.Font.Bold = true;
+                headerRange.Style.Fill.BackgroundColor = XLColor.LightBlue;
+                headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                int row = 2;
+                decimal totalAmount = 0;
+                decimal totalPrice = 0;
+                decimal totalDiscountPrice = 0;
+                decimal totalTotalPriceAfterDiscount = 0;
+                decimal totalVatRate = 0;
+                decimal totalVatPrice = 0;
+                decimal totalFinalPrice = 0;
+
+                // وارد کردن داده‌ها به ورک‌شیت
+                foreach (var invoice in invoices)
+                {
+                    worksheet.Cell(row, 1).Value = row - 1; // ردیف
+                    worksheet.Cell(row, 2).Value = invoice.InvoiceNumber;
+                    worksheet.Cell(row, 3).Value = invoice.InvoicePersianDate;
+                    worksheet.Cell(row, 4).Value = invoice.Buyer;
+                    worksheet.Cell(row, 5).Value = invoice.ProductOrServiceName;
+                    worksheet.Cell(row, 6).Value = invoice.stuffUID;
+                    worksheet.Cell(row, 7).Value = Math.Round(invoice.UnitPrice);
+                    worksheet.Cell(row, 8).Value = Math.Round(invoice.Amount, 1);
+                    worksheet.Cell(row, 9).Value = Math.Round(invoice.Price);
+                    worksheet.Cell(row, 10).Value = Math.Round(invoice.DiscountPrice);
+                    worksheet.Cell(row, 11).Value = Math.Round(invoice.TotalPriceAfterDiscount);
+                    worksheet.Cell(row, 12).Value = Math.Round(invoice.VatRate ?? 0);
+                    worksheet.Cell(row, 13).Value = Math.Round(invoice.VatPrice);
+                    worksheet.Cell(row, 14).Value = Math.Round(invoice.FinalPrice);
+
+                    // تنظیم فرمت عددی
+                    worksheet.Cell(row, 5).Style.NumberFormat.Format = "#,##0.0"; // Number with separator and one decimal
+                    for (int col = 6; col <= 14; col++)
+                    {
+                        worksheet.Cell(row, col).Style.NumberFormat.Format = "#,##0"; // Number with separator
+                    }
+
+                    // تنظیم مرزهای سلول‌ها
+                    var dataRange = worksheet.Range(row, 1, row, 14);
+                    dataRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    dataRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                    // محاسبه جمع ستون‌ها
+                    totalAmount += Math.Round(invoice.Amount, 1);
+                    totalPrice += Math.Round(invoice.Price);
+                    totalDiscountPrice += Math.Round(invoice.DiscountPrice);
+                    totalTotalPriceAfterDiscount += Math.Round(invoice.TotalPriceAfterDiscount);
+                    totalVatRate += Math.Round(invoice.VatRate.Value);
+                    totalVatPrice += Math.Round(invoice.VatPrice);
+                    totalFinalPrice += Math.Round(invoice.FinalPrice);
+
+                    row++;
+                }
+
+                // اضافه کردن جمع کل
+                worksheet.Cell(row, 1).Value = "جمع";
+                worksheet.Cell(row, 1).Style.Font.Bold = true;
+
+                worksheet.Cell(row, 8).Value = totalAmount;
+                worksheet.Cell(row, 9).Value = totalPrice;
+                worksheet.Cell(row, 10).Value = totalDiscountPrice;
+                worksheet.Cell(row, 11).Value = totalTotalPriceAfterDiscount;
+                worksheet.Cell(row, 12).Value = totalVatRate;
+                worksheet.Cell(row, 13).Value = totalVatPrice;
+                worksheet.Cell(row, 14).Value = totalFinalPrice;
+
+                // تنظیم فرمت عددی برای جمع کل
+                worksheet.Cell(row, 5).Style.NumberFormat.Format = "#,##0.0"; // Number with separator and one decimal
+                for (int col = 6; col <= 14; col++)
+                {
+                    worksheet.Cell(row, col).Style.NumberFormat.Format = "#,##0"; // Number with separator
+                }
+
+                // تنظیم استایل جمع کل
+                var totalRange = worksheet.Range(row, 1, row, 14);
                 totalRange.Style.Font.Bold = true;
                 totalRange.Style.Fill.BackgroundColor = XLColor.LightGreen;
                 totalRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;

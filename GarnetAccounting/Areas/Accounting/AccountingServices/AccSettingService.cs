@@ -54,6 +54,8 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                     saleDiscountMoeinId = settingDto.saleDiscountMoeinId,
                     ReturnToSaleMoeinId = settingDto.ReturnToSaleMoeinId,
                     SaleVatMoeinId = settingDto.SaleVatMoeinId,
+                    SetTafsilForSaleMoein = settingDto.SetTafsilForSaleMoein,
+                    SetTafsilForSaleVat = settingDto.SetTafsilForSaleVat,
 
                     BuyMoeinId = settingDto.BuyMoeinId,
                     BuyIsAutoGenerate = settingDto.BuyIsAutoGenerate,
@@ -61,6 +63,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                     BuyDiscountMoeinId = settingDto.BuyDiscountMoeinId,
                     ReturnToBuyMoeinId = settingDto.ReturnToBuyMoeinId,
                     BuyVatMoeinId = settingDto.BuyVatMoeinId,
+                    SetTafsilForBuyVat = settingDto.SetTafsilForBuyVat,
 
                     WarehouseIsAutoGenerate = settingDto.WarehouseIsAutoGenerate,
                     WarehouseMoeinId = settingDto.WarehouseMoeinId,
@@ -106,6 +109,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             existingSetting.ReturnToSaleMoeinId = settingDto.ReturnToSaleMoeinId;
             existingSetting.SaleVatMoeinId = settingDto.SaleVatMoeinId;
             existingSetting.SetTafsilForSaleVat = settingDto.SetTafsilForSaleVat;
+            existingSetting.SetTafsilForSaleMoein = settingDto.SetTafsilForSaleMoein;
 
             existingSetting.BuyMoeinId = settingDto.BuyMoeinId;
             existingSetting.BuyPartyMoeinId = settingDto.BuyPartyMoeinId;
@@ -155,6 +159,8 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 saleDiscountMoeinId = settingDto.saleDiscountMoeinId,
                 ReturnToSaleMoeinId = settingDto.ReturnToSaleMoeinId,
                 SaleVatMoeinId = settingDto.SaleVatMoeinId,
+                SetTafsilForSaleVat = settingDto.SetTafsilForSaleVat,
+                SetTafsilForSaleMoein = settingDto.SetTafsilForSaleMoein,
 
                 BuyMoeinId = settingDto.BuyMoeinId,
                 BuyIsAutoGenerate = settingDto.BuyIsAutoGenerate,
@@ -162,6 +168,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 BuyDiscountMoeinId = settingDto.BuyDiscountMoeinId,
                 ReturnToBuyMoeinId = settingDto.ReturnToBuyMoeinId,
                 BuyVatMoeinId = settingDto.BuyVatMoeinId,
+                SetTafsilForBuyVat = settingDto.SetTafsilForBuyVat,
 
                 WarehouseIsAutoGenerate = settingDto.WarehouseIsAutoGenerate,
                 WarehouseMoeinId = settingDto.WarehouseMoeinId,

@@ -1288,5 +1288,63 @@ namespace GarnetAccounting.Areas.Commercial.ComercialServices
             return report;
 
         }
+
+        public async Task<List<InvoiceDetailsDto>> GetSalesDetailsAsync(InvoiceFilterDto filter)
+        {
+            if (filter.Party == 0)
+                filter.Party = null;
+
+            var query = _db.InvoiceItems
+                .Include(n => n.Invoice)
+                .ThenInclude(n => n.InvoiceParty)
+                .Include(n => n.Product)
+                .ThenInclude(n => n.ProductUnits)
+                .Where(n =>
+                n.Invoice.SellerId == filter.SellerId
+                ).AsQueryable();
+
+            if (filter.Party != null)
+                query = query.Where(n => n.Invoice.PartyId == filter.Party);
+            if (!string.IsNullOrEmpty(filter.srtFromDate))
+            {
+                DateTime fromDate = filter.srtFromDate.PersianToLatin();
+                query = query.Where(n => n.Invoice.InvoiceDate >= fromDate);
+            }
+            if (!string.IsNullOrEmpty(filter.srtToDate))
+            {
+                DateTime toDate = filter.srtToDate.PersianToLatin();
+                query = query.Where(n => n.Invoice.InvoiceDate <= toDate);
+            }
+
+            if (filter.PeriodId.HasValue)
+                query = query.Where(n => n.Invoice.FinancePeriodId == filter.PeriodId);
+            if (filter.Taged)
+                query = query.Where(n => n.Invoice.flag == true);
+
+
+            var report = await query.Select(x => new InvoiceDetailsDto
+            {
+                InvoiceNumber = x.Invoice.InvoiceNumber,
+                InvoicePersianDate = x.Invoice.InvoiceDate.LatinToPersian(),
+                ProductOrServiceId = x.ProductId,
+                ProductOrServiceName = x.Product.ProductName,
+                unitId = x.Product.BaseUnitId,
+                UnitCountName = x.Product.BaseUnit.UnitName,
+                Amount = x.TotalQuantity,
+                UnitPrice = x.UnitPrice,
+                Price = x.PriceBeForDescount,
+                DiscountPrice = x.Discount,
+                TotalPriceAfterDiscount = x.PriceAfterDiscount,
+                VatRate = x.VatRate,
+                VatPrice = x.VatPrice,
+                FinalPrice = x.FinalPrice,
+                Buyer = x.Invoice.InvoiceParty.Name,
+                stuffUID = x.Product.UniqueId,
+
+            }).ToListAsync();
+
+            return report;
+
+        }
     }
 }

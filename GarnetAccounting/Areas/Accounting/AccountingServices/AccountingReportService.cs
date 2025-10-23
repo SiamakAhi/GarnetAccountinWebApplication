@@ -287,7 +287,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
 
 
 
-        public async Task<List<Report_BrowserDto>> Report_MoeinAsync(DocFilterDto filter)
+        public async Task<List<Report_BrowserDto>> Report_Moein2Async(DocFilterDto filter)
         {
             List<Report_BrowserDto> accounts = new List<Report_BrowserDto>();
 
@@ -349,6 +349,98 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
 
             return accounts;
         }
+
+        public async Task<List<Report_BrowserDto>> Report_MoeinAsync(DocFilterDto filter)
+        {
+            // تبدیل تاریخ‌ها بیرون از Query
+            if (!string.IsNullOrEmpty(filter.strStartDate))
+                filter.StartDate = filter.strStartDate.PersianToLatin();
+            if (!string.IsNullOrEmpty(filter.strEndDate))
+                filter.EndDate = filter.strEndDate.PersianToLatin();
+
+            var query = _db.Acc_Articles.AsNoTracking()
+                .Where(n => !n.IsDeleted && !n.Doc.IsDeleted
+                            && n.Doc.SellerId == filter.SellerId
+                            && n.Doc.PeriodId == filter.PeriodId
+                            && (filter.KolId == null || n.Moein.KolId == filter.KolId));
+
+            if (filter.docType != null)
+                query = query.Where(n => n.Doc.StatusId == filter.docType.Value);
+
+            if (filter.StartDate.HasValue)
+                query = query.Where(n => n.Doc.DocDate >= filter.StartDate.Value.Date);
+
+            if (filter.EndDate.HasValue)
+                query = query.Where(n => n.Doc.DocDate <= filter.EndDate.Value.Date);
+
+            if (filter.FromDocNumer > 0)
+                query = query.Where(n => n.Doc.DocNumber >= filter.FromDocNumer);
+
+            if (filter.ToDocNumer > 0)
+                query = query.Where(n => n.Doc.DocNumber <= filter.ToDocNumer);
+
+            if (!string.IsNullOrEmpty(filter.Description))
+                query = query.Where(n => n.Doc.Description.Contains(filter.Description));
+
+            var accounts = await query
+                .GroupBy(g => new
+                {
+                    g.MoeinId,
+                    g.Moein.MoeinCode,
+                    g.Moein.MoeinName,
+                    g.Moein.Nature,
+                    g.Moein.KolId,
+                    g.Moein.MoeinKol.KolCode,
+                    g.Moein.MoeinKol.KolName,
+                    g.Moein.MoeinKol.GroupId,
+                    g.Moein.MoeinKol.KolGroup.GroupName,
+                    g.Moein.MoeinKol.Description,
+                    g.Moein.MoeinKol.KolGroup.Order
+                })
+                .Select(g => new Report_BrowserDto
+                {
+                    KolId = g.Key.KolId,
+                    MoeinId = g.Key.MoeinId,
+                    GroupId = g.Key.GroupId,
+                    GroupName = g.Key.GroupName,
+                    KolCode = g.Key.KolCode,
+                    KolName = g.Key.KolName,
+                    MoeinCode = g.Key.MoeinCode,
+                    MoeinName = g.Key.MoeinName,
+                    Description = g.Key.Description,
+                    Nature = g.Key.Nature,
+                    SellerId = filter.SellerId,
+                    Id = g.Key.KolId,
+
+                    Bed = g.Sum(x => x.Bed),
+                    Bes = g.Sum(x => x.Bes),
+
+                    // مانده
+                    Mandeh = g.Sum(x => x.Bed) > g.Sum(x => x.Bes)
+                        ? g.Sum(x => x.Bed) - g.Sum(x => x.Bes)
+                        : g.Sum(x => x.Bes) - g.Sum(x => x.Bed),
+
+                    // ماهیت مانده
+                    MandehNature = (short)(
+                        g.Sum(x => x.Bed) > g.Sum(x => x.Bes) ? 1 :
+                        g.Sum(x => x.Bed) < g.Sum(x => x.Bes) ? 2 : 3),
+
+                    // مانده بدهکار
+                    MandehBed = g.Sum(x => x.Bed) > g.Sum(x => x.Bes)
+                        ? g.Sum(x => x.Bed) - g.Sum(x => x.Bes) : 0,
+
+                    // مانده بستانکار
+                    MandehBes = g.Sum(x => x.Bes) > g.Sum(x => x.Bed)
+                        ? g.Sum(x => x.Bes) - g.Sum(x => x.Bed) : 0
+                })
+                .OrderBy(x => x.GroupId)
+                .ThenBy(x => x.KolCode)
+                .ThenBy(x => x.MoeinCode)
+                .ToListAsync();
+
+            return accounts;
+        }
+
         public async Task<List<Report_BrowserDto>> Report_Tafsil4Async(DocFilterDto filter)
         {
             List<Report_BrowserDto> accounts = new List<Report_BrowserDto>();

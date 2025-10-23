@@ -53,6 +53,7 @@ namespace GarnetAccounting.Areas.Accounting.Models.Entities
         [Display(Name = "حساب معین ارزش افزوده فروش")]
         public int? SaleVatMoeinId { get; set; }
         public bool SetTafsilForSaleVat { get; set; } = true;
+        public bool SetTafsilForSaleMoein { get; set; } = false;
 
         [Display(Name = "حساب معین اسناد خرید")]
         public int? BuyMoeinId { get; set; }

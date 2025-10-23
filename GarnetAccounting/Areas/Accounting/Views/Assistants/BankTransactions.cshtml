@@ -12,26 +12,27 @@
                 <li>
                     <a href="javascript:void(0)" data-url="@Url.Action("ImportBankTransaction", "Assistants", new { Area = "Accounting" })" class="quickaccess-link callform">
                         <i class="bx bx-plus"></i>
-                        <span>بارگذاری گزارش بانک 
+                        <span>
+                            بارگذاری گزارش بانک
                             <span class="text-info">xlsx.</span>
                         </span>
                     </a>
                 </li>
                 <li>
                     <a class="quickaccess-link bulkActionformdata-callmodal"
-                    data-formid="frmBankFilter" data-tableid="tblbanktransactions"
-                    data-url="@Url.Action("CreatetransactionDoc", "DocCreator", new { Area = "Accounting" })"
-                    title="ثبت سند " href="javascript:void(0)">
+                       data-formid="frmBankFilter" data-tableid="tblbanktransactions"
+                       data-url="@Url.Action("CreatetransactionDoc", "DocCreator", new { Area = "Accounting" })"
+                       title="ثبت سند " href="javascript:void(0)">
                         <i class="bx bx-detail"></i>
                         <span>ثبت سند حسابدای</span>
                     </a>
                 </li>
                 <li>
                     <a class="quickaccess-link bulkAction"
-                    data-tableid="tblbanktransactions"
-                    data-url="@Url.Action("saveTransactionAsChecked", "Assistants", new { Area = "Accounting" })"
-                    data-allerttext="تراکنش های انتخاب شده بعنوان چک شده درنظر گرفته شود ؟"
-                    href="javascript:void(0)">
+                       data-tableid="tblbanktransactions"
+                       data-url="@Url.Action("saveTransactionAsChecked", "Assistants", new { Area = "Accounting" })"
+                       data-allerttext="تراکنش های انتخاب شده بعنوان چک شده درنظر گرفته شود ؟"
+                       href="javascript:void(0)">
                         <i class="bx bx-checkbox-checked"></i>
                         <span>ثبت بعنوان چک شده</span>
                     </a>
@@ -110,7 +111,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 mb-1"> 
+                                <div class="col-lg-6 mb-1">
                                     <div class="garnet-input-group1 garnet-input-group-light mb-1">
                                         <label asp-for="filter.AccountId">‌نوع تراکنش</label>
                                         <select class="form-select" asp-for="filter.Transactiontype">
@@ -141,6 +142,14 @@
                             <div class=" d-grid p-2">
                                 <input type="submit" class="garnet-btn garnet-btn-warning mb-2" value="نمایش" />
                             </div>
+                            @if (Model.transactions != null && Model.transactions.Any())
+                            {
+                                <div class="d-grid px-2">
+                                    <a href="javascript:void(0)" data-formid="frmBankFilter" data-url="@Url.Action("BankTransactionEportToExcel", "Assistants", new { Area = "Accounting" })" class="garnet-btn garnet-btn-info  btn-primary mb-1 submitCustomForm">
+                                        خرجی اکسل
+                                    </a>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -173,7 +182,7 @@
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                    @if (Model.transactions.Any())
+                    @if (Model.transactions != null && Model.transactions.Any())
                     {
                         int row = 1;
                         foreach (var x in Model.transactions)
@@ -190,12 +199,12 @@
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
                                             <a class="dropdown-item callform" href="javascript:void(0);"
-                                            data-url="@Url.Action("AddNoteToTransaction", "Assistants", new { Area = "Accounting", Id = x.Id })">
+                                               data-url="@Url.Action("AddNoteToTransaction", "Assistants", new { Area = "Accounting", Id = x.Id })">
                                                 <i class="bx bx-note me-2 text-info"></i>
                                                 یادداشت
                                             </a>
                                             <a class="dropdown-item accAjaxPost" href="javascript:void(0);"
-                                               data-url="@Url.Action("TransactionCheckToggle", "Assistants", new { Area = "Accounting"})" data-target="@x.Id">
+                                               data-url="@Url.Action("TransactionCheckToggle", "Assistants", new { Area = "Accounting" })" data-target="@x.Id">
                                                 <i class="bx bx-checkbox  @(x.IsChecked ?"bx-bx-checkbox":"bx-checkbox-checked")" me-2 text-info"></i>
                                                 @if (x.IsChecked)
                                                 {
@@ -270,7 +279,7 @@
                                 <span class="text-sm-end">ريال</span>
                             </div>
                         </li>
-                      <li></li>
+                        <li></li>
                     </ul>
                 </div>
             </div>
@@ -281,7 +290,7 @@
 
 <script type="text/javascript">
 
-      
+
     document.querySelectorAll('#tblbanktransactions tbody tr').forEach(row => {
         // اضافه کردن رویداد click به هر ردیف
         row.addEventListener('click', function (event) {

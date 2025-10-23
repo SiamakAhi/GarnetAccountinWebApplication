@@ -338,6 +338,94 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
 
             return Json(result.ToJsonResult());
         }
+
+        public async Task<IActionResult> BankTransactionEportToExcel(BankReportFilterDto filter)
+        {
+            if (!_user.SellerId.HasValue || !_user.PeriodId.HasValue) return NoContent();
+
+            BankTransactionViewModel model = new BankTransactionViewModel();
+            filter.SellerId = _user.SellerId.Value;
+            if (filter.ShowAll)
+            {
+                filter.HasDoc = null;
+                filter.IsChecked = null;
+            }
+
+            if (!string.IsNullOrEmpty(filter?.strFromDate))
+                filter.FromDate = filter.strFromDate.PersianToLatin();
+            if (!string.IsNullOrEmpty(filter?.strToDate))
+                filter.ToDate = filter.strToDate.PersianToLatin();
+
+            model.filter = filter;
+            model.transactions = await _bankImporter.GetBankTransactionsAsync(filter);
+            if (model.transactions == null || model.transactions.Count <= 0)
+                return View("BankTransactions");
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Transaction");
+                worksheet.RightToLeft = true;
+
+                worksheet.Cell(1, 1).Value = "ردیف";
+                worksheet.Cell(1, 2).Value = "تاریخ";
+                worksheet.Cell(1, 3).Value = "ساعت";
+                worksheet.Cell(1, 4).Value = "پیگیری";
+                worksheet.Cell(1, 5).Value = "نوع عملیات";
+                worksheet.Cell(1, 6).Value = "کد عملیات";
+                worksheet.Cell(1, 7).Value = "شرح";
+                worksheet.Cell(1, 8).Value = "شرح کاربر";
+                worksheet.Cell(1, 9).Value = "واریز";
+                worksheet.Cell(1, 10).Value = "برداشت";
+                worksheet.Cell(1, 11).Value = "مانده";
+
+                var headerRange = worksheet.Range(1, 1, 1, 11);
+                headerRange.Style.Font.Bold = true;
+                headerRange.Style.Fill.BackgroundColor = XLColor.LightBlue;
+                headerRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                int row = 2;
+                foreach (var z in model.transactions)
+                {
+                    worksheet.Cell(row, 1).Value = row;
+                    worksheet.Cell(row, 2).Value = z.Date?.LatinToPersian();
+                    worksheet.Cell(row, 3).Value = z.Time;
+                    worksheet.Cell(row, 4).Value = z.DocumentNumber;
+                    worksheet.Cell(row, 5).Value = z.Operation;
+                    worksheet.Cell(row, 6).Value = z.OperationCode;
+                    worksheet.Cell(row, 7).Value = z.Description;
+                    worksheet.Cell(row, 8).Value = z.Note;
+                    worksheet.Cell(row, 9).Value = z.Debtor;
+                    worksheet.Cell(row, 10).Value = z.Creditor;
+                    worksheet.Cell(row, 11).Value = z.Balance;
+
+
+                    worksheet.Cell(row, 9).Style.NumberFormat.Format = "#,##0";
+                    worksheet.Cell(row, 10).Style.NumberFormat.Format = "#,##0";
+                    worksheet.Cell(row, 11).Style.NumberFormat.Format = "#,##0";
+
+                    row++;
+                }
+
+                worksheet.Columns().AdjustToContents();
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var excelData = stream.ToArray();
+
+                    // بازگشت فایل اکسل به صورت FileContentResult برای دانلود
+                    return new FileContentResult(excelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    {
+                        FileDownloadName = "Garnet Invoices list.xlsx"
+                    };
+                }
+
+            }
+
+
+        }
         //
         [HttpPost]
         public async Task<IActionResult> DeleteTransactions(List<long> items)

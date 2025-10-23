@@ -1008,6 +1008,12 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                         saleArticle.RowNumber = row;
                         saleArticle.AccountantRemark = a.Id.ToString();
                         saleArticle.ArchiveCode = a.InvoiceNumber;
+                        if (accSett.SetTafsilForSaleMoein)
+                        {
+                            saleArticle.Tafsil4Id = a.PartyTafsilId;
+                            saleArticle.Tafsil4Name = a.PartyName;
+                        }
+
                         row++;
                         Articles.Add(saleArticle);
 
@@ -1032,6 +1038,13 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                             saleVatArticle.RowNumber = row;
                             saleVatArticle.AccountantRemark = a.Id.ToString();
                             saleVatArticle.ArchiveCode = a.InvoiceNumber;
+
+                            if (accSett.SetTafsilForSaleVat)
+                            {
+                                saleVatArticle.Tafsil4Id = a.PartyTafsilId;
+                                saleVatArticle.Tafsil4Name = a.PartyName;
+                            }
+
                             row++;
                             Articles.Add(saleVatArticle);
                         }
@@ -1056,6 +1069,12 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                             saleDiscountArticle.RowNumber = row;
                             saleDiscountArticle.AccountantRemark = a.Id.ToString();
                             saleDiscountArticle.ArchiveCode = a.InvoiceNumber;
+
+                            if (accSett.SetTafsilForSaleMoein)
+                            {
+                                saleDiscountArticle.Tafsil4Id = a.PartyTafsilId;
+                                saleDiscountArticle.Tafsil4Name = a.PartyName;
+                            }
                             row++;
                             Articles.Add(saleDiscountArticle);
                         }

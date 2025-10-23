@@ -54,6 +54,9 @@ namespace GarnetAccounting.Areas.Accounting.Dto
         public int? SaleVatMoeinId { get; set; }
         public bool SetTafsilForSaleVat { get; set; } = true;
 
+        [Display(Name = "برای اسناد فروش تفصیل خریدار درج شود")]
+        public bool SetTafsilForSaleMoein { get; set; } = false;
+
         [Display(Name = "حساب معین اسناد خرید")]
         public int? BuyMoeinId { get; set; }
         [Display(Name = "حساب معین طرف حساب در فاکتور خرید (بستانکاران تجاری)")]

@@ -41,7 +41,7 @@
                 <div class="tab-content">
                     <div class="tab-pane fade p-2 active show" id="navs-top-accounting" role="tabpanel">
                         <div class="inner-container bg-light">
-                            
+
                             <div class="row">
                                 <div class="divider text-start divider-info mt-3 mb-2">
                                     <div class="divider-text">تنظیمات بستن حساب ها</div>
@@ -52,16 +52,16 @@
                                         <div class="mb-2">
                                             <input type="radio" asp-for="IsTemprory" id="istemp" value="@true" />
                                             <label for="istemp">
-                                                 موقت
+                                                موقت
                                             </label>
                                         </div>
-                                      <div>
+                                        <div>
                                             <input type="radio" asp-for="IsTemprory" id="notemp" value="@false" />
                                             <label for="notemp">
                                                 (دائم) ادواری
                                             </label>
-                                      </div>
-                                    
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -87,14 +87,14 @@
                             </div>
 
                             <div class="row">
-                              
+
                                 <div class="col-md-6 mb-2">
                                     <label class="form-label" asp-for="KholaseSoodVaZianMoeinId"></label>
                                     <select type="text" asp-for="KholaseSoodVaZianMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
                                         <option value="null">انتخاب</option>
                                     </select>
                                 </div>
-                                 <div class="col-md-6 mb-2">
+                                <div class="col-md-6 mb-2">
                                     <label class="form-label" asp-for="SoodVaZianAnbashtehMoeinId"></label>
                                     <select type="text" asp-for="SoodVaZianAnbashtehMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
                                         <option value="null">انتخاب</option>
@@ -119,7 +119,7 @@
                                         <option value="null">انتخاب</option>
                                     </select>
                                 </div>
-                                
+
                             </div>
                             <div class="row">
 
@@ -192,8 +192,8 @@
                                         <option value="mull">انتخاب</option>
                                     </select>
                                 </div>
-                                
-                               
+
+
                                 <div class="col-md-4 mb-2">
                                     <label class="form-label" asp-for="BuyVatMoeinId"></label>
                                     <select type="text" asp-for="BuyVatMoeinId" class="select2 form-control" asp-items="ViewBag.Moeins">
@@ -222,7 +222,7 @@
                                         <input type="checkbox" asp-for="SetTafsilForBuyVat" />
                                     </div>
                                 </div>
-                               
+
                                 <div class="col-md-4 mb-2 mt-4">
                                     <div class="dataentry-buttons">
                                         <a href="javascript:void(0)" class="btn btn-primary mb-2 accAjaxSubmit"> ذخیـره تنظیمات</a>
@@ -230,7 +230,7 @@
                                 </div>
                             </div>
                         </div>
-                      
+
                     </div>
                     <div class="tab-pane fade p-2" id="navs-top-sale" role="tabpanel">
                         <div class="inner-container bg-light">
@@ -280,6 +280,12 @@
                                         <input type="checkbox" asp-for="SetTafsilForSaleVat" />
                                     </div>
                                 </div>
+                                <div class="col-md-6 mb-2 mt-2">
+                                    <div class="garnet-checkbox-group">
+                                        <label asp-for="SetTafsilForSaleMoein"> </label>
+                                        <input type="checkbox" asp-for="SetTafsilForSaleMoein" />
+                                    </div>
+                                </div>
                                 <div class="col-md-4 mb-2 mt-4">
                                     <div class="dataentry-buttons">
                                         <a href="javascript:void(0)" class="btn btn-primary mb-2 accAjaxSubmit"> ذخیـره تنظیمات</a>
@@ -287,7 +293,7 @@
                                 </div>
                             </div>
                         </div>
-                      
+
                     </div>
                     <div class="tab-pane fade p-2" id="navs-top-warehouse" role="tabpanel">
                         <div class="inner-container bg-light">
@@ -340,7 +346,7 @@
                                         <option value="mull">انتخاب</option>
                                     </select>
                                 </div>
-                               
+
                                 <div class="col-md-6 mb-2 mt-2">
                                     <div class="garnet-checkbox-group">
                                         <label asp-for="sz_CalcSystemicPayanDoreh"></label>

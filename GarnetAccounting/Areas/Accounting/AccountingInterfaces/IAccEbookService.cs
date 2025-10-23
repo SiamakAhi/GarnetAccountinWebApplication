@@ -11,6 +11,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingInterfaces
 
         Task<List<EBookManagerDto>> GetEbookMetadata(long sellerId, int periodId);
         Task<EBookManagerDto> GetEbookAsync(EBookManagerDto dto);
+        Task<EBookManagerDto> AddMetaDataAsync(EBookManagerDto dto);
 
     }
 }

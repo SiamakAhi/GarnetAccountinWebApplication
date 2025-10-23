@@ -33,5 +33,6 @@ namespace GarnetAccounting.Areas.Commercial.ComercialInterfaces
         IQueryable<InvoiceHeaderDto> GetInvoicesForCreateDoc(DocCreatorFilterDto filter);
         Task<List<InvoiceHeaderDto>> GetInvoicesToDtoByIdAsync(List<Guid> Ids);
         Task<List<InvoiceDetailsDto>> SaleReportByStufAsync(InvoiceFilterDto filter);
+        Task<List<InvoiceDetailsDto>> GetSalesDetailsAsync(InvoiceFilterDto filter);
     }
 }

@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = "دفاتر تجاری االکترونیک";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    bool hasData = false;
+    if (Model.eBooks != null && Model.eBooks.Any() && Model.Successed)
+        hasData = true;
 }
 
 <div class="container-fluid px-2">
@@ -12,22 +16,23 @@
         <div class="col-md-4">
             <h5 class="text-primary">آماده سازی و استخراج</h5>
             <div class="p-2">
-                <form asp-action="ElectronicBookFiles" asp-controller="ElectronicBookManager" asp-area="Accounting" method="post">
+                <form asp-action="ElectronicBookFiles" asp-controller="ElectronicBookManager" asp-area="Accounting" method="post" id="frmebookfilter">
                     <input type="hidden" asp-for="SellerId" value="@Model.SellerId" />
                     <input type="hidden" asp-for="PeriodId" value="@Model.PeriodId" />
+                    <input type="hidden" asp-for="CreateBy" value="@User.Identity.Name" />
                     <input type="hidden" asp-for="ByDate" value="@true" />
-
+                   
                     <div class="form-group mb-2">
                         <label asp-for="strFromDate" class="form-label"></label>
-                        <input type="text" asp-for="strFromDate" class="form-control flatpickr-input" />
+                        <input type="text" asp-for="strFromDate" readonly="@(hasData ? true :false)" class="form-control flatpickr-input" />
                     </div>
                     <div class="form-group mb-2">
                         <label asp-for="strToDate" class="form-label"></label>
-                        <input type="text" asp-for="strToDate" class="form-control flatpickr-input" />
+                        <input type="text" asp-for="strToDate" readonly="@(hasData ? true :false)" class="form-control flatpickr-input" />
                     </div>
                     <div class="col-md-12 mt-2">
                         <label class="switch">
-                            <input type="checkbox" class="switch-input" asp-for="InsertMoein" checked="@Model.InsertMoein" data-val="@Model.InsertMoein" value="@Model.InsertMoein">
+                            <input type="checkbox" class="switch-input" readonly="@(hasData ? true :false)" asp-for="InsertMoein" checked="@Model.InsertMoein" data-val="@Model.InsertMoein" value="@Model.InsertMoein">
                             <span class="switch-toggle-slider">
                                 <span class="switch-on"></span>
                                 <span class="switch-off"></span>
@@ -37,7 +42,7 @@
                     </div>
                     <div class="col-md-12">
                         <label class="switch">
-                            <input type="checkbox" class="switch-input" asp-for="InsertDescription" checked="@Model.InsertDescription" data-val="@Model.InsertDescription" data-val="@Model.InsertDescription" value="@Model.InsertDescription">
+                            <input type="checkbox" class="switch-input" readonly="@(hasData ? true :false)" asp-for="InsertDescription" checked="@Model.InsertDescription" data-val="@Model.InsertDescription" data-val="@Model.InsertDescription" value="@Model.InsertDescription">
                             <span class="switch-toggle-slider">
                                 <span class="switch-on"></span>
                                 <span class="switch-off"></span>
@@ -49,7 +54,7 @@
                     {
                         <div class="d-flex mb-3 mt-2 p-2 gap-1">
                             <a class="btn btn-warning" asp-action="ElectronicBookFiles" asp-controller="ElectronicBookManager" asp-area="Accounting">بازگشت</a>
-                            <a class="btn btn-success flex-grow-1 submitCustomForm " data-url="@Url.Action("ExportEBook", "ElectronicBookManager", new { Area = "Accounting" })">استخراج فایل xlsx/CSV</a>
+                            <a class="btn btn-success flex-grow-1 submitCustomForm " data-formid="frmebookfilter" data-url="@Url.Action("GenerateEBook", "ElectronicBookManager", new { Area = "Accounting" })">استخراج فایل xlsx/CSV</a>
                         </div>
                     }
                     else
@@ -86,14 +91,14 @@
                             {
                                 <tr>
 
-                                    <td>@rownumber</td>
-                                    <td>@x.CreateAt.LatinToPersian()</td>
-                                    <td>@x.FromDate.LatinToPersian()</td>
-                                    <td>@x.ToDate.LatinToPersian()</td>
-                                    <td>@x.MinDocNumber</td>
-                                    <td>@x.MaxDocNumber</td>
-                                    <td></td>
-                                    <td></td>
+                                    <td class="text-center">@rownumber</td>
+                                    <td class="text-center">@x.CreateAt.LatinToPersian()</td>
+                                    <td class="text-center">@x.FromDate.LatinToPersian()</td>
+                                    <td class="text-center">@x.ToDate.LatinToPersian()</td>
+                                    <td class="text-center">@x.MinDocNumber</td>
+                                    <td class="text-center">@x.MaxDocNumber</td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
                                 </tr>
 
                                 rownumber++;
