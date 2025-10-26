@@ -263,26 +263,26 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
 
                             dto.RowNumber = worksheet.Cell(row, 1).GetValue<int>();
                             dto.DocNumber = worksheet.Cell(row, 2).GetValue<int>();
-                            dto.OldDocnumber = worksheet.Cell(row, 2).GetValue<int>();
-                            dto.PersianDate = worksheet.Cell(row, 3).GetValue<string>();
+                            dto.OldDocnumber = worksheet.Cell(row, 3).GetValue<int>();
+                            dto.PersianDate = worksheet.Cell(row, 4).GetValue<string>();
                             if (string.IsNullOrEmpty(dto.PersianDate))
                                 continue;
                             dto.DocDate = dto.PersianDate.PersianToLatin();
-                            dto.DocDescription = worksheet.Cell(row, 4).GetValue<string>();
-                            dto.Description = worksheet.Cell(row, 5).GetValue<string>();
-                            dto.Bed = worksheet.Cell(row, 6).GetValue<Int64>();
-                            dto.Bes = worksheet.Cell(row, 7).GetValue<Int64>();
+                            dto.DocDescription = worksheet.Cell(row, 5).GetValue<string>();
+                            dto.Description = worksheet.Cell(row, 6).GetValue<string>();
+                            dto.Bed = worksheet.Cell(row, 7).GetValue<Int64>();
+                            dto.Bes = worksheet.Cell(row, 8).GetValue<Int64>();
 
                             dto.KolName = worksheet.Cell(row, 9).GetValue<string>();
-                            dto.KolCode = worksheet.Cell(row, 8).GetValue<string>();
+                            dto.KolCode = worksheet.Cell(row, 10).GetValue<string>();
 
                             dto.MoeinName = worksheet.Cell(row, 11).GetValue<string>();
-                            dto.MoeinCod = worksheet.Cell(row, 10).GetValue<string>();
+                            dto.MoeinCod = worksheet.Cell(row, 12).GetValue<string>();
                             if (string.IsNullOrEmpty(dto.MoeinCod))
                                 continue;
-                            dto.TafsilName = worksheet.Cell(row, 12).GetValue<string>();
-                            dto.TafsilName5 = worksheet.Cell(row, 13).GetValue<string>();
-                            dto.TafsilName6 = worksheet.Cell(row, 14).GetValue<string>();
+                            dto.TafsilName = worksheet.Cell(row, 13).GetValue<string>();
+                            dto.TafsilName5 = worksheet.Cell(row, 14).GetValue<string>();
+                            dto.TafsilName6 = worksheet.Cell(row, 15).GetValue<string>();
 
                             Artics.Add(dto);
 
@@ -370,15 +370,15 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 result.Message = "دوره مالی معتبر نیست";
             }
 
-            List<Acc_Document> docs = documents.GroupBy(d => d.DocNumber).Select(n => new Acc_Document
+            List<Acc_Document> docs = documents.GroupBy(d => new { d.DocNumber, d.OldDocnumber, d.DocDate }).Select(n => new Acc_Document
             {
                 Id = Guid.NewGuid(),
                 SellerId = sellerId,
                 PeriodId = peropdId,
-                AtfNumber = n.Key,
-                DocNumber = n.Key,
-                AutoDocNumber = n.Key,
-                DocDate = n.Max(d => d.DocDate),
+                AtfNumber = n.Key.OldDocnumber,
+                DocNumber = n.Key.DocNumber,
+                AutoDocNumber = n.Key.OldDocnumber,
+                DocDate = n.Key.DocDate,
                 TypeId = 1,
                 CreateDate = DateTime.Now,
                 CreatorUserName = userName,
@@ -395,7 +395,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 List<Acc_Article> docArts = new List<Acc_Article>();
                 var artics = documents.Where(n => n.DocNumber == doc.DocNumber)
                     .OrderBy(n => n.TafsilName)
-                    .ThenByDescending(n => n.Bed).ThenByDescending(n => n.Bes).ToList();
+                    .ToList();
                 int row = 1;
                 foreach (var a in artics)
                 {

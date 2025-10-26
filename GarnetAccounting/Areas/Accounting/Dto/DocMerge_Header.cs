@@ -34,7 +34,7 @@ namespace GarnetAccounting.Areas.Accounting.Dto
         public int? AtfNumber { get; set; }
 
         [Display(Name = "شرح سند")]
-        public string? Description { get; set; }
+        public string? Description { get; set; } = " بابت منظور نمودن مدارک مثبته ضمیمه سند حسابداری";
 
         [Display(Name = "زیرسیستم صادر کننده سند")]
         public int? SubsystemId { get; set; }
@@ -50,6 +50,7 @@ namespace GarnetAccounting.Areas.Accounting.Dto
         public List<Guid> DocsForMerge { get; set; }
         public bool MergeSameAccount { get; set; }
         public bool MergeSameTafsil { get; set; }
+        public bool AddDocsMergedNumbetToDesc { get; set; } = true;
 
     }
 }

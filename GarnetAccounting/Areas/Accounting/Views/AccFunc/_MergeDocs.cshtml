@@ -45,7 +45,9 @@
                         </div>
                         <div class="col-md-12 mb-2">
                             @*<label class="form-label" asp-for="Doc.Description"></label>*@
-                            <textarea rows="1" asp-for="Doc.Description" class="form-control form-control-sm  gonext" placeholder="شـرح سنـد"></textarea>
+                            <textarea rows="1" asp-for="Doc.Description" class="form-control form-control-sm  gonext" placeholder="شـرح سنـد" >
+                                بابت منظور نمودن مدارک مثبته ضمیمه سند حسابداری
+                            </textarea>
                         </div>
                     </div>
                     <div class="row mt-2">
@@ -56,7 +58,11 @@
                             </div>
                             <div class="form-check form-check-info">
                                 <input class="form-check-input mdsa" asp-for="Doc.MergeSameTafsil" type="checkbox" checked="checked" data-target="#tbl-mergedocs" data-url="@Url.Action("DocMerge_GetArticles","AccFunc",new{Area="Accounting"})">
-                                <label class="form-check-label fw-100" asp-for="Doc.MergeSameTafsil">ادغام حساب ها در سند با درنظر گرفتن حساب های تفصیلی 4 انجام شود. </label>
+                                <label class="form-check-label fw-100" asp-for="Doc.MergeSameTafsil">حساب های تفصیلی مشابه تجمیع نشوند  </label>
+                            </div>
+                            <div class="form-check form-check-info">
+                                <input class="form-check-input" asp-for="Doc.AddDocsMergedNumbetToDesc" type="checkbox" checked="checked">
+                                <label class="form-check-label fw-100" asp-for="Doc.AddDocsMergedNumbetToDesc">شماره سیستمی اسناد ادغام شده در شرح سند درج شود</label>
                             </div>
                         </div>
                         <div class="col-md-3 d-grid px-3">

@@ -1981,9 +1981,10 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
 
         public async Task<List<DocMerge_Article>> GetMergeDocsArticlesAsync(Guid[] Docs, bool mergeAccount = false, bool keepTafsil = true)
         {
+
             var oldArticles = await _db.Acc_Articles
                .Include(n => n.Doc).Include(n => n.Moein).ThenInclude(n => n.MoeinKol)
-                .Where(n => n.IsDeleted == false && Docs.Contains(n.DocId))
+                .Where(n => (!n.IsDeleted && !n.Doc.IsDeleted) && Docs.Contains(n.DocId))
                 .ToListAsync();
             if (oldArticles == null) return null;
 
@@ -2078,7 +2079,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                         Bed = n.Sum(x => x.Bed),
                         Bes = n.Sum(x => x.Bes),
 
-                    }).OrderByDescending(n => n.Bes).ToList();
+                    }).OrderBy(n => n.DocNumber).ThenBy(n => n.RowNumber).ToList();
                     lst.AddRange(besArts);
                     //
                     return lst;
@@ -2121,7 +2122,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             }
 
 
-            return lst;
+            return lst.OrderBy(n => n.DocNumber).ThenBy(n => n.RowNumber).ToList();
         }
         //
         public async Task<clsResult> AddMergedDocsAsync(DocMerge_Header dto)
@@ -2131,7 +2132,8 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             result.ShowMessage = true;
             var oldArticles = await _db.Acc_Articles
                .Include(n => n.Doc).Include(n => n.Moein).ThenInclude(n => n.MoeinKol)
-                .Where(n => n.IsDeleted == false && dto.DocsForMerge.Contains(n.DocId))
+                .Where(n => (!n.IsDeleted && !n.Doc.IsDeleted) && dto.DocsForMerge.Contains(n.DocId))
+                .OrderBy(n => n.Doc.DocNumber).ThenBy(n => n.RowNumber)
                 .ToListAsync();
             var oldDocNumbers = oldArticles.Select(n => n.Doc.AutoDocNumber).Distinct().ToList();
             string oldDocSign = "ادغام سند(های) ";
@@ -2158,7 +2160,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             n.strDocDate = dto.strDocDate;
             n.DocDate = dto.DocDate;
             n.IsDeleted = false;
-            if (oldDocNumbers.Count > 1)
+            if (oldDocNumbers.Count > 1 && dto.AddDocsMergedNumbetToDesc)
             {
                 n.Description += oldDocSign;
             }
@@ -2328,6 +2330,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 );
 
             int rownumber = 1;
+
             foreach (var art in lst)
             {
                 art.RowNumber = rownumber;
