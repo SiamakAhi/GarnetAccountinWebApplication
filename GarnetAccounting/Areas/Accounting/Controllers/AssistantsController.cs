@@ -216,6 +216,9 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
                     case 60:
                         result = await _bankImporter.ImportRefahJariAsync(model);
                         break;
+                    case 61:
+                        result = await _bankImporter.ImportRefahJari2Async(model);
+                        break;
                     case 70:
                         result = await _bankImporter.ImportCityBankAsync(model);
                         break;

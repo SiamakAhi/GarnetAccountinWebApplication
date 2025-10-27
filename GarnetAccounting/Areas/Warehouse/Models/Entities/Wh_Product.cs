@@ -96,7 +96,6 @@ namespace GarnetAccounting.Areas.Warehouse.Models.Entities
         public virtual Wh_UnitOfMeasure? PakageUnit { get; set; }
         public virtual ICollection<Wh_ProductUnit> ProductUnits { get; set; } = new List<Wh_ProductUnit>();
         public virtual ICollection<com_InvoiceItem> InvoiceItems { get; set; } = new List<com_InvoiceItem>();
-        public virtual ICollection<Wh_WarehouseDocumentItem> WarehouseDocumentItems { get; set; } = new List<Wh_WarehouseDocumentItem>();
     }
 
 }

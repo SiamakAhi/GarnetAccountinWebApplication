@@ -93,11 +93,6 @@ namespace GarnetAccounting.Models
             builder.ApplyConfiguration<Wh_Product>(new Wh_ProductMapp());
             builder.ApplyConfiguration<Wh_ProductUnit>(new Wh_ProductUnitMapp());
             builder.ApplyConfiguration<Wh_Warehouse>(new Wh_WarehouseMapp());
-            builder.ApplyConfiguration<Wh_WarehouseLocation>(new Wh_WarehouseLocationMapp());
-            builder.ApplyConfiguration<Wh_WarehouseDocument>(new Wh_WarehouseDocumentMapp());
-            builder.ApplyConfiguration<Wh_WarehouseDocumentItem>(new Wh_WarehouseDocumentItemMapp());
-            builder.ApplyConfiguration<Wh_Inventory>(new Wh_InventoryMapp());
-            builder.ApplyConfiguration<Wh_InventoryTransaction>(new Wh_InventoryTransactionMapp());
 
             // Commercial
             builder.ApplyConfiguration<com_Invoice>(new Com_InvoiceMapp());
@@ -268,11 +263,6 @@ namespace GarnetAccounting.Models
         public DbSet<Wh_ProductUnit> Wh_ProductUnits { get; set; }
         public DbSet<Wh_UnitOfMeasure> Wh_UnitOfMeasures { get; set; }
         public DbSet<Wh_Warehouse> Wh_Warehouses { get; set; }
-        public DbSet<Wh_WarehouseLocation> Wh_WarehouseLocations { get; set; }
-        public DbSet<Wh_WarehouseDocument> Wh_WarehouseDocuments { get; set; }
-        public DbSet<Wh_WarehouseDocumentItem> Wh_WarehouseDocumentItems { get; set; }
-        public DbSet<Wh_Inventory> Wh_Inventories { get; set; }
-        public DbSet<Wh_InventoryTransaction> Wh_InventoryTransactions { get; set; }
 
 
         //--Commertial

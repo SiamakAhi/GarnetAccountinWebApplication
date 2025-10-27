@@ -14,9 +14,7 @@ namespace GarnetAccounting.Areas.Warehouse.Models.Mapping
                 .WithMany(n => n.ProductUnits)
                 .HasForeignKey(n => n.ProductId);
 
-            builder.HasOne(n => n.UnitOfMeasure)
-                .WithMany(n => n.ProductUnits)
-                .HasForeignKey(n => n.UnitOfMeasureId);
+
         }
     }
 }

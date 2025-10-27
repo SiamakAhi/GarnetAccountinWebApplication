@@ -28,8 +28,6 @@ namespace GarnetAccounting.Areas.Warehouse.Models.Entities
         // Navigation Properties
         public virtual ICollection<Wh_Product> Products { get; set; } = new List<Wh_Product>();
         public virtual ICollection<Wh_Product> PakageProducts { get; set; } = new List<Wh_Product>();
-        public virtual ICollection<Wh_Inventory> InventoriesBaseUnit { get; set; } = new List<Wh_Inventory>();
-        public virtual ICollection<Wh_Inventory> InventoriesPackageUnit { get; set; } = new List<Wh_Inventory>();
-        public virtual ICollection<Wh_ProductUnit>? ProductUnits { get; set; }
+
     }
 }

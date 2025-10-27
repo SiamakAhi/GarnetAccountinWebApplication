@@ -30,9 +30,6 @@ namespace GarnetAccounting.Areas.Warehouse.Models.Entities
         public long? TafsilId { get; set; }
 
 
-        // Navigation Properties
-        public ICollection<Wh_WarehouseLocation>? WarehouseLocations { get; set; }
-        public ICollection<Wh_WarehouseDocument> WarehouseDocuments { get; set; }
     }
 
 }

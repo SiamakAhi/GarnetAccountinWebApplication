@@ -346,6 +346,146 @@ namespace GarnetAccounting.Classes
             return rawData;
         }
 
+        public InvoiceImportDto_Atiran ReadInvoicesFromAtiran404Excel(IFormFile file)
+        {
+            InvoiceImportDto_Atiran rawData = new InvoiceImportDto_Atiran();
+            rawData.Items = new List<ImportRawData_Atiran>();
+            rawData.Errors = new List<ErrorDto>();
 
+            if (file == null || file.Length == 0)
+            {
+                throw new ArgumentException("فایل اکسل معتبر نیست.");
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                file.CopyTo(stream);
+                stream.Position = 0;
+
+                using (var workbook = new XLWorkbook(stream))
+                {
+                    var worksheet = workbook.Worksheet(1);
+                    var rows = worksheet.RowsUsed().Skip(1); // Skipping header row
+                    int rowNumber = 1;
+                    foreach (var row in rows)
+                    {
+                        // Reading values into independent variables
+
+                        long invoiceNumber = row.Cell("D").GetValue<long?>() ?? 0;
+                        if (invoiceNumber == 0)
+                        {
+                            var error = new ErrorDto
+                            {
+                                Code = $"ردیف {rowNumber}",
+                                Error = "شماره فاکتور قید نشده است."
+                            };
+                            rawData.Errors.Add(error);
+                            rowNumber++;
+                            continue;
+                        }
+
+                        string? strInvoiceDate = row.Cell("A").GetValue<string?>();
+                        DateTime invoiceDate = DateTime.Now;
+                        try
+                        { invoiceDate = strInvoiceDate.PersianToLatin(); }
+                        catch
+                        {
+                            var error = new ErrorDto
+                            {
+                                Code = $"ردیف {rowNumber}",
+                                Error = "فرمت تاریخ نادرست است."
+                            };
+                            rawData.Errors.Add(error);
+                            rowNumber++;
+                            continue;
+                        }
+                        string? categoryName = null;
+
+                        string? personCode = row.Cell("B").GetValue<string?>();
+                        string personName = row.Cell("C").GetValue<string>();
+                        string? personNationalId = row.Cell("U").GetValue<string?>();
+                        string? personEcconomicCode = row.Cell("V").GetValue<string?>();
+
+                        string? productCode = "001";
+                        string productName = row.Cell("E").GetValue<string>();
+                        string? pakageUnitCountName = "بسته";
+                        string? baseUnitCountName = "عدد";
+
+                        int qtyBaseUnitInPakage = 0;
+                        decimal qtyPakage = row.Cell("F").GetValue<decimal?>() ?? 0;
+                        decimal qtyBase = row.Cell("G").GetValue<decimal?>() ?? 0;
+
+                        decimal feePackage = row.Cell("I").GetValue<decimal?>() ?? 0;
+                        decimal feeBase = row.Cell("H").GetValue<decimal?>() ?? 0;
+
+                        decimal priceBeforeDiscount = row.Cell("J").GetValue<decimal?>() ?? 0;
+                        decimal discount = row.Cell("L").GetValue<decimal?>() ?? 0;
+                        decimal priceAfterDiscount = row.Cell("M").GetValue<decimal?>() ?? 0;
+
+                        decimal vatRateInPercent = row.Cell("N").GetValue<decimal?>() ?? 0;
+                        decimal vatPrice = row.Cell("O").GetValue<decimal?>() ?? 0;
+                        decimal finalPrice = row.Cell("R").GetValue<decimal?>() ?? 0;
+                        if (finalPrice == 0)
+                            continue;
+
+                        if (string.IsNullOrEmpty(personName))
+                        {
+                            var error = new ErrorDto
+                            {
+                                Code = $"ردیف {rowNumber}",
+                                Error = "نام خریدار قید نشده است."
+                            };
+                            rawData.Errors.Add(error);
+                            rowNumber++;
+                            continue;
+                        }
+                        if (string.IsNullOrEmpty(productName))
+                        {
+                            var error = new ErrorDto
+                            {
+                                Code = $"ردیف {rowNumber}",
+                                Error = "نام کالا یا خدمت قید نشده است."
+                            };
+                            rawData.Errors.Add(error);
+                            rowNumber++;
+                            continue;
+                        }
+
+                        // Create InvoiceExcelImportDto object and add to list
+                        var invoiceDto = new ImportRawData_Atiran
+                        {
+                            InvoiceNumer = invoiceNumber.ToString(),
+                            strDate = strInvoiceDate,
+                            InvoiceDate = invoiceDate,
+                            CategoryName = categoryName,
+                            personCode = personCode,
+                            personName = personName,
+                            personNationalId = personNationalId,
+                            personEcconomicCode = personEcconomicCode,
+                            ProductCode = productCode,
+                            ProductName = productName,
+                            PakageUnitCountName = pakageUnitCountName,
+                            baseUnitCountName = baseUnitCountName,
+                            QtyPakage = qtyPakage,
+                            QtyBase = qtyBase,
+                            QtyBaseUnitInPakage = 1,
+                            Fee = feeBase,
+                            PriceBeforeDiscount = priceBeforeDiscount,
+                            PriceAfterDiscount = priceAfterDiscount,
+                            Discount = discount,
+                            VatPrice = vatPrice,
+                            VatRate = vatRateInPercent,
+                            FinalPrice = finalPrice,
+
+                        };
+
+                        rawData.Items.Add(invoiceDto);
+                        rowNumber++;
+                    }
+                }
+            }
+
+            return rawData;
+        }
     }
 }

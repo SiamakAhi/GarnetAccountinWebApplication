@@ -20,9 +20,16 @@
 
             <form asp-action="bulkCreateInvoice" asp-controller="sale" asp-area="Commercial" method="post" enctype="multipart/form-data">
                 <div class="row mt-1">
-                    <div class="col-12c mb-4">
+                    <div class="col-6 mb-4">
                         <label class="form-label">انتخاب فایل اکسل </label>
                         <input type="file" class="form-control" name="ExcelFile" accept=".xls, .xlsx" placeholder="انتخاب اکسل حاوی اطلاعات کالا یا خدمات" />
+                    </div>
+                    <div class="col-6 mb-4">
+                        <label class="form-label">الگوی اکسل</label>
+                        <select class="form-select" name="template" >
+                            <option value="404">گزارش 1404 آتیران</option>
+                            <option value="403">گزارش 1403 به قبل</option>
+                        </select>
                     </div>
                     <div class="mt-2">
                         <input type="button" class="btn btn-primary mb-2 accAjaxSubmit" value="دریافت و ثبت اطلاعات" />

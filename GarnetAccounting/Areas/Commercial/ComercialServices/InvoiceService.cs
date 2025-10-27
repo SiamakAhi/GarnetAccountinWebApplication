@@ -797,7 +797,7 @@ namespace GarnetAccounting.Areas.Commercial.ComercialServices
             }
             catch (Exception x)
             {
-                result.Message = "در ایجاد گورهی صورتحساب خطایی رخ داده است \n" + x.Message;
+                result.Message = "در ایجاد 'گروهی صورتحساب خطایی رخ داده است \n" + x.Message;
             }
 
             return result;

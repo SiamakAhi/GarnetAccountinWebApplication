@@ -310,12 +310,17 @@ namespace GarnetAccounting.Areas.Commercial.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> bulkCreateInvoice(IFormFile ExcelFile)
+        public async Task<IActionResult> bulkCreateInvoice(IFormFile ExcelFile, short template)
         {
             clsResult result = new clsResult();
             result.Success = false;
             ExcelImporter importer = new ExcelImporter();
-            var data = importer.ReadInvoicesFromAtiranExcel(ExcelFile);
+            var data = new InvoiceImportDto_Atiran();
+            if (template == 404)
+                data = importer.ReadInvoicesFromAtiran404Excel(ExcelFile);
+            else
+                data = importer.ReadInvoicesFromAtiranExcel(ExcelFile);
+
             if (data.Errors.Count > 0)
             {
                 foreach (var er in data.Errors)

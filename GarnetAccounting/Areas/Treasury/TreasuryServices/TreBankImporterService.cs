@@ -31,7 +31,8 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
             items.Add(new SelectListItem { Value = "41", Text = "اقتصاد نوین (اینترنت بانک)" });
             items.Add(new SelectListItem { Value = "42", Text = "اقتصاد نوین (اینترنت بانک 2)" });
             items.Add(new SelectListItem { Value = "50", Text = "کشاورزی" });
-            items.Add(new SelectListItem { Value = "60", Text = "رفاه (حساب جاری)" });
+            items.Add(new SelectListItem { Value = "60", Text = "رفاه (حساب جاری) A-M" });
+            items.Add(new SelectListItem { Value = "61", Text = "رفاه (حساب جاری) A-N" });
             items.Add(new SelectListItem { Value = "70", Text = "بانک شهر (اینترنت بانک )" });
             items.Add(new SelectListItem { Value = "80", Text = "پست بانک (اینتربانک)" });
             items.Add(new SelectListItem { Value = "90", Text = "بانک صادرات - سپهر" });
@@ -1408,6 +1409,112 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
                             transaction.Description = row.Cell("D").GetValue<string?>();
                             transaction.ReferenceId = row.Cell("E").GetValue<string?>();
                             transaction.Operation = row.Cell("B").GetValue<string?>();
+                            transaction.BatchNumber = batchNum;
+
+                            BankTransactionList.Add(transaction);
+                        }
+                        catch (Exception ex)
+                        {
+                            result.Message += $"خطا در ردیف {row.RowNumber()}: {ex.Message}";
+                            okTask = false;
+                            continue; // خروج از حلقه در صورت بروز خطا
+                        }
+                    }
+                }
+            }
+            if (okTask)
+            {
+                var existingData = await _db.TreBankTransactions.AsNoTracking().Where(n => n.SellerId == dto.SellerId && n.BankAccountId == dto.BankAccountId).ToListAsync();
+
+                List<TreBankTransaction> finalList = new List<TreBankTransaction>();
+                foreach (var x in BankTransactionList)
+                {
+                    if (!existingData.Where(n => n.Date == x.Date && n.DocumentNumber == x.DocumentNumber).Any())
+                    { finalList.Add(x); }
+                }
+
+
+                try
+                {
+                    if (finalList.Count > 0)
+                    {
+                        await _db.TreBankTransactions.AddRangeAsync(finalList);
+                        await _db.SaveChangesAsync();
+                        result.Message = $"تعداد {finalList.Count} از {BankTransactionList.Count} رکورد موجود در فایل بارگذاری شد";
+                    }
+                    else
+                    {
+                        result.Message = $"رکورد جدیدی برای افزودن یافت نشد";
+                    }
+
+                    result.Success = true;
+
+                }
+                catch (Exception)
+                {
+                    result.Message = "خطایی در ثبت اطلاعات گزارش بانک رخ داده است فایل را بررسی کنید مجدد تلاش کنید";
+                }
+            }
+            return result;
+        }
+
+        //--- 61
+        public async Task<clsResult> ImportRefahJari2Async(BankImporterDto dto)
+        {
+            clsResult result = new clsResult();
+            result.Success = false;
+
+            if (dto.SellerId == 0)
+            {
+                result.Message = "لایسنس شناسایی نشد";
+                return result;
+            }
+            if (dto.File == null || dto.File.Length <= 0)
+            {
+                result.Message = "فایل معتبر نیست";
+                return result;
+            }
+            bool okTask = true;
+            var BankTransactionList = new List<TreBankTransaction>();
+
+            using (var stream = new MemoryStream())
+            {
+                await dto.File.CopyToAsync(stream);
+                using (var workbook = new XLWorkbook(stream))
+                {
+                    var worksheet = workbook.Worksheet(1);
+                    var rows = worksheet.RowsUsed();
+
+                    // تنظیم ردیف شروع به 2
+                    int startRow = 3;
+                    string batchNum = DateTime.Now.ToLong().ToString();
+                    // حذف تیتر ها
+                    foreach (var row in rows.Skip(startRow - 1))
+                    {
+                        try
+                        {
+
+                            var transaction = new TreBankTransaction();
+
+                            transaction.SellerId = dto.SellerId;
+                            transaction.BankAccountId = dto.BankAccountId;
+                            transaction.Row = row.Cell("N").GetValue<int?>() ?? 0;
+                            if (transaction.Row == 0) continue;
+
+                            string dateValue = row.Cell("M").GetValue<string>().Trim();
+                            transaction.Date = dateValue.Length > 10 ? dateValue.PersianToLatinRefah() : dateValue.PersianToLatin();
+
+                            string timeValue = row.Cell("L").GetValue<string>().Substring(1, 5);
+                            transaction.Time = TimeSpan.TryParse(timeValue, out var parsedTime) ? parsedTime : TimeSpan.Zero;
+
+                            transaction.DocumentNumber = row.Cell("I").GetValue<string?>();
+                            transaction.Debtor = row.Cell("K").GetValue<long?>() ?? 0; // واریز
+                            transaction.Creditor = row.Cell("J").GetValue<long?>() ?? 0; // برداشت
+                            transaction.Balance = row.Cell("C").GetValue<long?>() ?? 0;
+                            transaction.Branch = row.Cell("H").GetValue<string?>();
+                            transaction.Description = row.Cell("D").GetValue<string?>();
+                            transaction.ReferenceId = row.Cell("E").GetValue<string?>();
+                            transaction.Note = row.Cell("B").GetValue<string?>();
                             transaction.BatchNumber = batchNum;
 
                             BankTransactionList.Add(transaction);

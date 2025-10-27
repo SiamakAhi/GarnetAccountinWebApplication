@@ -2009,7 +2009,7 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                     Mandeh = (n.Sum(s => s.Bed) > n.Sum(s => s.Bes)) ? n.Sum(s => s.Bed) - n.Sum(s => s.Bes) : n.Sum(s => s.Bes) - n.Sum(s => s.Bed),
                     MandehNature = Convert.ToInt16((n.Sum(s => s.Bed) > n.Sum(s => s.Bes)) ? 1 : ((n.Sum(s => s.Bed) < n.Sum(s => s.Bes)) ? 2 : 3))
 
-                }).ToListAsync();
+                }).OrderBy(n => n.MoeinCode).ThenByDescending(n => n.Tafsil4Name).ToListAsync();
 
             return accounts;
         }
