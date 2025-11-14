@@ -59,7 +59,6 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
                 && c.BankAccountId == accountId
                 && (c.Date >= fromDate && c.Date <= untilDate));
 
-
             return query.Select(c => new TreBankTransactionDto
             {
                 Id = c.Id,
@@ -99,7 +98,7 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
                 .Where(c =>
                 c.SellerId == filter.SellerId
                 && c.BankAccountId == filter.AccountId
-                && (c.Date >= filter.FromDate && c.Date <= filter.ToDate));
+                && (c.Date.Value.Date >= filter.FromDate.Date && c.Date.Value.Date <= filter.ToDate.Date));
 
             if (filter.HasDoc.HasValue)
                 query = query.Where(n => n.HasDoc == filter.HasDoc);
@@ -110,8 +109,21 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
             if (filter.Transactiontype == 1)
                 query = query.Where(n => n.Debtor > 0);
 
-            if (filter.Transactiontype == 2)
-                query = query.Where(n => n.Creditor > 0);
+            if (filter.fromAmount != null && filter.fromAmount > 0)
+            {
+                if (filter.Transactiontype == 1)
+                    query = query.Where(n => n.Debtor >= filter.fromAmount);
+                else
+                    query = query.Where(n => n.Creditor >= filter.fromAmount);
+            }
+            if (filter.toAmount != null && filter.toAmount >0)
+            {
+                if (filter.Transactiontype == 1)
+                    query = query.Where(n => n.Debtor <= filter.fromAmount);
+                else
+                    query = query.Where(n => n.Creditor <= filter.fromAmount);
+            }
+
 
             if (!string.IsNullOrEmpty(filter.Description))
             {
@@ -1289,7 +1301,7 @@ namespace GarnetAccounting.Areas.Treasury.TreasuryServices
                     var rows = worksheet.RowsUsed();
 
                     // تنظیم ردیف شروع به 7
-                    int startRow = 7;
+                    int startRow = 2;
                     string batchNum = DateTime.Now.ToLong().ToString();
                     // حذف تیتر ها
                     foreach (var row in rows.Skip(startRow - 1))

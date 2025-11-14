@@ -192,7 +192,12 @@ namespace GarnetAccounting.Areas.Commercial.Controllers
             clsResult result = new clsResult();
             result.Success = false;
             ExcelImporter importer = new ExcelImporter();
-            var data = importer.ReadInvoicesFromAtiranExcel(dto.ExcelFile);
+            var data = new InvoiceImportDto_Atiran();
+            if (dto.template == 404)
+                data = importer.ReadInvoicesFromAtiran404Excel(dto.ExcelFile);
+            else
+                data = importer.ReadInvoicesFromAtiranExcel(dto.ExcelFile);
+
             if (data.Errors.Count > 0)
             {
                 foreach (var er in data.Errors)

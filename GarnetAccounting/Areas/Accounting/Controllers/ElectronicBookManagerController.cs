@@ -170,21 +170,25 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
                 {
                     var sb = new StringBuilder();
 
-                    // هدر CSV
-                    sb.AppendLine("ردیف,تاریخ,کد حساب کل,عنوان حساب کل,کد حساب معین,عنوان حساب معین,شرح,مبلغ بدهکار (ريال),مبلغ بستانکار (ريال)");
+                    // هدرها با delimiter ;
+                    sb.AppendLine("ردیف;تاریخ;کد حساب کل;عنوان حساب کل;کد حساب معین;عنوان حساب معین;شرح;مبلغ بدهکار (ريال);مبلغ بستانکار (ريال)");
 
-                    // داده‌ها
+                    // داده‌ها بدون " و با ;
                     foreach (var x in model.eBooks)
                     {
-                        // برای اطمینان از درست بودن فرمت CSV، متن‌ها را داخل "قرار می‌دهیم
-                        sb.AppendLine($"\"{x.Row}\",\"{x.docDate}\",\"{x.KolCode}\",\"{x.KolName}\",\"{x.MoeinCode}\",\"{x.MoeinName}\",\"{x.Description}\",\"{x.Bed}\",\"{x.Bes}\"");
+                        sb.AppendLine($"{x.Row};{x.docDate};{x.KolCode};{x.KolName};{x.MoeinCode};{x.MoeinName};{x.Description};{x.Bed};{x.Bes}");
                     }
 
-                    // تبدیل به بایت با UTF-8 (با BOM تا در Excel فارسی درست نمایش داده شود)
-                    var utf8WithBom = new System.Text.UTF8Encoding(true);
-                    var csvBytes = utf8WithBom.GetBytes(sb.ToString());
+                    // خروجی UTF-16LE + BOM برای Excel
+                    var unicode = Encoding.Unicode; // UTF-16LE
+                    var preamble = unicode.GetPreamble(); // BOM
+                    var body = unicode.GetBytes(sb.ToString());
 
-                    return new FileContentResult(csvBytes, "text/csv")
+                    var finalBytes = new byte[preamble.Length + body.Length];
+                    Buffer.BlockCopy(preamble, 0, finalBytes, 0, preamble.Length);
+                    Buffer.BlockCopy(body, 0, finalBytes, preamble.Length, body.Length);
+
+                    return new FileContentResult(finalBytes, "application/vnd.ms-excel")
                     {
                         FileDownloadName = $"دفتر تجاری از تاریخ {model.strFromDate} تا {model.strToDate}.csv"
                     };

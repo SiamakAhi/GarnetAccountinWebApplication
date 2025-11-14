@@ -92,6 +92,7 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> InsertMoadianReport(ExcelImportDto dto)
         {

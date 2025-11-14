@@ -1301,6 +1301,7 @@ namespace GarnetAccounting.Areas.Commercial.ComercialServices
                 .ThenInclude(n => n.ProductUnits)
                 .Where(n =>
                 n.Invoice.SellerId == filter.SellerId
+                && n.Invoice.InvoiceType == filter.Invoicetype
                 ).AsQueryable();
 
             if (filter.Party != null)

@@ -22,11 +22,19 @@
             <form asp-action="bulkCreateBuyInvoice" asp-controller="buy" asp-area="Commercial" method="post" enctype="multipart/form-data">
                 <input type="hidden" asp-for="InvoiceType" value="1" />
                 <div class="row mt-1">
-                    <div class="col-12 mb-4">
+                  
+                    <div class="col-6 mb-4">
                         <label class="form-label">انتخاب فایل اکسل </label>
                         <input type="file" class="form-control" asp-for="ExcelFile" accept=".xls, .xlsx" placeholder="انتخاب اکسل حاوی اطلاعات کالا یا خدمات" />
                     </div>
-                    <div class="col-md-3 mb-2">
+                    <div class="col-6 mb-4">
+                        <label class="form-label">الگوی اکسل</label>
+                        <select class="form-select" asp-for="template">
+                            <option value="404">گزارش 1404 آتیران</option>
+                            <option value="403">گزارش 1403 به قبل</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mb-2">
                         <div class="form-check form-check-inline">
                             <input asp-for="JustTaxable" class="form-check-input" type="checkbox">
                             <label class="form-check-label" asp-for="JustTaxable">

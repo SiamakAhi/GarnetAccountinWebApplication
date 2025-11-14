@@ -191,11 +191,7 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
             report.RegData("header", header);
             report.RegData("articles", articles);
 
-            // Set variables
-            StiVariable CompanyName = new StiVariable("CompanyName", userSett.ActiveSellerName);
-            StiVariable rpDate = new StiVariable("ReportDate", DateTime.Now.LatinToPersian());
-            report.Dictionary.Variables.Add(CompanyName);
-            report.Dictionary.Variables.Add(rpDate);
+
 
             //Doc Footer
             string Auther = accSetting.PrintCreator == true ? header.Auther : "";
@@ -209,6 +205,13 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
             report.Dictionary.Variables.Add(Approver1Name);
             report.Dictionary.Variables.Add(Approver2Title);
             report.Dictionary.Variables.Add(Approver2Name);
+
+            // Set variables
+            StiVariable CompanyName = new StiVariable("CompanyName", userSett.ActiveSellerName);
+            StiVariable rpDate = new StiVariable("ReportDate", DateTime.Now.LatinToPersian());
+            report.Dictionary.Variables.Add(CompanyName);
+            report.Dictionary.Variables.Add(rpDate);
+
             // Generate report and export to PDF
             var stream = new MemoryStream();
             await report.ExportDocumentAsync(StiExportFormat.Pdf, stream);
@@ -241,7 +244,7 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> GetReport_PrintDocs(List<Guid> DocIds, int? PrintLevel = null)
+        public async Task<IActionResult> GetReport_PrintDocs_old(List<Guid> DocIds, int? PrintLevel = null)
         {
             string userName = User.Identity.Name;
             var userSett = await _gs.GetUserSettingAsync(userName);
@@ -286,6 +289,107 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
                     case 2:
                         doc = await _acc.GetDocPrintMoeinAsync(id);
                         break;
+                }
+
+                var header = doc.Header;
+                var articles = doc.Articles;
+                rp.RegData("header", header);
+                rp.RegData("articles", articles);
+
+                // 🔹 ابتدا متغیرهای عمومی را اضافه کن
+                rp.Dictionary.Variables.Clear();
+                rp.Dictionary.Variables.Add(new StiVariable("CompanyName", userSett.ActiveSellerName));
+                rp.Dictionary.Variables.Add(new StiVariable("ReportDate", DateTime.Now.LatinToPersian()));
+
+                // 🔹 سپس رندر کن
+                rp.Render(false);
+
+                // 🔹 سپس متغیرهای پایین گزارش را برای گزارش اصلی تنظیم کن
+                string Auther = accSetting.PrintCreator == true ? header.Auther : "";
+                report.Dictionary.Variables.Add(new StiVariable("Auther", Auther));
+                report.Dictionary.Variables.Add(new StiVariable("Approver1Title", accSetting.Approver1Title ?? ""));
+                report.Dictionary.Variables.Add(new StiVariable("Approver1Name", accSetting.Approver1Name ?? ""));
+                report.Dictionary.Variables.Add(new StiVariable("Approver2Title", accSetting.Approver2Title ?? ""));
+                report.Dictionary.Variables.Add(new StiVariable("Approver2Name", accSetting.Approver2Name ?? ""));
+
+                foreach (StiPage page in rp.RenderedPages)
+                {
+                    page.Report = report;
+                    page.NewGuid();
+                    page.Convert(
+                        Stimulsoft.Report.Units.StiUnit.GetUnitFromReportUnit(rp.ReportUnit),
+                        Stimulsoft.Report.Units.StiUnit.GetUnitFromReportUnit(report.ReportUnit)
+                    );
+                    report.RenderedPages.Add(page);
+                }
+            }
+
+
+            return StiNetCoreViewer.GetReportResult(this, report);
+        }
+
+        public async Task<IActionResult> GetReport_PrintDocs(List<Guid> DocIds, int? PrintLevel = null)
+        {
+            string userName = User.Identity.Name;
+            var userSett = await _gs.GetUserSettingAsync(userName);
+            var accSetting = await _accountingSettings.GetSettingAsync(userSett.ActiveSellerId.Value);
+
+            StiReport rp = new StiReport();
+            string path = StiNetCoreHelper.MapPath(this, @"wwwroot/Reports/acc/DocPrint.mrt");
+            switch (PrintLevel)
+            {
+                case 1:
+                    path = StiNetCoreHelper.MapPath(this, @"wwwroot/Reports/acc/DocPrintKol.mrt");
+                    break;
+                case 2:
+                    path = StiNetCoreHelper.MapPath(this, @"wwwroot/Reports/acc/DocPrintMoein.mrt");
+                    break;
+                case 3:
+                    path = StiNetCoreHelper.MapPath(this, @"wwwroot/Reports/acc/DocPrint.mrt");
+                    break;
+                default:
+                    break;
+            }
+            rp.Load(path);
+
+            // اضافه کردن متغیرها قبل از کامپایل
+            rp.Dictionary.Variables.Add("CompanyName", userSett.ActiveSellerName);
+            rp.Dictionary.Variables.Add("ReportDate", DateTime.Now.LatinToPersian());
+
+            await rp.CompileAsync();
+
+            StiReport report = new StiReport();
+            report.NeedsCompiling = false;
+            report.Culture = "fd-IR";
+
+            // اضافه کردن متغیرهای فوتر به گزارش اصلی
+            string Auther = accSetting.PrintCreator == true ? "" : ""; // مقدار اولیه
+            report.Dictionary.Variables.Add("Auther", Auther);
+            report.Dictionary.Variables.Add("Approver1Title",
+                string.IsNullOrEmpty(accSetting.Approver1Title) ? "" : accSetting.Approver1Title);
+            report.Dictionary.Variables.Add("Approver1Name",
+                string.IsNullOrEmpty(accSetting.Approver1Name) ? "" : accSetting.Approver1Name);
+            report.Dictionary.Variables.Add("Approver2Title",
+                string.IsNullOrEmpty(accSetting.Approver2Title) ? "" : accSetting.Approver2Title);
+            report.Dictionary.Variables.Add("Approver2Name",
+                string.IsNullOrEmpty(accSetting.Approver2Name) ? "" : accSetting.Approver2Name);
+
+            await report.RenderAsync();
+            report.RenderedPages.Clear();
+            Stimulsoft.Report.Units.StiUnit newUnit =
+                Stimulsoft.Report.Units.StiUnit.GetUnitFromReportUnit(report.ReportUnit);
+
+            foreach (var id in DocIds)
+            {
+                var doc = await _acc.GetDocPrintAsync(id);
+                switch (PrintLevel)
+                {
+                    case 1:
+                        doc = await _acc.GetDocPrintKolAsync(id);
+                        break;
+                    case 2:
+                        doc = await _acc.GetDocPrintMoeinAsync(id);
+                        break;
                     case 3:
                         doc = await _acc.GetDocPrintAsync(id);
                         break;
@@ -295,34 +399,30 @@ namespace GarnetAccounting.Areas.Accounting.Controllers
 
                 var header = doc.Header;
                 var articles = doc.Articles;
+
+                // آپدیت متغیر Auther برای هر سند
+                Auther = accSetting.PrintCreator == true ? header.Auther : "";
+                report.Dictionary.Variables["Auther"].Value = Auther;
+
                 rp.RegData("header", header);
                 rp.RegData("articles", articles);
-                StiVariable CompanyName = new StiVariable("CompanyName", userSett.ActiveSellerName);
-                StiVariable rpDate = new StiVariable("ReportDate", DateTime.Now.LatinToPersian());
-                rp.Dictionary.Variables.Add(CompanyName);
-                rp.Dictionary.Variables.Add(rpDate);
-                //Doc Footer
-                string Auther = accSetting.PrintCreator == true ? header.Auther : "";
-                StiVariable auther = new StiVariable("Auther", Auther);
-                StiVariable Approver1Title = new StiVariable("Approver1Title", string.IsNullOrEmpty(accSetting.Approver1Title) ? "" : accSetting.Approver1Title);
-                StiVariable Approver1Name = new StiVariable("Approver1Name", string.IsNullOrEmpty(accSetting.Approver1Name) ? "" : accSetting.Approver1Name);
-                StiVariable Approver2Title = new StiVariable("Approver2Title", string.IsNullOrEmpty(accSetting.Approver2Title) ? "" : accSetting.Approver2Title);
-                StiVariable Approver2Name = new StiVariable("Approver2Name", string.IsNullOrEmpty(accSetting.Approver2Name) ? "" : accSetting.Approver2Name);
-                report.Dictionary.Variables.Add(auther);
-                report.Dictionary.Variables.Add(Approver1Title);
-                report.Dictionary.Variables.Add(Approver1Name);
-                report.Dictionary.Variables.Add(Approver2Title);
-                report.Dictionary.Variables.Add(Approver2Name);
+
+                // رندر بعد از تنظیم همه متغیرها و داده‌ها
                 rp.Render(false);
 
                 foreach (StiPage page in rp.RenderedPages)
                 {
                     page.Report = report;
                     page.NewGuid();
-                    Stimulsoft.Report.Units.StiUnit oldUnit = Stimulsoft.Report.Units.StiUnit.GetUnitFromReportUnit(rp.ReportUnit);
-                    if (report.ReportUnit != rp.ReportUnit) page.Convert(oldUnit, newUnit);
+                    Stimulsoft.Report.Units.StiUnit oldUnit =
+                        Stimulsoft.Report.Units.StiUnit.GetUnitFromReportUnit(rp.ReportUnit);
+                    if (report.ReportUnit != rp.ReportUnit)
+                        page.Convert(oldUnit, newUnit);
                     report.RenderedPages.Add(page);
                 }
+
+                // پاک کردن صفحات rp برای سند بعدی
+                rp.RenderedPages.Clear();
             }
 
             return StiNetCoreViewer.GetReportResult(this, report);

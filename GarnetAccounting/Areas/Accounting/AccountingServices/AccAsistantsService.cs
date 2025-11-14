@@ -261,7 +261,9 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                     {
                         var report = new Acc_MoadianReport();
 
-                        report.InvoiceType = row.Cell(1).GetString();
+                        report.InvoiceType = row.Cell(1).GetValue<string?>() ??"";
+                        if (string.IsNullOrEmpty(report.InvoiceType))
+                            continue;
                         report.InvoicePattern = row.Cell(2).GetString();
                         report.InvoiceSubject = row.Cell(3).GetString();
                         if (report.InvoiceSubject == "ابطالی")
@@ -283,8 +285,8 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                         report.BuyerIdentity = row.Cell(11).GetString();
                         report.BuyerEconomicNumber = row.Cell(12).GetString();
                         report.SellerBranch = row.Cell(13).GetString();
-                        report.BuyerName = row.Cell(14).GetString();
-                        report.BuyerTradeName = row.Cell(15).GetString();
+                        report.BuyerName = row.Cell(14).GetValue<string?>() ?? "سایر";
+                        report.BuyerTradeName = row.Cell(15).GetValue<string?>() ?? "سایر";
                         report.BuyerPersonType = row.Cell(16).GetString();
                         report.SellerContractNumber = row.Cell(17).GetString();
                         report.SubscriptionNumber = row.Cell(18).GetString();
@@ -1556,6 +1558,9 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
                 n.AccountingInvoiceCode = num;
 
                 n.InvoiceDate = x.date.LatinToPersian();
+                if (x.date < DateTime.Now.AddDays(-12))
+                    n.InvoiceDate += DateTime.Now.AddDays(-10);
+
                 n.InvoiceType = x.tafsilId == 13931 ? (short)1 : (short)2;
                 n.BasePrice = x.bes;
                 n.BuyerType = x.tafsilId == 13931 ? (short)1 : (short)2;

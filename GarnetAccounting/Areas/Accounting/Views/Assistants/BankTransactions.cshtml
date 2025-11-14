@@ -111,24 +111,42 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 mb-1">
-                                    <div class="garnet-input-group1 garnet-input-group-light mb-1">
-                                        <label asp-for="filter.AccountId">‌نوع تراکنش</label>
-                                        <select class="form-select" asp-for="filter.Transactiontype">
-                                            <option value="1">واریز</option>
-                                            <option value="2">برداشت</option>
-                                        </select>
-                                    </div>
-                                    <div class="widget-info fw mb-1">
-                                        <div class="form-check form-check-inline mb-1">
-                                            <input class="form-check-input" type="checkbox" asp-for="filter.ShowAll">
-                                            <label class="form-check-label" asp-for="filter.ShowAll">
-                                                نمایش تراکنش های چک شده
-                                            </label>
+                                <div class="col-lg-6 p-0 m-0">
+                                    <div class="row p-0 m-0">
+                                        <div class="col-lg-6 mb-1">
+                                            <div class="garnet-input-group1 garnet-input-group-light mb-1">
+                                                <label asp-for="filter.AccountId">‌نوع تراکنش</label>
+                                                <select class="form-select" asp-for="filter.Transactiontype">
+                                                    <option value="1">واریز</option>
+                                                    <option value="2">برداشت</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-1">
+                                            <div class="widget-info fw mb-1">
+                                                <div class="form-check form-check-inline mb-1">
+                                                    <input class="form-check-input" type="checkbox" asp-for="filter.ShowAll">
+                                                    <label class="form-check-label" asp-for="filter.ShowAll">
+                                                        نمایش تراکنش های چک شده
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-1">
+                                            <div class="garnet-input-group1 garnet-input-group-light">
+                                                <label asp-for="filter.fromAmount">از مبلغ‌</label>
+                                                <input type="text" asp-for="filter.fromAmount" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-1">
+                                            <div class="garnet-input-group1 garnet-input-group-light">
+                                                <label asp-for="filter.toAmount">تا مبلغ‌</label>
+                                                <input type="text" asp-for="filter.toAmount" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
+                                
                             </div>
                         </div>
                     </div>
@@ -193,7 +211,7 @@
                                     @row
                                 </td>
                                 <td>
-                                    <div class="btn-group @(x.IsChecked ?"bg-success":"")" role="group">
+                                    <div class="btn-group @(x.IsChecked ? "bg-success" : "")" role="group">
                                         <button id="btnGroupDrop1" type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i class="bx bx-menu"></i>
                                         </button>
@@ -205,7 +223,7 @@
                                             </a>
                                             <a class="dropdown-item accAjaxPost" href="javascript:void(0);"
                                                data-url="@Url.Action("TransactionCheckToggle", "Assistants", new { Area = "Accounting" })" data-target="@x.Id">
-                                                <i class="bx bx-checkbox  @(x.IsChecked ?"bx-bx-checkbox":"bx-checkbox-checked")" me-2 text-info"></i>
+                                                <i class="bx bx-checkbox  @(x.IsChecked ? "bx-bx-checkbox" : "bx-checkbox-checked")" me-2 text-info"></i>
                                                 @if (x.IsChecked)
                                                 {
                                                     <span>
@@ -229,8 +247,8 @@
                                 <td>@x.OperationCode</td>
                                 <td>@x.Description</td>
                                 <td>@x.Note</td>
-                                <td>@x.Debtor?.ToPrice()</td>
-                                <td>@x.Creditor?.ToPrice()</td>
+                                <td class="col_debtor">@x.Debtor?.ToPrice()</td>
+                                <td class="col_Creditor">@x.Creditor?.ToPrice()</td>
                                 <td>@x.Balance?.ToPrice()</td>
                             </tr>
 
@@ -260,7 +278,27 @@
 
         <div class=" alert-secondary">
             <div class="row">
-                <div class="col-lg-8 col-md-6">
+                <div class="col-lg-4 col-md-6">
+                    <ul class="docfooter-totalAmounts p-2 mt-2 ms-3">
+                        <li><h6>جمع ردیف های انتخاب شده </h6></li>
+                        <li>
+                            <label>جمع ستون برداشت : </label>
+                            <div>
+                                <input type="text" readonly value="0" id="input_crideor" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li>
+                            <label>جمع ستون واریز : </label>
+                            <div>
+                                <input type="text" readonly value="0" id="input_debtor" />
+                                <span class="text-sm-end">ريال</span>
+                            </div>
+                        </li>
+                        <li></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6">
                 </div>
 
                 <div class="col-lg-4 col-md-6">
@@ -268,14 +306,14 @@
                         <li>
                             <label>جمع بدهکار : </label>
                             <div>
-                                <input type="text" readonly value="@Model.transactions?.Sum(n=>n.Debtor).ToPrice()" />
+                                <input type="text" readonly value="@Model.transactions?.Sum(n => n.Debtor).ToPrice()" />
                                 <span class="text-sm-end">ريال</span>
                             </div>
                         </li>
                         <li>
                             <label>جمع بستانکار : </label>
                             <div>
-                                <input type="text" readonly value="@Model.transactions?.Sum(n=>n.Creditor).ToPrice()" />
+                                <input type="text" readonly value="@Model.transactions?.Sum(n => n.Creditor).ToPrice()" />
                                 <span class="text-sm-end">ريال</span>
                             </div>
                         </li>
@@ -288,6 +326,8 @@
     </div>
 </div>
 
+<script src="~/vendor/libs/jquery/jquery.js"></script>
+<script src="~/appfunctions/banktransscripts.js"></script>
 <script type="text/javascript">
 
 
@@ -311,6 +351,7 @@
             }
         });
     });
+
 
 </script>
 

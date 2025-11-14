@@ -8,6 +8,10 @@
         public DateTime ToDate { get; set; }
         public string strFromDate { get; set; }
         public string strToDate { get; set; }
+
+        public long? fromAmount { get; set; }
+        public long? toAmount { get; set; }
+
         public string Description { get; set; }
         public int Transactiontype { get; set; } = 0;
         public bool? HasDoc { get; set; } = false;

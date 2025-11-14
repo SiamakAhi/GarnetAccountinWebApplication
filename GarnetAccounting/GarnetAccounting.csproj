@@ -100,6 +100,7 @@
     <Folder Include="Areas\Support\Data\" />
     <Folder Include="Areas\Support\Models\" />
     <Folder Include="Areas\Treasury\Data\" />
+    <Folder Include="Areas\Warehouse\Models\Entities\" />
     <Folder Include="wwwroot\exports\" />
     <Folder Include="wwwroot\icons\" />
     <Folder Include="wwwroot\Reports\acc\NewFolder\" />

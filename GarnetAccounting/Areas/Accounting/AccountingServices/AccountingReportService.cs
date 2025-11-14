@@ -984,7 +984,11 @@ namespace GarnetAccounting.Areas.Accounting.AccountingServices
             }
             if (filter.Tafsil4Ids?.Count > 0)
             {
-                query = query.Where(n => filter.Tafsil4Ids.Contains(n.Tafsil4Id));
+                if (filter.Tafsil4Ids.Where(n => n.Value == 0).Any())
+                    query = query.Where(n => filter.Tafsil4Ids.Contains(n.Tafsil4Id) || n.Tafsil4Id == null);
+                else
+                    query = query.Where(n => filter.Tafsil4Ids.Contains(n.Tafsil4Id));
+
             }
             if (filter.Tafsil5Ids?.Count > 0)
             {
